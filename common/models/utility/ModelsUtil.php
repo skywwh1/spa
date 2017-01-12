@@ -81,4 +81,9 @@ class ModelsUtil
         return ArrayHelper::getValue($data, $k);
     }
 
+    public static function getPlatform($k)
+    {
+        return static::getValue(static::platform, $k);
+    }
+
 }

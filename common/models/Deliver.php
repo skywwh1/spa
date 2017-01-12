@@ -46,10 +46,11 @@ class Deliver extends \yii\db\ActiveRecord
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'channel0', 'pay_out', 'discount', 'daily_cap'], 'required'],
             [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'step'], 'integer'],
             [['pay_out', 'discount'], 'number'],
-            [['note'], 'string', 'max' => 255],
+            [['track_url', 'note'], 'string', 'max' => 255],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
+            ['channel0', 'ifExist'],
         ];
     }
 
@@ -72,6 +73,7 @@ class Deliver extends \yii\db\ActiveRecord
             'note' => 'Note',
             'channel0' => 'Channel',
             'campaign_uuid' => 'Campaign UUID',
+            'track_url' => 'Track Url',
         ];
     }
 
@@ -99,6 +101,21 @@ class Deliver extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'creator']);
     }
 
+    /**
+     * @inheritdoc
+     */
+    public static function findIdentity($campaignId, $channelId)
+    {
+        return static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]);
+    }
+
+    public function ifExist()
+    {
+        if (!static::findIdentity($this->channel_id, $this->channel_id)) {
+            $this->addError('channel0', 'The Campaign had been offer to this channel');
+        }
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -106,6 +123,7 @@ class Deliver extends \yii\db\ActiveRecord
                 $this->create_time = time();
                 $this->update_time = time();
                 $this->creator = Yii::$app->user->identity->getId();
+                $this->track_url = 'stream/track?' . 'pl=' . strtolower(\ModelsUtil::getPlatform($this->campaign->platform)) . "&ch_id=" . $this->channel_id . '&cp_uid=' . $this->campaign_uuid;
             } else {
                 $this->update_time = time();
             }

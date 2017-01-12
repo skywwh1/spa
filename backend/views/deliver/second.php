@@ -28,6 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
+            <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
+        </div>
+    </div>
+
+    <div class='form-group row'>
+        <div class='col-lg-4'>
             <?= $form->field($model, 'pay_out')->textInput() ?>
         </div>
     </div>

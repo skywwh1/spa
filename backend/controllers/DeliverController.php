@@ -52,8 +52,16 @@ class DeliverController extends Controller
      */
     public function actionView($campaign_id, $channel_id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($campaign_id, $channel_id),
+//        return $this->render('view', [
+//            'model' => $this->findModel($campaign_id, $channel_id),
+//        ]);
+
+        $searchModel = new DeliverSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -74,15 +82,18 @@ class DeliverController extends Controller
                     'model' => $model,
                 ]);
             } else if ($model->step == 2) {
-
-                $model->save();
-                return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
+                if ($model->save()) {
+                    return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
+                } else {
+                    return $this->render('second', [
+                        'model' => $model,
+                    ]);
+                }
             }
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
