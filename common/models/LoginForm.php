@@ -11,7 +11,9 @@ class LoginForm extends Model
 {
     public $username;
     public $password;
+    public $type;
     public $rememberMe = true;
+    public $verifyCode;
 
     private $_user;
 
@@ -23,11 +25,20 @@ class LoginForm extends Model
     {
         return [
             // username and password are both required
-            [['username', 'password'], 'required'],
+            [['username', 'password','type'], 'required'],
+            ['type','integer'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
             ['password', 'validatePassword'],
+            ['verifyCode', 'captcha'],
+        ];
+    }
+
+    public function attributeLabels()
+    {
+        return [
+            'verifyCode' => 'Verification Code',
         ];
     }
 

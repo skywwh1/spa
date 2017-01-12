@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
                         'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                         'display' => 'value',
                         'remote' => [
-                            'url' => Url::to(['campaign/get_adv_list']) . '&name=%QUERY',
+                            'url' => Url::to(['campaign/get_adv_list']) . '?name=%QUERY',
                             'wildcard' => '%QUERY'
                         ]
                     ]],

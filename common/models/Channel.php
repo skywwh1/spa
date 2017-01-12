@@ -118,7 +118,7 @@ class Channel extends \yii\db\ActiveRecord
             'password_reset_token' => 'Password Reset Token',
             'settlement_type' => 'Settlement Type',
             'om' => 'OM',
-            'main_channel' => 'Main Channel',
+            'main_channel' => 'Mater Channel',
             'account_name' => 'Account Name',
             'branch_name' => 'Branch Name',
             'card_number' => 'Card Number',

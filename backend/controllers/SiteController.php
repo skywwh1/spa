@@ -27,8 +27,9 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error', 'forget', 'test', 'signup'],
+                        'actions' => ['login', 'error', 'forget', 'test', 'signup','captcha'],
                         'allow' => true,
+                        'roles' => ['?'],
                     ],
                     [
                         'actions' => ['logout', 'index', 'forget', 'test'],
@@ -54,6 +55,18 @@ class SiteController extends Controller
         return [
             'error' => [
                 'class' => 'yii\web\ErrorAction',
+            ],
+            'captcha' => [
+                'class' => 'yii\captcha\CaptchaAction',
+              //  'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+               // 'backColor'=>0x000000,//背景颜色
+                'maxLength' => 6, //最大显示个数
+                'minLength' => 4,//最少显示个数
+//                'padding' => 10,//间距
+                'height'=>35,//高度
+                'width' => 130,  //宽度
+//                'foreColor'=>0xffffff,     //字体颜色
+                'offset'=>5,        //设置字符偏移量 有效果
             ],
         ];
     }
@@ -104,6 +117,7 @@ class SiteController extends Controller
 
     public function actionForget()
     {
+        $this->layout = false;
         return $this->render('forget');
     }
 

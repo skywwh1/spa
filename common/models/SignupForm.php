@@ -13,6 +13,7 @@ class SignupForm extends Model
     public $password;
     public $email;
     public $confirmPassword;
+    public $verifyCode;
 
     private $_user;
 
@@ -28,6 +29,7 @@ class SignupForm extends Model
             // rememberMe must be a boolean value
             ['email', 'email'],
             ['confirmPassword', 'confirm'],
+            ['verifyCode', 'captcha'],
         ];
     }
 

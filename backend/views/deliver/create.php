@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                             'display' => 'value',
                             'remote' => [
-                                'url' => Url::to(['campaign/campaigns_by_uuid']) . '&uuid=%QUERY',
+                                'url' => Url::to(['campaign/campaigns_by_uuid']) . '?uuid=%QUERY',
                                 'wildcard' => '%QUERY'
                             ]
                         ]],
@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
                             'display' => 'value',
                             'remote' => [
-                                'url' => Url::to(['channel/get_channel_name']) . '&name=%QUERY',
+                                'url' => Url::to(['channel/get_channel_name']) . '?name=%QUERY',
                                 'wildcard' => '%QUERY'
                             ]
                         ]],
