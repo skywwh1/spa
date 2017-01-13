@@ -35,8 +35,8 @@ use yii\widgets\ActiveForm;
     <div class='form-group row'>
         <div class='col-lg-4'>
             <?= $form->field($model, 'om')->widget(Typeahead::classname(), [
-                'pluginOptions' => ['highlight'=>true],
-                'options' => ['value' => isset($model->om0)?$model->om0->username:'',],
+                'pluginOptions' => ['highlight' => true],
+                'options' => ['value' => isset($model->om0) ? $model->om0->username : '',],
                 'dataset' => [
                     [
                         'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -52,10 +52,9 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'main_channel')->widget(Typeahead::classname(), [
-                'pluginOptions' => ['highlight'=>true],
-                'options' => ['value' => isset($model->main_channel)?$model->getMainChannel()->one()->username:'',],
-//                'options' => ['value' => $model->main_channel],
+            <?= $form->field($model, 'master_channel')->widget(Typeahead::classname(), [
+                'pluginOptions' => ['highlight' => true],
+                'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
                 'dataset' => [
                     [
                         'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -71,19 +70,55 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'account_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'payment_way')->checkboxList(ModelsUtil::payment_way) ?>
         </div>
     </div>
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'branch_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'payment_term')->checkboxList(ModelsUtil::payment_term) ?>
         </div>
     </div>
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'card_number')->textInput() ?>
+            <?= $form->field($model, 'beneficiary_name')->textInput() ?>
+        </div>
+    </div>
+
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'bank_country')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'bank_name')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'bank_address')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'swift')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'account_nu_iban')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
         </div>
     </div>
 
@@ -103,6 +138,12 @@ use yii\widgets\ActiveForm;
     <div class='form-group row'>
         <div class='col-lg-4'>
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true]) ?>
         </div>
     </div>
 
@@ -137,11 +178,6 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true]) ?>
-        </div>
-    </div>
 
     <div class='form-group row'>
         <div class='col-lg-4'>
@@ -155,17 +191,6 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'note')->textarea() ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'app_id')->textInput(['maxlength' => true]) ?>
-        </div>
-    </div>
 
     <div class='form-group row'>
         <div class='col-lg-4'>
@@ -175,16 +200,29 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'click_pram_name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'total_revenue')->textInput() ?>
         </div>
     </div>
-
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'click_pram_length')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'payable')->textInput() ?>
         </div>
     </div>
-
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'paid')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'strong_geo')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'strong_catagory')->textInput(['maxlength' => true]) ?>
+        </div>
+    </div>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

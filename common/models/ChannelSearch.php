@@ -18,8 +18,8 @@ class ChannelSearch extends Channel
     public function rules()
     {
         return [
-            [['id', 'type', 'om', 'main_channel', 'card_number', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'bd', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'need_pay'], 'integer'],
-            [['username', 'team', 'firstname', 'lastname', 'auth_key', 'password_hash', 'password_reset_token', 'settlement_type', 'account_name', 'branch_name', 'contacts', 'email', 'country', 'city', 'address', 'company', 'phone1', 'phone2', 'wechat', 'skype', 'alipay', 'lang', 'timezone', 'system', 'cc_email', 'note', 'app_id', 'post_back', 'click_pram_name', 'click_pram_length', 'already_pay'], 'safe'],
+            [['id', 'type', 'om', 'master_channel', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
+            [['username', 'firstname', 'lastname', 'auth_key', 'password_hash', 'password_reset_token', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'system', 'contacts', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'wechat', 'skype', 'alipay', 'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'safe'],
         ];
     }
 
@@ -62,8 +62,7 @@ class ChannelSearch extends Channel
             'id' => $this->id,
             'type' => $this->type,
             'om' => $this->om,
-            'main_channel' => $this->main_channel,
-            'card_number' => $this->card_number,
+            'master_channel' => $this->master_channel,
             'created_time' => $this->created_time,
             'updated_time' => $this->updated_time,
             'qq' => $this->qq,
@@ -73,30 +72,38 @@ class ChannelSearch extends Channel
             'confirmed' => $this->confirmed,
             'suspended' => $this->suspended,
             'deleted' => $this->deleted,
-            'bd' => $this->bd,
             'status' => $this->status,
             'traffic_source' => $this->traffic_source,
             'pricing_mode' => $this->pricing_mode,
             'total_revenue' => $this->total_revenue,
-            'need_pay' => $this->need_pay,
+            'payable' => $this->payable,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'team', $this->team])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'settlement_type', $this->settlement_type])
-            ->andFilterWhere(['like', 'account_name', $this->account_name])
-            ->andFilterWhere(['like', 'branch_name', $this->branch_name])
+            ->andFilterWhere(['like', 'payment_way', $this->payment_way])
+            ->andFilterWhere(['like', 'payment_term', $this->payment_term])
+            ->andFilterWhere(['like', 'beneficiary_name', $this->beneficiary_name])
+            ->andFilterWhere(['like', 'bank_country', $this->bank_country])
+            ->andFilterWhere(['like', 'bank_name', $this->bank_name])
+            ->andFilterWhere(['like', 'bank_address', $this->bank_address])
+            ->andFilterWhere(['like', 'swift', $this->swift])
+            ->andFilterWhere(['like', 'account_nu_iban', $this->account_nu_iban])
+            ->andFilterWhere(['like', 'company_address', $this->company_address])
+            ->andFilterWhere(['like', 'note', $this->note])
+            ->andFilterWhere(['like', 'system', $this->system])
             ->andFilterWhere(['like', 'contacts', $this->contacts])
             ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'cc_email', $this->cc_email])
+            ->andFilterWhere(['like', 'company', $this->company])
             ->andFilterWhere(['like', 'country', $this->country])
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'company', $this->company])
             ->andFilterWhere(['like', 'phone1', $this->phone1])
             ->andFilterWhere(['like', 'phone2', $this->phone2])
             ->andFilterWhere(['like', 'wechat', $this->wechat])
@@ -104,14 +111,10 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'alipay', $this->alipay])
             ->andFilterWhere(['like', 'lang', $this->lang])
             ->andFilterWhere(['like', 'timezone', $this->timezone])
-            ->andFilterWhere(['like', 'system', $this->system])
-            ->andFilterWhere(['like', 'cc_email', $this->cc_email])
-            ->andFilterWhere(['like', 'note', $this->note])
-            ->andFilterWhere(['like', 'app_id', $this->app_id])
             ->andFilterWhere(['like', 'post_back', $this->post_back])
-            ->andFilterWhere(['like', 'click_pram_name', $this->click_pram_name])
-            ->andFilterWhere(['like', 'click_pram_length', $this->click_pram_length])
-            ->andFilterWhere(['like', 'already_pay', $this->already_pay]);
+            ->andFilterWhere(['like', 'paid', $this->paid])
+            ->andFilterWhere(['like', 'strong_geo', $this->strong_geo])
+            ->andFilterWhere(['like', 'strong_catagory', $this->strong_catagory]);
 
         return $dataProvider;
     }

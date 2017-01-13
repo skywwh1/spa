@@ -78,12 +78,6 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'traffic_source')->dropDownList(ModelsUtil::traffic_source) ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
             <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode)?>
         </div>
     </div>

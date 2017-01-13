@@ -56,4 +56,10 @@ class RegionsDomain extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Campaign::className(), ['target_geo' => 'id']);
     }
+
+    public static function getGeoListByName($name)
+    {
+        return static::find()->select(['domain'])->where(['like', 'domain', $name])->column();
+    }
+
 }

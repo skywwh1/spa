@@ -11,12 +11,14 @@ use Yii;
  * @property string $username
  * @property string $firstname
  * @property string $lastname
- * @property string $team
  * @property string $settlement_type
  * @property integer $bd
  * @property string $system
  * @property integer $status
  * @property string $contacts
+ * @property double $total_revenue
+ * @property double $receivable
+ * @property double $received
  * @property integer $pricing_mode
  * @property integer $type
  * @property string $auth_key
@@ -25,16 +27,17 @@ use Yii;
  * @property integer $created_time
  * @property integer $updated_time
  * @property string $email
+ * @property string $cc_email
  * @property string $company
+ * @property string $country
+ * @property string $city
+ * @property string $address
  * @property string $phone1
  * @property string $phone2
  * @property string $weixin
  * @property integer $qq
  * @property string $skype
  * @property string $alipay
- * @property string $country
- * @property string $city
- * @property string $address
  * @property string $lang
  * @property string $timezone
  * @property integer $firstaccess
@@ -43,9 +46,10 @@ use Yii;
  * @property integer $confirmed
  * @property integer $suspended
  * @property integer $deleted
- * @property string $cc_email
- * @property integer $traffic_source
  * @property string $note
+ *
+ * @property User $bd0
+ * @property Campaign[] $campaigns
  */
 class Advertiser extends \yii\db\ActiveRecord
 {
@@ -64,8 +68,9 @@ class Advertiser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'email'], 'required'],
-            [['status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'traffic_source'], 'integer'],
-            [['username', 'firstname', 'lastname', 'team', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
+            [['status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['total_revenue', 'receivable', 'received'], 'number'],
+            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['contacts', 'password_hash', 'password_reset_token', 'company', 'address', 'note'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
@@ -79,7 +84,7 @@ class Advertiser extends \yii\db\ActiveRecord
             ['cc_email', 'email'],
             [['password_reset_token'], 'unique'],
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
-            [['bd'], 'required','message'=>'Can not found BD'],
+            [['bd'], 'required', 'message' => 'Can not found BD'],
         ];
     }
 
@@ -99,6 +104,9 @@ class Advertiser extends \yii\db\ActiveRecord
             'system' => 'System',
             'status' => 'Status',
             'contacts' => 'Contacts',
+            'total_revenue' => 'Total Revenue',
+            'receivable' => 'Receivable',
+            'received' => 'Received',
             'pricing_mode' => 'Pricing Mode',
             'type' => 'Type',
             'auth_key' => 'Auth Key',
@@ -107,16 +115,17 @@ class Advertiser extends \yii\db\ActiveRecord
             'created_time' => 'Created Time',
             'updated_time' => 'Updated Time',
             'email' => 'Email',
+            'cc_email' => 'Cc Email',
             'company' => 'Company',
             'phone1' => 'Phone',
+            'country' => 'Country',
+            'city' => 'City',
+            'address' => 'Address',
             'phone2' => 'Phone2',
             'weixin' => 'Weixin',
             'qq' => 'Qq',
             'skype' => 'Skype',
             'alipay' => 'Alipay',
-            'country' => 'Country',
-            'city' => 'City',
-            'address' => 'Address',
             'lang' => 'Lang',
             'timezone' => 'Timezone',
             'firstaccess' => 'Firstaccess',
@@ -125,8 +134,6 @@ class Advertiser extends \yii\db\ActiveRecord
             'confirmed' => 'Confirmed',
             'suspended' => 'Suspended',
             'deleted' => 'Deleted',
-            'cc_email' => 'Cc Email',
-            'traffic_source' => 'Traffic Source',
             'note' => 'Note',
         ];
     }
@@ -149,23 +156,17 @@ class Advertiser extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if(parent::beforeSave($insert))
-        {
-            if($insert)
-            {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
                 $this->created_time = time();
                 $this->updated_time = time();
-            }
-            else
-            {
+            } else {
                 $this->updated_time = time();
             }
 
             return true;
 
-        }
-        else
-        {
+        } else {
             return false;
         }
     }
@@ -173,5 +174,10 @@ class Advertiser extends \yii\db\ActiveRecord
     public static function getAdvNameListByName($name)
     {
         return static::find()->select("username")->where(['like', 'username', $name])->column();
+    }
+
+    public static function getOneByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
     }
 }

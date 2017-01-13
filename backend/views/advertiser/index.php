@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'username',
-            'team',
              'settlement_type',
              'bd',
              'system',

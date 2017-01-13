@@ -9,7 +9,6 @@ use Yii;
  *
  * @property integer $id
  * @property string $username
- * @property string $team
  * @property string $firstname
  * @property string $lastname
  * @property integer $type
@@ -18,18 +17,27 @@ use Yii;
  * @property string $password_reset_token
  * @property string $settlement_type
  * @property integer $om
- * @property integer $main_channel
- * @property string $account_name
- * @property string $branch_name
- * @property integer $card_number
+ * @property integer $master_channel
+ * @property string $payment_way
+ * @property string $payment_term
+ * @property string $beneficiary_name
+ * @property string $bank_country
+ * @property string $bank_name
+ * @property string $bank_address
+ * @property string $swift
+ * @property string $account_nu_iban
+ * @property string $company_address
+ * @property string $note
+ * @property string $system
  * @property string $contacts
  * @property integer $created_time
  * @property integer $updated_time
  * @property string $email
+ * @property string $cc_email
+ * @property string $company
  * @property string $country
  * @property string $city
  * @property string $address
- * @property string $company
  * @property string $phone1
  * @property string $phone2
  * @property string $wechat
@@ -44,24 +52,19 @@ use Yii;
  * @property integer $confirmed
  * @property integer $suspended
  * @property integer $deleted
- * @property integer $bd
- * @property string $system
  * @property integer $status
- * @property string $cc_email
  * @property integer $traffic_source
  * @property integer $pricing_mode
- * @property string $note
- * @property string $app_id
  * @property string $post_back
- * @property string $click_pram_name
- * @property string $click_pram_length
  * @property integer $total_revenue
- * @property integer $need_pay
- * @property string $already_pay
+ * @property integer $payable
+ * @property string $paid
+ * @property string $strong_geo
+ * @property string $strong_catagory
  *
  * @property CampaignChannelLog[] $campaignChannelLogs
  * @property Campaign[] $campaigns
- * @property Channel $mainChannel
+ * @property Channel $masterChannel
  * @property Channel[] $channels
  * @property User $om0
  */
@@ -81,12 +84,14 @@ class Channel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'email', 'password_hash', 'post_back','status'], 'required'],
-            [['type', 'card_number', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'bd', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'need_pay'], 'integer'],
-            [['username', 'team', 'firstname', 'lastname', 'settlement_type', 'account_name', 'branch_name', 'contacts', 'alipay', 'timezone', 'system', 'app_id', 'click_pram_name', 'click_pram_length'], 'string', 'max' => 100],
+            //、、, 'payment_way', 'payment_term'
+            [['username', 'email', 'password_hash', 'post_back', 'status'], 'required'],
+            [['username', 'email'], 'required'],
+            [['type',  'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
+            [['username', 'firstname', 'lastname', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_key'], 'string', 'max' => 32],
-            [['password_hash', 'password_reset_token', 'address', 'company', 'note', 'post_back', 'already_pay'], 'string', 'max' => 255],
-            [['email', 'wechat', 'skype', 'cc_email'], 'string', 'max' => 50],
+            [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'string', 'max' => 255],
+            [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 50],
             [['country'], 'string', 'max' => 10],
             [['city'], 'string', 'max' => 120],
             [['phone1', 'phone2'], 'string', 'max' => 20],
@@ -95,7 +100,7 @@ class Channel extends \yii\db\ActiveRecord
             [['email'], 'unique'],
             [['email', 'cc_email'], 'email'],
             [['password_reset_token'], 'unique'],
-            [['main_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Main Channel does not exist', 'targetAttribute' => ['main_channel' => 'id']],
+            [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
             [['om'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['om' => 'id']],
             ['om', 'required', 'message' => 'OM does not exist'],
         ];
@@ -109,7 +114,6 @@ class Channel extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'username' => 'Channel',
-            'team' => 'Team',
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'type' => 'Type',
@@ -118,18 +122,27 @@ class Channel extends \yii\db\ActiveRecord
             'password_reset_token' => 'Password Reset Token',
             'settlement_type' => 'Settlement Type',
             'om' => 'OM',
-            'main_channel' => 'Mater Channel',
-            'account_name' => 'Account Name',
-            'branch_name' => 'Branch Name',
-            'card_number' => 'Card Number',
+            'master_channel' => 'Master Channel',
+            'payment_way' => 'Payment Way',
+            'payment_term' => 'Payment Term',
+            'beneficiary_name' => 'Beneficiary Name',
+            'bank_country' => 'Bank Country',
+            'bank_name' => 'Bank Name',
+            'bank_address' => 'Bank Address',
+            'swift' => 'Swift',
+            'account_nu_iban' => 'Account Number/Iban',
+            'company_address' => 'Company Address',
+            'note' => 'Note',
+            'system' => 'System',
             'contacts' => 'Contacts',
             'created_time' => 'Created Time',
             'updated_time' => 'Updated Time',
             'email' => 'Email',
+            'cc_email' => 'Cc Email',
+            'company' => 'Company',
             'country' => 'Country',
             'city' => 'City',
             'address' => 'Address',
-            'company' => 'Company',
             'phone1' => 'Phone',
             'phone2' => 'Phone2',
             'wechat' => 'Wechat',
@@ -144,20 +157,15 @@ class Channel extends \yii\db\ActiveRecord
             'confirmed' => 'Confirmed',
             'suspended' => 'Suspended',
             'deleted' => 'Deleted',
-            'bd' => 'BD',
-            'system' => 'System',
             'status' => 'Status',
-            'cc_email' => 'Cc Email',
             'traffic_source' => 'Traffic Source',
             'pricing_mode' => 'Pricing Mode',
-            'note' => 'Note',
-            'app_id' => 'App ID',
             'post_back' => 'Post Back',
-            'click_pram_name' => 'Click Pram Name',
-            'click_pram_length' => 'Click Pram Length',
             'total_revenue' => 'Total Revenue',
-            'need_pay' => 'Need Pay',
-            'already_pay' => 'Already Pay',
+            'payable' => 'Payable',
+            'paid' => 'Paid',
+            'strong_geo' => 'Strong Geo',
+            'strong_catagory' => 'Strong Catagory',
         ];
     }
 
@@ -166,7 +174,7 @@ class Channel extends \yii\db\ActiveRecord
      */
     public function getCampaignChannelLogs()
     {
-        return $this->hasMany(S2s::className(), ['channel_id' => 'id']);
+        return $this->hasMany(Deliver::className(), ['channel_id' => 'id']);
     }
 
     /**
@@ -180,9 +188,9 @@ class Channel extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getMainChannel()
+    public function getMasterChannel()
     {
-       return $this->hasOne(Channel::className(), ['id' => 'main_channel']);
+        return $this->hasOne(Channel::className(), ['id' => 'master_channel']);
     }
 
     /**
@@ -190,7 +198,7 @@ class Channel extends \yii\db\ActiveRecord
      */
     public function getChannels()
     {
-        return $this->hasMany(Channel::className(), ['main_channel' => 'id']);
+        return $this->hasMany(Channel::className(), ['master_channel' => 'id']);
     }
 
     /**

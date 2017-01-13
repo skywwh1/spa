@@ -17,6 +17,7 @@ use Yii;
  * @property integer $creator
  * @property integer $create_time
  * @property integer $update_time
+ * @property string $track_url
  * @property string $note
  *
  * @property Campaign $campaign
@@ -70,10 +71,10 @@ class Deliver extends \yii\db\ActiveRecord
             'creator' => 'Creator',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
+            'track_url' => 'Track Url',
             'note' => 'Note',
             'channel0' => 'Channel',
             'campaign_uuid' => 'Campaign UUID',
-            'track_url' => 'Track Url',
         ];
     }
 

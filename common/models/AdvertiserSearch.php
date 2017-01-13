@@ -18,8 +18,9 @@ class AdvertiserSearch extends Advertiser
     public function rules()
     {
         return [
-            [['id', 'bd', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'traffic_source'], 'integer'],
-            [['username', 'firstname', 'lastname', 'team', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'company', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'country', 'city', 'address', 'lang', 'timezone', 'cc_email', 'note'], 'safe'],
+            [['id', 'bd', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'lang', 'timezone', 'note'], 'safe'],
+            [['total_revenue', 'receivable', 'received'], 'number'],
         ];
     }
 
@@ -62,6 +63,9 @@ class AdvertiserSearch extends Advertiser
             'id' => $this->id,
             'bd' => $this->bd,
             'status' => $this->status,
+            'total_revenue' => $this->total_revenue,
+            'receivable' => $this->receivable,
+            'received' => $this->received,
             'pricing_mode' => $this->pricing_mode,
             'type' => $this->type,
             'created_time' => $this->created_time,
@@ -73,13 +77,11 @@ class AdvertiserSearch extends Advertiser
             'confirmed' => $this->confirmed,
             'suspended' => $this->suspended,
             'deleted' => $this->deleted,
-            'traffic_source' => $this->traffic_source,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'team', $this->team])
             ->andFilterWhere(['like', 'settlement_type', $this->settlement_type])
             ->andFilterWhere(['like', 'system', $this->system])
             ->andFilterWhere(['like', 'contacts', $this->contacts])
@@ -87,18 +89,18 @@ class AdvertiserSearch extends Advertiser
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
             ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['like', 'cc_email', $this->cc_email])
             ->andFilterWhere(['like', 'company', $this->company])
+            ->andFilterWhere(['like', 'country', $this->country])
+            ->andFilterWhere(['like', 'city', $this->city])
+            ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'phone1', $this->phone1])
             ->andFilterWhere(['like', 'phone2', $this->phone2])
             ->andFilterWhere(['like', 'weixin', $this->weixin])
             ->andFilterWhere(['like', 'skype', $this->skype])
             ->andFilterWhere(['like', 'alipay', $this->alipay])
-            ->andFilterWhere(['like', 'country', $this->country])
-            ->andFilterWhere(['like', 'city', $this->city])
-            ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'lang', $this->lang])
             ->andFilterWhere(['like', 'timezone', $this->timezone])
-            ->andFilterWhere(['like', 'cc_email', $this->cc_email])
             ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;

@@ -19,13 +19,11 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'username') ?>
 
-    <?= $form->field($model, 'team') ?>
-
     <?= $form->field($model, 'firstname') ?>
 
     <?= $form->field($model, 'lastname') ?>
 
-    <?php // echo $form->field($model, 'type') ?>
+    <?= $form->field($model, 'type') ?>
 
     <?php // echo $form->field($model, 'auth_key') ?>
 
@@ -37,13 +35,29 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'om') ?>
 
-    <?php // echo $form->field($model, 'main_channel') ?>
+    <?php // echo $form->field($model, 'master_channel') ?>
 
-    <?php // echo $form->field($model, 'account_name') ?>
+    <?php // echo $form->field($model, 'payment_way') ?>
 
-    <?php // echo $form->field($model, 'branch_name') ?>
+    <?php // echo $form->field($model, 'payment_term') ?>
 
-    <?php // echo $form->field($model, 'card_number') ?>
+    <?php // echo $form->field($model, 'beneficiary_name') ?>
+
+    <?php // echo $form->field($model, 'bank_country') ?>
+
+    <?php // echo $form->field($model, 'bank_name') ?>
+
+    <?php // echo $form->field($model, 'bank_address') ?>
+
+    <?php // echo $form->field($model, 'swift') ?>
+
+    <?php // echo $form->field($model, 'account_nu_iban') ?>
+
+    <?php // echo $form->field($model, 'company_address') ?>
+
+    <?php // echo $form->field($model, 'note') ?>
+
+    <?php // echo $form->field($model, 'system') ?>
 
     <?php // echo $form->field($model, 'contacts') ?>
 
@@ -53,13 +67,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'email') ?>
 
+    <?php // echo $form->field($model, 'cc_email') ?>
+
+    <?php // echo $form->field($model, 'company') ?>
+
     <?php // echo $form->field($model, 'country') ?>
 
     <?php // echo $form->field($model, 'city') ?>
 
     <?php // echo $form->field($model, 'address') ?>
-
-    <?php // echo $form->field($model, 'company') ?>
 
     <?php // echo $form->field($model, 'phone1') ?>
 
@@ -89,33 +105,23 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'deleted') ?>
 
-    <?php // echo $form->field($model, 'bd') ?>
-
-    <?php // echo $form->field($model, 'system') ?>
-
     <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'cc_email') ?>
 
     <?php // echo $form->field($model, 'traffic_source') ?>
 
     <?php // echo $form->field($model, 'pricing_mode') ?>
 
-    <?php // echo $form->field($model, 'note') ?>
-
-    <?php // echo $form->field($model, 'app_id') ?>
-
     <?php // echo $form->field($model, 'post_back') ?>
-
-    <?php // echo $form->field($model, 'click_pram_name') ?>
-
-    <?php // echo $form->field($model, 'click_pram_length') ?>
 
     <?php // echo $form->field($model, 'total_revenue') ?>
 
-    <?php // echo $form->field($model, 'need_pay') ?>
+    <?php // echo $form->field($model, 'payable') ?>
 
-    <?php // echo $form->field($model, 'already_pay') ?>
+    <?php // echo $form->field($model, 'paid') ?>
+
+    <?php // echo $form->field($model, 'strong_geo') ?>
+
+    <?php // echo $form->field($model, 'strong_catagory') ?>
 
     <div class="form-group">
         <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

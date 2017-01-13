@@ -49,9 +49,9 @@ class ModelsUtil
         3 => 'Appsflyer',
         4 => 'Kochava',
         5 => 'MAT',
-        6=>'Tune',
-        7=>'TD',
-        0=>'Others',
+        6 => 'Tune',
+        7 => 'TD',
+        0 => 'Others',
     );
 
     const traffic_source = array(
@@ -90,6 +90,18 @@ class ModelsUtil
         1 => 'Fast Jump'
     );
 
+    const payment_way = array(
+        1 => "Wire",
+        2 => "Paypal"
+    );
+
+    const payment_term = array(
+        1 => 'NET30',
+        2 => 'NET15',
+        3 => 'Bi-weekly',
+        4 => 'Weekly',
+    );
+
     public static function getValue($data, $k)
     {
         return ArrayHelper::getValue($data, $k);
@@ -98,6 +110,31 @@ class ModelsUtil
     public static function getPlatform($k)
     {
         return static::getValue(static::platform, $k);
+    }
+
+    public static function getTrafficeSource($k)
+    {
+        return static::getValue(static::traffic_source, $k);
+    }
+
+    public static function getCreateType($k)
+    {
+        return static::getValue(static::create_type, $k);
+    }
+
+    public static function getPricingMode($k)
+    {
+        return static::getValue(static::pricing_mode, $k);
+    }
+
+    public static function getSystem($k)
+    {
+        return static::getValue(static::system, $k);
+    }
+
+    public static function getAdvertiserStatus($k)
+    {
+        return static::getValue(static::advertiser_status, $k);
     }
 
 }

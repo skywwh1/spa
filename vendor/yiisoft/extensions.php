@@ -102,4 +102,13 @@ return array (
       '@kartik/daterange' => $vendorDir . '/kartik-v/yii2-date-range',
     ),
   ),
+  'kartik-v/yii2-checkbox-x' => 
+  array (
+    'name' => 'kartik-v/yii2-checkbox-x',
+    'version' => '9999999-dev',
+    'alias' => 
+    array (
+      '@kartik/checkbox' => $vendorDir . '/kartik-v/yii2-checkbox-x',
+    ),
+  ),
 );

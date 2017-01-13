@@ -124,7 +124,19 @@ use yii\widgets\ActiveForm;
     </div>
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'target_geo')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
+                'pluginOptions' => ['highlight' => true],
+                'options' => ['value' => isset($model->target_geo) ? $model->targetGeo->domain : '',],
+                'dataset' => [
+                    [
+                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                        'display' => 'value',
+                        'remote' => [
+                            'url' => Url::to(['campaign/get_geo']) . '?name=%QUERY',
+                            'wildcard' => '%QUERY'
+                        ]
+                    ]],
+            ]) ?>
         </div>
     </div>
 
@@ -207,15 +219,10 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'creative_type')->textInput() ?>
+            <?= $form->field($model, 'creative_type')->dropDownList(ModelsUtil::create_type) ?>
         </div>
     </div>
 
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'creative_description')->textarea(['maxlength' => true]) ?>
-        </div>
-    </div>
     <div class='page-header'>
         <h4>CPA Info</h4>
     </div>
@@ -241,7 +248,7 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'indirect')->dropDownList(ModelsUtil::user_status)?>
+            <?= $form->field($model, 'indirect')->dropDownList(ModelsUtil::user_status) ?>
         </div>
     </div>
 
@@ -259,7 +266,7 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'open_type')->textInput() ?>
+            <?= $form->field($model, 'open_type')->dropDownList(ModelsUtil::open_type) ?>
         </div>
     </div>
 
@@ -293,18 +300,6 @@ use yii\widgets\ActiveForm;
     <div class='form-group row'>
         <div class='col-lg-4'>
             <?= $form->field($model, 'adv_link')->textInput(['maxlength' => true]) ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'link_type')->textInput() ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'other_setting')->dropDownList(ModelsUtil::campaign_other_setting,['prompt'=>'Select……']) ?>
         </div>
     </div>
 

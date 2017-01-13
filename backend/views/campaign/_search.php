@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'campaign_uuid') ?>
 
-    <?php // echo $form->field($model, 'pricing_model') ?>
+    <?php // echo $form->field($model, 'pricing_mode') ?>
 
     <?php // echo $form->field($model, 'promote_start') ?>
 
@@ -36,10 +36,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'device') ?>
 
     <?php // echo $form->field($model, 'platform') ?>
-
-    <?php // echo $form->field($model, 'budget') ?>
-
-    <?php // echo $form->field($model, 'open_budget') ?>
 
     <?php // echo $form->field($model, 'daily_cap') ?>
 
@@ -103,17 +99,13 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'subid_status') ?>
 
-    <?php // echo $form->field($model, 'strack_way') ?>
+    <?php // echo $form->field($model, 'track_way') ?>
 
     <?php // echo $form->field($model, 'third_party') ?>
 
     <?php // echo $form->field($model, 'track_link_domain') ?>
 
     <?php // echo $form->field($model, 'adv_link') ?>
-
-    <?php // echo $form->field($model, 'link_type') ?>
-
-    <?php // echo $form->field($model, 'other_setting') ?>
 
     <?php // echo $form->field($model, 'ip_blacklist') ?>
 

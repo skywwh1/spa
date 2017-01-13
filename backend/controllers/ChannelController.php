@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\Campaign;
 use common\models\User;
+use common\utility\MailUtil;
 use Yii;
 use common\models\Channel;
 use common\models\ChannelSearch;
@@ -70,8 +71,8 @@ class ChannelController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $user = User::findByUsername($model->om);
             $model->om = isset($user) ? $user->id : "";
-            $main_chan = Channel::findChannelByName($model->main_channel);
-            $model->main_channel = isset($main_chan) ? $main_chan->id : null;
+            $main_chan = Channel::findChannelByName($model->master_channel);
+            $model->master_channel = isset($main_chan) ? $main_chan->id : null;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -144,20 +145,12 @@ class ChannelController extends Controller
 ///*****************************************************************************************
     public function actionTest()
     {
-        echo "aaa";
-        $mail = \Yii::$app->mailer->compose()
-            ->setTo('evan_wu95@126.com')
-            ->setSubject('邮件发送配置')
-            //->setTextBody('Yii中文网教程真好 www.yii-china.com')   //发布纯文字文本
-            ->setHtmlBody("<br>Yii中文网教程真好！www.yii-china.com")//发布可以带html标签的文本
-            ->send();
-        if ($mail)
-            echo 'success';
-        else
-            echo 'fail';
-        echo "kk";
+
+        $aa = new Channel();
+        $aa->username='999999999999';
+        $aa->email = "evan_wu95@126.com";
+        MailUtil::sendCreateChannel($aa);
         die();
-        return $this->render('test');
     }
 
     public function actionAjaxtest()

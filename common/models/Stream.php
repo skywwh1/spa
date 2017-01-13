@@ -12,6 +12,7 @@ use Yii;
  * @property string $cp_uid
  * @property string $ch_id
  * @property string $pl
+ * @property string $tx_id
  * @property string $ip
  */
 class Stream extends \yii\db\ActiveRecord
@@ -31,7 +32,7 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             [['click_id', 'cp_uid', 'ch_id'], 'required'],
-            [['click_id', 'cp_uid', 'ch_id', 'pl', 'ip'], 'string', 'max' => 255],
+            [['click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ip'], 'string', 'max' => 255],
         ];
     }
 
@@ -46,6 +47,7 @@ class Stream extends \yii\db\ActiveRecord
             'cp_uid' => 'cp_uid',
             'ch_id' => 'ch_id',
             'pl' => 'pl',
+            'tx_id' => 'Tx ID',
             'ip' => 'IP',
         ];
     }

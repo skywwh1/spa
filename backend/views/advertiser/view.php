@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'username',
-            'team',
+//            'team',
             //'settlement_type',
             [
                 'attribute'=>'settlement_type',
@@ -87,11 +87,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             //'deleted',
             'cc_email:email',
-            //'traffic_source',
-            [
-                'attribute'=>'traffic_source',
-                'value'=>ModelsUtil::getValue(ModelsUtil::traffic_source,$model->traffic_source),
-            ],
             'note:ntext',
         ],
     ]) ?>

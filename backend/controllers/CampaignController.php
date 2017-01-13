@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Advertiser;
+use common\models\RegionsDomain;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
@@ -66,13 +67,18 @@ class CampaignController extends Controller
     {
         $model = new Campaign();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            $advertiser = Advertiser::getOneByUsername($model->advertiser);
+            $model->advertiser = isset($advertiser) ? $advertiser->id : null;
+            $geo = RegionsDomain::findOne(['domain' => $model->target_geo]);
+            $model->target_geo = isset($geo) ? $geo->id : null;
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
     }
 
     /**
@@ -86,12 +92,10 @@ class CampaignController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            //$model->promote_start = strtotime( $model->promote_start);
-           // $model->promote_end = strtotime( $model->promote_end);
-//            $model->validate();
-            echo "<pre>";
-            var_dump($model);
-            die();
+            $advertiser = Advertiser::getOneByUsername($model->advertiser);
+            $model->advertiser = isset($advertiser) ? $advertiser->id : null;
+            $geo = RegionsDomain::findOne(['domain' => $model->target_geo]);
+            $model->target_geo = isset($geo) ? $geo->id : null;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -138,5 +142,10 @@ class CampaignController extends Controller
     public function actionGet_adv_list($name)
     {
         return \JsonUtil::toTypeHeadJson(Advertiser::getAdvNameListByName($name));
+    }
+
+    public function actionGet_geo($name)
+    {
+        return \JsonUtil::toTypeHeadJson(RegionsDomain::getGeoListByName($name));
     }
 }

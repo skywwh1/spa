@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1d985316ca7083b6b658499ef9c35217",
+    "content-hash": "437e99a9a9c6d507a369ae2122b6b3a1",
     "packages": [
         {
             "name": "bizley/ajaxdropdown",
@@ -341,6 +341,103 @@
                 "html"
             ],
             "time": "2016-07-16T12:58:58+00:00"
+        },
+        {
+            "name": "kartik-v/bootstrap-checkbox-x",
+            "version": "v1.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/bootstrap-checkbox-x.git",
+                "reference": "af83ff5293a79551cbb2fc38473318e6c5d25854"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/bootstrap-checkbox-x/zipball/af83ff5293a79551cbb2fc38473318e6c5d25854",
+                "reference": "af83ff5293a79551cbb2fc38473318e6c5d25854",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "kartik\\plugins\\checkbox\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "An extended checkbox plugin for bootstrap with three states and additional styles.",
+            "homepage": "https://github.com/kartik-v/bootstrap-checkbox-x",
+            "keywords": [
+                "bootstrap",
+                "checkbox",
+                "indeterminate",
+                "jquery",
+                "null",
+                "state",
+                "three"
+            ],
+            "time": "2015-09-22T02:28:53+00:00"
+        },
+        {
+            "name": "kartik-v/yii2-checkbox-x",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kartik-v/yii2-checkbox-x.git",
+                "reference": "3c7527fd2a344e405061c9720640e5a2376e558a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kartik-v/yii2-checkbox-x/zipball/3c7527fd2a344e405061c9720640e5a2376e558a",
+                "reference": "3c7527fd2a344e405061c9720640e5a2376e558a",
+                "shasum": ""
+            },
+            "require": {
+                "kartik-v/bootstrap-checkbox-x": "~1.5",
+                "kartik-v/yii2-krajee-base": "~1.7"
+            },
+            "type": "yii2-extension",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "kartik\\checkbox\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD 3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Kartik Visweswaran",
+                    "email": "kartikv2@gmail.com",
+                    "homepage": "http://www.krajee.com/"
+                }
+            ],
+            "description": "Extended checkbox widget for bootstrap with three states and additional styles.",
+            "homepage": "https://github.com/kartik-v/yii2-checkbox-x",
+            "keywords": [
+                "bootstrap",
+                "checkbox",
+                "indeterminate",
+                "jquery",
+                "null",
+                "state",
+                "three"
+            ],
+            "time": "2016-11-26 10:46:54"
         },
         {
             "name": "kartik-v/yii2-date-range",
@@ -3267,7 +3364,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "kartik-v/yii2-widget-datepicker": 20,
-        "kartik-v/yii2-field-range": 20
+        "kartik-v/yii2-field-range": 20,
+        "kartik-v/yii2-checkbox-x": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

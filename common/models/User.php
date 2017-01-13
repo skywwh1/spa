@@ -47,6 +47,7 @@ use yii\web\IdentityInterface;
 class User extends \yii\db\ActiveRecord implements IdentityInterface
 {
     const STATUS_ACTIVE = 10;
+
     /**
      * @inheritdoc
      */
@@ -63,7 +64,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['username', 'email'], 'required'],
             ['username', 'filter', 'filter' => 'trim'],
-            [['parent_id', 'type',  'status', 'qq', 'firstaccess', 'lastaccess', 'picture', 'suspended', 'deleted'], 'integer'],
+            [['parent_id', 'type', 'status', 'qq', 'firstaccess', 'lastaccess', 'picture', 'suspended', 'deleted'], 'integer'],
             [['username', 'firstname', 'lastname', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['company', 'address'], 'string', 'max' => 255],
             [['email', 'weixin', 'skype'], 'string', 'max' => 50],
@@ -115,6 +116,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             'deleted' => 'Deleted',
         ];
     }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -122,6 +124,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         return $this->hasMany(Advertiser::className(), ['bd' => 'id']);
     }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -304,18 +307,20 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+//
+//    public function getBdNameList($username){
+//        static::find()->select()->column();
+//    }
 
-    public function getBdNameList($username){
-        static::find()->select()->column();
+    public static function getBDList($username)
+    {
+        //->andWhere(["type"=>8])
+        return static::find()->select("username")->where(["like", "username", $username])->column();
     }
 
-    public static function getBDList($username){
-        var_dump($username);
-        die();
-        return static::find()->select("username")->where(["like","username",$username])->andWhere(["type"=>8])->column();
-    }
-
-    public static function getOMList($username){
-        return static::find()->select("username")->where(["like","username",$username])->andWhere(["type"=>9])->column();
+    public static function getOMList($username)
+    {
+        //->andWhere(["type"=>9])
+        return static::find()->select("username")->where(["like", "username", $username])->column();
     }
 }

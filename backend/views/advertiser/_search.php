@@ -23,9 +23,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'lastname') ?>
 
-    <?= $form->field($model, 'team') ?>
-
-    <?php // echo $form->field($model, 'settlement_type') ?>
+    <?= $form->field($model, 'settlement_type') ?>
 
     <?php // echo $form->field($model, 'bd') ?>
 
@@ -34,6 +32,12 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'contacts') ?>
+
+    <?php // echo $form->field($model, 'total_revenue') ?>
+
+    <?php // echo $form->field($model, 'receivable') ?>
+
+    <?php // echo $form->field($model, 'received') ?>
 
     <?php // echo $form->field($model, 'pricing_mode') ?>
 
@@ -51,7 +55,15 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'email') ?>
 
+    <?php // echo $form->field($model, 'cc_email') ?>
+
     <?php // echo $form->field($model, 'company') ?>
+
+    <?php // echo $form->field($model, 'country') ?>
+
+    <?php // echo $form->field($model, 'city') ?>
+
+    <?php // echo $form->field($model, 'address') ?>
 
     <?php // echo $form->field($model, 'phone1') ?>
 
@@ -64,12 +76,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'skype') ?>
 
     <?php // echo $form->field($model, 'alipay') ?>
-
-    <?php // echo $form->field($model, 'country') ?>
-
-    <?php // echo $form->field($model, 'city') ?>
-
-    <?php // echo $form->field($model, 'address') ?>
 
     <?php // echo $form->field($model, 'lang') ?>
 
@@ -86,10 +92,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'suspended') ?>
 
     <?php // echo $form->field($model, 'deleted') ?>
-
-    <?php // echo $form->field($model, 'cc_email') ?>
-
-    <?php // echo $form->field($model, 'traffic_source') ?>
 
     <?php // echo $form->field($model, 'note') ?>
 

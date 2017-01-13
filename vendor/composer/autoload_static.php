@@ -32,9 +32,11 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'k' => 
         array (
             'kartik\\typeahead\\' => 17,
+            'kartik\\plugins\\checkbox\\' => 24,
             'kartik\\field\\' => 13,
             'kartik\\daterange\\' => 17,
             'kartik\\date\\' => 12,
+            'kartik\\checkbox\\' => 16,
             'kartik\\base\\' => 12,
         ),
         'c' => 
@@ -125,6 +127,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-typeahead',
         ),
+        'kartik\\plugins\\checkbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/bootstrap-checkbox-x',
+        ),
         'kartik\\field\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-field-range',
@@ -136,6 +142,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'kartik\\date\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-datepicker',
+        ),
+        'kartik\\checkbox\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-checkbox-x',
         ),
         'kartik\\base\\' => 
         array (

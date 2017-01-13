@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use SebastianBergmann\CodeCoverage\Driver\Driver;
 use Yii;
 use yii\helpers\Json;
 
@@ -13,19 +14,17 @@ use yii\helpers\Json;
  * @property string $campaign_name
  * @property string $tag
  * @property string $campaign_uuid
- * @property integer $pricing_model
+ * @property integer $pricing_mode
  * @property integer $promote_start
  * @property integer $promote_end
  * @property integer $end_time
  * @property integer $device
  * @property integer $platform
- * @property integer $budget
- * @property integer $open_budget
  * @property integer $daily_cap
  * @property integer $open_cap
  * @property double $adv_price
- * @property integer $now_payout
- * @property string $target_geo
+ * @property double $now_payout
+ * @property integer $target_geo
  * @property string $traffice_source
  * @property string $note
  * @property string $preview_link
@@ -56,8 +55,6 @@ use yii\helpers\Json;
  * @property integer $third_party
  * @property integer $track_link_domain
  * @property string $adv_link
- * @property integer $link_type
- * @property string $other_setting
  * @property string $ip_blacklist
  * @property integer $creator
  * @property integer $create_time
@@ -65,8 +62,9 @@ use yii\helpers\Json;
  *
  * @property Advertiser $advertiser0
  * @property User $creator0
- * @property CampaignChannelLog[] $campaignChannelLogs
+ * @property Deliver[] $delivers
  * @property Channel[] $channels
+ * @property RegionsDomain $targetGeo
  */
 class Campaign extends \yii\db\ActiveRecord
 {
@@ -84,15 +82,16 @@ class Campaign extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_name', 'campaign_uuid','adv_link','budget', 'daily_cap'], 'required'],
-            [['campaign_uuid'],'unique'],
+            [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price'], 'required'],
+            [['campaign_uuid'], 'unique'],
 //            'promote_start', 'promote_end', 'end_time',
-            [['pricing_mode', 'device', 'platform', 'budget', 'open_budget', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'pm', 'bd', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['adv_price','now_payout'], 'number'],
+            [['pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'pm', 'bd', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['adv_price', 'now_payout'], 'number'],
             [['campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
-            [['target_geo', 'note', 'preview_link', 'description', 'creative_link', 'creative_description', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
+            [['note', 'preview_link', 'description', 'creative_link', 'creative_description', 'adv_link', 'ip_blacklist'], 'string', 'max' => 255],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
-            ['advertiser', 'required','message'=>'Advertiser does not exist'],
+            ['advertiser', 'required', 'message' => 'Advertiser does not exist'],
+            ['target_geo', 'required', 'message' => 'Target Geo does not exist'],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
         ];
     }
@@ -108,14 +107,12 @@ class Campaign extends \yii\db\ActiveRecord
             'campaign_name' => 'Campaign Name',
             'tag' => 'Tag',
             'campaign_uuid' => 'Campaign Uuid',
-            'pricing_model' => 'Pricing Model',
+            'pricing_mode' => 'Pricing Mode',
             'promote_start' => 'Promote Start',
             'promote_end' => 'Promote End',
             'end_time' => 'End Time',
             'device' => 'Device',
             'platform' => 'Platform',
-            'budget' => 'Budget',
-            'open_budget' => 'Open Budget',
             'daily_cap' => 'Daily Cap',
             'open_cap' => 'Open Cap',
             'adv_price' => 'Adv Price',
@@ -151,8 +148,6 @@ class Campaign extends \yii\db\ActiveRecord
             'third_party' => 'Third Party',
             'track_link_domain' => 'Track Link Domain',
             'adv_link' => 'Adv Link',
-            'link_type' => 'Link Type',
-            'other_setting' => 'Other Setting',
             'ip_blacklist' => 'Ip Blacklist',
             'creator' => 'Creator',
             'create_time' => 'Create Time',
@@ -171,6 +166,14 @@ class Campaign extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getTargetGeo()
+    {
+        return $this->hasOne(RegionsDomain::className(), ['id' => 'target_geo']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCreator0()
     {
         return $this->hasOne(User::className(), ['id' => 'creator']);
@@ -179,9 +182,9 @@ class Campaign extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getCampaignChannelLogs()
+    public function getDelivers()
     {
-        return $this->hasMany(CampaignChannelLog::className(), ['campaign_id' => 'id']);
+        return $this->hasMany(Deliver::className(), ['campaign_id' => 'id']);
     }
 
     /**
