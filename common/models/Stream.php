@@ -42,11 +42,11 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'click_id' => 'Click ID',
-            'cp_uid' => 'Cp Uid',
-            'ch_id' => 'Ch ID',
-            'pl' => 'Pl',
-            'ip' => 'Ip',
+            'click_id' => 'click_id',
+            'cp_uid' => 'cp_uid',
+            'ch_id' => 'ch_id',
+            'pl' => 'pl',
+            'ip' => 'IP',
         ];
     }
 }

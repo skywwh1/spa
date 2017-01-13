@@ -310,6 +310,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     }
 
     public static function getBDList($username){
+        var_dump($username);
+        die();
         return static::find()->select("username")->where(["like","username",$username])->andWhere(["type"=>8])->column();
     }
 

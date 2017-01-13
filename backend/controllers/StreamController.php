@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Stream;
 use common\models\StreamSearch;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -15,6 +16,7 @@ use yii\filters\VerbFilter;
 class StreamController extends Controller
 {
     public $layout = false;
+
     /**
      * @inheritdoc
      */
@@ -126,18 +128,26 @@ class StreamController extends Controller
     public function actionTrack()
     {
         $model = new Stream();
+        $data = Yii::$app->request->getQueryParams();
+        $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
+        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
+        $model->pl = isset($data['pl']) ? $data['pl'] : null;
+        $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
+        $model->ip = Yii::$app->request->getUserIP();
 
-        var_dump(Yii::$app->request->queryString);
-        die();
-        if ($model->load(Yii::$app->request->post()) ) {
-//            && $model->save()
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+//        $model->validate();
+//        var_dump($model->getErrors());
+//        die();
+        if (!$model->validate() && $model->hasErrors()) {
+            $echoStr = "";
+            foreach ($model->getErrors() as $k => $v) {
+                $echoStr .= implode("", $v) . "</br>";
+            }
+            echo $echoStr;
+            die();
+        }else {
+            $model->save();
+            return $this->redirect();
         }
-
-        return Yii::$app->request->getUserIP();
     }
 }

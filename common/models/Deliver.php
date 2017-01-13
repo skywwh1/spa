@@ -106,12 +106,16 @@ class Deliver extends \yii\db\ActiveRecord
      */
     public static function findIdentity($campaignId, $channelId)
     {
+//        echo $campaignId."<br>";
+//        echo $channelId."<br>";
+//        var_dump(static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]));
+//        die();
         return static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]);
     }
 
     public function ifExist()
     {
-        if (!static::findIdentity($this->channel_id, $this->channel_id)) {
+        if (static::findIdentity($this->campaign_id, $this->channel_id)) {
             $this->addError('channel0', 'The Campaign had been offer to this channel');
         }
     }

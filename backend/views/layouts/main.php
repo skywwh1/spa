@@ -64,7 +64,6 @@ AppAsset::register($this);
             <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
                 <i class='icon-user'></i>
                 <strong><?=Yii::$app->user->identity->username?></strong>
-                <img class="img-rounded" src="http://placehold.it/20x20/ccc/777" />
                 <b class='caret'></b>
             </a>
             <ul class='dropdown-menu'>

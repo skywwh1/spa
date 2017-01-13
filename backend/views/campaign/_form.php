@@ -101,15 +101,6 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-2'>
-            <?= $form->field($model, 'budget')->textInput() ?>
-        </div><div class='col-lg-2'>
-            <?= $form->field($model, 'open_budget')->dropDownList(ModelsUtil::user_status) ?>
-        </div>
-
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-2'>
             <?= $form->field($model, 'daily_cap')->textInput() ?>
         </div>
         <div class='col-lg-2'>
@@ -139,7 +130,7 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'traffice_source')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'traffice_source')->dropDownList(ModelsUtil::traffic_source) ?>
         </div>
     </div>
 

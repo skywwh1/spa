@@ -15,8 +15,19 @@ class ModelsUtil
         1 => "CPI",
         2 => "CPA",
         3 => "CPM",
-        4 => "CPC",);
+        4 => "CPC",
+        5 => "CPO",
+        6 => "CPS",
+    );
     const status = array();
+    const create_type = array(
+        1 => "banner",
+        2 => "video",
+    );
+    const  open_type = array(
+        1 => "open",
+        0 => "private",
+    );
     const link_type = array();
     const user_type = array(
         0 => "Admin",
@@ -33,11 +44,14 @@ class ModelsUtil
     );
 
     const system = array(
-        1 => 'SuperADS',
-        2 => 'HighMob',
-        3 => 'Hasoffers',
-        4 => 'Fund',
-        5 => 'Mediabuy',
+        1 => 'ADV Server',
+        2 => 'Adjust',
+        3 => 'Appsflyer',
+        4 => 'Kochava',
+        5 => 'MAT',
+        6=>'Tune',
+        7=>'TD',
+        0=>'Others',
     );
 
     const traffic_source = array(

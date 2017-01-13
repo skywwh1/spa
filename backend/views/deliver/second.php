@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        <?= Html::button('Go Back',array('class' =>'btn btn-primary','onclick'=>'js:history.go(-1);returnFalse;'))?>
+        <?= Html::a('Go Back', ['deliver/create'],array('class' =>'btn btn-primary')) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
