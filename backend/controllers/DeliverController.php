@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Campaign;
 use Yii;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -78,6 +79,7 @@ class DeliverController extends Controller
             if ($model->step == 1) {
                 $model->setCampaignIdBy($model->campaign_uuid);
                 $model->setChannelIdBy($model->channel0);
+                $model->adv_price = $model->campaign->adv_price;
                 return $this->render('second', [
                     'model' => $model,
                 ]);

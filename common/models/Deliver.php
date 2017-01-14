@@ -30,6 +30,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $campaign_uuid;
     public $channel0;
     public $step;
+    public $adv_price;
 
     /**
      * @inheritdoc
