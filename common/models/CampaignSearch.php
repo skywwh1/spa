@@ -18,7 +18,7 @@ class CampaignSearch extends Campaign
     public function rules()
     {
         return [
-            [['id', 'advertiser', 'pricing_mode', 'promote_start', 'promote_end', 'end_time', 'device', 'platform', 'daily_cap', 'open_cap', 'target_geo', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'pm', 'bd', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['id', 'advertiser', 'pricing_mode', 'promote_start', 'promote_end', 'end_time', 'device', 'platform', 'daily_cap', 'open_cap', 'target_geo', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
             [['campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'note', 'preview_link', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'adv_link', 'ip_blacklist'], 'safe'],
             [['adv_price', 'now_payout'], 'number'],
         ];
@@ -79,8 +79,6 @@ class CampaignSearch extends Campaign
             'indirect' => $this->indirect,
             'cap' => $this->cap,
             'cvr' => $this->cvr,
-            'pm' => $this->pm,
-            'bd' => $this->bd,
             'status' => $this->status,
             'open_type' => $this->open_type,
             'subid_status' => $this->subid_status,

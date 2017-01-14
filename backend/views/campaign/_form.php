@@ -254,18 +254,6 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'pm')->textInput() ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'bd')->textInput() ?>
-        </div>
-    </div>
-
-    <div class='form-group row'>
-        <div class='col-lg-4'>
             <?= $form->field($model, 'open_type')->dropDownList(ModelsUtil::open_type) ?>
         </div>
     </div>

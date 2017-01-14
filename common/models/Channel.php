@@ -86,7 +86,7 @@ class Channel extends \yii\db\ActiveRecord
     {
         return [
             //、、, 'payment_way', 'payment_term'
-            [['username', 'email', 'password_hash', 'post_back', 'status'], 'required'],
+            [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
             [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
             [['username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],

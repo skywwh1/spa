@@ -66,7 +66,8 @@ class AdvertiserController extends Controller
     {
         $model = new Advertiser();
         if ($model->load(Yii::$app->request->post())) {
-            $model->bd = User::findByUsername($model->bd)->id;
+            $user = User::findByUsername($model->bd);
+            $model->bd = isset($user) ? $user->id : null;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }

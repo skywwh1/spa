@@ -61,8 +61,8 @@ $this->params['breadcrumbs'][] = $this->title;
              'cap',
              'cvr',
              'epc',
-             'pm',
-             'bd',
+//             'pm',
+//             'bd',
              'status',
 
             ['class' => 'yii\grid\ActionColumn'],

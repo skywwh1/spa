@@ -18,8 +18,8 @@ class AdvertiserSearch extends Advertiser
     public function rules()
     {
         return [
-            [['id', 'bd', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
-            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'lang', 'timezone', 'note'], 'safe'],
+            [['id', 'pm', 'bd', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'post_parameter', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'lang', 'timezone', 'note'], 'safe'],
             [['total_revenue', 'receivable', 'received'], 'number'],
         ];
     }
@@ -61,6 +61,7 @@ class AdvertiserSearch extends Advertiser
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'pm' => $this->pm,
             'bd' => $this->bd,
             'status' => $this->status,
             'total_revenue' => $this->total_revenue,
@@ -88,6 +89,7 @@ class AdvertiserSearch extends Advertiser
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
             ->andFilterWhere(['like', 'password_hash', $this->password_hash])
             ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
+            ->andFilterWhere(['like', 'post_parameter', $this->post_parameter])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['like', 'cc_email', $this->cc_email])
             ->andFilterWhere(['like', 'company', $this->company])

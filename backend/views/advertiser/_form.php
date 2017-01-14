@@ -29,9 +29,15 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
+            <?= $form->field($model, 'pm')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+        </div>
+    </div>
+
+    <div class='form-group row'>
+        <div class='col-lg-4'>
             <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
-                'pluginOptions' => ['highlight'=>true],
-                'options' => ['value' => isset($model->bd)?$model->bd0->username:'',],
+                'pluginOptions' => ['highlight' => true],
+                'options' => ['value' => isset($model->bd) ? $model->bd0->username : '',],
                 'dataset' => [
                     [
                         'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -57,6 +63,11 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 
+    <div class='form-group row'>
+        <div class='col-lg-4'>
+            <?= $form->field($model, 'post_parameter')->textInput(['value' => 'click_id', 'readonly' => true]) ?>
+        </div>
+    </div>
 
     <div class='form-group row'>
         <div class='col-lg-4'>
@@ -78,7 +89,7 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode)?>
+            <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
         </div>
     </div>
 

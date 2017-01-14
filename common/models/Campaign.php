@@ -46,8 +46,6 @@ use yii\helpers\Json;
  * @property integer $cap
  * @property integer $cvr
  * @property string $epc
- * @property integer $pm
- * @property integer $bd
  * @property integer $status
  * @property integer $open_type
  * @property integer $subid_status
@@ -85,7 +83,7 @@ class Campaign extends \yii\db\ActiveRecord
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price'], 'required'],
             [['campaign_uuid'], 'unique'],
 //            'promote_start', 'promote_end', 'end_time',
-            [['pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'pm', 'bd', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout'], 'number'],
             [['campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
             [['note', 'preview_link', 'description', 'creative_link', 'creative_description', 'adv_link', 'ip_blacklist'], 'string', 'max' => 255],
@@ -139,8 +137,6 @@ class Campaign extends \yii\db\ActiveRecord
             'cap' => 'Cap',
             'cvr' => 'Cvr',
             'epc' => 'Epc',
-            'pm' => 'Pm',
-            'bd' => 'Bd',
             'status' => 'Status',
             'open_type' => 'Open Type',
             'subid_status' => 'Subid Status',

@@ -12,6 +12,7 @@ use Yii;
  * @property string $firstname
  * @property string $lastname
  * @property string $settlement_type
+ * @property integer $pm
  * @property integer $bd
  * @property string $system
  * @property integer $status
@@ -26,6 +27,7 @@ use Yii;
  * @property string $password_reset_token
  * @property integer $created_time
  * @property integer $updated_time
+ * @property string $post_parameter
  * @property string $email
  * @property string $cc_email
  * @property string $company
@@ -67,7 +69,7 @@ class Advertiser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'email'], 'required'],
+            [['username', 'post_parameter', 'email'], 'required'],
             [['status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
             [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
@@ -100,6 +102,7 @@ class Advertiser extends \yii\db\ActiveRecord
             'lastname' => 'Lastname',
             'team' => 'Team',
             'settlement_type' => 'Settlement Type',
+            'pm' => 'PM',
             'bd' => 'BD',
             'system' => 'System',
             'status' => 'Status',

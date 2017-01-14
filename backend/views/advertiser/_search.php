@@ -25,6 +25,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'settlement_type') ?>
 
+    <?php // echo $form->field($model, 'pm') ?>
+
     <?php // echo $form->field($model, 'bd') ?>
 
     <?php // echo $form->field($model, 'system') ?>
@@ -52,6 +54,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'created_time') ?>
 
     <?php // echo $form->field($model, 'updated_time') ?>
+
+    <?php // echo $form->field($model, 'post_parameter') ?>
 
     <?php // echo $form->field($model, 'email') ?>
 

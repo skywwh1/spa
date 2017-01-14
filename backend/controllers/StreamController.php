@@ -8,6 +8,7 @@ use common\models\Feed;
 use Yii;
 use common\models\Stream;
 use common\models\StreamSearch;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,13 +24,28 @@ class StreamController extends Controller
     /**
      * @inheritdoc
      */
+//    public function behaviors()
+//    {
+//        return [
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'delete' => ['POST'],
+//                ],
+//            ],
+//        ];
+//    }
     public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['track', 'feed'],
+                        'allow' => true,
+                        'roles' => ['?'],
+                    ],
                 ],
             ],
         ];
@@ -132,13 +148,26 @@ class StreamController extends Controller
     {
         $model = new Stream();
         $data = Yii::$app->request->getQueryParams();
+        //array(3) { ["pl"]=> string(3) "ios" ["ch_id"]=> string(2) "22" ["cp_uid"]=> string(5) "sdfsd" }
+        $allParameters = '';
+        if (isset($data)) {
+            foreach ($data as $k => $v) {
+                $allParameters .= $k . '=' . $v . '&';
+            }
+        }
+
+
+        if (isset($allParameters)) {
+            $model->all_parameters = $allParameters;
+        }
+        $model->click_uuid = uniqid() . uniqid();
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->pl = isset($data['pl']) ? $data['pl'] : null;
         $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
         $model->ip = Yii::$app->request->getUserIP();
 
-        $echoStr = "error string";
+        $echoStr = "error message : ";
         if (!$model->validate() && $model->hasErrors()) {
             foreach ($model->getErrors() as $k => $v) {
                 $echoStr .= implode("", $v) . "</br>";
@@ -146,11 +175,23 @@ class StreamController extends Controller
 
         } else {
             $model->save();
-            $camp = Campaign::findByUuid( $model->cp_uid);
-            if(isset($camp)){
-                $deliver = Deliver::findIdentity($camp->id,$model->ch_id);
-                if (isset($deliver)){
-                    return $this->redirect($camp->adv_link);
+            $camp = Campaign::findByUuid($model->cp_uid);
+            if (isset($camp)) {
+                $deliver = Deliver::findIdentity($camp->id, $model->ch_id);
+                if (isset($deliver)) {
+                    $link = $camp->adv_link;
+                    if (strpos($link, '?') !== false) {
+                        $link .= '&';
+                    } else {
+                        $link .= '?';
+                    }
+                    $post_param = $deliver->campaign->advertiser0->post_parameter;
+                    if (!empty($post_param)) {
+                        $link .= $post_param . '=' . $model->click_uuid;
+                    } else {
+                        $link .= 'click_id=' . $model->click_uuid;
+                    }
+                    return $this->redirect($link);
                 }
             }
         }
@@ -165,7 +206,7 @@ class StreamController extends Controller
         $data = Yii::$app->request->getQueryParams();
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
-        if(isset($data['click_id']) ){
+        if (isset($data['click_id'])) {
             $model->save();
         }
         die();
