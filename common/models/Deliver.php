@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\utility\MailUtil;
 use Yii;
 
 /**
@@ -107,11 +108,16 @@ class Deliver extends \yii\db\ActiveRecord
      */
     public static function findIdentity($campaignId, $channelId)
     {
-//        echo $campaignId."<br>";
-//        echo $channelId."<br>";
-//        var_dump(static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]));
-//        die();
         return static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]);
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (parent::afterSave($insert, $changedAttributes)) {
+            if ($insert) {
+                MailUtil::sendSTSCreateMail($this);
+            }
+        }
     }
 
     public function ifExist()

@@ -12,5 +12,5 @@ use yii\helpers\Url;
     <p>You account have been created</p>
     <p>username: <?= $channel->username ?></p>
     <p>password: <?= $channel->password_hash ?></p>
-    <p>please login in SuperADS<?= Html::a(Html::encode(Url::home()), Url::home()) ?> to reset your password</p>
+    <p>please login in SuperADS <?= Html::a('Home ', Url::home()) ?> to reset your password</p>
 </div>

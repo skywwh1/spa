@@ -41,12 +41,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'om',
             [
                 'attribute' => 'om',
-                'value' => $model->om0->username,
+                'value' => isset($model->om0) ? $model->om0->username : "",
             ],
             //'master_channel',
             [
                 'attribute' => 'master_channel',
-                'value' => $model->masterChannel->username,
+                'value' => isset($model->masterChannel) ? $model->masterChannel->username : "",
             ],
             'payment_way',
             'payment_term',

@@ -146,9 +146,7 @@ class ChannelController extends Controller
     public function actionTest()
     {
 
-        $aa = new Channel();
-        $aa->username='999999999999';
-        $aa->email = "evan_wu95@126.com";
+        $aa = Channel::findOne(['id'=>25]);
         MailUtil::sendCreateChannel($aa);
         die();
     }

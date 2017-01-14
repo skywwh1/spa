@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\utility\MailUtil;
 use Yii;
 
 /**
@@ -87,8 +88,8 @@ class Channel extends \yii\db\ActiveRecord
             //、、, 'payment_way', 'payment_term'
             [['username', 'email', 'password_hash', 'post_back', 'status'], 'required'],
             [['username', 'email'], 'required'],
-            [['type',  'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
-            [['username', 'firstname', 'lastname', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
+            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
+            [['username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'string', 'max' => 255],
             [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 50],
@@ -225,6 +226,15 @@ class Channel extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        MailUtil::sendCreateChannel($this);
+        if($insert){
+        }
+    }
+
 
     public static function getChannelNameListByName($name)
     {
