@@ -215,11 +215,6 @@ class Campaign extends \yii\db\ActiveRecord
         return Json::encode($out);
     }
 
-    public static function isExistCampaignUuid($uuid)
-    {
-        return Campaign::findOne(['campaign_uuid' => $uuid]);
-    }
-
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -236,5 +231,10 @@ class Campaign extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    public static function findByUuid($uuid)
+    {
+        return Campaign::findOne(['campaign_uuid' => $uuid]);
     }
 }

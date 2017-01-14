@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use common\models\Campaign;
+use common\models\Deliver;
+use common\models\Feed;
 use Yii;
 use common\models\Stream;
 use common\models\StreamSearch;
@@ -36,46 +39,46 @@ class StreamController extends Controller
      * Lists all Stream models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new StreamSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    public function actionIndex()
+//    {
+//        $searchModel = new StreamSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Displays a single Stream model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+//    public function actionView($id)
+//    {
+//        return $this->render('view', [
+//            'model' => $this->findModel($id),
+//        ]);
+//    }
 
     /**
      * Creates a new Stream model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Stream();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
+//    public function actionCreate()
+//    {
+//        $model = new Stream();
+//
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        } else {
+//            return $this->render('create', [
+//                'model' => $model,
+//            ]);
+//        }
+//    }
 
     /**
      * Updates an existing Stream model.
@@ -83,18 +86,18 @@ class StreamController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
+//    public function actionUpdate($id)
+//    {
+//        $model = $this->findModel($id);
+//
+//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+//            return $this->redirect(['view', 'id' => $model->id]);
+//        } else {
+//            return $this->render('update', [
+//                'model' => $model,
+//            ]);
+//        }
+//    }
 
     /**
      * Deletes an existing Stream model.
@@ -102,12 +105,12 @@ class StreamController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
+//    public function actionDelete($id)
+//    {
+//        $this->findModel($id)->delete();
+//
+//        return $this->redirect(['index']);
+//    }
 
     /**
      * Finds the Stream model based on its primary key value.
@@ -116,14 +119,14 @@ class StreamController extends Controller
      * @return Stream the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
-        if (($model = Stream::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
+//    protected function findModel($id)
+//    {
+//        if (($model = Stream::findOne($id)) !== null) {
+//            return $model;
+//        } else {
+//            throw new NotFoundHttpException('The requested page does not exist.');
+//        }
+//    }
 
     public function actionTrack()
     {
@@ -135,19 +138,36 @@ class StreamController extends Controller
         $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
         $model->ip = Yii::$app->request->getUserIP();
 
-//        $model->validate();
-//        var_dump($model->getErrors());
-//        die();
+        $echoStr = "error string";
         if (!$model->validate() && $model->hasErrors()) {
-            $echoStr = "";
             foreach ($model->getErrors() as $k => $v) {
                 $echoStr .= implode("", $v) . "</br>";
             }
-            echo $echoStr;
-            die();
-        }else {
+
+        } else {
             $model->save();
-            return $this->redirect();
+            $camp = Campaign::findByUuid( $model->cp_uid);
+            if(isset($camp)){
+                $deliver = Deliver::findIdentity($camp->id,$model->ch_id);
+                if (isset($deliver)){
+                    return $this->redirect($camp->adv_link);
+                }
+            }
         }
+
+        echo $echoStr;
+        die();
+    }
+
+    public function actionFeed()
+    {
+        $model = new Feed();
+        $data = Yii::$app->request->getQueryParams();
+        $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
+        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
+        if(isset($data['click_id']) ){
+            $model->save();
+        }
+        die();
     }
 }

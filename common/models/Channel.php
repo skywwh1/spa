@@ -230,8 +230,8 @@ class Channel extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-        MailUtil::sendCreateChannel($this);
         if($insert){
+            MailUtil::sendCreateChannel($this);
         }
     }
 

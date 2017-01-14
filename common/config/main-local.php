@@ -19,14 +19,10 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            'useFileTransport' => true,    //这里一定要改成false，不然邮件不会发送
+            'useFileTransport' => false,    //这里一定要改成false，不然邮件不会发送
+//            'useFileTransport' => true,    //这里一定要改成false，不然邮件不会发送
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
-//                'host' => 'smtp.126.com',
-//                'username' => 'skywwh1@126.com',
-//                'password' => 'wwh123456',        //如果是163邮箱，此处要填授权码
-//                'port' => '25',
-//                'encryption' => 'tls',
                 'host' => 'smtp.mxhichina.com',
                 'username' => 'admin@superads.cn',
                 'password' => 'Asdf1234!@',        //如果是163邮箱，此处要填授权码
@@ -34,9 +30,9 @@ return [
                 'encryption' => 'tls',
 
             ],
-            'messageConfig'=>[
-                'charset'=>'UTF-8',
-                'from'=>['admin@superads.cn'=>'SuperAds Admin']
+            'messageConfig' => [
+                'charset' => 'UTF-8',
+                'from' => ['admin@superads.cn' => 'SuperAds Admin']
             ],
         ],
     ],

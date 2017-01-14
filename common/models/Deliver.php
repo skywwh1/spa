@@ -113,10 +113,9 @@ class Deliver extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if (parent::afterSave($insert, $changedAttributes)) {
-            if ($insert) {
-                MailUtil::sendSTSCreateMail($this);
-            }
+        parent::afterSave($insert, $changedAttributes);
+        if ($insert) {
+            MailUtil::sendSTSCreateMail($this);
         }
     }
 
@@ -134,7 +133,7 @@ class Deliver extends \yii\db\ActiveRecord
                 $this->create_time = time();
                 $this->update_time = time();
                 $this->creator = Yii::$app->user->identity->getId();
-                $this->track_url = 'stream/track?' . 'pl=' . strtolower(\ModelsUtil::getPlatform($this->campaign->platform)) . "&ch_id=" . $this->channel_id . '&cp_uid=' . $this->campaign_uuid;
+                $this->track_url = '/stream/track?' . 'pl=' . strtolower(\ModelsUtil::getPlatform($this->campaign->platform)) . "&ch_id=" . $this->channel_id . '&cp_uid=' . $this->campaign_uuid;
             } else {
                 $this->update_time = time();
             }

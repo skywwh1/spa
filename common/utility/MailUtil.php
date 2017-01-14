@@ -25,20 +25,20 @@ class MailUtil
         if ($mail->send()) {
             $isSend = 1;
         }
-        $param = array('type' => 1, 'isSend' => $isSend);
+        $param = array('type' => 'channel create', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
     }
 
     public static function sendSTSCreateMail(Deliver $deliver)
     {
-        $mail = Yii::$app->mailer->compose('channel_created', ['channel' => $deliver]);
+        $mail = Yii::$app->mailer->compose('sts_created', ['deliver' => $deliver]);
         $mail->setTo($deliver->channel->email);
-        $mail->setSubject('SuperADS Campaign create success');
+        $mail->setSubject('SuperADS New Campaign');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;
         }
-        $param = array('type' => 2, 'isSend' => $isSend);
+        $param = array('type' => 's2s create', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
     }
 }

@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Campaign;
+use common\models\Deliver;
 use common\models\User;
 use common\utility\MailUtil;
 use Yii;
@@ -146,8 +147,10 @@ class ChannelController extends Controller
     public function actionTest()
     {
 
-        $aa = Channel::findOne(['id'=>25]);
-        MailUtil::sendCreateChannel($aa);
+//        $aa = Channel::findOne(['id'=>25]);
+//        MailUtil::sendCreateChannel($aa);
+        $aa = Deliver::findIdentity(1,22);
+        MailUtil::sendSTSCreateMail($aa);
         die();
     }
 

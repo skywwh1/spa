@@ -14,7 +14,7 @@ use yii\mail\MessageInterface;
  * @property string $creator
  * @property integer $is_send
  * @property string $content
- * @property integer $type
+ * @property string $type
  * @property integer $create_time
  */
 class SendMailLog extends \yii\db\ActiveRecord
@@ -33,8 +33,8 @@ class SendMailLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['is_send', 'type', 'create_time'], 'integer'],
-            [['content'], 'string'],
+            [['is_send', 'create_time'], 'integer'],
+            [['content', 'type'], 'string'],
             [['to_who'], 'string', 'max' => 255],
         ];
     }
@@ -64,9 +64,10 @@ class SendMailLog extends \yii\db\ActiveRecord
         $log->creator = Yii::$app->user->identity->getId();
 
         $log->to_who = implode(array_keys($mail->getTo()));
-        $log->content = htmlspecialchars($mail->toString());
+        //htmlentities
+        $log->content = $mail->toString();
         $log->save();
-        var_dump($mail->getTo());
-        $log->save();
+//        var_dump($mail->getTo());
+//        $log->save();
     }
 }

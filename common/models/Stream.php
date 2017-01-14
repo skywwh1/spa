@@ -31,7 +31,8 @@ class Stream extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_id', 'cp_uid', 'ch_id'], 'required'],
+            [['cp_uid', 'ch_id'], 'required'],
+//            ['click_id', 'required'],
             [['click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ip'], 'string', 'max' => 255],
         ];
     }
