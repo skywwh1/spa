@@ -10,6 +10,7 @@ use common\models\Stream;
 use common\models\StreamSearch;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -44,7 +45,7 @@ class StreamController extends Controller
                     [
                         'actions' => ['track', 'feed'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['?', '@'],
                     ],
                 ],
             ],
@@ -146,17 +147,14 @@ class StreamController extends Controller
 
     public function actionTrack()
     {
-        $urlData = ['stream/track', 'pl' => 'aa', 'ch_id' => 'pp', 'cp_uid' => 'cc'];
-        echo Yii::$app->urlManager->createAbsoluteUrl($urlData);
-        die();
         $model = new Stream();
         $data = Yii::$app->request->getQueryParams();
-        //array(3) { ["pl"]=> string(3) "ios" ["ch_id"]=> string(2) "22" ["cp_uid"]=> string(5) "sdfsd" }
         $allParameters = '';
         if (!empty($data)) {
             foreach ($data as $k => $v) {
                 $allParameters .= $k . '=' . $v . '&';
             }
+            $allParameters = chop($allParameters, '&');
         }
         if (!empty($allParameters)) {
             $model->all_parameters = $allParameters;
@@ -168,10 +166,10 @@ class StreamController extends Controller
         $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
         $model->ip = Yii::$app->request->getUserIP();
 
-        $echoStr = "error message : ";
+        $message = "";
         if (!$model->validate() && $model->hasErrors()) {
             foreach ($model->getErrors() as $k => $v) {
-                $echoStr .= implode("", $v) . "</br>";
+                $message .= implode("", $v) . "</br>";
             }
 
         } else {
@@ -192,25 +190,33 @@ class StreamController extends Controller
                     } else {
                         $link .= 'click_id=' . $model->click_uuid;
                     }
+                    $model->redirect = $link;
                     $model->save();
                     return $this->redirect($link);
                 }
             }
         }
-
-        echo $echoStr;
-        die();
+        return Json::encode(['success'=>$message]);
     }
 
     public function actionFeed()
     {
         $model = new Feed();
         $data = Yii::$app->request->getQueryParams();
+        $allParameters = '';
+        if (!empty($data)) {
+            foreach ($data as $k => $v) {
+                $allParameters .= $k . '=' . $v . '&';
+            }
+            $allParameters = chop($allParameters, '&');
+        }
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
-        if (isset($data['click_id'])) {
+        $model->ip = Yii::$app->request->getUserIP();
+        if (!empty($allParameters)) {
+            $model->all_parameters = $allParameters;
             $model->save();
         }
-        die();
+        return Json::encode(['success'=>$data]);
     }
 }

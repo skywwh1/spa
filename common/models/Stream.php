@@ -16,6 +16,11 @@ use Yii;
  * @property string $tx_id
  * @property string $all_parameters
  * @property string $ip
+ * @property string $redirect
+ * @property string $browser
+ * @property string $browser_type
+ * @property string $post_link
+ * @property integer $is_post
  * @property integer $create_time
  */
 class Stream extends \yii\db\ActiveRecord
@@ -35,8 +40,8 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
-            [['create_time'], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip'], 'string', 'max' => 255],
+            [['is_post', 'create_time'], 'integer'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'string', 'max' => 255],
         ];
     }
 
@@ -55,7 +60,24 @@ class Stream extends \yii\db\ActiveRecord
             'tx_id' => 'Tx ID',
             'all_parameters' => 'All Parameters',
             'ip' => 'Ip',
+            'redirect' => 'Redirect',
+            'browser' => 'Browser',
+            'browser_type' => 'Browser Type',
+            'post_link' => 'Post Link',
+            'is_post' => 'Is Post',
             'create_time' => 'Create Time',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->create_time = time();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

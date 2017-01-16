@@ -11,6 +11,8 @@ use Yii;
  * @property string $click_id
  * @property string $ch_id
  * @property integer $is_count
+ * @property string $all_parameters
+ * @property string $ip
  * @property integer $create_time
  */
 class Feed extends \yii\db\ActiveRecord
@@ -30,7 +32,7 @@ class Feed extends \yii\db\ActiveRecord
     {
         return [
             [['is_count', 'create_time'], 'integer'],
-            [['click_id', 'ch_id'], 'string', 'max' => 255],
+            [['click_id', 'ch_id', 'all_parameters', 'ip'], 'string', 'max' => 255],
         ];
     }
 
@@ -44,7 +46,22 @@ class Feed extends \yii\db\ActiveRecord
             'click_id' => 'Click ID',
             'ch_id' => 'Ch ID',
             'is_count' => 'Is Count',
+            'all_parameters' => 'All Parameters',
+            'ip' => 'IP',
             'create_time' => 'Create Time',
         ];
+    }
+
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
+                $this->create_time = time();
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 }

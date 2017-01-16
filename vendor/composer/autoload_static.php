@@ -29,6 +29,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         array (
             'phpDocumentor\\Reflection\\' => 25,
         ),
+        'l' => 
+        array (
+            'linslin\\yii2\\curl\\' => 18,
+        ),
         'k' => 
         array (
             'kartik\\typeahead\\' => 17,
@@ -122,6 +126,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
             0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
             1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
             2 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+        ),
+        'linslin\\yii2\\curl\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/linslin/yii2-curl',
         ),
         'kartik\\typeahead\\' => 
         array (
