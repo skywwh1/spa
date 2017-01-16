@@ -70,6 +70,9 @@ class ChannelController extends Controller
         $model = new Channel();
 
         if ($model->load(Yii::$app->request->post())) {
+//            var_dump($model->payment_way);
+//            die();
+            $model->payment_way = implode($model->payment_way);
             $user = User::findByUsername($model->om);
             $model->om = isset($user) ? $user->id : "";
             $main_chan = Channel::findChannelByName($model->master_channel);
@@ -92,8 +95,13 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        if (isset($model->payment_way)){
+            $model->payment_way = explode(',',$model->payment_way);
+        }
         if ($model->load(Yii::$app->request->post())) {
+//            var_dump(implode(',',$model->payment_way));
+//            die();
+            $model->payment_way=implode(',',$model->payment_way);
             $model->om = User::findByUsername($model->om)->id;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -149,7 +157,7 @@ class ChannelController extends Controller
 
 //        $aa = Channel::findOne(['id'=>25]);
 //        MailUtil::sendCreateChannel($aa);
-        $aa = Deliver::findIdentity(1,22);
+        $aa = Deliver::findIdentity(2,30);
         MailUtil::sendSTSCreateMail($aa);
         die();
     }

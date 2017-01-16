@@ -102,7 +102,12 @@ use yii\helpers\Url;
             <td><?= Html::encode($deliver->campaign->version) ?></td>
             <td><?= Html::encode($deliver->campaign->targetGeo->domain) ?></td>
             <td><?= Html::encode($deliver->pay_out) ?></td>
-            <td><?= Html::a('Tracking Link ', Url::home(true).$deliver->track_url) ?></td>
+            <td><?php
+                $url = Url::home(true);
+                $url = str_replace('admin', 'track', $url);
+                $url .= $deliver->track_url;
+                echo  Html::a('Tracking Link ', $url) ?>
+            </td>
             <td><?= Html::encode($deliver->campaign->creative_link) ?></td>
             <td><?= Html::encode($deliver->campaign->traffice_source) ?></td>
             <td><?= Html::encode($deliver->daily_cap) ?></td>

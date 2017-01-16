@@ -200,21 +200,6 @@ use yii\widgets\ActiveForm;
 
     <div class='form-group row'>
         <div class='col-lg-4'>
-            <?= $form->field($model, 'total_revenue')->textInput() ?>
-        </div>
-    </div>
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'payable')->textInput() ?>
-        </div>
-    </div>
-    <div class='form-group row'>
-        <div class='col-lg-4'>
-            <?= $form->field($model, 'paid')->textInput(['maxlength' => true]) ?>
-        </div>
-    </div>
-    <div class='form-group row'>
-        <div class='col-lg-4'>
             <?= $form->field($model, 'strong_geo')->textInput(['maxlength' => true]) ?>
         </div>
     </div>

@@ -85,7 +85,7 @@ class Channel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            //、、, 'payment_way', 'payment_term'
+            [['payment_way', 'payment_term'],'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
             [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
@@ -161,7 +161,7 @@ class Channel extends \yii\db\ActiveRecord
             'status' => 'Status',
             'traffic_source' => 'Traffic Source',
             'pricing_mode' => 'Pricing Mode',
-            'post_back' => 'Post Back',
+            'post_back' => 'Postback',
             'total_revenue' => 'Total Revenue',
             'payable' => 'Payable',
             'paid' => 'Paid',

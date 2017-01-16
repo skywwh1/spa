@@ -146,18 +146,19 @@ class StreamController extends Controller
 
     public function actionTrack()
     {
+        $urlData = ['stream/track', 'pl' => 'aa', 'ch_id' => 'pp', 'cp_uid' => 'cc'];
+        echo Yii::$app->urlManager->createAbsoluteUrl($urlData);
+        die();
         $model = new Stream();
         $data = Yii::$app->request->getQueryParams();
         //array(3) { ["pl"]=> string(3) "ios" ["ch_id"]=> string(2) "22" ["cp_uid"]=> string(5) "sdfsd" }
         $allParameters = '';
-        if (isset($data)) {
+        if (!empty($data)) {
             foreach ($data as $k => $v) {
                 $allParameters .= $k . '=' . $v . '&';
             }
         }
-
-
-        if (isset($allParameters)) {
+        if (!empty($allParameters)) {
             $model->all_parameters = $allParameters;
         }
         $model->click_uuid = uniqid() . uniqid();
@@ -174,7 +175,7 @@ class StreamController extends Controller
             }
 
         } else {
-            $model->save();
+
             $camp = Campaign::findByUuid($model->cp_uid);
             if (isset($camp)) {
                 $deliver = Deliver::findIdentity($camp->id, $model->ch_id);
@@ -191,6 +192,7 @@ class StreamController extends Controller
                     } else {
                         $link .= 'click_id=' . $model->click_uuid;
                     }
+                    $model->save();
                     return $this->redirect($link);
                 }
             }

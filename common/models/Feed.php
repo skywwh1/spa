@@ -10,6 +10,8 @@ use Yii;
  * @property integer $id
  * @property string $click_id
  * @property string $ch_id
+ * @property integer $is_count
+ * @property integer $create_time
  */
 class Feed extends \yii\db\ActiveRecord
 {
@@ -27,6 +29,7 @@ class Feed extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['is_count', 'create_time'], 'integer'],
             [['click_id', 'ch_id'], 'string', 'max' => 255],
         ];
     }
@@ -40,6 +43,8 @@ class Feed extends \yii\db\ActiveRecord
             'id' => 'ID',
             'click_id' => 'Click ID',
             'ch_id' => 'Ch ID',
+            'is_count' => 'Is Count',
+            'create_time' => 'Create Time',
         ];
     }
 }

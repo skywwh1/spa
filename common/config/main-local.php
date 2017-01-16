@@ -19,8 +19,8 @@ return [
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
             'viewPath' => '@common/mail',
-            'useFileTransport' => false,    //这里一定要改成false，不然邮件不会发送
-//            'useFileTransport' => true,    //这里一定要改成false，不然邮件不会发送
+//            'useFileTransport' => false,    //这里一定要改成false，不然邮件不会发送
+            'useFileTransport' => true,    //这里一定要改成false，不然邮件不会发送
             'transport' => [
                 'class' => 'Swift_SmtpTransport',
                 'host' => 'smtp.mxhichina.com',

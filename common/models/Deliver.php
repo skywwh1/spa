@@ -134,7 +134,11 @@ class Deliver extends \yii\db\ActiveRecord
                 $this->create_time = time();
                 $this->update_time = time();
                 $this->creator = Yii::$app->user->identity->getId();
-                $this->track_url = '/stream/track?' . 'pl=' . strtolower(\ModelsUtil::getPlatform($this->campaign->platform)) . "&ch_id=" . $this->channel_id . '&cp_uid=' . $this->campaign_uuid;
+                $urlData = ['stream/track',
+                    'pl' => strtolower(\ModelsUtil::getPlatform($this->campaign->platform)),
+                    'ch_id' => $this->channel_id,
+                    'cp_uid' => $this->campaign_uuid];
+                $this->track_url = Yii::$app->urlManager->createUrl($urlData);
             } else {
                 $this->update_time = time();
             }
