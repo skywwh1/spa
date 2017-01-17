@@ -64,4 +64,12 @@ class Feed extends \yii\db\ActiveRecord
             return false;
         }
     }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function findNeedCounts()
+    {
+        return static::find()->where(['is_count' => 0])->all();
+    }
 }

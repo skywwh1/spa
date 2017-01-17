@@ -10,15 +10,28 @@ use Yii;
  *
  * @property integer $campaign_id
  * @property integer $channel_id
+ * @property string $adv_price
  * @property integer $pricing_mode
- * @property double $pay_out
+ * @property string $pay_out
  * @property integer $daily_cap
- * @property double $discount
+ * @property string $discount
  * @property integer $is_run
  * @property integer $creator
  * @property integer $create_time
  * @property integer $update_time
  * @property string $track_url
+ * @property integer $click
+ * @property integer $unique_click
+ * @property integer $install
+ * @property string $cvr
+ * @property string $cost
+ * @property integer $match_install
+ * @property string $match_cvr
+ * @property string $revenue
+ * @property integer $def
+ * @property string $deduction_percent
+ * @property string $profit
+ * @property string $margin
  * @property string $note
  *
  * @property Campaign $campaign
@@ -30,7 +43,6 @@ class Deliver extends \yii\db\ActiveRecord
     public $campaign_uuid;
     public $channel0;
     public $step;
-    public $adv_price;
 
     /**
      * @inheritdoc
@@ -47,13 +59,13 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'channel0', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'step'], 'integer'],
-            [['pay_out', 'discount'], 'number'],
+            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step'], 'integer'],
+            [['adv_price', 'pay_out', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             [['track_url', 'note'], 'string', 'max' => 255],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
-            ['channel0', 'ifExist'],
+//            ['channel0', 'ifExist'],
         ];
     }
 
@@ -65,6 +77,7 @@ class Deliver extends \yii\db\ActiveRecord
         return [
             'campaign_id' => 'Campaign ID',
             'channel_id' => 'Channel ID',
+            'adv_price' => 'Adv Price',
             'pricing_mode' => 'Pricing Mode',
             'pay_out' => 'Pay Out',
             'daily_cap' => 'Daily Cap',
@@ -74,6 +87,18 @@ class Deliver extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
             'track_url' => 'Track Url',
+            'click' => 'Click',
+            'unique_click' => 'Unique Click',
+            'install' => 'Install',
+            'cvr' => 'Cvr',
+            'cost' => 'Cost',
+            'match_install' => 'Match Install',
+            'match_cvr' => 'Match Cvr',
+            'revenue' => 'Revenue',
+            'def' => 'Def',
+            'deduction_percent' => 'Deduction Percent',
+            'profit' => 'Profit',
+            'margin' => 'Margin',
             'note' => 'Note',
             'channel0' => 'Channel',
             'campaign_uuid' => 'Campaign UUID',
@@ -129,25 +154,21 @@ class Deliver extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->create_time = time();
-                $this->update_time = time();
-                $this->creator = Yii::$app->user->identity->getId();
-                $urlData = ['stream/track',
-                    'pl' => strtolower(\ModelsUtil::getPlatform($this->campaign->platform)),
-                    'ch_id' => $this->channel_id,
-                    'cp_uid' => $this->campaign_uuid];
-                $this->track_url = Yii::$app->urlManager->createUrl($urlData);
-            } else {
-                $this->update_time = time();
-            }
-
-            return true;
-
+        if ($insert) {
+            $this->create_time = time();
+            $this->update_time = time();
+            $this->creator = Yii::$app->user->identity->getId();
+            $urlData = ['stream/track',
+                'pl' => strtolower(\ModelsUtil::getPlatform($this->campaign->platform)),
+                'ch_id' => $this->channel_id,
+                'cp_uid' => $this->campaign_uuid];
+            $this->track_url = Yii::$app->urlManager->createUrl($urlData);
         } else {
-            return false;
+            $this->campaign_uuid = 'aaa';
+            $this->channel0 = 'aaa';
+            $this->update_time = time();
         }
+        return parent::beforeSave($insert);
     }
 
     public function setCampaignIdBy($uuid)

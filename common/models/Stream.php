@@ -20,7 +20,8 @@ use Yii;
  * @property string $browser
  * @property string $browser_type
  * @property string $post_link
- * @property integer $is_post
+ * @property integer $post_status
+ * @property integer $post_time
  * @property integer $create_time
  */
 class Stream extends \yii\db\ActiveRecord
@@ -40,7 +41,7 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
-            [['is_post', 'create_time'], 'integer'],
+            [['post_status', 'post_time', 'create_time'], 'integer'],
             [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'string', 'max' => 255],
         ];
     }
@@ -64,7 +65,8 @@ class Stream extends \yii\db\ActiveRecord
             'browser' => 'Browser',
             'browser_type' => 'Browser Type',
             'post_link' => 'Post Link',
-            'is_post' => 'Is Post',
+            'post_status' => 'Post Status',
+            'post_time' => 'Post Time',
             'create_time' => 'Create Time',
         ];
     }
@@ -79,5 +81,25 @@ class Stream extends \yii\db\ActiveRecord
         } else {
             return false;
         }
+    }
+
+    /**
+     * 0:inti ,1:need to post, 2:don`t post, 3: already post
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getNeedPosts()
+    {
+        return static::find()->where(['post_status' => 1])->all();
+    }
+
+    public static function isFirstPost($campaign_uuid, $channel_id)
+    {
+        $is = static::findOne(['ch_id' => $channel_id, 'cp_uid' => $campaign_uuid, ['or', 'post_status=1', 'post_status=3']]);
+        if ($is) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }
