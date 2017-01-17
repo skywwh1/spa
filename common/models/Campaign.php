@@ -80,7 +80,7 @@ class Campaign extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price'], 'required'],
+            [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
             [['campaign_uuid'], 'unique'],
 //            'promote_start', 'promote_end', 'end_time',
             [['pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],

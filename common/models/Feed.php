@@ -72,4 +72,9 @@ class Feed extends \yii\db\ActiveRecord
     {
         return static::find()->where(['is_count' => 0])->all();
     }
+
+    public static function getOneByClickId($clickId)
+    {
+        return static::findOne(['click_id' => $clickId]);
+    }
 }
