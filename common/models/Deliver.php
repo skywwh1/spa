@@ -59,7 +59,7 @@ class Deliver extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'channel0', 'pay_out', 'discount', 'daily_cap'], 'required'],
+            [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
             [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             [['campaign_uuid'], 'string', 'max' => 100],
@@ -67,7 +67,6 @@ class Deliver extends \yii\db\ActiveRecord
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
-//            ['channel0', 'ifExist'],
             ['channel_id', 'unique', 'targetAttribute' => ['campaign_id', 'channel_id'], 'message' => 'The Campaign had been offer to this channel']
         ];
     }

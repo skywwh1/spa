@@ -22,6 +22,7 @@ use Yii;
  * @property string $post_link
  * @property integer $post_status
  * @property integer $post_time
+ * @property integer $is_count
  * @property integer $create_time
  */
 class Stream extends \yii\db\ActiveRecord
@@ -41,7 +42,7 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
-            [['post_status', 'post_time', 'create_time'], 'integer'],
+            [['post_status', 'post_time', 'create_time', 'is_count',], 'integer'],
             [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'string', 'max' => 255],
         ];
     }
@@ -67,6 +68,7 @@ class Stream extends \yii\db\ActiveRecord
             'post_link' => 'Post Link',
             'post_status' => 'Post Status',
             'post_time' => 'Post Time',
+            'is_count' => 'Is Count',
             'create_time' => 'Create Time',
         ];
     }
@@ -85,13 +87,16 @@ class Stream extends \yii\db\ActiveRecord
 
     /**
      * 0:inti ,1:need to post, 2:don`t post, 3: already post
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|\common\models\Stream[]
      */
     public static function getNeedPosts()
     {
         return static::find()->where(['post_status' => 1])->all();
     }
 
+    /**
+     * @return array|\common\models\Stream[]
+     */
     public static function getCountClicks()
     {
         return static::findAll(['is_count' => 0]);

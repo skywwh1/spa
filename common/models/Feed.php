@@ -81,4 +81,9 @@ class Feed extends \yii\db\ActiveRecord
     {
         return static::findOne(['click_id' => $clickId]);
     }
+
+    public static function findIdentify($id)
+    {
+        return self::findOne(['id' => $id]);
+    }
 }

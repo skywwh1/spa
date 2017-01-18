@@ -2,6 +2,7 @@
 namespace console\controllers;
 
 use common\models\Campaign;
+use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\Stream;
@@ -28,14 +29,21 @@ class AuditController extends Controller
     public function actionCount_feed()
     {
         $needCounts = Feed::findNeedCounts();
-        $matchClicks = $this->getMatch_clicks($needCounts);
-        //更新campaign的真实安装量。
-        $this->updateMatchInstall($matchClicks);
-        //更新扣量
-        $this->updatePost_status($matchClicks);
-        //更新点击量
-        $this->count_clicks();
+        $this->echoMessage("Get feeds count " . count($needCounts));
+        if (!empty($needCounts)) {
 
+            $matchClicks = $this->getMatch_clicks($needCounts);
+            //更新campaign的真实安装量。
+            $this->updateMatchInstall($matchClicks);
+            // 更新feed
+            $this->updateFeedStatus($needCounts);
+            //更新扣量
+            $this->updatePost_status($matchClicks);
+            //更新点击量
+            $this->count_clicks();
+        } else {
+            $this->echoHead("No feed need to update");
+        }
         //post
         $this->post_back();
     }
@@ -47,15 +55,17 @@ class AuditController extends Controller
         $curl = new Curl();
         $needPosts = Stream::getNeedPosts();
         foreach ($needPosts as $k) {
+            $this->echoMessage("Click  $k->click_uuid going to post ");
+            $this->echoMessage("Post to " . $k->post_link);
             $response = $curl->get($k->post_link);
+            var_dump($response);
             $k->post_status = 3; // 已经post
             $k->post_time = time();
-            $k->save();
-            echo " \n";
-            echo "Post to " . $k->post_link . " \n";
-            echo "waiting 5 seconds \n";
-            echo "Time: " . time() . " \n";
-            sleep(5);
+            if (!$k->save()) {
+                var_dump($k->getErrors());
+            }
+            $this->echoMessage("Wait 1 second");
+            sleep(1);
         }
         $this->echoHead("Post action end at " . time());
     }
@@ -66,8 +76,6 @@ class AuditController extends Controller
     protected function updateMatchInstall($matchClicks)
     {
         $this->echoHead("update match install start");
-        if ($matchClicks == null || empty($matchClicks))
-            return;
         $data = array();
         $feeds = array();
         foreach ($matchClicks as $k) {
@@ -88,23 +96,25 @@ class AuditController extends Controller
                 $deliver->match_install += $v; //累加
                 $deliver->channel0 = 'aaa';
                 $deliver->save();
-                echo "campaign $camp_chanl[0], $camp_chanl[1] match install update to $v \n";
+                $this->echoMessage("deliver $camp_chanl[0]-$camp_chanl[1] match install update to $v");
             }
         }
-        // TODO 更新feed 的状态。
-        echo "--- update feed status \n";
-        if (!empty($feeds)) {
-            foreach ($feeds as $k) {
 
-                $feed = Feed::getOneByClickId($k);
-                //*********************************************************************************************************
-                $feed->is_count = 1;
-                $feed->save();
-                echo "update feed {$feed->id} to counted \n";
-            }
+        $this->echoHead("end update match install");
+    }
+
+    /**
+     * @param \common\models\feed[] $feeds
+     */
+    protected function updateFeedStatus($feeds)
+    {
+        $this->echoHead("start update feed status to counted");
+        foreach ($feeds as $feed) {
+            $feed->is_count = 1;
+            $feed->save();
+            $this->echoMessage("update feed {$feed->id} to counted");
         }
-        echo "--- end update feed status \n";
-        $this->echoHead("update match install end");
+        $this->echoHead("end update feed status");
     }
 
     /**
@@ -113,22 +123,25 @@ class AuditController extends Controller
     protected function updatePost_status($matchClicks)
     {
         $this->echoHead("update post status start");
-        if ($matchClicks == null || empty($matchClicks))
-            return;
         foreach ($matchClicks as $k) {
 
             $k->post_status = 2; //默认不post back；
             $campaign_uuid = $k->cp_uid;
             $channel_id = $k->ch_id;
-            echo "campaign_uuid = " . $campaign_uuid . "\n";
-            echo "channel_id = " . $channel_id . "\n";
+            $this->echoMessage("");
             $deliver = Deliver::findIdentityByCpUuidAndChid($campaign_uuid, $channel_id);
-//            var_dump($deliver);
+            if ($deliver !== null) {
+                $this->echoMessage("find deliver $campaign_uuid-$channel_id");
+            } else {
+                $this->echoMessage("can not find deliver $campaign_uuid-$channel_id");
+                continue;
+            }
             $actual_install_percent = (($deliver->install + 1) / $deliver->match_install) * 100;
             $discount = 100 - $deliver->discount;
-            echo "install = " . $deliver->install . "\n";
-            echo "match install = " . $deliver->match_install . "\n";
+            $this->echoMessage("this deliver install is $deliver->install");
+            $this->echoMessage("this deliver match install is $deliver->match_install");
             if (($deliver->install < 5) || $actual_install_percent <= $discount) { //还没达到扣标准。
+                $this->echoMessage("this click will be post back");
                 $deliver->install += 1;
                 $deliver->actual_discount = $actual_install_percent;
                 $k->post_status = 1; // ready to send
@@ -137,13 +150,20 @@ class AuditController extends Controller
                 if (!empty($post_back)) {
                     $k->post_link = $this->genPost_link($post_back, $k->all_parameters);
                 }
+                $this->echoMessage("post link is $k->post_link");
+            } else {
+                $this->echoMessage("this click will not post back");
             }
-            echo "discount=" . $discount . "\n ======";
-            echo "post link       {$k->post_link}            \n";
-            $k->save();
-            $deliver->save();
+            if ($k->save() === false) {
+                $this->echoMessage("click update error");
+                var_dump($k->getErrors());
+            }
+            if ($deliver->save() === false) {
+                $this->echoMessage("deliver update error");
+                var_dump($deliver->getErrors());
+            }
         }
-        $this->echoHead("update post status end");
+        $this->echoHead("end update post status");
     }
 
     /** 有效点击
@@ -159,6 +179,7 @@ class AuditController extends Controller
                 continue;
             $matchClicks[] = $stream;
         }
+        $this->echoMessage("Get match clicks " . count($matchClicks));
         return $matchClicks;
     }
 
@@ -174,9 +195,12 @@ class AuditController extends Controller
                 } else {
                     $camps[$stream->cp_uid . ',' . $stream->ch_id] = 1;
                 }
-                echo "update stream {$stream->cp_uid}-{ $stream->ch_id} is counted";
                 $stream->is_count = 1;
-                $stream->save();
+                if ($stream->save()) {
+                    $this->echoMessage("update stream {$stream->cp_uid}-{ $stream->ch_id} is counted");
+                } else {
+                    var_dump($stream->getErrors());
+                }
             }
         }
 
@@ -186,7 +210,13 @@ class AuditController extends Controller
                 $deliver = Deliver::findIdentityByCpUuidAndChid($ids[0], $ids[1]);
                 $deliver->click += $v;
                 $deliver->unique_click = Stream::getDistinctIpClick($ids[0], $ids[1]);
-                $deliver->save();
+                if ($deliver->save()) {
+                    $this->echoMessage("deliver $deliver->campaign_id - $deliver->channel_id");
+                    $this->echoMessage("update click to $deliver->click ");
+                    $this->echoMessage("update unique click to $deliver->unique_click ");
+                } else {
+                    var_dump($deliver->getErrors());
+                }
             }
         }
         $this->echoHead("end to count clicks");
@@ -200,9 +230,8 @@ class AuditController extends Controller
 
     protected function genPost_link($postback, $allParams)
     {
-        echo "post back $postback \n";
-        echo "all param $allParams \n";
-        echo "genarate url start \n";
+        $this->echoMessage("channel post back is " . $postback);
+        $this->echoMessage("click params are " . $allParams);
         $homeurl = substr($postback, 0, strpos($postback, '?'));
         $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
         $params = explode("&", $paramstring);
@@ -229,8 +258,10 @@ class AuditController extends Controller
         if (!empty($returnParams)) {
             $returnParams = chop($returnParams, '&');
             $homeurl .= "?" . $returnParams;
+        } else {
+            $this->echoMessage("can not found post back params");
         }
-        echo "\n genarate url : " . $homeurl . "\n";
+        $this->echoMessage("generate url: " . $homeurl);
         return $homeurl;
     }
 
@@ -270,11 +301,11 @@ class AuditController extends Controller
 
     private function echoHead($str)
     {
-        echo "===============================  $str  ======================== \n";
+        echo "#######  $str \n\n";
     }
 
     private function echoMessage($str)
     {
-        echo " \t           $str \n";
+        echo " \t $str \n";
     }
 }
