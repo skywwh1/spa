@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\DeliverSearch */
+/* @var $searchModel common\models\ReportSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'S2S Log';
+$this->title = 'Delivers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="deliver-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3>Report List</h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 <?php Pjax::begin(); ?>    <?= GridView::widget([
@@ -23,18 +23,33 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'campaign.campaign_name',
             'channel.username',
+            'campaign_uuid',
+            'adv_price',
             'pricing_mode',
-            'pay_out',
-            'daily_cap',
-            // 'discount',
+             'pay_out',
+             'daily_cap',
+            // 'actual_discount',
+             'discount',
             // 'is_run',
             // 'creator',
             // 'create_time:datetime',
             // 'update_time:datetime',
             // 'track_url:url',
-            // 'note',
+            // 'click',
+            // 'unique_click',
+            // 'install',
+             'cvr',
+             'cost',
+             'match_install',
+             'match_cvr',
+             'revenue',
+             'def',
+             'deduction_percent',
+             'profit',
+             'margin',
+             'note',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 <?php Pjax::end(); ?></div>

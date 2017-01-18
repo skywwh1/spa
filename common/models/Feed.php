@@ -13,7 +13,9 @@ use Yii;
  * @property integer $is_count
  * @property string $all_parameters
  * @property string $ip
+ * @property string $host_name
  * @property integer $create_time
+ * @property integer $update_time
  */
 class Feed extends \yii\db\ActiveRecord
 {
@@ -31,8 +33,8 @@ class Feed extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['is_count', 'create_time'], 'integer'],
-            [['click_id', 'ch_id', 'all_parameters', 'ip'], 'string', 'max' => 255],
+            [['is_count', 'create_time', 'update_time'], 'integer'],
+            [['click_id', 'ch_id', 'all_parameters', 'ip', 'host_name'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,7 +50,9 @@ class Feed extends \yii\db\ActiveRecord
             'is_count' => 'Is Count',
             'all_parameters' => 'All Parameters',
             'ip' => 'IP',
+            'host_name' => 'Host Name',
             'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
         ];
     }
 

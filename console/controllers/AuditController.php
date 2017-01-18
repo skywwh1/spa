@@ -35,12 +35,15 @@ class AuditController extends Controller
         $this->updatePost_status($matchClicks);
         //更新点击量
         $this->count_clicks();
+
+        //post
+        $this->post_back();
     }
 
 // 每20分钟post
-    public function actionPost_back()
+    protected function post_back()
     {
-        $this->echoWord("Post action start at " . time());
+        $this->echoHead("Post action start at " . time());
         $curl = new Curl();
         $needPosts = Stream::getNeedPosts();
         foreach ($needPosts as $k) {
@@ -54,7 +57,7 @@ class AuditController extends Controller
             echo "Time: " . time() . " \n";
             sleep(5);
         }
-        $this->echoWord("Post action end at " . time());
+        $this->echoHead("Post action end at " . time());
     }
 
     /** 更新总的安装量
@@ -62,7 +65,7 @@ class AuditController extends Controller
      */
     protected function updateMatchInstall($matchClicks)
     {
-        $this->echoWord("update match install start");
+        $this->echoHead("update match install start");
         if ($matchClicks == null || empty($matchClicks))
             return;
         $data = array();
@@ -101,7 +104,7 @@ class AuditController extends Controller
             }
         }
         echo "--- end update feed status \n";
-        $this->echoWord("update match install end");
+        $this->echoHead("update match install end");
     }
 
     /**
@@ -109,7 +112,7 @@ class AuditController extends Controller
      */
     protected function updatePost_status($matchClicks)
     {
-        $this->echoWord("update post status start");
+        $this->echoHead("update post status start");
         if ($matchClicks == null || empty($matchClicks))
             return;
         foreach ($matchClicks as $k) {
@@ -140,7 +143,7 @@ class AuditController extends Controller
             $k->save();
             $deliver->save();
         }
-        $this->echoWord("update post status end");
+        $this->echoHead("update post status end");
     }
 
     /** 有效点击
@@ -161,7 +164,7 @@ class AuditController extends Controller
 
     protected function count_clicks()
     {
-        $this->echoWord("start to count clicks");
+        $this->echoHead("start to count clicks");
         $streams = Stream::getCountClicks();
         $camps = array();
         if (!empty($streams)) {
@@ -186,7 +189,7 @@ class AuditController extends Controller
                 $deliver->save();
             }
         }
-        $this->echoWord("end to count clicks");
+        $this->echoHead("end to count clicks");
     }
 
     // 每天清理一遍click——log
@@ -265,8 +268,13 @@ class AuditController extends Controller
         return $homeurl;
     }
 
-    private function echoWord($str)
+    private function echoHead($str)
     {
         echo "===============================  $str  ======================== \n";
+    }
+
+    private function echoMessage($str)
+    {
+        echo " \t           $str \n";
     }
 }

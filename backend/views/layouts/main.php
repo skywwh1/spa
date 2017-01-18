@@ -141,15 +141,8 @@ AppAsset::register($this);
                 <i class='icon-flag'></i>
                 <a href='#'>Reports</a>
                 <ul class='dropdown-menu'>
-                    <li class='dropdown-header'>Launcher description</li>
                     <li>
-                        <a href='#'>Action</a>
-                    </li>
-                    <li>
-                        <a href='#'>Another action</a>
-                    </li>
-                    <li>
-                        <a href='#'>Something else here</a>
+                        <?= Html::a('Report List', ['report/index']) ?>
                     </li>
                 </ul>
             </li>
