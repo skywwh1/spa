@@ -92,14 +92,15 @@ class Stream extends \yii\db\ActiveRecord
         return static::find()->where(['post_status' => 1])->all();
     }
 
-    public static function isFirstPost($campaign_uuid, $channel_id)
+    public static function getCountClicks()
     {
-        $is = static::findOne(['ch_id' => $channel_id, 'cp_uid' => $campaign_uuid, ['or', 'post_status=1', 'post_status=3']]);
-        if ($is) {
-            return false;
-        } else {
-            return true;
-        }
+        return static::findAll(['is_count' => 0]);
+    }
 
+    public static function getDistinctIpClick($cp_uid, $ch_id)
+    {
+        // returns all inactive customers
+        $sql = 'SELECT distinct ip FROM feedback_channel_click_log WHERE cp_uid=:cp_uid AND ch_id=:ch_id';
+        return static::findBySql($sql, ['cp_uid' => $cp_uid, 'ch_id' => $ch_id])->count();
     }
 }

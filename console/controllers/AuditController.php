@@ -33,12 +33,14 @@ class AuditController extends Controller
         $this->updateMatchInstall($matchClicks);
         //更新扣量
         $this->updatePost_status($matchClicks);
+        //更新点击量
+        $this->count_clicks();
     }
 
 // 每20分钟post
     public function actionPost_back()
     {
-        echo "Post action start at " . time();
+        $this->echoWord("Post action start at " . time());
         $curl = new Curl();
         $needPosts = Stream::getNeedPosts();
         foreach ($needPosts as $k) {
@@ -52,7 +54,7 @@ class AuditController extends Controller
             echo "Time: " . time() . " \n";
             sleep(5);
         }
-        echo "Post action end at " . time();
+        $this->echoWord("Post action end at " . time());
     }
 
     /** 更新总的安装量
@@ -60,7 +62,7 @@ class AuditController extends Controller
      */
     protected function updateMatchInstall($matchClicks)
     {
-        echo "=======update match install start \n";
+        $this->echoWord("update match install start");
         if ($matchClicks == null || empty($matchClicks))
             return;
         $data = array();
@@ -94,12 +96,12 @@ class AuditController extends Controller
                 $feed = Feed::getOneByClickId($k);
                 //*********************************************************************************************************
                 $feed->is_count = 1;
-                //$feed->save();
+                $feed->save();
                 echo "update feed {$feed->id} to counted \n";
             }
         }
         echo "--- end update feed status \n";
-        echo "=======update match install end \n";
+        $this->echoWord("update match install end");
     }
 
     /**
@@ -107,7 +109,7 @@ class AuditController extends Controller
      */
     protected function updatePost_status($matchClicks)
     {
-        echo "=======update post status start =========================== \n";
+        $this->echoWord("update post status start");
         if ($matchClicks == null || empty($matchClicks))
             return;
         foreach ($matchClicks as $k) {
@@ -123,7 +125,7 @@ class AuditController extends Controller
             $discount = 100 - $deliver->discount;
             echo "install = " . $deliver->install . "\n";
             echo "match install = " . $deliver->match_install . "\n";
-            if ($actual_install_percent <= $discount) { //还没达到扣标准。
+            if (($deliver->install < 5) || $actual_install_percent <= $discount) { //还没达到扣标准。
                 $deliver->install += 1;
                 $deliver->actual_discount = $actual_install_percent;
                 $k->post_status = 1; // ready to send
@@ -138,7 +140,7 @@ class AuditController extends Controller
             $k->save();
             $deliver->save();
         }
-        echo "=======update post status end ============================= \n";
+        $this->echoWord("update post status end");
     }
 
     /** 有效点击
@@ -155,6 +157,36 @@ class AuditController extends Controller
             $matchClicks[] = $stream;
         }
         return $matchClicks;
+    }
+
+    protected function count_clicks()
+    {
+        $this->echoWord("start to count clicks");
+        $streams = Stream::getCountClicks();
+        $camps = array();
+        if (!empty($streams)) {
+            foreach ($streams as $stream) {
+                if (isset($camps[$stream->cp_uid . ',' . $stream->ch_id])) {
+                    $camps[$stream->cp_uid . ',' . $stream->ch_id] += 1;
+                } else {
+                    $camps[$stream->cp_uid . ',' . $stream->ch_id] = 1;
+                }
+                echo "update stream {$stream->cp_uid}-{ $stream->ch_id} is counted";
+                $stream->is_count = 1;
+                $stream->save();
+            }
+        }
+
+        if (!empty($camps)) {
+            foreach ($camps as $k => $v) {
+                $ids = explode(',', $k);
+                $deliver = Deliver::findIdentityByCpUuidAndChid($ids[0], $ids[1]);
+                $deliver->click += $v;
+                $deliver->unique_click = Stream::getDistinctIpClick($ids[0], $ids[1]);
+                $deliver->save();
+            }
+        }
+        $this->echoWord("end to count clicks");
     }
 
     // 每天清理一遍click——log
@@ -233,4 +265,8 @@ class AuditController extends Controller
         return $homeurl;
     }
 
+    private function echoWord($str)
+    {
+        echo "===============================  $str  ======================== \n";
+    }
 }
