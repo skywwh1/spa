@@ -319,7 +319,7 @@ class AuditController extends Controller
     public function actionTest()
     {
         $curl = new Curl();
-        $response = $curl->get("https://admin.superads.cn/stream/feed");
+        $response = $curl->get("https://track.superads.cn/stream/feed");
         var_dump($response);
     }
 }

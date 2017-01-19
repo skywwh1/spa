@@ -1,5 +1,6 @@
 <?php
 
+use yii\bootstrap\Progress;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\typeahead\TypeaheadBasic;
@@ -17,7 +18,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="test-link-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin([
+            'id' => 'test-link-form',
+        ]); ?>
 
         <div class='form-group row'>
             <div class='col-lg-4'>
@@ -31,9 +34,37 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
         <div class="form-group">
-            <?= Html::submitButton('Test', ['class' => 'btn btn-primary']) ?>
+            <?= Html::button('Test', ['class' => 'btn btn-primary', 'onclick' => 'testPost();', '']) ?>
         </div>
 
         <?php ActiveForm::end(); ?>
+
     </div>
 </div>
+<script type="application/javascript">
+    function testPost() {
+        $('#test-link-form').yiiActiveForm('validate');
+        var $form = $("#test-link-form"), data = $form.data("yiiActiveForm");
+        $.each(data.attributes, function () {
+            this.status = 3;
+        });
+        $form.yiiActiveForm("validate");
+        if ($("#test-link-form").find(".has-error").length) {
+            return false;
+        }
+
+        $.ajax({
+            url: '<?php echo Yii::$app->request->baseUrl . '/deliver/testlink' ?>',
+            type: 'post',
+            data: {
+                'TestLinkForm[tracking_link]': $('#testlinkform-tracking_link').val(),
+                'TestLinkForm[channel]': $('#testlinkform-channel').val(),
+                _csrf: '<?=Yii::$app->request->getCsrfToken()?>'
+            },
+            success: function (data) {
+                alert(data);
+                console.log(data);
+            }
+        });
+    }
+</script>

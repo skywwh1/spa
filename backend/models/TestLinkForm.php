@@ -11,6 +11,7 @@ class TestLinkForm extends Model
 {
     public $channel;
     public $tracking_link;
+    public $result;
 
 
     /**
@@ -20,6 +21,7 @@ class TestLinkForm extends Model
     {
         return [
             [['channel', 'tracking_link', 'type'], 'required'],
+            ['tracking_link', 'url', 'defaultScheme' => 'http'],
 
         ];
     }
@@ -29,6 +31,7 @@ class TestLinkForm extends Model
         return [
             'channel' => 'Channel',
             'tracking_link' => 'Tracking Link',
+            'result' => 'Result',
         ];
     }
 

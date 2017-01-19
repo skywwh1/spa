@@ -63,7 +63,7 @@ use Yii;
  * @property string $strong_geo
  * @property string $strong_catagory
  *
- * @property CampaignChannelLog[] $campaignChannelLogs
+ * @property Deliver[] $delivers
  * @property Campaign[] $campaigns
  * @property Channel $masterChannel
  * @property Channel[] $channels

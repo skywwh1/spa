@@ -10,6 +10,7 @@ use common\models\DeliverSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * DeliverController implements the CRUD actions for Deliver model.
@@ -154,7 +155,7 @@ class DeliverController extends Controller
     {
         $model = new TestLinkForm();
 
-        if ($model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->isAjax) {
 
         } else {
             return $this->render('test_link', [
