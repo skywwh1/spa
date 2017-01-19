@@ -80,7 +80,7 @@ class DeliverController extends Controller
             if ($model->step == 1) {
                 $model->setCampaignIdBy($model->campaign_uuid);
                 $model->setChannelIdBy($model->channel0);
-                $model->adv_price = $model->campaign->adv_price;
+                $model->adv_price = isset($model->campaign) ? $model->campaign->adv_price : 0;
                 return $this->render('second', [
                     'model' => $model,
                 ]);

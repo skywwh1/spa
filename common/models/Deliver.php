@@ -174,12 +174,18 @@ class Deliver extends \yii\db\ActiveRecord
 
     public function setCampaignIdBy($uuid)
     {
-        $this->campaign_id = Campaign::findOne(['campaign_uuid' => $uuid])->id;
+        $camp = Campaign::findOne(['campaign_uuid' => $uuid]);
+        if ($camp !== null) {
+            $this->campaign_id = $camp->id;
+        }
     }
 
     public function setChannelIdBy($channel)
     {
-        $this->channel_id = Channel::findOne(['username' => $channel])->id;
+        $channel = Channel::findOne(['username' => $channel]);
+        if ($channel !== null) {
+            $this->channel_id = $channel->id;
+        }
     }
 
     public static function findIdentityByCpUuidAndChid($campaignUuid, $channelId)
