@@ -51,9 +51,13 @@ class AuditController extends Controller
 // 每20分钟post
     protected function post_back()
     {
+        $needPosts = Stream::getNeedPosts();
+        if (empty($needPosts)) {
+            $this->echoHead("No campaign need to post back ");
+            return;
+        }
         $this->echoHead("Post action start at " . time());
         $curl = new Curl();
-        $needPosts = Stream::getNeedPosts();
         foreach ($needPosts as $k) {
             $this->echoMessage("Click  $k->click_uuid going to post ");
             $this->echoMessage("Post to " . $k->post_link);
@@ -94,7 +98,7 @@ class AuditController extends Controller
                 $camp_chanl = explode(',', $k);
                 $deliver = Deliver::findIdentity($camp_chanl[0], $camp_chanl[1]);
                 $deliver->match_install += $v; //累加
-                if(!$deliver->save()){
+                if (!$deliver->save()) {
                     var_dump($deliver->getErrors());
                 }
                 $this->echoMessage("deliver $camp_chanl[0]-$camp_chanl[1] match install update to $v");
@@ -112,7 +116,7 @@ class AuditController extends Controller
         $this->echoHead("start update feed status to counted");
         foreach ($feeds as $feed) {
             $feed->is_count = 1;
-            if(!$feed->save()){
+            if (!$feed->save()) {
                 var_dump($feed->getErrors());
             }
             $this->echoMessage("update feed {$feed->id} to counted");

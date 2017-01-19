@@ -13,14 +13,6 @@ use yii\widgets\ActiveForm;
 <fieldset class='text-center'>
     <div class="row">
         <div class="col-lg-1"></div>
-        <div class="col-lg-4">
-
-            <?= $form->field($model, 'type')->label(false)->dropDownList(['0'=>'Admin','1'=>'Channel','3'=>'Adviser'])?>
-        </div>
-        <div class="col-lg-7"></div>
-    </div>
-    <div class="row">
-        <div class="col-lg-1"></div>
         <div class="col-lg-10">
 
             <?= $form->field($model, 'username')->input('text', ['class' => 'form-control spa_form', 'placeholder' => 'Username','autofocus' => true])->label(false) ?>
