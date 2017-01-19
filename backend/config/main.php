@@ -45,7 +45,7 @@ return [
 //        ],
         'urlManager' => [
 //            'urlFormat'=>'path',
-//            'enablePrettyUrl' => true,
+            'enablePrettyUrl' => true,
             'showScriptName' => false,
 //            'suffix'=>'.html',
             'rules' => [
