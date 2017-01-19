@@ -157,7 +157,7 @@ class ChannelController extends Controller
 
 //        $aa = Channel::findOne(['id'=>25]);
 //        MailUtil::sendCreateChannel($aa);
-        $aa = Deliver::findIdentity(2,30);
+        $aa = Deliver::findIdentity(3,29);
         MailUtil::sendSTSCreateMail($aa);
         die();
     }

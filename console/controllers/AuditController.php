@@ -57,10 +57,10 @@ class AuditController extends Controller
             return;
         }
         $this->echoHead("Post action start at " . time());
-        $curl = new Curl();
         foreach ($needPosts as $k) {
             $this->echoMessage("Click  $k->click_uuid going to post ");
             $this->echoMessage("Post to " . $k->post_link);
+            $curl = new Curl();
             $response = $curl->get($k->post_link);
             var_dump($response);
             $k->post_status = 3; // 已经post
@@ -314,5 +314,12 @@ class AuditController extends Controller
     private function echoMessage($str)
     {
         echo " \t $str \n";
+    }
+
+    public function actionTest()
+    {
+        $curl = new Curl();
+        $response = $curl->get("https://admin.superads.cn/stream/feed");
+        var_dump($response);
     }
 }

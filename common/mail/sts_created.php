@@ -104,7 +104,7 @@ use yii\helpers\Url;
             <td><?= Html::encode($deliver->pay_out) ?></td>
             <td><?php
                 $url = Url::home(true);
-                $url = str_replace('admin', 'track', $url);
+                //$url = str_replace('admin', 'track', $url);
                 $url = chop($url, "/");
                 $url .= $deliver->track_url;
                 echo Html::a('Tracking Link ', $url) ?>
