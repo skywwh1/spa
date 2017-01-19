@@ -9,8 +9,8 @@ use yii\base\Model;
  */
 class TestLinkForm extends Model
 {
-    public $username;
-    public $password;
+    public $channel;
+    public $tracking_link;
 
 
     /**
@@ -19,21 +19,16 @@ class TestLinkForm extends Model
     public function rules()
     {
         return [
-            // username and password are both required
-            [['username', 'password','type'], 'required'],
-            ['type','integer'],
-            // rememberMe must be a boolean value
-            ['rememberMe', 'boolean'],
-            // password is validated by validatePassword()
-            ['password', 'validatePassword'],
-            ['verifyCode', 'captcha'],
+            [['channel', 'tracking_link', 'type'], 'required'],
+
         ];
     }
 
     public function attributeLabels()
     {
         return [
-            'verifyCode' => 'Verification Code',
+            'channel' => 'Channel',
+            'tracking_link' => 'Tracking Link',
         ];
     }
 

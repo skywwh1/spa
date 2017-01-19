@@ -105,8 +105,9 @@ use yii\helpers\Url;
             <td><?php
                 $url = Url::home(true);
                 $url = str_replace('admin', 'track', $url);
+                $url = chop($url, "/");
                 $url .= $deliver->track_url;
-                echo  Html::a('Tracking Link ', $url) ?>
+                echo Html::a('Tracking Link ', $url) ?>
             </td>
             <td><?= Html::encode($deliver->campaign->creative_link) ?></td>
             <td><?= Html::encode($deliver->campaign->traffice_source) ?></td>

@@ -68,8 +68,6 @@ use Yii;
  *
  * @property \common\models\Deliver[] $campaignChannelLogs
  * @property \common\models\Campaign[] $campaigns
- * @property Channel $masterChannel
- * @property Channel[] $channels
  * @property User $om0
  */
 class Channel extends \yii\db\ActiveRecord
@@ -101,7 +99,6 @@ class Channel extends \yii\db\ActiveRecord
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_reset_token'], 'unique'],
-            [['master_channel'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['master_channel' => 'id']],
             [['om'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['om' => 'id']],
         ];
     }
@@ -186,21 +183,6 @@ class Channel extends \yii\db\ActiveRecord
         return $this->hasMany(Campaign::className(), ['id' => 'campaign_id'])->viaTable('campaign_channel_log', ['channel_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getMasterChannel()
-    {
-        return $this->hasOne(Channel::className(), ['id' => 'master_channel']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getChannels()
-    {
-        return $this->hasMany(Channel::className(), ['master_channel' => 'id']);
-    }
 
     /**
      * @return \yii\db\ActiveQuery

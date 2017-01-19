@@ -63,7 +63,7 @@ AppAsset::register($this);
         <li class='dropdown user'>
             <a class='dropdown-toggle' data-toggle='dropdown' href='#'>
                 <i class='icon-user'></i>
-                <strong><?=Yii::$app->user->identity->username?></strong>
+                <strong><?= Yii::$app->user->identity->username ?></strong>
                 <b class='caret'></b>
             </a>
             <ul class='dropdown-menu'>
@@ -72,13 +72,13 @@ AppAsset::register($this);
                 </li>
                 <li class='divider'></li>
                 <li>
-                    <?php $aa='<a>'.
-                    Html::beginForm(['/site/logout'], 'post').
-                    Html::submitButton(
-                        'Logout',
-                        ['class' => 'btn-link','style'=>'color: #ecf0f1']
-                    ).
-                    Html::endForm().'</a>';
+                    <?php $aa = '<a>' .
+                        Html::beginForm(['/site/logout'], 'post') .
+                        Html::submitButton(
+                            'Logout',
+                            ['class' => 'btn-link', 'style' => 'color: #ecf0f1']
+                        ) .
+                        Html::endForm() . '</a>';
                     echo $aa;
                     ?>
                 </li>
@@ -99,7 +99,7 @@ AppAsset::register($this);
                         <?= Html::a('S2S', ['deliver/create']) ?>
                     </li>
                     <li>
-                        <a href='#'>Test Link</a>
+                        <?= Html::a('Test Link', ['deliver/testlink']) ?>
                     </li>
                     <li>
                         <?= Html::a('S2S Log', ['deliver/index']) ?>
@@ -120,7 +120,7 @@ AppAsset::register($this);
                 <?= Html::a('ADV', ['advertiser/index']) ?>
                 <ul class='dropdown-menu'>
                     <li>
-                    <?= Html::a('ADV List', ['advertiser/index']) ?>
+                        <?= Html::a('ADV List', ['advertiser/index']) ?>
                     </li>
                     <li>
                         <?= Html::a('Create ADV', ['advertiser/create']) ?>
@@ -146,7 +146,7 @@ AppAsset::register($this);
                     </li>
                 </ul>
             </li>
-         <li class='launcher'>
+            <li class='launcher'>
                 <i class='icon-bookmark'></i>
                 <a href='#'>Finance</a>
             </li>
@@ -176,7 +176,7 @@ AppAsset::register($this);
         <!--</div>-->
 
         <!-- Footer -->
-        <div >
+        <div>
             <div class='page-header'>
                 <h4></h4>
             </div>

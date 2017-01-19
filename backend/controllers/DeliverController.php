@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\TestLinkForm;
 use common\models\Campaign;
 use Yii;
 use common\models\Deliver;
@@ -146,6 +147,19 @@ class DeliverController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionTestlink()
+    {
+        $model = new TestLinkForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+
+        } else {
+            return $this->render('test_link', [
+                'model' => $model,
+            ]);
         }
     }
 }

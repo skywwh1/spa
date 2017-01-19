@@ -2,7 +2,7 @@
 namespace frontend\models;
 
 use yii\base\Model;
-use common\models\User;
+use frontend\models\Channel;
 
 /**
  * Signup form
@@ -39,7 +39,7 @@ class SignupForm extends Model
     /**
      * Signs user up.
      *
-     * @return User|null the saved model or null if saving fails
+     * @return Channel|null the saved model or null if saving fails
      */
     public function signup()
     {
@@ -47,11 +47,11 @@ class SignupForm extends Model
             return null;
         }
         
-        $user = new User();
+        $user = new Channel();
         $user->username = $this->username;
         $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
+//        $user->setPassword($this->password);
+//        $user->generateAuthKey();
         
         return $user->save() ? $user : null;
     }

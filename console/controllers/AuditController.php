@@ -94,8 +94,9 @@ class AuditController extends Controller
                 $camp_chanl = explode(',', $k);
                 $deliver = Deliver::findIdentity($camp_chanl[0], $camp_chanl[1]);
                 $deliver->match_install += $v; //累加
-                $deliver->channel0 = 'aaa';
-                $deliver->save();
+                if(!$deliver->save()){
+                    var_dump($deliver->getErrors());
+                }
                 $this->echoMessage("deliver $camp_chanl[0]-$camp_chanl[1] match install update to $v");
             }
         }
@@ -111,7 +112,9 @@ class AuditController extends Controller
         $this->echoHead("start update feed status to counted");
         foreach ($feeds as $feed) {
             $feed->is_count = 1;
-            $feed->save();
+            if(!$feed->save()){
+                var_dump($feed->getErrors());
+            }
             $this->echoMessage("update feed {$feed->id} to counted");
         }
         $this->echoHead("end update feed status");
