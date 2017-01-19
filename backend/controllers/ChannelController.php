@@ -4,8 +4,10 @@ namespace backend\controllers;
 
 use common\models\Campaign;
 use common\models\Deliver;
+use common\models\Stream;
 use common\models\User;
 use common\utility\MailUtil;
+use linslin\yii2\curl\Curl;
 use Yii;
 use common\models\Channel;
 use common\models\ChannelSearch;
@@ -95,13 +97,13 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if (isset($model->payment_way)){
-            $model->payment_way = explode(',',$model->payment_way);
+        if (isset($model->payment_way)) {
+            $model->payment_way = explode(',', $model->payment_way);
         }
         if ($model->load(Yii::$app->request->post())) {
 //            var_dump(implode(',',$model->payment_way));
 //            die();
-            $model->payment_way=implode(',',$model->payment_way);
+            $model->payment_way = implode(',', $model->payment_way);
             $model->om = User::findByUsername($model->om)->id;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -157,8 +159,12 @@ class ChannelController extends Controller
 
 //        $aa = Channel::findOne(['id'=>25]);
 //        MailUtil::sendCreateChannel($aa);
-        $aa = Deliver::findIdentity(3,29);
-        MailUtil::sendSTSCreateMail($aa);
+//        $aa = Deliver::findIdentity(3,29);
+//        MailUtil::sendSTSCreateMail($aa);
+        $curl = new Curl();
+        $aa = $curl->get("https://admin.superads.cn/stream/track?id=11&aa=00&oo=99&ch_id=29&cp_uid=sdf");
+        var_dump($aa);
+        var_dump(count(Stream::getLatestClick(29, time())));
         die();
     }
 

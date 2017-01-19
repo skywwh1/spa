@@ -108,4 +108,13 @@ class Stream extends \yii\db\ActiveRecord
         $sql = 'SELECT distinct ip FROM feedback_channel_click_log WHERE cp_uid=:cp_uid AND ch_id=:ch_id';
         return static::findBySql($sql, ['cp_uid' => $cp_uid, 'ch_id' => $ch_id])->count();
     }
+
+    public static function getLatestClick($channel_id, $time)
+    {
+        $aa = static::find()->where(['>', 'create_time', $time])->andWhere(['ch_id' => $channel_id])->limit(1)->all();
+        if (empty($aa)) {
+            return null;
+        }
+        return $aa[0];
+    }
 }
