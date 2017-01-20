@@ -161,10 +161,11 @@ class ChannelController extends Controller
 //        MailUtil::sendCreateChannel($aa);
 //        $aa = Deliver::findIdentity(3,29);
 //        MailUtil::sendSTSCreateMail($aa);
+        $t = time();
         $curl = new Curl();
         $aa = $curl->get("https://admin.superads.cn/stream/track?id=11&aa=00&oo=99&ch_id=29&cp_uid=sdf");
         var_dump($aa);
-        var_dump(count(Stream::getLatestClick(29, time())));
+        var_dump(count(Stream::getLatestClick(29, $t)));
         die();
     }
 

@@ -1,6 +1,7 @@
 <?php
 namespace backend\models;
 
+use common\models\Channel;
 use Yii;
 use yii\base\Model;
 
@@ -22,7 +23,7 @@ class TestLinkForm extends Model
         return [
             [['channel', 'tracking_link', 'type'], 'required'],
             ['tracking_link', 'url', 'defaultScheme' => 'http'],
-
+            ['channel','exist','targetClass' => Channel::className(), 'targetAttribute' => 'username'],
         ];
     }
 

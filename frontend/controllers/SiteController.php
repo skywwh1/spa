@@ -1,6 +1,8 @@
 <?php
 namespace frontend\controllers;
 
+use frontend\models\Channel;
+use frontend\models\ChannelSignupForm;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -148,13 +150,14 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new SignupForm();
+//        $model = new SignupForm();
+        $model = new ChannelSignupForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
-            }
+//            if ($user = $model->signup()) {
+//                if (Yii::$app->getUser()->login($user)) {
+//                    return $this->goHome();
+//                }
+//            }
         }
 
         return $this->render('signup', [

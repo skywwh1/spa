@@ -85,7 +85,7 @@ class Channel extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['payment_way', 'payment_term'],'safe'],
+            [['payment_way', 'payment_term'], 'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
             [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
@@ -230,7 +230,7 @@ class Channel extends \yii\db\ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         parent::afterSave($insert, $changedAttributes);
-        if($insert){
+        if ($insert) {
             MailUtil::sendCreateChannel($this);
         }
     }
@@ -246,4 +246,35 @@ class Channel extends \yii\db\ActiveRecord
         return static::findOne(['username' => $username]);
     }
 
+    public static function genPostBack($postback, $allParams)
+    {
+        $homeurl = substr($postback, 0, strpos($postback, '?'));
+        $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
+        $params = explode("&", $paramstring);
+        $returnParams = "";
+        $paramsTemp = array();
+        if (!empty($params)) {
+            foreach ($params as $k) {
+                $temp = explode('=', $k);
+                $paramsTemp[$temp[0]] = isset($temp[1]) ? $temp[1] : "";
+            }
+        }
+        if (!empty($paramsTemp)) {
+            foreach ($paramsTemp as $k => $v) {
+                if (strpos($allParams, $k) !== false) {
+                    $startCut = strpos($allParams, $k);
+                    $cutLen = (strlen($allParams) - $startCut);
+                    if (strpos($allParams, '&', $startCut)) {
+                        $cutLen = strpos($allParams, '&', $startCut) - $startCut;
+                    }
+                    $returnParams .= substr($allParams, $startCut, $cutLen) . "&";
+                }
+            }
+        }
+        if (!empty($returnParams)) {
+            $returnParams = chop($returnParams, '&');
+            $homeurl .= "?" . $returnParams;
+        }
+        return $homeurl;
+    }
 }

@@ -4,7 +4,9 @@ namespace backend\controllers;
 
 use backend\models\TestLinkForm;
 use common\models\Campaign;
+use common\models\Channel;
 use common\models\Stream;
+use linslin\yii2\curl\Curl;
 use Yii;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -157,6 +159,24 @@ class DeliverController extends Controller
         $model = new TestLinkForm();
 
         if (Yii::$app->request->isAjax) {
+            $model->load(Yii::$app->request->post());
+            $channel = Channel::findChannelByName($model->channel);
+            if (empty($channel)) {
+                return "Can found channel";
+            }
+            $t = time();
+            $curl = new Curl();
+            if ($curl->get($model->tracking_link) !== false) {
+                $stream = Stream::getLatestClick($channel->id, $t);
+                $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+                $curl = new Curl();
+                if ($curl->get($link) !== false) {
+                    return "Post back success";
+                }
+
+            } else {
+                return "Test fail";
+            }
 
         } else {
             return $this->render('test_link', [

@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin([
             'id' => 'test-link-form',
+            //'enableAjaxValidation' => true,
         ]); ?>
 
         <div class='form-group row'>
