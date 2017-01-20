@@ -1,18 +1,16 @@
 <?php
 namespace frontend\controllers;
 
-use frontend\models\Channel;
 use frontend\models\ChannelSignupForm;
+use frontend\models\LoginForm;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\LoginForm;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
-use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 
 /**
@@ -62,7 +60,15 @@ class SiteController extends Controller
             ],
             'captcha' => [
                 'class' => 'yii\captcha\CaptchaAction',
-                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                //  'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                // 'backColor'=>0x000000,//背景颜色
+                'maxLength' => 6, //最大显示个数
+                'minLength' => 4,//最少显示个数
+//                'padding' => 10,//间距
+                'height' => 35,//高度
+                'width' => 130,  //宽度
+//                'foreColor'=>0xffffff,     //字体颜色
+                'offset' => 5,        //设置字符偏移量 有效果
             ],
         ];
     }
@@ -90,7 +96,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goHome();
+            return  $this->redirect(['camp-log/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -150,14 +156,14 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-//        $model = new SignupForm();
         $model = new ChannelSignupForm();
         if ($model->load(Yii::$app->request->post())) {
-//            if ($user = $model->signup()) {
-//                if (Yii::$app->getUser()->login($user)) {
-//                    return $this->goHome();
-//                }
-//            }
+            if ($user = $model->signup()) {
+                if (Yii::$app->getUser()->login($user)) {
+                    return $this->goHome();
+                }
+            }
+            return null;
         }
 
         return $this->render('signup', [

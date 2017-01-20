@@ -4,6 +4,9 @@ namespace common\models;
 
 use common\utility\MailUtil;
 use Yii;
+use yii\base\NotSupportedException;
+use yii\db\ActiveRecord;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "channel".
@@ -69,7 +72,7 @@ use Yii;
  * @property Channel[] $channels
  * @property User $om0
  */
-class Channel extends \yii\db\ActiveRecord
+class Channel extends ActiveRecord implements IdentityInterface
 {
     /**
      * @inheritdoc
@@ -92,9 +95,9 @@ class Channel extends \yii\db\ActiveRecord
             [['username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'string', 'max' => 255],
-            [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 50],
-            [['country'], 'string', 'max' => 10],
-            [['city'], 'string', 'max' => 120],
+            [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 100],
+            [['country'], 'string', 'max' => 255],
+            [['city'], 'string', 'max' => 200],
             [['phone1', 'phone2'], 'string', 'max' => 20],
             [['lang'], 'string', 'max' => 30],
             [['username'], 'unique'],
@@ -276,5 +279,53 @@ class Channel extends \yii\db\ActiveRecord
             $homeurl .= "?" . $returnParams;
         }
         return $homeurl;
+    }
+
+    /**
+     * Generates password hash from password and sets it to the model
+     *
+     * @param string $password
+     */
+    public function setPassword($password)
+    {
+        $this->password_hash = Yii::$app->security->generateRandomString($password);
+    }
+
+    public function getPassword()
+    {
+        return Yii::$app->getSecurity()->decryptByPassword($this->password_hash, "spa_aaa");
+    }
+
+    public function validatePassword($password)
+    {
+        if ($this->password_hash === $password) {
+            return true;
+        }
+        return false;
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne(['id' => $id]);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
+    }
+
+    public function getId()
+    {
+        return $this->getPrimaryKey();
+    }
+
+    public function getAuthKey()
+    {
+        return $this->auth_key;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return $this->getAuthKey() === $authKey;
     }
 }

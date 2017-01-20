@@ -102,6 +102,54 @@ class ModelsUtil
         4 => 'Weekly',
     );
 
+    const timezone = array(
+        '-11' => 'UTC-11',
+        '-10' => 'UTC-10',
+        '-9' => 'UTC-9',
+        '-8' => 'UTC-8',
+        '-7' => 'UTC-7',
+        '-6' => 'UTC-6',
+        '-5' => 'UTC-5',
+        '-4' => 'UTC-4',
+        '-3' => 'UTC-3',
+        '-2' => 'UTC-2',
+        '-1' => 'UTC-1',
+        '0' => 'UTC0',
+        '1' => 'UTC+1',
+        '2' => 'UTC+2',
+        '3' => 'UTC+3',
+        '4' => 'UTC+4',
+        '5' => 'UTC+5',
+        '5.5' => 'UTC+5.5',
+        '6' => 'UTC+6',
+        '7' => 'UTC+7',
+        '8' => 'UTC+8',
+        '9' => 'UTC+9',
+        '10' => 'UTC+10',
+        '11' => 'UTC+11',
+    );
+
+    const offerType = array(
+        'apk' => 'Apk',
+        'incent' => 'Incent',
+        'non-incent' => 'Non Incent',
+        'subscription' => 'Subscription',
+        'facebook' => 'Facebook',
+        'adwords' => 'Adwords',
+        'others' => 'Others',
+    );
+
+    const trafficType = array(
+        'email' => 'Email',
+        'incent' => 'Incent',
+        'pop' => 'Pop',
+        'social-media' => 'Social Media',
+        'display' => 'Display',
+        'direct-publisher' => 'Direct Publisher',
+        'video' => 'Video',
+        'other' => 'Other',
+    );
+
     public static function getValue($data, $k)
     {
         return ArrayHelper::getValue($data, $k);

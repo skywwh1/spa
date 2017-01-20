@@ -62,4 +62,20 @@ class RegionsDomain extends \yii\db\ActiveRecord
         return static::find()->select(['domain'])->where(['like', 'domain', $name])->column();
     }
 
+    /**
+     * @return array
+     */
+    public static function getAllToArray()
+    {
+        //->select(['CONCAT(first_name, " ", last_name) AS value', 'CONCAT(first_name, " ", last_name) AS label', 'id as id'])
+        $data = static::find()->where(['<>', 'id', 1])->all();
+        $temp = array();
+        if (!empty($data)) {
+            foreach ($data as $k) {
+                $temp[$k->domain.'-'.$k->country_regions] = $k->domain.'-'.$k->country_regions;
+            }
+        }
+        return $temp;
+    }
+
 }

@@ -61,13 +61,11 @@ class SendMailLog extends \yii\db\ActiveRecord
         $log->type = ArrayHelper::getValue($param, 'type');
         $log->is_send = ArrayHelper::getValue($param, 'isSend');
         $log->create_time = time();
-        $log->creator = Yii::$app->user->identity->getId();
+        $user = Yii::$app->user->identity;
+        $log->creator = empty($user) ? null : $user->getId();
 
         $log->to_who = implode(array_keys($mail->getTo()));
-        //htmlentities
         $log->content = $mail->toString();
         $log->save();
-//        var_dump($mail->getTo());
-//        $log->save();
     }
 }
