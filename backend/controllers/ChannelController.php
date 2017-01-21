@@ -125,6 +125,14 @@ class ChannelController extends Controller
             $model->payment_term = explode(',', $model->payment_term);
         }
         if ($model->load(Yii::$app->request->post())) {
+            if (!empty($model->om)) {
+                $user = User::findByUsername($model->om);
+            }
+            $model->om = isset($user) ? $user->id : null;
+            if (!empty($model->master_channel)) {
+                $main_chan = Channel::findChannelByName($model->master_channel);
+            }
+            $model->master_channel = isset($main_chan) ? $main_chan->id : null;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
