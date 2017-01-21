@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\CampaignSearch;
 use frontend\models\CampaignChannelLogSearch;
 use Yii;
 use yii\filters\AccessControl;
@@ -72,9 +73,8 @@ class CampLogController extends Controller
 
     public function actionAlloffers()
     {
-        $searchModel = new CampaignChannelLogSearch();
-        $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
-
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         return $this->render('all_offers', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

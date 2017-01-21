@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
-/* @var $searchModel frontend\models\CampaignChannelLogSearch */
+/* @var $searchModel frontend\models\CampaignSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'All Offer List';
@@ -15,38 +15,57 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+    <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+//            'id',
+//            'advertiser',
+            'campaign_name',
+//            'tag',
             'campaign_uuid',
-//            'adv_price',
             'pricing_mode',
-             'pay_out',
-             'daily_cap',
-//             'actual_discount',
-//             'discount',
-             'is_run',
-//             'creator',
-//             'create_time:datetime',
-//             'update_time:datetime',
-//             'track_url:url',
-             'click',
-             'unique_click',
-             'install',
-//             'cvr',
-//             'cost',
-//             'match_install',
-//             'match_cvr',
-//             'revenue',
-//             'def',
-//             'deduction_percent',
-//             'profit',
-//             'margin',
-//             'note',
+            'indirect',
+            'category',
+            'target_geo',
+//             'promote_start',
+            // 'promote_end',
+            // 'end_time:datetime',
+            'device',
+            'platform',
+            // 'budget',
+            // 'open_budget',
+            // 'daily_cap',
+            // 'open_cap',
+            'adv_price',
+            // 'now_payout',
 
+            // 'traffice_source',
+            // 'note',
+            // 'preview_link',
+            // 'icon',
+            // 'package_name',
+            // 'app_name',
+            // 'app_size',
+
+            // 'version',
+            // 'app_rate',
+            // 'description',
+            // 'creative_link',
+            // 'creative_type',
+            // 'creative_description',
+            // 'carriers',
+            // 'conversion_flow',
+            // 'recommended',
+
+//            'cap',
+//            'cvr',
+//            'epc',
+//             'pm',
+//             'bd',
+            'status',
+
+//            ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-<?php Pjax::end(); ?></div>
+    <?php Pjax::end(); ?></div>
