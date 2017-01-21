@@ -37,7 +37,15 @@ class ChannelController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index',
+                            'create',
+                            'update',
+                            'view',
+                            'delete',
+                            'get_channel_name',
+                            'get_om',
+                            'test',
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
