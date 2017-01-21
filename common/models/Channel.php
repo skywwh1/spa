@@ -215,6 +215,12 @@ class Channel extends ActiveRecord implements IdentityInterface
 
     public function beforeSave($insert)
     {
+        if (!empty($this->payment_way) && is_array($this->payment_way)) {
+            $this->payment_way = implode(',', $this->payment_way);
+        }
+        if (!empty($this->payment_term) && is_array($this->payment_term)) {
+            $this->payment_term = implode(',', $this->payment_term);
+        }
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->created_time = time();

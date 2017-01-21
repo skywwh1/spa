@@ -8,6 +8,7 @@ use common\models\Stream;
 use common\models\User;
 use common\utility\MailUtil;
 use linslin\yii2\curl\Curl;
+use Symfony\Component\Yaml\Dumper;
 use Yii;
 use common\models\Channel;
 use common\models\ChannelSearch;
@@ -91,12 +92,13 @@ class ChannelController extends Controller
         $model = new Channel();
 
         if ($model->load(Yii::$app->request->post())) {
-//            var_dump($model->payment_way);
-//            die();
-            $model->payment_way = implode($model->payment_way);
-            $user = User::findByUsername($model->om);
-            $model->om = isset($user) ? $user->id : "";
-            $main_chan = Channel::findChannelByName($model->master_channel);
+            if (!empty($model->om)) {
+                $user = User::findByUsername($model->om);
+            }
+            $model->om = isset($user) ? $user->id : null;
+            if (!empty($model->master_channel)) {
+                $main_chan = Channel::findChannelByName($model->master_channel);
+            }
             $model->master_channel = isset($main_chan) ? $main_chan->id : null;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
@@ -116,14 +118,13 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if (isset($model->payment_way)) {
+        if (!empty($model->payment_way)) {
             $model->payment_way = explode(',', $model->payment_way);
         }
+        if (!empty($model->payment_term)) {
+            $model->payment_term = explode(',', $model->payment_term);
+        }
         if ($model->load(Yii::$app->request->post())) {
-//            var_dump(implode(',',$model->payment_way));
-//            die();
-            $model->payment_way = implode(',', $model->payment_way);
-            $model->om = User::findByUsername($model->om)->id;
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
