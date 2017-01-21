@@ -72,15 +72,18 @@ SbAppAsset::register($this);
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="#"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a href="index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Offers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <?= Html::a('My Campaign Logs', ['camp-log/index']) ?>
+                                <?= Html::a('All Offers', ['camp-log/alloffers']) ?>
                             </li>
 
+                            <li>
+                                <?= Html::a('My Approved Offers', ['camp-log/myoffers']) ?>
+                            </li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
@@ -140,12 +143,9 @@ SbAppAsset::register($this);
     $(document).ready(function () {
         $(".nav a").each(function () {
             $this = $(this);
-
             if ($this[0].href == String(window.location)) {
                 $this.addClass("active");
-//                alert();
                 console.log($this.parent().parent().parent());
-                //$this.parent().find('ul').addClass("active");
                 $this.parent().parent().parent().addClass("active");
                 $this.parent().parent().attr('aria-expanded','true');
             }

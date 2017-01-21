@@ -16,6 +16,8 @@ class CampLogController extends Controller
     /**
      * @inheritdoc
      */
+    public $layout = "my_main";
+
     public function behaviors()
     {
         return [
@@ -23,7 +25,7 @@ class CampLogController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => ['index', 'alloffers', 'myoffers'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -44,11 +46,36 @@ class CampLogController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout='my_main';
         $searchModel = new CampaignChannelLogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all CampaignChannelLog models.
+     * @return mixed
+     */
+    public function actionMyoffers()
+    {
+        $searchModel = new CampaignChannelLogSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('myoffers', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionAlloffers()
+    {
+        $searchModel = new CampaignChannelLogSearch();
+        $dataProvider = $searchModel->searchAll(Yii::$app->request->queryParams);
+
+        return $this->render('all_offers', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
