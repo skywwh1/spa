@@ -80,6 +80,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+//        $this->layout='my_main';
         return $this->render('index');
     }
 
@@ -159,9 +160,7 @@ class SiteController extends Controller
         $model = new ChannelSignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
-                if (Yii::$app->getUser()->login($user)) {
-                    return $this->goHome();
-                }
+                return $this->render('sigup-finish');
             }
             return null;
         }

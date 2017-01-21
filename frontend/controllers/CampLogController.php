@@ -44,6 +44,7 @@ class CampLogController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout='my_main';
         $searchModel = new CampaignChannelLogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
