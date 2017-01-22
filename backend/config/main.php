@@ -53,5 +53,5 @@ return [
         ],
     ],
     'params' => $params,
-//    'layout'=>'mylayout',
+    'layout'=>'admin_layout',
 ];

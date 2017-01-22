@@ -159,6 +159,7 @@ class AuditController extends Controller
                 }
                 $this->echoMessage("post link is $k->post_link");
             } else {
+                $deliver->def += 1;
                 $this->echoMessage("this click will not post back");
             }
             if ($k->save() === false) {

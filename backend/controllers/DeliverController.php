@@ -3,17 +3,16 @@
 namespace backend\controllers;
 
 use backend\models\TestLinkForm;
-use common\models\Campaign;
 use common\models\Channel;
+use common\models\Deliver;
+use common\models\DeliverSearch;
 use common\models\Stream;
 use linslin\yii2\curl\Curl;
 use Yii;
-use common\models\Deliver;
-use common\models\DeliverSearch;
+use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\web\Response;
 
 /**
  * DeliverController implements the CRUD actions for Deliver model.
@@ -30,6 +29,22 @@ class DeliverController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'create',
+                            'update',
+                            'view',
+                            'delete',
+                            'testlink',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

@@ -61,6 +61,7 @@ class ChannelController extends Controller
      */
     public function actionIndex()
     {
+        $this->layout='admin_layout';
         $searchModel = new ChannelSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

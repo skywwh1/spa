@@ -10,10 +10,14 @@ $this->title = 'Create Campaign';
 $this->params['breadcrumbs'][] = ['label' => 'Campaigns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="campaign-create">
+<div class="col-lg-12">
+    <div class="box box-info">
+        <div class="box-body">
 
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
+        </div>
+    </div>
 </div>
