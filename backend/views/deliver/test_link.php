@@ -14,9 +14,9 @@ $this->title = 'Test Link';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="test-link">
-
-    <div class="test-link-form">
+<div class="col-lg-12">
+    <div class="box box-info">
+        <div class="box-body">
 
         <?php $form = ActiveForm::begin([
             'id' => 'test-link-form',
@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php ActiveForm::end(); ?>
 
+        </div>
     </div>
 </div>
 <script type="application/javascript">
