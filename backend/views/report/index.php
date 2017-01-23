@@ -11,15 +11,16 @@ use yii\widgets\Pjax;
 $this->title = 'Delivers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="col-lg-12">
-    <div class="box box-info">
-        <div class="box-body">
 
-            <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<div class="col-lg-12">
+    <div class="box box-info ">
+        <div class="box-body table-responsive">
+            <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
             <?php Pjax::begin(); ?>    <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
+                'tableOptions' => ['class' => 'table table-striped table-bordered'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
 
@@ -56,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
             ]); ?>
             <?php Pjax::end(); ?>
+
         </div>
     </div>
 </div>

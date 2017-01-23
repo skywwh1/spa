@@ -24,7 +24,8 @@
         "kartik-v/yii2-date-range": "*",
         "kartik-v/yii2-field-range": "dev-master",
         "kartik-v/yii2-checkbox-x": "@dev",
-        "linslin/yii2-curl": "*"
+        "linslin/yii2-curl": "*",
+        "kartik-v/yii2-widget-select2": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",
