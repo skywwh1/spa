@@ -13,8 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="col-lg-12">
-    <div class="box box-info ">
-        <div class="box-body table-responsive">
+    <div class="box box-info table-responsive">
+        <div class="box-body">
             <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
             <?php Pjax::begin(); ?>    <?= GridView::widget([

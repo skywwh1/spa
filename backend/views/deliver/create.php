@@ -12,9 +12,9 @@ $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="deliver-create">
-
-    <div class="deliver-form">
+<div class="col-lg-12">
+    <div class="box box-info">
+        <div class="box-body">
 
         <?php $form = ActiveForm::begin(); ?>
 
@@ -60,5 +60,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php ActiveForm::end(); ?>
         <div id="test_div"></div>
+        </div>
     </div>
 </div>

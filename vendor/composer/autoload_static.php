@@ -36,6 +36,7 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'k' => 
         array (
             'kartik\\typeahead\\' => 17,
+            'kartik\\select2\\' => 15,
             'kartik\\plugins\\checkbox\\' => 24,
             'kartik\\field\\' => 13,
             'kartik\\daterange\\' => 17,
@@ -134,6 +135,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'kartik\\typeahead\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-typeahead',
+        ),
+        'kartik\\select2\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-select2',
         ),
         'kartik\\plugins\\checkbox\\' => 
         array (

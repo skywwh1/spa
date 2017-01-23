@@ -12,7 +12,7 @@ $this->title = 'Channel List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="col-lg-12">
-    <div class="box box-info">
+    <div class="box box-info table-responsive">
         <div class="box-body">
 
 
