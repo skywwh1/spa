@@ -17,9 +17,9 @@ use yii\widgets\ActiveForm;
 
 
 <?= $form->field($model, 'username')->input('text', ['class' => 'form-control', 'placeholder' => 'Username','autofocus' => true])->label(false) ?>
-    <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+<!--    <span class="glyphicon glyphicon-envelope form-control-feedback"></span> -->
     <?= $form->field($model, 'password')->input('password', ['class' => 'form-control', 'placeholder' => 'Password'])->label(false) ?>
-    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+<!--    <span class="glyphicon glyphicon-lock form-control-feedback"></span> -->
 
     <?= $form->field($model, 'verifyCode')->label(false)->widget(Captcha::className(), [
         'template' => '<div class="row"><div class="col-lg-5">{image}</div><div class="col-lg-7">{input}</div></div>',

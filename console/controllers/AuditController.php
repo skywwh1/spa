@@ -28,8 +28,11 @@ class AuditController extends Controller
     // 10分钟一次。
     public function actionCount_feed()
     {
+        date_default_timezone_set("Asia/Shanghai");
+        $this->echoMessage("Time : " . date("Y-m-d H:i:s", time()));
         $needCounts = Feed::findNeedCounts();
         $this->echoMessage("Get feeds count " . count($needCounts));
+
         if (!empty($needCounts)) {
 
             $matchClicks = $this->getMatch_clicks($needCounts);
@@ -39,11 +42,11 @@ class AuditController extends Controller
             $this->updateFeedStatus($needCounts);
             //更新扣量
             $this->updatePost_status($matchClicks);
-            //更新点击量
-            $this->count_clicks();
         } else {
             $this->echoHead("No feed need to update");
         }
+        //更新点击量
+        $this->count_clicks();
         //post
         $this->post_back();
     }
@@ -193,9 +196,13 @@ class AuditController extends Controller
 
     protected function count_clicks()
     {
-        $this->echoHead("start to count clicks");
         $streams = Stream::getCountClicks();
+        if (empty($streams)) {
+            $this->echoMessage("No clicks update");
+            return;
+        }
         $camps = array();
+        $this->echoHead("start to count clicks");
         if (!empty($streams)) {
             foreach ($streams as $stream) {
                 if (isset($camps[$stream->cp_uid . ',' . $stream->ch_id])) {

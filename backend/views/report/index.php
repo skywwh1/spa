@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\ReportSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Delivers';
+$this->title = 'Campaign report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -20,13 +20,22 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php Pjax::begin(); ?>    <?= GridView::widget([
                 'dataProvider' => $dataProvider,
                 'filterModel' => $searchModel,
-                'tableOptions' => ['class' => 'table table-striped table-bordered'],
+                'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
 
-                    'campaign.campaign_name',
+                    [
+                        'attribute'=>'campaign_id',
+                        'value'=>'campaign.campaign_name',
+                        'label'=>'Campaign Name',
+                    ],
+//                    'campaign.campaign_name',
                     'campaign_uuid',
-                    'channel.username',
+                    [
+                        'attribute'=>'channel_id',
+                        'value'=>'channel.username',
+                        'label'=>'Channel Name',
+                    ],
                     'click',
                     'unique_click',
                     'install',

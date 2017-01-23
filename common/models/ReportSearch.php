@@ -18,8 +18,8 @@ class ReportSearch extends Deliver
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['campaign_uuid', 'track_url', 'note'], 'safe'],
+            [['pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
+            [['campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -58,10 +58,10 @@ class ReportSearch extends Deliver
             return $dataProvider;
         }
 
+        $query->joinWith('campaign');
+        $query->joinWith('channel');
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
             'adv_price' => $this->adv_price,
             'pricing_mode' => $this->pricing_mode,
             'pay_out' => $this->pay_out,
@@ -85,10 +85,12 @@ class ReportSearch extends Deliver
             'profit' => $this->profit,
             'margin' => $this->margin,
         ]);
-
         $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
-            ->andFilterWhere(['like', 'note', $this->note]);
+            ->andFilterWhere(['like', 'note', $this->note])
+            ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'channel.username', $this->channel_id]);
+
 
         return $dataProvider;
     }

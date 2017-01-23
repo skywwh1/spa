@@ -19,7 +19,10 @@ class ModelsUtil
         5 => "CPO",
         6 => "CPS",
     );
-    const status = array();
+    const status = array(
+        0 => 'No',
+        1 => 'yes',
+    );
     const create_type = array(
         1 => "banner",
         2 => "video",
@@ -183,6 +186,11 @@ class ModelsUtil
     public static function getAdvertiserStatus($k)
     {
         return static::getValue(static::advertiser_status, $k);
+    }
+
+    public static function getStatus($k)
+    {
+        return static::getValue(static::status, $k);
     }
 
 }

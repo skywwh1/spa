@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CampaignSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -24,7 +25,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'campaign_name',
 //            'tag',
             'campaign_uuid',
-            'pricing_mode',
+//            'pricing_mode',
+            [
+                'attribute' => 'pricing_mode',
+                'value' => function ($data) {
+                    return ModelsUtil::getPricingMode($data->pricing_mode);
+                }
+            ],
             'indirect',
             'category',
             'target_geo',
