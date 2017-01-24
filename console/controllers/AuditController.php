@@ -6,6 +6,7 @@ use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\Stream;
+use frontend\models\ChannelReports;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 use yii\db\ActiveRecord;
@@ -326,8 +327,6 @@ class AuditController extends Controller
 
     public function actionTest()
     {
-        $curl = new Curl();
-        $response = $curl->get("https://track.superads.cn/stream/feed");
-        var_dump($response);
+        var_dump(ChannelReports::getDailyReport('',''));
     }
 }

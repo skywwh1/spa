@@ -91,7 +91,13 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">My reports</a>
+                                <?= Html::a('Hourly Report', ['my-report/hourly']) ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Daily Report', ['my-report/daily']) ?>
+                            </li>
+                            <li>
+                                <?= Html::a('Offers Report', ['my-report/offers']) ?>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
