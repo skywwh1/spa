@@ -184,7 +184,7 @@ class Yii2 extends Framework implements ActiveRecord, PartedModule
             $this->loadFixtures($test);
         }
 
-        if ($this->config['cleanup'] && $this->app->has('db')) {
+        if ($this->config['cleanup'] && $this->app->has('db') && $this->app->db instanceof \yii\db\Connection) {
             $this->transaction = $this->app->db->beginTransaction();
         }
     }
@@ -213,12 +213,15 @@ class Yii2 extends Framework implements ActiveRecord, PartedModule
         foreach ($this->loadedFixtures as $fixture) {
             $fixture->unloadFixtures();
         }
+        $this->loadedFixtures = [];
 
         if ($this->transaction && $this->config['cleanup']) {
             $this->transaction->rollback();
         }
 
-        $this->client->resetPersistentVars();
+        if ($this->client) {
+            $this->client->resetPersistentVars();
+        }
 
         if (isset(\Yii::$app) && \Yii::$app->has('session', true)) {
             \Yii::$app->session->close();
