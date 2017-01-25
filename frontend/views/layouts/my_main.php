@@ -73,7 +73,7 @@ SbAppAsset::register($this);
             <div class="sidebar-nav navbar-collapse">
                 <ul class="nav" id="side-menu">
                     <li>
-                        <a href="index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        <a href="../camp-log/index"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     <li>
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Offers<span class="fa arrow"></span></a>
