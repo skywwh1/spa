@@ -1,7 +1,9 @@
 <?php
 
-use yii\helpers\Html;
+use common\models\Category;
+use common\models\RegionsDomain;
 use yii\grid\GridView;
+use yii\helpers\Html;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -11,17 +13,18 @@ use yii\widgets\Pjax;
 $this->title = 'All Offer List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="alloffers"></div>
 <div class="campaign-channel-log-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-//            'id',
-//            'advertiser',
+            'id',
+//            'campaign.id',
             'campaign_name',
 //            'tag',
             'campaign_uuid',
@@ -32,14 +35,44 @@ $this->params['breadcrumbs'][] = $this->title;
                     return ModelsUtil::getPricingMode($data->pricing_mode);
                 }
             ],
-            'indirect',
-            'category',
-            'target_geo',
+//            'indirect',
+            [
+                'attribute' => 'indirect',
+                'value' => function ($data) {
+                    return ModelsUtil::getStatus($data->indirect);
+                }
+            ],
+//            'category',
+            [
+                'attribute' => 'category',
+                'value' => function ($data) {
+                    return Category::findOne(['id' => $data->category])->name;
+                }
+            ],
+            [
+                'attribute' => 'target_geo',
+                'value' => function ($data) {
+                    return RegionsDomain::findOne(['id' => $data->target_geo])->domain;
+                }
+            ],
+//            'target_geo',
 //             'promote_start',
             // 'promote_end',
             // 'end_time:datetime',
-            'device',
-            'platform',
+            //'device',
+            [
+                'attribute' => 'device',
+                'value' => function ($data) {
+                    return ModelsUtil::getDevice($data->device);
+                },
+            ],
+//            'platform',
+            [
+                'attribute' => 'platform',
+                'value' => function ($data) {
+                    return ModelsUtil::getPlatform($data->platform);
+                },
+            ],
             // 'budget',
             // 'open_budget',
             // 'daily_cap',
@@ -70,7 +103,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'epc',
 //             'pm',
 //             'bd',
-            'status',
+//            'status',
+            [
+                'attribute' => 'status',
+                'value' => function ($data) {
+                    return isset($data->status) ? $data->status : "";
+                },
+            ],
 
 //            ['class' => 'yii\grid\ActionColumn'],
         ],

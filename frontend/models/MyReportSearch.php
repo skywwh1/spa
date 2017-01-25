@@ -6,6 +6,9 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Deliver;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
+use yii\helpers\VarDumper;
 
 /**
  * MyReportSearch represents the model behind the search form about `common\models\Deliver`.
@@ -18,6 +21,7 @@ class MyReportSearch extends Deliver
     public $end_time;
     public $timezone;
     public $installs;
+    public $cvr0;
 
     /**
      * @inheritdoc
@@ -26,9 +30,14 @@ class MyReportSearch extends Deliver
     {
         return [
             [['pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['timezone', 'start_time', 'end_time', 'campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
+            [['cvr0', 'timezone', 'start_time', 'end_time', 'campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
+    }
+
+    public function attributeLabels()
+    {
+        return ['cvr0' => 'CVR'];
     }
 
     /**
@@ -44,12 +53,12 @@ class MyReportSearch extends Deliver
      * Creates data provider instance with search query applied
      *
      * @param array $params
-     *
+     * @param String $type
      * @return ActiveDataProvider
      */
     public function search($params, $type)
     {
-        $query = MyReportSearch::find();
+        $query = new Query();
 
         // add conditions that should always apply here
 
@@ -58,7 +67,13 @@ class MyReportSearch extends Deliver
         ]);
 
         $this->load($params);
-        //date_default_timezone_set('Europe/London');
+        if (isset($this->timezone)) {
+            date_default_timezone_set(ArrayHelper::getValue(timezone_identifiers_list(), $this->timezone));
+        } else {
+            date_default_timezone_set("Asia/Shanghai");
+            $this->timezone = array_search("Asia/Shanghai", timezone_identifiers_list());
+        }
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -67,28 +82,39 @@ class MyReportSearch extends Deliver
         }
         $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d"	) time';
         if ($type === 'hourly') {
-            $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d %H"	) time';
+            $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d %H:00"	) time';
         }
         $query->select([
             'COUNT(fc.id) clicks',
             'COUNT(ff.id) installs',
+            'COUNT(ff.id)/COUNT(fc.id) cvr0',
             $time,
             'de.*']);
 
         $query->from('campaign_channel_log de');
         $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid');
         $query->leftJoin('feedback_advertiser_feed_log ff', 'fc.click_uuid = ff.click_id');
-        if (isset($this->start_time)){
-            $this->start_time=strtotime($this->start_time);
+        $query->andFilterWhere(['de.channel_id'=>Yii::$app->user->getId()]);
+        if (isset($this->start_time)) {
+            $this->start_time = strtotime($this->start_time);
             $query->andFilterWhere(['>=', 'fc.create_time', $this->start_time]);
+        } else {
+            $this->start_time = time();
         }
-        if(isset($this->end_time)){
-            $this->end_time=strtotime($this->end_time. ' +1 day');
+        if (isset($this->end_time)) {
+            $this->end_time = strtotime($this->end_time . '+1 day');
             $query->andFilterWhere(['<', 'fc.create_time', $this->end_time]);
+            $this->end_time = strtotime(date('Y-m-d', $this->end_time) . '-1 day');
+        } else {
+            $this->end_time = time();
         }
-        $query->groupBy('time');
-        $query->orderBy('clicks');
+        if ($type === 'offers') {
+            $query->groupBy('campaign_id');
 
+        } else {
+            $query->groupBy('time');
+        }
+        $query->orderBy('time');
 
         return $dataProvider;
     }
@@ -112,54 +138,6 @@ class MyReportSearch extends Deliver
 
     public function offersSearch($params)
     {
-        $query = Deliver::find();
-
-        // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        $this->load($params);
-
-        if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
-            return $dataProvider;
-        }
-
-        // grid filtering conditions
-        $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
-            'adv_price' => $this->adv_price,
-            'pricing_mode' => $this->pricing_mode,
-            'pay_out' => $this->pay_out,
-            'daily_cap' => $this->daily_cap,
-            'actual_discount' => $this->actual_discount,
-            'discount' => $this->discount,
-            'is_run' => $this->is_run,
-            'creator' => $this->creator,
-            'create_time' => $this->create_time,
-            'update_time' => $this->update_time,
-            'click' => $this->click,
-            'unique_click' => $this->unique_click,
-            'install' => $this->install,
-            'cvr' => $this->cvr,
-            'cost' => $this->cost,
-            'match_install' => $this->match_install,
-            'match_cvr' => $this->match_cvr,
-            'revenue' => $this->revenue,
-            'def' => $this->def,
-            'deduction_percent' => $this->deduction_percent,
-            'profit' => $this->profit,
-            'margin' => $this->margin,
-        ]);
-
-        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
-            ->andFilterWhere(['like', 'track_url', $this->track_url])
-            ->andFilterWhere(['like', 'note', $this->note]);
-
-        return $dataProvider;
+        return $this->search($params, 'offers');
     }
 }

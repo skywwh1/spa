@@ -7,6 +7,7 @@ use common\models\RegionsDomain;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,6 +27,25 @@ class CampaignController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => [
+                            'view',
+                            'index',
+                            'create',
+                            'update',
+                            'delete',
+                            'campaign_by_uuid',
+                            'get_adv_list',
+                            'get_geo'
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

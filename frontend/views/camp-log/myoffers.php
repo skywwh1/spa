@@ -11,17 +11,17 @@ use yii\widgets\Pjax;
 $this->title = 'My Approved Offers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="myoffers"></div>
 <div class="campaign-channel-log-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h3><?= Html::encode($this->title) ?></h3>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
+            'campaign.id',
             'campaign_uuid',
 //            'adv_price',
             //'pricing_mode',
@@ -40,7 +40,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'is_run',
                 'value' => function ($data) {
                     return ModelsUtil::getStatus($data->is_run);
-                }
+                },
+                'filter'=>ModelsUtil::status,
             ],
 //             'creator',
 //             'create_time:datetime',

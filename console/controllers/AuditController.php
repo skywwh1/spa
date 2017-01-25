@@ -33,7 +33,8 @@ class AuditController extends Controller
         $this->echoMessage("Time : " . date("Y-m-d H:i:s", time()));
         $needCounts = Feed::findNeedCounts();
         $this->echoMessage("Get feeds count " . count($needCounts));
-
+        //更新点击量
+        $this->count_clicks();
         if (!empty($needCounts)) {
 
             $matchClicks = $this->getMatch_clicks($needCounts);
@@ -46,8 +47,6 @@ class AuditController extends Controller
         } else {
             $this->echoHead("No feed need to update");
         }
-        //更新点击量
-        $this->count_clicks();
         //post
         $this->post_back();
     }
@@ -102,6 +101,7 @@ class AuditController extends Controller
                 $camp_chanl = explode(',', $k);
                 $deliver = Deliver::findIdentity($camp_chanl[0], $camp_chanl[1]);
                 $deliver->match_install += $v; //累加
+                $this->statistics($deliver);
                 if (!$deliver->save()) {
                     var_dump($deliver->getErrors());
                 }
@@ -166,6 +166,7 @@ class AuditController extends Controller
                 $deliver->def += 1;
                 $this->echoMessage("this click will not post back");
             }
+            $this->statistics($deliver);
             if ($k->save() === false) {
                 $this->echoMessage("click update error");
                 var_dump($k->getErrors());
@@ -226,6 +227,7 @@ class AuditController extends Controller
                 $deliver = Deliver::findIdentityByCpUuidAndChid($ids[0], $ids[1]);
                 $deliver->click += $v;
                 $deliver->unique_click = Stream::getDistinctIpClick($ids[0], $ids[1]);
+                $this->statistics($deliver);
                 if ($deliver->save()) {
                     $this->echoMessage("deliver $deliver->campaign_id - $deliver->channel_id");
                     $this->echoMessage("update click to $deliver->click ");
@@ -315,6 +317,28 @@ class AuditController extends Controller
         return $homeurl;
     }
 
+    /**
+     *计算转化率
+     * @param \common\models\Deliver $deliver
+     */
+    private function statistics(&$deliver)
+    {
+        $this->echoMessage("calculate benefit ");
+        if ($deliver->click) {
+            $deliver->cvr = $deliver->install / $deliver->click;
+            $deliver->match_cvr = $deliver->match_install / $deliver->click;
+        }
+        $deliver->cost = $deliver->install * $deliver->campaign->adv_price;
+        $deliver->revenue = $deliver->match_install * $deliver->campaign->adv_price;
+        if ($deliver->match_install) {
+            $deliver->actual_discount = $deliver->install / $deliver->match_install;
+        }
+        $deliver->profit = $deliver->revenue - $deliver->cost;
+        if ($deliver->revenue) {
+            $deliver->margin = $deliver->profit / $deliver->revenue;
+        }
+    }
+
     private function echoHead($str)
     {
         echo "#######  $str \n\n";
@@ -327,6 +351,6 @@ class AuditController extends Controller
 
     public function actionTest()
     {
-        var_dump(ChannelReports::getDailyReport('',''));
+        var_dump(timezone_identifiers_list());
     }
 }

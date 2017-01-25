@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
-
+                    'campaign_id',
                     [
                         'attribute'=>'campaign_id',
                         'value'=>'campaign.campaign_name',
@@ -31,6 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
 //                    'campaign.campaign_name',
                     'campaign_uuid',
+                   'channel_id',
                     [
                         'attribute'=>'channel_id',
                         'value'=>'channel.username',
@@ -44,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'cost',
                     'match_install',
                     'match_cvr',
-                    'adv_price',
+                    'campaign.adv_price',
                     'revenue',
                     'def',
                     'deduction_percent',

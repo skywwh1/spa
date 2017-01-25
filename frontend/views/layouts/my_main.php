@@ -42,11 +42,12 @@ SbAppAsset::register($this);
                     <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+<!--                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
                     </li>
                     <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
                     </li>
                     <li class="divider"></li>
+-->
                     <li>
                         <?php
                         echo Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']);
@@ -78,11 +79,11 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-files-o fa-fw"></i> Offers<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <?= Html::a('All Offers', ['camp-log/alloffers']) ?>
+                                <?= Html::a('All Offers', ['camp-log/alloffers'],['data-menu'=>"alloffers"]) ?>
                             </li>
 
                             <li>
-                                <?= Html::a('My Approved Offers', ['camp-log/myoffers']) ?>
+                                <?= Html::a('My Approved Offers', ['camp-log/myoffers'],['data-menu'=>"myoffers"]) ?>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -91,13 +92,13 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <?= Html::a('Hourly Report', ['my-report/hourly']) ?>
+                                <?= Html::a('Hourly Report', ['my-report/hourly'],['data-menu'=>"hourly"]) ?>
                             </li>
                             <li>
-                                <?= Html::a('Daily Report', ['my-report/daily']) ?>
+                                <?= Html::a('Daily Report', ['my-report/daily'],['data-menu'=>"daily"]) ?>
                             </li>
                             <li>
-                                <?= Html::a('Offers Report', ['my-report/offers']) ?>
+                                <?= Html::a('Offers Report', ['my-report/offers'],['data-menu'=>"offers"]) ?>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->
@@ -145,17 +146,4 @@ SbAppAsset::register($this);
 <?php $this->endBody() ?>
 </body>
 </html>
-<script type="text/javascript">
-    $(document).ready(function () {
-        $(".nav a").each(function () {
-            $this = $(this);
-            if ($this[0].href == String(window.location)) {
-                $this.addClass("active");
-                console.log($this.parent().parent().parent());
-                $this.parent().parent().parent().addClass("active");
-                $this.parent().parent().attr('aria-expanded','true');
-            }
-        });
-    });
-</script>
 <?php $this->endPage() ?>

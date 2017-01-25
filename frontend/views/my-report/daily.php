@@ -14,6 +14,7 @@ use yii\widgets\Pjax;
 $this->title = 'Daily report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="daily"></div>
 <div class="row">
     <div class="col-lg-12">
         <h3 class="page-header"><?= Html::encode($this->title) ?></h3>
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="row">
                     <div class="col-lg-6">
                         <?php $form = ActiveForm::begin([
-                            'action' => ['hourly'],
+                            'action' => ['daily'],
                             'method' => 'get',
                         ]); ?>
 
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <label class="control-label">Timezone:</label>
                                 </div>
                                 <div class="col-lg-9">
-                                    <?= Html::dropDownList('MyReportSearch[timezone]', '8', ModelsUtil::timezone, ['class' => 'form-control']) ?>
+                                    <?= Html::dropDownList('MyReportSearch[timezone]', $searchModel->timezone, timezone_identifiers_list(), ['class' => 'form-control']) ?>
                                 </div>
                             </div>
                         </div>
@@ -51,13 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <?php
                                     echo DatePicker::widget([
                                         'name' => 'MyReportSearch[start_time]',
-                                        'value' => Yii::$app->formatter->asDate('now', 'php:Y-mm-d'),
+                                        'value' => date('Y-m-d', $searchModel->start_time),
                                         'type' => DatePicker::TYPE_RANGE,
                                         'name2' => 'MyReportSearch[end_time]',
-                                        'value2' => Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                                        'value2' => date('Y-m-d', $searchModel->end_time),
                                         'pluginOptions' => [
                                             'autoclose' => true,
-                                            'format' => 'yyyy-MM-dd'
+                                            'format' => 'yyyy-mm-dd'
                                         ]
                                     ]);
                                     ?>
@@ -91,10 +92,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'filterModel' => $searchModel,
                             'columns' => [
                                 'time',
-                                'clicks',
-                                'installs',
                                 'campaign_id',
                                 'campaign_uuid',
+                                'clicks',
+                                'installs',
+                                [
+                                    'attribute'=>'cvr0',
+                                    'value'=>$searchModel->cvr0,
+                                    'label'=>'CVR(100%)',
+                                ],
+//                                'cvr0',
 //                                'pricing_mode',
                                 'pay_out',
                                 // 'daily_cap',

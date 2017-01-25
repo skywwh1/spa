@@ -193,4 +193,9 @@ class ModelsUtil
         return static::getValue(static::status, $k);
     }
 
+    public static function getDevice($k)
+    {
+        return static::getValue(static::device, $k);
+    }
+
 }
