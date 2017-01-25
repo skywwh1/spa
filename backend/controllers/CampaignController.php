@@ -39,7 +39,7 @@ class CampaignController extends Controller
                             'create',
                             'update',
                             'delete',
-                            'campaign_by_uuid',
+                            'campaigns_by_uuid',
                             'get_adv_list',
                             'get_geo'
                         ],
