@@ -10,6 +10,7 @@ $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'S2s', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="STS"></div>
 <div class="col-lg-12">
     <div class="box box-info">
         <div class="box-body">

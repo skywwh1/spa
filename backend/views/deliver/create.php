@@ -1,6 +1,8 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\helpers\Html;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 use kartik\typeahead\TypeaheadBasic;
 use kartik\typeahead\Typeahead;
@@ -12,6 +14,7 @@ $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="STS"></div>
 <div class="col-lg-12">
     <div class="box box-info">
         <div class="box-body">
@@ -32,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'wildcard' => '%QUERY'
                             ]
                         ]],
-                ]) ?>
+                ])	?>
             </div>
         </div>
 

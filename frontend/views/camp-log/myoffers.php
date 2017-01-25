@@ -20,9 +20,10 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php Pjax::begin(); ?>    <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
+//        'showHeader'=>false,
         'columns' => [
             'campaign.id',
-            'campaign_uuid',
+            'campaign.campaign_name',
 //            'adv_price',
             //'pricing_mode',
             [

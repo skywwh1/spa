@@ -14,6 +14,7 @@ $this->title = 'Test Link';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="testlink"></div>
 <div class="col-lg-12">
     <div class="box box-info">
         <div class="box-body">

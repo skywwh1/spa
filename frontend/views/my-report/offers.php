@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-12">
                         <?php Pjax::begin(); ?>    <?= GridView::widget([
                             'dataProvider' => $dataProvider,
-                            //'filterModel' => $searchModel,
+                            'filterModel' => $searchModel,
                             'columns' => [
                                 'campaign_id',
                                 'campaign_uuid',

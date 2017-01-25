@@ -5,7 +5,6 @@ namespace frontend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use frontend\models\CampaignChannelLog;
 
 /**
  * CampaignChannelLogSearch represents the model behind the search form about `frontend\models\CampaignChannelLog`.
@@ -86,9 +85,9 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             'margin' => $this->margin,
         ]);
 
-        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
-            ->andFilterWhere(['like', 'track_url', $this->track_url])
-            ->andFilterWhere(['like', 'note', $this->note]);
+        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid]);
+//            ->andFilterWhere(['like', 'track_url', $this->track_url])
+//            ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;
     }

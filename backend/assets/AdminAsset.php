@@ -26,6 +26,7 @@ class AdminAsset extends AssetBundle
         'admin/js/select2.full.min.js',
         'admin/js/app.min.js',
         'admin/js/demo.js',
+        'admin/js/custom.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

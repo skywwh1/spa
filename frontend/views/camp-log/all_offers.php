@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'campaign.id',
             'campaign_name',
 //            'tag',
-            'campaign_uuid',
+           // 'campaign_uuid',
 //            'pricing_mode',
             [
                 'attribute' => 'pricing_mode',
@@ -36,12 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
 //            'indirect',
-            [
-                'attribute' => 'indirect',
-                'value' => function ($data) {
-                    return ModelsUtil::getStatus($data->indirect);
-                }
-            ],
+//            [
+//                'attribute' => 'indirect',
+//                'value' => function ($data) {
+//                    return ModelsUtil::getStatus($data->indirect);
+//                }
+//            ],
 //            'category',
             [
                 'attribute' => 'category',
@@ -77,8 +77,8 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'open_budget',
             // 'daily_cap',
             // 'open_cap',
-            'adv_price',
-            // 'now_payout',
+//            'adv_price',
+             'now_payout',
 
             // 'traffice_source',
             // 'note',

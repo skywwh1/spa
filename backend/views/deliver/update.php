@@ -11,6 +11,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->campaign->campaign_uuid, 'url' => ['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
+<div id="nav-menu" data-menu="STS"></div>
 <div class="col-lg-12">
     <div class="box box-info">
         <div class="box-body">

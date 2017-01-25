@@ -94,8 +94,8 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/deliver/create"><i class="fa fa-circle-o"></i>S2S</a></li>
-                        <li><a href="/deliver/testlink"><i class="fa fa-circle-o"></i>Test Link</a></li>
+                        <li><a href="/deliver/create" data-menu="STS"><i class="fa fa-circle-o"></i>S2S</a></li>
+                        <li><a href="/deliver/testlink" data-menu="testlink"><i class="fa fa-circle-o"></i>Test Link</a></li>
                         <li><a href="/deliver/index"><i class="fa fa-circle-o"></i>S2S Log</a></li>
                     </ul>
                 </li>
@@ -152,7 +152,7 @@ AdminAsset::register($this);
                     </ul>
                 </li>
 
-                <li class="treeview active">
+                <li class="treeview">
                     <a href="#">
                         <i class="fa fa-edit"></i> <span>Finance</span>
                         <span class="pull-right-container">
@@ -160,7 +160,7 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li class="active"><a href="#"><i class="fa fa-circle-o"></i> Test</a>
+                        <li><a href="#"><i class="fa fa-circle-o"></i> Test</a>
                         </li>
                     </ul>
                 </li>

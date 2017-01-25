@@ -23,7 +23,7 @@ use yii\helpers\Json;
  * @property integer $daily_cap
  * @property integer $open_cap
  * @property string $adv_price
- * @property double $now_payout
+ * @property string $now_payout
  * @property integer $target_geo
  * @property string $traffice_source
  * @property string $note
@@ -84,10 +84,10 @@ class Campaign extends \yii\db\ActiveRecord
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
             [['campaign_uuid'], 'unique'],
 //            'promote_start', 'promote_end', 'end_time',
-            [['pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
-            [[ 'category','now_payout'], 'number'],
+            [['category', 'pricing_mode', 'device', 'platform', 'daily_cap', 'open_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['adv_price', 'now_payout'], 'number'],
             [['campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
-            [['adv_price','note', 'preview_link', 'description', 'creative_link', 'creative_description', 'adv_link', 'ip_blacklist'], 'string', 'max' => 255],
+            [['note', 'preview_link', 'description', 'creative_link', 'creative_description', 'adv_link', 'ip_blacklist'], 'string', 'max' => 255],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
             ['advertiser', 'required', 'message' => 'Advertiser does not exist'],
             ['target_geo', 'required', 'message' => 'Target Geo does not exist'],
