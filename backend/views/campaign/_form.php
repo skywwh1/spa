@@ -63,7 +63,7 @@ use yii\widgets\ActiveForm;
                 'value2' => Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                 'pluginOptions' => [
                     'autoclose' => true,
-                    'format' => 'yyyy-MM-dd'
+                    'format' => 'yyyy-mm-dd'
                 ]
             ]);
             ?>

@@ -12,22 +12,21 @@ use common\models\Deliver;
  */
 class MyReportSearch extends Deliver
 {
-    public $daily_click;
-    public $daily;
-    public $hourly;
-    public $hourly_click;
+    public $time;
+    public $clicks;
     public $start_time;
     public $end_time;
     public $timezone;
-    public $install;
+    public $installs;
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['campaign_uuid', 'track_url', 'note'], 'safe'],
+            [['pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
+            [['timezone', 'start_time', 'end_time', 'campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -48,7 +47,70 @@ class MyReportSearch extends Deliver
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params, $type)
+    {
+        $query = MyReportSearch::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        //date_default_timezone_set('Europe/London');
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d"	) time';
+        if ($type === 'hourly') {
+            $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d %H"	) time';
+        }
+        $query->select([
+            'COUNT(fc.id) clicks',
+            'COUNT(ff.id) installs',
+            $time,
+            'de.*']);
+
+        $query->from('campaign_channel_log de');
+        $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid');
+        $query->leftJoin('feedback_advertiser_feed_log ff', 'fc.click_uuid = ff.click_id');
+        if (isset($this->start_time)){
+            $this->start_time=strtotime($this->start_time);
+            $query->andFilterWhere(['>=', 'fc.create_time', $this->start_time]);
+        }
+        if(isset($this->end_time)){
+            $this->end_time=strtotime($this->end_time. ' +1 day');
+            $query->andFilterWhere(['<', 'fc.create_time', $this->end_time]);
+        }
+        $query->groupBy('time');
+        $query->orderBy('clicks');
+
+
+        return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function hourlySearch($params)
+    {
+        return $this->search($params, 'hourly');
+    }
+
+    public function dailySearch($params)
+    {
+        return $this->search($params, 'daily');
+    }
+
+    public function offersSearch($params)
     {
         $query = Deliver::find();
 

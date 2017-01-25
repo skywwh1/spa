@@ -8,31 +8,33 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
-
-<div class="deliver-search col-lg-6">
-
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
-
-    <?= $form->field($model, 'campaign_id') ?>
-
-    <?= $form->field($model, 'channel_id') ?>
-
-    <?= $form->field($model, 'campaign_uuid') ?>
-
-    <?= $form->field($model, 'adv_price') ?>
-
-    <?= $form->field($model, 'pricing_mode') ?>
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-lg-6">
 
 
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+                        <?php $form = ActiveForm::begin([
+                            'action' => ['hourly'],
+                            'method' => 'get',
+                        ]); ?>
+
+                        <?= $form->field($model, 'campaign_id') ?>
+
+                        <?= $form->field($model, 'channel_id') ?>
+
+
+                        <div class="form-group">
+                            <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                            <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
 </div>

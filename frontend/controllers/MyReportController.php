@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 class MyReportController extends Controller
 {
     public $layout = "my_main";
+
     /**
      * @inheritdoc
      */
@@ -52,7 +53,7 @@ class MyReportController extends Controller
     public function actionHourly()
     {
         $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
 
         return $this->render('hourly', [
             'searchModel' => $searchModel,
@@ -67,7 +68,7 @@ class MyReportController extends Controller
     public function actionDaily()
     {
         $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
 
         return $this->render('daily', [
             'searchModel' => $searchModel,
@@ -78,13 +79,14 @@ class MyReportController extends Controller
     public function actionOffers()
     {
         $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->offersSearch(Yii::$app->request->queryParams);
 
         return $this->render('offers', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
     /**
      * Displays a single Deliver model.
      * @param integer $campaign_id
