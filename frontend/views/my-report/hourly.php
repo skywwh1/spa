@@ -93,8 +93,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'columns' => [
                                 'time',
                                 'campaign_id',
-                                'campaign_uuid',
+                                'campaign_name',
                                 'clicks',
+                                'unique_clicks',
                                 'installs',
                                 [
                                     'attribute'=>'cvr0',
@@ -103,6 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ],
 //                                'pricing_mode',
                                 'pay_out',
+
                                 // 'daily_cap',
                                 // 'actual_discount',
                                 // 'discount',
@@ -118,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'cost',
                                 // 'match_install',
                                 // 'match_cvr',
-                                // 'revenue',
+                                 'revenue',
                                 // 'def',
                                 // 'deduction_percent',
                                 // 'profit',

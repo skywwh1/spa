@@ -22,6 +22,9 @@ class MyReportSearch extends Deliver
     public $timezone;
     public $installs;
     public $cvr0;
+    public $unique_clicks;
+    public $campaign_name;
+
 
     /**
      * @inheritdoc
@@ -30,7 +33,7 @@ class MyReportSearch extends Deliver
     {
         return [
             [['pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['cvr0', 'timezone', 'start_time', 'end_time', 'campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
+            [['campaign_name', 'cvr0', 'timezone', 'start_time', 'end_time', 'campaign_id', 'channel_id', 'campaign_uuid', 'track_url', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -89,12 +92,18 @@ class MyReportSearch extends Deliver
             'COUNT(ff.id) installs',
             'COUNT(ff.id)/COUNT(fc.id) cvr0',
             $time,
-            'de.*']);
+            'de.campaign_id',
+            'cp.campaign_name campaign_name',
+            'COUNT(DISTINCT(fc.ip)) unique_clicks',
+            'de.pay_out',
+            'COUNT(ff.id)*de.pay_out revenue',
+        ]);
 
         $query->from('campaign_channel_log de');
+        $query->leftJoin('campaign cp', 'de.campaign_id = cp.id');
         $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid');
         $query->leftJoin('feedback_advertiser_feed_log ff', 'fc.click_uuid = ff.click_id');
-        $query->andFilterWhere(['de.channel_id'=>Yii::$app->user->getId()]);
+        $query->andFilterWhere(['de.channel_id' => Yii::$app->user->getId()]);
         if (isset($this->start_time)) {
             $this->start_time = strtotime($this->start_time);
             $query->andFilterWhere(['>=', 'fc.create_time', $this->start_time]);
@@ -108,6 +117,8 @@ class MyReportSearch extends Deliver
         } else {
             $this->end_time = time();
         }
+        $query->andFilterWhere(['de.campaign_id' => $this->campaign_id]);
+        $query->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_name]);
         if ($type === 'offers') {
             $query->groupBy('campaign_id');
 

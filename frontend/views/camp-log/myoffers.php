@@ -61,7 +61,10 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'profit',
 //             'margin',
 //             'note',
-
+            [
+                'class' => 'yii\grid\ActionColumn', 'template' => '{view}',
+                'header'=>'Detail',
+            ],
         ],
     ]); ?>
     <?php Pjax::end(); ?></div>

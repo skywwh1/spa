@@ -6,6 +6,7 @@
 use frontend\assets\SbAppAsset;
 use yii\helpers\Html;
 use common\widgets\Alert;
+use yii\widgets\Breadcrumbs;
 
 SbAppAsset::register($this);
 ?>
@@ -136,7 +137,6 @@ SbAppAsset::register($this);
     </nav>
     <div id="page-wrapper">
         <div class="row">
-
             <?= $content ?>
         </div>
 

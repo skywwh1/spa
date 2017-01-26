@@ -1,61 +1,58 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model frontend\models\CampaignChannelLog */
 
-$this->title = $model->campaign_id;
+$this->title = $model->campaign->campaign_name . ' detail';
 $this->params['breadcrumbs'][] = ['label' => 'Campaign Channel Logs', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="campaign-channel-log-view">
+<div id="nav-menu" data-menu="myoffers"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header"> <?= Html::encode($this->title) ?></h3>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+<div class="row">
+    <div class="col-lg-10">
+                        <?= DetailView::widget([
+                            'model' => $model,
+                            'attributes' => [
+                                'campaign_id',
+                                'campaign.campaign_name',
+//            'campaign.adv_price',
+                                [
+                                    'label' => 'Pricing Mode',
+                                    'value' => ModelsUtil::getPricingMode($model->pricing_mode),
+                                ],
+                                'pay_out',
+                                'daily_cap',
+//            'is_run',
+                                [
+                                    'label' => 'Is Run',
+                                    'value' => ModelsUtil::getStatus($model->is_run),
+                                ],
+                                'create_time:datetime',
+//            'track_url:url',
+                                [
+                                    'label' => 'Track Url',
+                                    'value' => Url::to('@track' . $model->track_url),
+                                    'format' => 'url'
+                                ],
+                                'click',
+                                'unique_click',
+                                'install',
+                                'cvr',
+                                'note',
+                            ],
+                        ]) ?>
+                        <?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']);
+                        ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'campaign_id',
-            'channel_id',
-            'campaign_uuid',
-            'adv_price',
-            'pricing_mode',
-            'pay_out',
-            'daily_cap',
-            'actual_discount',
-            'discount',
-            'is_run',
-            'creator',
-            'create_time:datetime',
-            'update_time:datetime',
-            'track_url:url',
-            'click',
-            'unique_click',
-            'install',
-            'cvr',
-            'cost',
-            'match_install',
-            'match_cvr',
-            'revenue',
-            'def',
-            'deduction_percent',
-            'profit',
-            'margin',
-            'note',
-        ],
-    ]) ?>
-
+    </div>
 </div>
