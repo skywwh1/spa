@@ -23,14 +23,16 @@ class StsController extends Controller
             foreach ($delivers as $deliver) {
                 $data[$deliver->channel_id][] = $deliver;
             }
-//           echo '<pre>';
-//           var_dump($data);
             foreach ($data as $k => $v) {
                 $channel = Channel::findOne(['id' => $k]);
-//                           echo '<pre>';
-//           var_dump($k);
-                MailUtil::sendStsChannelMail($channel, $v);
+                $this->echoMessage("Time : " . date("Y-m-d H:i:s", time()));
+                $this->echoMessage(MailUtil::sendStsChannelMail($channel, $v));
             }
         }
+    }
+
+    private function echoMessage($str)
+    {
+        echo " \t $str \n";
     }
 }
