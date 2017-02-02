@@ -8,37 +8,31 @@ use yii\helpers\Url;
 
 ?>
 <style type="text/css">
-    .divTable {
-        display: table;
-        width: 80%;
+    table {
+        border-spacing: 0;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border-color: #ccc;
+        font-family: 'microsoft yahei', calibri, verdana;
+        table-layout: fixed;
     }
 
-    .divTableRow {
-        display: table-row;
+    table tr {
+        height: 30px;
+        vertical-align: middle;
+        font-size: 16px;
+        background-color: #fefefe;
+        border: 1px solid #ddd
     }
 
-    .divTableCell, .divTableHead {
-        border: 1px solid #999999;
-        display: table-cell;
-        padding: 3px 10px;
+    table tr th {
+        text-align: center;
+        border: 1px solid #ccc
     }
 
-    .divTableHeading {
-        background-color: #EEE;
-        font-weight: bold;
-        display: table-cell;
-        border: 1px solid #999999;
-        padding: 3px 10px;
-    }
-
-    .divTableFoot {
-        background-color: #EEE;
-        display: table-footer-group;
-        font-weight: bold;
-    }
-
-    .divTableBody {
-        display: table-row-group;
+    table tbody td {
+        text-align: center;
+        border: 1px solid #ddd
     }
 </style>
 <div class="sts_created" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
@@ -50,75 +44,74 @@ use yii\helpers\Url;
     <p>&nbsp;&nbsp; &nbsp;Here are some new campaigns for you today. If you need any help, please feel free to contact
         me.</p>
 
-    <p>&nbsp;&nbsp; &nbsp;Note:&nbsp;admin@superads.cn&nbsp;is a <strong>NO-REPLY</strong> email. Please reply to your
+    <p>&nbsp;&nbsp; &nbsp;Note:&nbsp;This email&nbsp;is a <strong>NO-REPLY</strong> email. Please reply to your
         beloved account managers ONLY.</p>
-    <div class="divTable" style="border: 1px solid #000;">
-        <div class="divTableBody">
-            <?php
-            $id = '<div class="divTableHeading"> ID</div>';
-            $campaign_name = '<div class="divTableHeading"> Campaign name</div>';
-            $version = '<div class="divTableHeading"> Version</div>';
-            $target_geo = '<div class="divTableHeading"> Target Geo</div>';
-            $payout = '<div class="divTableHeading"> Payout</div>';
-            $preview_link = '<div class="divTableHeading">Preview Link</div>';
-            $link = '<div class="divTableHeading"> Link</div>';
-            $creative = '<div class="divTableHeading"> Creative</div>';
-            $traffic_source = '<div class="divTableHeading"> Traffic Source</div>';
-            $daily_cap = '<div class="divTableHeading"> Daily Cap</div>';
-            $notes = '<div class="divTableHeading"> Notes</div>';
-            //            $exclude_traffic = '<div class="divTableHeading"> Exclude Traffic</div>';
-            $conversion_flow = '<div class="divTableHeading"> Conversion Flow</div>';
-            $carrier = '<div class="divTableHeading"> Carrier</div>';
+    <table style="width: 100%;" border="1">
+        <tbody>
+        <?php
+        $id = '<td> ID</td>';
+        $campaign_name = '<td> Campaign name</td>';
+        $version = '<td> Version</td>';
+        $target_geo = '<td> Target Geo</td>';
+        $payout = '<td> Payout</td>';
+        $preview_link = '<td>Preview Link</td>';
+        $link = '<td> Link</td>';
+        $creative = '<td> Creative</td>';
+        $traffic_source = '<td> Traffic Source</td>';
+        $daily_cap = '<td> Daily Cap</td>';
+        $notes = '<td> Notes</td>';
+        $conversion_flow = '<td> Conversion Flow</td>';
+        $carrier = '<td> Carrier</td>';
 
-            foreach ($delivers as $deliver) {
-                $id .= '<div class="divTableCell">' . Html::encode($deliver->campaign->id) . '</div>';
-                $campaign_name .= '<div class="divTableCell">' . Html::encode($deliver->campaign->campaign_name) . '</div>';
-                $version .= '<div class="divTableCell">' . Html::encode($deliver->campaign->version) . '</div>';
-                $target_geo .= '<div class="divTableCell">' . Html::encode($deliver->campaign->targetGeo->domain) . '</div>';
-                $payout .= '<div class="divTableCell">' . Html::encode($deliver->pay_out) . '</div>';
-                $preview_link .= '<div class="divTableCell"><a href="' . $deliver->campaign->preview_link . '">Preview Link Link</a></div>';
-                $link .= '<div class="divTableCell"><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></div>';
-                $creative .= '<div class="divTableCell">' . Html::encode($deliver->campaign->creative_link) . '</div>';
-                $traffic_source .= '<div class="divTableCell">' . Html::encode(ModelsUtil::getTrafficeSource($deliver->campaign->traffice_source)) . '</div>';
-                $daily_cap .= '<div class="divTableCell">' . Html::encode($deliver->daily_cap) . '</div>';
-                $notes .= '<div class="divTableCell">' . Html::encode($deliver->note) . '</div>';
-                $conversion_flow .= '<div class="divTableCell">' . Html::encode($deliver->campaign->conversion_flow) . '</div>';
-                $carrier .= '<div class="divTableCell">' . Html::encode($deliver->campaign->carriers) . '</div>';
-            }
+        foreach ($delivers as $deliver) {
+            $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
+            $campaign_name .= '<td>' . Html::encode($deliver->campaign->campaign_name) . '</td>';
+            $version .= '<td>' . Html::encode($deliver->campaign->version) . '</td>';
+            $target_geo .= '<td>' . Html::encode($deliver->campaign->targetGeo->domain) . '</td>';
+            $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
+            $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
+            $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
+            $creative .= '<td>' . Html::encode($deliver->campaign->creative_link) . '</td>';
+            $traffic_source .= '<td>' . Html::encode(ModelsUtil::getTrafficeSource($deliver->campaign->traffice_source)) . '</td>';
+            $daily_cap .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';
+            $notes .= '<td>' . Html::encode($deliver->note) . '</td>';
+            $conversion_flow .= '<td>' . Html::encode($deliver->campaign->conversion_flow) . '</td>';
+            $carrier .= '<td>' . Html::encode($deliver->campaign->carriers) . '</td>';
+        }
 
-            $id = '<div class="divTableRow">' . $id . '</div>';
-            $campaign_name = '<div class="divTableRow">' . $campaign_name . '</div>';
-            $version = '<div class="divTableRow">' . $version . '</div>';
-            $target_geo = '<div class="divTableRow">' . $target_geo . '</div>';
-            $payout = '<div class="divTableRow">' . $payout . '</div>';
-            $preview_link = '<div class="divTableRow">' . $preview_link . '</div>';
-            $link = '<div class="divTableRow">' . $link . '</div>';
-            $creative = '<div class="divTableRow">' . $creative . '</div>';
-            $traffic_source = '<div class="divTableRow">' . $traffic_source . '</div>';
-            $daily_cap = '<div class="divTableRow">' . $daily_cap . '</div>';
-            $notes = '<div class="divTableRow">' . $notes . '</div>';
-            //            $exclude_traffic = '<div class="divTableRow">' . $exclude_traffic . '</div>';
-            $conversion_flow = '<div class="divTableRow">' . $conversion_flow . '</div>';
-            $carrier = '<div class="divTableRow">' . $carrier . '</div>';
+        $id = '<tr>' . $id . '</tr>';
+        $campaign_name = '<tr>' . $campaign_name . '</tr>';
+        $version = '<tr>' . $version . '</tr>';
+        $target_geo = '<tr>' . $target_geo . '</tr>';
+        $payout = '<tr>' . $payout . '</tr>';
+        $preview_link = '<tr>' . $preview_link . '</tr>';
+        $link = '<tr>' . $link . '</tr>';
+        $creative = '<tr>' . $creative . '</tr>';
+        $traffic_source = '<tr>' . $traffic_source . '</tr>';
+        $daily_cap = '<tr>' . $daily_cap . '</tr>';
+        $notes = '<tr>' . $notes . '</tr>';
+        //            $exclude_traffic = '<tr>' . $exclude_traffic . '</tr>';
+        $conversion_flow = '<tr>' . $conversion_flow . '</tr>';
+        $carrier = '<tr>' . $carrier . '</tr>';
 
-            echo $id;
-            echo $campaign_name;
-            echo $version;
-            echo $target_geo;
-            echo $payout;
-            echo $preview_link;
-            echo $link;
-            echo $creative;
-            echo $traffic_source;
-            echo $daily_cap;
-            echo $notes;
-            //            echo $exclude_traffic;
-            echo $conversion_flow;
-            echo $carrier;
+        echo $id;
+        echo $campaign_name;
+        echo $version;
+        echo $target_geo;
+        echo $payout;
+        echo $preview_link;
+        echo $link;
+        echo $creative;
+        echo $traffic_source;
+        echo $daily_cap;
+        echo $notes;
+        //            echo $exclude_traffic;
+        echo $conversion_flow;
+        echo $carrier;
 
-            ?>
-        </div>
-    </div>
+        ?>
+        </tbody>
+    </table>
     <p>Have a nice day. </p>
     <p>Best regards</p>
     <p>SuperAds Admin</p>

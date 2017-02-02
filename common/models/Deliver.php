@@ -35,6 +35,7 @@ use Yii;
  * @property string $profit
  * @property string $margin
  * @property string $note
+ * @property integer $is_send_create
  *
  * @property Campaign $campaign
  * @property Channel $channel
@@ -60,7 +61,7 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step'], 'integer'],
+            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             [['campaign_uuid'], 'string', 'max' => 100],
             [['track_url', 'note'], 'string', 'max' => 255],
@@ -105,6 +106,7 @@ class Deliver extends \yii\db\ActiveRecord
             'profit' => 'Profit',
             'margin' => 'Margin',
             'note' => 'Note',
+            'is_send_create' => 'Is Send Create',
             'channel0' => 'Channel',
         ];
     }
