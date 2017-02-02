@@ -7,6 +7,7 @@ use yii\widgets\ActiveForm;
 use kartik\typeahead\TypeaheadBasic;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model common\models\Deliver */
 
@@ -14,55 +15,101 @@ $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="STS"></div>
-<div class="col-lg-12">
-    <div class="box box-info">
-        <div class="box-body">
+<div class="row">
+    <div id="nav-menu" data-menu="STS"></div>
+    <div class="col-lg-6">
+        <div class="box box-info">
+            <div class="box-body">
 
-        <?php $form = ActiveForm::begin(); ?>
+                <?php $form = ActiveForm::begin([
+//                    'id' => 'form-id',
+//                    'enableAjaxValidation' => true,
+//                    'validationUrl' => Url::toRoute(['sts-validate']),
+                ]); ?>
 
-        <div class='form-group row'>
-            <div class='col-lg-4'>
-                <?= $form->field($model, 'campaign_uuid')->widget(Typeahead::classname(), [
-                    'options' => ['placeholder' => 'Campaign UUID'],
-                    'pluginOptions' => ['highlight'=>true],
-                    'dataset' => [
-                        [
-                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                            'display' => 'value',
-                            'remote' => [
-                                'url' => Url::to(['campaign/campaigns_by_uuid']) . '?uuid=%QUERY',
-                                'wildcard' => '%QUERY'
-                            ]
-                        ]],
-                ])	?>
+                <?php
+                //            $form->field($model, 'campaign_uuid')->widget(Typeahead::classname(), [
+                //                'options' => ['placeholder' => 'Campaign UUID'],
+                //                'pluginOptions' => ['highlight' => true],
+                //                'dataset' => [
+                //                    [
+                //                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                //                        'display' => 'value',
+                //                        'remote' => [
+                //                            'url' => Url::to(['campaign/campaigns_by_uuid']) . '?uuid=%QUERY',
+                //                            'wildcard' => '%QUERY'
+                //                        ]
+                //                    ]],
+                //            ])
+                echo $form->field($model, 'campaign_uuid')->widget(Select2::classname(), [
+//                'initValueText' => $cityDesc, // set the initial display text
+                    'size' => Select2::MEDIUM,
+                    'options' => [
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'language' => [
+                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                        ],
+                        'ajax' => [
+                            'url' => Url::to('/campaign/get_campaign_uuid_multiple'),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {uuid:params.term}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(campaign) { return campaign.campaign_uuid; }'),
+                        'templateSelection' => new JsExpression('function (campaign) { return campaign.campaign_uuid; }'),
+                    ],
+                ]);
+                ?>
+
+                <?php
+                //            $form->field($model, 'channel')->widget(Typeahead::classname(), [
+                //                'options' => ['placeholder' => 'Channel'],
+                //                'pluginOptions' => ['highlight' => true],
+                //                'dataset' => [
+                //                    [
+                //                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                //                        'display' => 'value',
+                //                        'remote' => [
+                //                            'url' => Url::to(['channel/get_channel_name']) . '?name=%QUERY',
+                //                            'wildcard' => '%QUERY'
+                //                        ]
+                //                    ]],
+                //            ])
+                echo $form->field($model, 'channel')->widget(Select2::classname(), [
+//                'initValueText' => $cityDesc, // set the initial display text
+                    'size' => Select2::MEDIUM,
+                    'options' => [
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'language' => [
+                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                        ],
+                        'ajax' => [
+                            'url' => Url::to('/channel/get_channel_multiple'),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(channel) { return channel.username; }'),
+                        'templateSelection' => new JsExpression('function (channel) { return channel.username; }'),
+                    ],
+                ]);
+                ?>
+                <?= $form->field($model, 'step')->hiddenInput(['value' => 1])->label(false) ?>
+                <div class="form-group">
+                    <?= Html::submitButton('Go ahead', ['class' => 'btn btn-success']) ?>
+                </div>
+
+                <?php ActiveForm::end(); ?>
+                <div id="test_div"></div>
             </div>
-        </div>
-
-        <div class='form-group row'>
-            <div class='col-lg-4'>
-                <?= $form->field($model, 'channel0')->widget(Typeahead::classname(), [
-                    'options' => ['placeholder' => 'Channel'],
-                    'pluginOptions' => ['highlight'=>true],
-                    'dataset' => [
-                        [
-                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                            'display' => 'value',
-                            'remote' => [
-                                'url' => Url::to(['channel/get_channel_name']) . '?name=%QUERY',
-                                'wildcard' => '%QUERY'
-                            ]
-                        ]],
-                ]) ?>
-            </div>
-        </div>
-        <?= $form->field($model, 'step')->hiddenInput(['value'=>1])->label(false)?>
-        <div class="form-group">
-            <?= Html::submitButton('Go ahead', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
-
-        <?php ActiveForm::end(); ?>
-        <div id="test_div"></div>
         </div>
     </div>
 </div>

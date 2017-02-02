@@ -27,6 +27,7 @@ class SbAppAsset extends AssetBundle
 //        'vendor/morrisjs/morris.min.js',
 //        'data/morris-data.js',
         'dist/js/sb-admin-2.js',
+        'dist/js/main.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

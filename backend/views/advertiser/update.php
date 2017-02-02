@@ -10,12 +10,14 @@ $this->params['breadcrumbs'][] = ['label' => 'Advertisers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="advertiser-update">
+<div class="row">
+    <div class="advertiser-update">
 
-    <h3><?= Html::encode($this->title) ?></h3>
+        <h3><?= Html::encode($this->title) ?></h3>
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+        <?= $this->render('_form', [
+            'model' => $model,
+        ]) ?>
 
+    </div>
 </div>

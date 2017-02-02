@@ -3,14 +3,17 @@
 namespace backend\controllers;
 
 use common\models\Advertiser;
+use common\models\Category;
 use common\models\RegionsDomain;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
+use yii\db\Query;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * CampaignController implements the CRUD actions for Campaign model.
@@ -41,10 +44,19 @@ class CampaignController extends Controller
                             'delete',
                             'campaigns_by_uuid',
                             'get_adv_list',
-                            'get_geo'
+                            'get_geo',
+                            'get_category',
+                            'get_campaign_uuid_multiple',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
+                    ],
+                    [
+                        'actions' => [
+                            'get_category',
+                            ],
+                        'allow' => true,
+                        'roles' => ['?'],
                     ],
                 ],
             ],
@@ -167,5 +179,30 @@ class CampaignController extends Controller
     public function actionGet_geo($name)
     {
         return \JsonUtil::toTypeHeadJson(RegionsDomain::getGeoListByName($name));
+    }
+
+    public function actionGet_category($q = null, $id = null)
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $query = new Query;
+            $query->select('id, name AS text')
+                ->from('category')
+                ->where(['like', 'name', $q])
+                ->limit(20);
+            $command = $query->createCommand();
+            $data = $command->queryAll();
+            $out['results'] = array_values($data);
+        }
+        elseif ($id > 0) {
+            $out['results'] = ['id' => $id, 'text' => Category::findOne($id)->name];
+        }
+        return $out;
+    }
+
+    public function actionGet_campaign_uuid_multiple($uuid)
+    {
+        return Campaign::getCampaignsByUuidMultiple($uuid);
     }
 }

@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use common\models\ApplyCampaign;
+use common\models\Campaign;
+use common\models\Deliver;
 use frontend\models\AllCampaignSearch;
 use frontend\models\CampaignChannelLog;
 use frontend\models\CampaignChannelLogSearch;
@@ -29,7 +32,13 @@ class CampLogController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index', 'alloffers', 'myoffers','view'],
+                        'actions' => ['index',
+                            'alloffers',
+                            'myoffers',
+                            'view',
+                            'campaign-view',
+                            'apply',
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -108,5 +117,36 @@ class CampLogController extends Controller
         }
     }
 
+    public function actionCampaignView($id)
+    {
+        if (($model = Campaign::findOne($id)) == null) {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+        return $this->renderAjax('campaign_view', [
+            'model' => $model,
+        ]);
+    }
 
+    public function actionApply($id)
+    {
+        if (Yii::$app->request->isAjax) {
+            $channel_id = Yii::$app->user->id;
+            $campaign_id = $id;
+            $apply = ApplyCampaign::findIdentify($campaign_id,$channel_id);
+            if(empty($apply)){
+                $model = new ApplyCampaign();
+                $model->channel_id = $channel_id;
+                $model->campaign_id = $campaign_id;
+                $model->status = 1;
+                $model->save();
+            }
+            $searchModel = new AllCampaignSearch();
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            return $this->render('all_offers', [
+                'searchModel' => $searchModel,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
+        return null;
+    }
 }

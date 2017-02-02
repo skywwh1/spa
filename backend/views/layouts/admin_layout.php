@@ -108,9 +108,9 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/campaign/index"><i class="fa fa-circle-o"></i> Campaign List</a></li>
-                        <li><a href="/campaign/create"><i class="fa fa-circle-o"></i> Create Offer</a></li>
-                        </li>
+                        <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign List</a></li>
+                        <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create Offer</a></li>
+                        <li><a href="/apply-campaign/index"><i class="fa fa-circle-o"></i> Applying Offers</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -122,7 +122,7 @@ AdminAsset::register($this);
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="/advertiser/index"><i class="fa fa-circle-o"></i> ADV List</a></li>
-                        <li><a href="/advertiser/create"><i class="fa fa-circle-o"></i> Create ADV</a></li>
+                        <li><a href="/advertiser/create" data-menu="advertiser_create"><i class="fa fa-circle-o"></i> Create ADV</a></li>
                         </li>
                     </ul>
                 </li>
@@ -135,7 +135,9 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/channel/index"><i class="fa fa-circle-o"></i> Channel List</a></li>
+                        <li><a href="/channel/index" data-menu="channel_index"><i class="fa fa-circle-o"></i> Channel List</a></li>
+                        <li><a href="/channel/my-channels" data-menu="my_channels"><i class="fa fa-circle-o"></i> My Channels</a></li>
+                        <li><a href="/channel/applying" data-menu="applicants"><i class="fa fa-circle-o"></i> Applicant List</a></li>
                         <li><a href="/channel/create"><i class="fa fa-circle-o"></i> Create Channel</a></li>
                     </ul>
                 </li>
@@ -181,9 +183,7 @@ AdminAsset::register($this);
         </section>
 
         <section class="content">
-            <div class="row">
                 <?= $content ?>
-            </div>
         </section>
     </div>
 

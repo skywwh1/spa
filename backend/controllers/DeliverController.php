@@ -2,7 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\StsForm;
 use backend\models\TestLinkForm;
+use common\models\Campaign;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -13,6 +15,8 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 /**
  * DeliverController implements the CRUD actions for Deliver model.
@@ -41,6 +45,7 @@ class DeliverController extends Controller
                             'view',
                             'delete',
                             'testlink',
+                            'sts-create',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -93,29 +98,72 @@ class DeliverController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Deliver();
-
+        $model = new StsForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->step == 1) {
-                $model->setCampaignIdBy($model->campaign_uuid);
-                $model->setChannelIdBy($model->channel0);
-                $model->adv_price = isset($model->campaign) ? $model->campaign->adv_price : 0;
-                return $this->render('second', [
-                    'model' => $model,
-                ]);
-            } else if ($model->step == 2) {
-                if ($model->save()) {
-                    return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
-                } else {
-                    return $this->render('second', [
-                        'model' => $model,
-                    ]);
+            $delivers = [];
+            $errors = [];
+            foreach ($model->campaign_uuid as $campaign_id) {
+                foreach ($model->channel as $channel_id) {
+                    $deliver = new Deliver();
+                    $deliver->campaign_id = $campaign_id;
+                    $deliver->channel_id = $channel_id;
+                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                    $deliver->validate('channel_id');
+                    if ($deliver->hasErrors('channel_id')) {
+                        $errors[] = $deliver->getErrors('channel_id');
+                    }
+                    $delivers[] = $deliver;
                 }
+            }
+
+            if (empty($errors)) {
+                return $this->render('second', [
+                    'delivers' => $delivers,
+                ]);
+            } else {
+//                var_dump($errors);
+//                die();
+                $str = "";
+                $model = new StsForm();
+                foreach ($errors as $item) {
+                    $str .= implode($item) . ', ';
+                }
+                $model->addError('campaign_uuid', $str);
             }
         }
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Creates a new Deliver model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionStsCreate()
+    {
+        $data = array();
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $model = new Deliver();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+
+            if ($model->save()) {
+                $campaign = Campaign::findOne($model->campaign_id);
+                $channel = Channel::findOne($model->channel_id);
+                $str = 'Campaign ' . $campaign->campaign_name . ' had been offer to ' . $channel->username;
+                $data = ['Success' => $str];
+            } else {
+                $data = ['Success' => $model->getErrors()];
+            }
+        }
+        return $data;
     }
 
     /**
@@ -125,7 +173,8 @@ class DeliverController extends Controller
      * @param integer $channel_id
      * @return mixed
      */
-    public function actionUpdate($campaign_id, $channel_id)
+    public
+    function actionUpdate($campaign_id, $channel_id)
     {
         $model = $this->findModel($campaign_id, $channel_id);
 
@@ -145,7 +194,8 @@ class DeliverController extends Controller
      * @param integer $channel_id
      * @return mixed
      */
-    public function actionDelete($campaign_id, $channel_id)
+    public
+    function actionDelete($campaign_id, $channel_id)
     {
         $this->findModel($campaign_id, $channel_id)->delete();
 
@@ -160,7 +210,8 @@ class DeliverController extends Controller
      * @return Deliver the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($campaign_id, $channel_id)
+    protected
+    function findModel($campaign_id, $channel_id)
     {
         if (($model = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id])) !== null) {
             return $model;
@@ -169,7 +220,8 @@ class DeliverController extends Controller
         }
     }
 
-    public function actionTestlink()
+    public
+    function actionTestlink()
     {
         $model = new TestLinkForm();
 

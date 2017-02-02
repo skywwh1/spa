@@ -80,7 +80,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-//        $this->layout='my_main';
+        $this->layout='testmain';
         return $this->render('index');
     }
 
@@ -162,7 +162,6 @@ class SiteController extends Controller
             if ($user = $model->signup()) {
                 return $this->render('sigup-finish');
             }
-            return null;
         }
 
         return $this->render('signup', [

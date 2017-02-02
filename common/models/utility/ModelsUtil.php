@@ -153,6 +153,27 @@ class ModelsUtil
         'other' => 'Other',
     );
 
+    const campaign_tag = array(
+        '0' => 'private',
+        '1' => 'public',
+    );
+
+    const apply_status = array(
+        '1' => 'Applying',
+        '2' => 'Approved',
+        '3' => 'Rejected',
+    );
+
+    public static function getApplyStatus($k)
+    {
+        return static::getValue(static::apply_status, $k);
+    }
+
+    public static function getCampaignTag($k)
+    {
+        return static::getValue(static::campaign_tag, $k);
+    }
+
     public static function getValue($data, $k)
     {
         return ArrayHelper::getValue($data, $k);

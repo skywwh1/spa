@@ -10,14 +10,11 @@ $this->title = 'Create Advertiser';
 $this->params['breadcrumbs'][] = ['label' => 'Advertisers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="col-lg-12">
-    <div class="box box-info">
-        <div class="box-body">
+<div id="nav-menu" data-menu="advertiser_create"></div>
+<div class="row">
 
     <?= $this->render('_form', [
         'model' => $model,
     ]) ?>
 
-        </div>
-    </div>
 </div>

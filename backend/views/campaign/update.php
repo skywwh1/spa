@@ -10,14 +10,11 @@ $this->params['breadcrumbs'][] = ['label' => 'Campaigns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->campaign_name, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div class="col-lg-12">
-    <div class="box box-info">
-        <div class="box-body">
+<div class="row">
 
-            <?= $this->render('_form', [
-                'model' => $model,
-            ]) ?>
+    <div id="nav-menu" data-menu="campaign_index"></div>
 
-        </div>
-    </div>
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
 </div>

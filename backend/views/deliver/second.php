@@ -1,85 +1,97 @@
 <?php
 
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Deliver */
+/* @var $delivers common\models\Deliver[] */
 
 $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'S2s', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="nav-menu" data-menu="STS"></div>
-<div class="col-lg-12">
-    <div class="box box-info">
-        <div class="box-body">
-
-            <?php $form = ActiveForm::begin(); ?>
-
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'campaign_uuid')->textInput(['readonly' => true]) ?>
+<?php
+if (!is_null($delivers)) {
+    $i = 0;
+    foreach ($delivers as $deliver) {
+        if ($i % 2 == 0) {
+            echo '<div class="row">';
+        }
+        ?>
+        <div class="col-lg-6">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Offer <?= $deliver->campaign_uuid ?> to <?= $deliver->channel0 ?></h3>
                 </div>
-            </div>
+                <div class="box-body">
 
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'channel0')->textInput(['readonly' => true]) ?>
-                </div>
-            </div>
+                    <?php $form = ActiveForm::begin([
+                        'id' => $deliver->formName() . 'form' . $i,
+                        'action' => ['/deliver/sts-create'],
+                        'options' => ['class' => 'sts_form'],
+                    ]); ?>
 
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
-                </div>
-            </div>
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <div class="form-group col-lg-4">
-                        <label class="control-label">Adv price:</label>
+                    <?= $form->field($deliver, 'campaign_uuid')->textInput(['readonly' => true]) ?>
+                    <?= $form->field($deliver, 'channel0')->textInput(['readonly' => true]) ?>
+                    <?= $form->field($deliver, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
+                    <div class="col-lg-12">
+                        <div class="form-group col-lg-4">
+                            <label class="control-label">Adv price:</label>
+                        </div>
+                        <div class="form-group col-lg-4">
+                            <label class="control-label"><?= $deliver->adv_price ?></label>
+                        </div>
                     </div>
-                    <div class="form-group col-lg-4">
-                        <label class="control-label"><?= $model->adv_price ?></label>
-                    </div>
+                    <?= $form->field($deliver, 'pay_out')->textInput() ?>
+                    <?= $form->field($deliver, 'daily_cap')->textInput() ?>
+                    <?= $form->field($deliver, 'discount')->textInput() ?>
+                    <?= $form->field($deliver, 'note')->textarea(['rows' => 6]) ?>
+
+                    <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>
+                    <?= $form->field($deliver, 'campaign_id')->hiddenInput()->label(false) ?>
+                    <?= $form->field($deliver, 'channel_id')->hiddenInput()->label(false) ?>
+                    <?php ActiveForm::end(); ?>
+
                 </div>
             </div>
+        </div>
 
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'pay_out')->textInput() ?>
-                </div>
+
+        <?php
+        if ($i % 2 != 0) {
+            echo '</div>';
+        }
+        $i++;
+    }
+}
+?>
+<?php Modal::begin([
+    'id' => 'campaign-detail-modal',
+    'size' => 'modal-lg',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="campaign-detail-content"></div>';
+
+Modal::end(); ?>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box">
+            <div class="box-footer">
+                <button type="button" class="btn btn-primary" id="submit-button">Submit</button>
             </div>
-
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'daily_cap')->textInput() ?>
-                </div>
-            </div>
-
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'discount')->textInput() ?>
-                </div>
-            </div>
-
-            <div class='form-group row'>
-                <div class='col-lg-4'>
-                    <?= $form->field($model, 'note')->textarea() ?>
-                </div>
-            </div>
-
-            <?= $form->field($model, 'step')->hiddenInput(['value' => 2])->label(false) ?>
-            <?= $form->field($model, 'campaign_id')->hiddenInput()->label(false) ?>
-            <?= $form->field($model, 'channel_id')->hiddenInput()->label(false) ?>
-
-            <div class="form-group">
-                <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-                <?= Html::a('Go Back', ['deliver/create'], array('class' => 'btn btn-primary')) ?>
-            </div>
-
-            <?php ActiveForm::end(); ?>
-
         </div>
     </div>
 </div>
+
+<?php
+$this->registerJsFile(
+    '@web/js/sts.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>

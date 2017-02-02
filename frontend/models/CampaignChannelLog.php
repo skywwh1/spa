@@ -76,7 +76,7 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
             'campaign_uuid' => 'Campaign Uuid',
             'adv_price' => 'Adv Price',
             'pricing_mode' => 'Pricing Mode',
-            'pay_out' => 'Pay Out',
+            'pay_out' => 'Payout',
             'daily_cap' => 'Daily Cap',
             'actual_discount' => 'Actual Discount',
             'discount' => 'Discount',

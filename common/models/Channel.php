@@ -3,9 +3,11 @@
 namespace common\models;
 
 use common\utility\MailUtil;
+use frontend\models\ChannelRegister;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\helpers\Json;
 use yii\web\IdentityInterface;
 
 /**
@@ -66,11 +68,13 @@ use yii\web\IdentityInterface;
  * @property string $strong_geo
  * @property string $strong_catagory
  *
+ * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
  * @property Campaign[] $campaigns
  * @property Channel $masterChannel
  * @property Channel[] $channels
  * @property User $om0
+ * @property ChannelRegister $channelRegister
  */
 class Channel extends ActiveRecord implements IdentityInterface
 {
@@ -176,6 +180,14 @@ class Channel extends ActiveRecord implements IdentityInterface
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getApplyCampaigns()
+    {
+        return $this->hasMany(ApplyCampaign::className(), ['channel_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getCampaignChannelLogs()
     {
         return $this->hasMany(Deliver::className(), ['channel_id' => 'id']);
@@ -211,6 +223,14 @@ class Channel extends ActiveRecord implements IdentityInterface
     public function getOm0()
     {
         return $this->hasOne(User::className(), ['id' => 'om']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannelRegister()
+    {
+        return $this->hasOne(ChannelRegister::className(), ['channel_id' => 'id']);
     }
 
     public function beforeSave($insert)
@@ -333,5 +353,12 @@ class Channel extends ActiveRecord implements IdentityInterface
     public function validateAuthKey($authKey)
     {
         return $this->getAuthKey() === $authKey;
+    }
+
+    public static function getChannelMultiple($username)
+    {
+        $data = static::find()->select('id,username')->where(['like', 'username', $username])->limit(20)->all();
+        $out['results'] = array_values($data);
+        return Json::encode($out);
     }
 }

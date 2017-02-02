@@ -15,6 +15,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
     ];
     public $js = [
+        'dist/js/jssor.slider-22.1.8.min.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

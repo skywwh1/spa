@@ -68,7 +68,7 @@ class Deliver extends \yii\db\ActiveRecord
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
-            ['channel_id', 'unique', 'targetAttribute' => ['campaign_id', 'channel_id'], 'message' => 'The Campaign had been offer to this channel']
+            ['channel_id', 'unique', 'targetAttribute' => ['campaign_id', 'channel_id'], 'message' => isset($this->campaign) ? $this->campaign->campaign_uuid . ' already offer to ' . $this->channel->username : 'error!']
         ];
     }
 
@@ -141,14 +141,6 @@ class Deliver extends \yii\db\ActiveRecord
         return static::findOne(['campaign_id' => $campaignId, 'channel_id' => $channelId]);
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-        if ($insert) {
-            MailUtil::sendSTSCreateMail($this);
-        }
-    }
-
     public function ifExist()
     {
         if (static::findIdentity($this->campaign_id, $this->channel_id)) {
@@ -163,7 +155,7 @@ class Deliver extends \yii\db\ActiveRecord
             $this->update_time = time();
             $this->creator = Yii::$app->user->identity->getId();
             $urlData = ['stream/track',
-                'pl' => strtolower(\ModelsUtil::getPlatform($this->campaign->platform)),
+                'pl' => strtolower(\ModelsUtil::getPlatform(Campaign::findOne(['id' => $this->campaign_id])->platform)),
                 'ch_id' => $this->channel_id,
                 'cp_uid' => $this->campaign_uuid];
             $this->track_url = Yii::$app->urlManager->createUrl($urlData);
@@ -192,5 +184,10 @@ class Deliver extends \yii\db\ActiveRecord
     public static function findIdentityByCpUuidAndChid($campaignUuid, $channelId)
     {
         return static::findOne(['campaign_uuid' => $campaignUuid, 'channel_id' => $channelId]);
+    }
+
+    public static function getAllNeedSendCreate()
+    {
+        return static::find()->where(['is_send_create' => 0])->all();
     }
 }

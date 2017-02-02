@@ -20,39 +20,53 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <div class="row">
     <div class="col-lg-10">
-                        <?= DetailView::widget([
-                            'model' => $model,
-                            'attributes' => [
-                                'campaign_id',
-                                'campaign.campaign_name',
+        <?= DetailView::widget([
+            'model' => $model,
+            'attributes' => [
+                'campaign_id',
+                'campaign.campaign_name',
 //            'campaign.adv_price',
-                                [
-                                    'label' => 'Pricing Mode',
-                                    'value' => ModelsUtil::getPricingMode($model->pricing_mode),
-                                ],
-                                'pay_out',
-                                'daily_cap',
+                [
+                    'label' => 'Pricing Mode',
+                    'value' => ModelsUtil::getPricingMode($model->pricing_mode),
+                ],
+                [
+                    'label' => 'Traffic Source',
+                    'value' => ModelsUtil::getTrafficeSource($model->campaign->traffice_source),
+                ],
+                'pay_out',
+                'daily_cap',
 //            'is_run',
-                                [
-                                    'label' => 'Is Run',
-                                    'value' => ModelsUtil::getStatus($model->is_run),
-                                ],
-                                'create_time:datetime',
+                [
+                    'label' => 'Running',
+                    'value' => ModelsUtil::getStatus($model->is_run),
+                ],
+                'create_time:datetime',
 //            'track_url:url',
-                                [
-                                    'label' => 'Track Url',
-                                    'value' => Url::to('@track' . $model->track_url),
-                                    'format' => 'url'
-                                ],
-                                'click',
-                                'unique_click',
-                                'install',
-                                'cvr',
-                                'note',
-                            ],
-                        ]) ?>
-                        <?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']);
-                        ?>
+                [
+                    'label' => 'Track Url',
+                    'value' => Url::to('@track' . $model->track_url),
+                    'format' => 'url'
+                ],
+                [
+                    'label' => 'Preview Link',
+                    'value' => Url::to('@track' . $model->campaign->preview_link),
+                    'format' => 'url'
+                ],
+                [
+                    'label' => 'Creative Link',
+                    'value' => Url::to('@track' . $model->campaign->creative_link),
+                    'format' => 'url'
+                ],
+                'click',
+                'unique_click',
+                'install',
+                'cvr',
+                'note',
+            ],
+        ]) ?>
+        <?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']);
+        ?>
 
     </div>
 </div>

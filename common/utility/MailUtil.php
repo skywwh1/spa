@@ -41,4 +41,16 @@ class MailUtil
         $param = array('type' => 's2s create', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
     }
+
+    /**
+     * @param Channel $channel
+     * @param Deliver[] $delivers
+     */
+    public static function sendStsChannelMail($channel, $delivers)
+    {
+        $mail = Yii::$app->mailer->compose('sts_channel_created', ['delivers' => $delivers, 'channel' => $channel]);
+        $mail->setTo($channel->email);
+        $mail->setSubject('SuperADS New Campaign');
+        var_dump($mail->send());
+    }
 }

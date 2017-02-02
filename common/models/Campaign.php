@@ -4,6 +4,8 @@ namespace common\models;
 
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use Yii;
+use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 
 /**
@@ -59,6 +61,7 @@ use yii\helpers\Json;
  * @property integer $create_time
  * @property integer $update_time
  *
+ * @property ApplyCampaign[] $applyCampaigns
  * @property Advertiser $advertiser0
  * @property User $creator0
  * @property Deliver[] $delivers
@@ -67,6 +70,8 @@ use yii\helpers\Json;
  */
 class Campaign extends \yii\db\ActiveRecord
 {
+    public $apply_status;
+
     /**
      * @inheritdoc
      */
@@ -156,6 +161,14 @@ class Campaign extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getApplyCampaigns()
+    {
+        return $this->hasMany(ApplyCampaign::className(), ['campaign_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getAdvertiser0()
     {
         return $this->hasOne(Advertiser::className(), ['id' => 'advertiser']);
@@ -213,6 +226,13 @@ class Campaign extends \yii\db\ActiveRecord
         return Json::encode($out);
     }
 
+    public static function getCampaignsByUuidMultiple($uuid)
+    {
+        $data = static::find()->select('id,campaign_uuid')->where(['like', 'campaign_uuid', $uuid])->limit(20)->all();
+        $out['results'] = array_values($data);
+        return Json::encode($out);
+    }
+
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
@@ -234,5 +254,21 @@ class Campaign extends \yii\db\ActiveRecord
     public static function findByUuid($uuid)
     {
         return Campaign::findOne(['campaign_uuid' => $uuid]);
+    }
+
+    public function isApply($campaign_id, $channel_id)
+    {
+        $deliver = Deliver::findIdentity($campaign_id, $channel_id);
+        if (isset($deliver)) {
+            $this->apply_status = 2;
+            return true;
+        }
+        $apply = ApplyCampaign::findIdentify($campaign_id, $channel_id);
+        if (isset($apply)) {
+            $this->apply_status = $apply->status;
+            return true;
+        }
+        return false;
+
     }
 }

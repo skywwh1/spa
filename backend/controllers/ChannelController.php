@@ -43,9 +43,13 @@ class ChannelController extends Controller
                             'update',
                             'view',
                             'delete',
+                            'applying',
                             'get_channel_name',
                             'get_om',
+                            'view-applicant',
+                            'my-channels',
                             'test',
+                            'get_channel_multiple',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -61,11 +65,40 @@ class ChannelController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout='admin_layout';
         $searchModel = new ChannelSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->searchIndex(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Channel models.
+     * @return mixed
+     */
+    public function actionMyChannels()
+    {
+        $searchModel = new ChannelSearch();
+        $dataProvider = $searchModel->searchMyChannels(Yii::$app->request->queryParams);
+
+        return $this->render('my_channels', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Channel models.
+     * @return mixed
+     */
+    public function actionApplying()
+    {
+        $searchModel = new ChannelSearch();
+        $dataProvider = $searchModel->searchApplying(Yii::$app->request->queryParams);
+
+        return $this->render('applicants', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -180,6 +213,20 @@ class ChannelController extends Controller
     public function actionGet_om($om)
     {
         return \JsonUtil::toTypeHeadJson(User::getOMList($om));
+    }
+
+    public function actionViewApplicant($id)
+    {
+        $model = $this->findModel($id);
+        return $this->render('applicant_view', [
+            'model' => $model,
+            'register' => $model->channelRegister,
+        ]);
+    }
+
+    public function actionGet_channel_multiple($name)
+    {
+        return Channel::getChannelMultiple($name);
     }
 
 ///*****************************************************************************************

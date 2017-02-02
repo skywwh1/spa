@@ -35,11 +35,9 @@ class ChannelSearch extends Channel
     /**
      * Creates data provider instance with search query applied
      *
-     * @param array $params
-     *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search()
     {
         $query = Channel::find();
 
@@ -49,7 +47,7 @@ class ChannelSearch extends Channel
             'query' => $query,
         ]);
 
-        $this->load($params);
+//        $this->load($params);
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -117,5 +115,46 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'strong_catagory', $this->strong_catagory]);
 
         return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchApplying($params)
+    {
+        $this->load($params);
+        $this->status = 2;
+        return $this->search();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchIndex($params)
+    {
+        $this->load($params);
+        return $this->search();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchMyChannels($params)
+    {
+        $this->load($params);
+        $this->om = Yii::$app->user->id;
+        return $this->search();
     }
 }

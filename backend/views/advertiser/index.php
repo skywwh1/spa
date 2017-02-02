@@ -11,58 +11,61 @@ use yii\widgets\Pjax;
 $this->title = 'Advertiser List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="col-lg-12">
-    <div class="box box-info  table-responsive">
-        <div class="box-body">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-info  table-responsive">
+            <div class="box-body">
 
-            <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-            <?php Pjax::begin(); ?>    <?= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                'columns' => [
+                <?php Pjax::begin(); ?>    <?= GridView::widget([
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
+                    'columns' => [
 
-                    'id',
-                    'username',
-                    'settlement_type',
-                    'bd',
-                    'system',
-                    'status',
-                    // 'contacts',
-                    'pricing_mode',
-                    'created_time:datetime',
-                    // 'type',
-                    // 'auth_key',
-                    // 'password_hash',
-                    // 'password_reset_token',
-                    // 'updated_at',
-                    // 'email:email',
-                    // 'company',
-                    // 'phone1',
-                    // 'phone2',
-                    // 'weixin',
-                    // 'qq',
-                    // 'skype',
-                    // 'alipay',
-                    // 'country',
-                    // 'city',
-                    // 'address',
-                    // 'lang',
-                    // 'timezone',
-                    // 'firstaccess',
-                    // 'lastaccess',
-                    // 'picture',
-                    // 'confirmed',
-                    // 'suspended',
-                    // 'deleted',
-                    // 'cc_email:email',
-                    // 'traffic_source',
-                    'note',
+                        'id',
+                        'username',
+                        'settlement_type',
+                        'bd',
+                        'system',
+                        'status',
+                        // 'contacts',
+                        'pricing_mode',
+                        'created_time:datetime',
+                        // 'type',
+                        // 'auth_key',
+                        // 'password_hash',
+                        // 'password_reset_token',
+                        // 'updated_at',
+                        // 'email:email',
+                        // 'company',
+                        // 'phone1',
+                        // 'phone2',
+                        // 'weixin',
+                        // 'qq',
+                        // 'skype',
+                        // 'alipay',
+                        // 'country',
+                        // 'city',
+                        // 'address',
+                        // 'lang',
+                        // 'timezone',
+                        // 'firstaccess',
+                        // 'lastaccess',
+                        // 'picture',
+                        // 'confirmed',
+                        // 'suspended',
+                        // 'deleted',
+                        // 'cc_email:email',
+                        // 'traffic_source',
+                        'note',
 
-                    ['class' => 'yii\grid\ActionColumn'],
-                ],
-            ]); ?>
-            <?php Pjax::end(); ?>
+                        ['class' => 'yii\grid\ActionColumn'],
+                    ],
+                ]); ?>
+                <?php Pjax::end(); ?>
+            </div>
         </div>
     </div>
 </div>
+
