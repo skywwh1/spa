@@ -67,7 +67,7 @@ use yii\helpers\Url;
             $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
             $campaign_name .= '<td>' . Html::encode($deliver->campaign->campaign_name) . '</td>';
             $version .= '<td>' . Html::encode($deliver->campaign->version) . '</td>';
-            $target_geo .= '<td>' . Html::encode($deliver->campaign->targetGeo->domain) . '</td>';
+            $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
             $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
             $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
             $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';

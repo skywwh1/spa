@@ -100,7 +100,7 @@ use yii\helpers\Url;
             <td><?= Html::encode($deliver->campaign->id) ?></td>
             <td><?= Html::encode($deliver->campaign->campaign_name) ?></td>
             <td><?= Html::encode($deliver->campaign->version) ?></td>
-            <td><?= Html::encode($deliver->campaign->targetGeo->domain) ?></td>
+            <td><?= Html::encode($deliver->campaign->target_geo) ?></td>
             <td><?= Html::encode($deliver->pay_out) ?></td>
             <td><?php
                 $url = Url::home(true);

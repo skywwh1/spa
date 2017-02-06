@@ -10,6 +10,7 @@ $this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="channel_index"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
@@ -17,13 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <p>
                     <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-                        'class' => 'btn btn-danger',
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item?',
-                            'method' => 'post',
-                        ],
-                    ]) ?>
                 </p>
 
                 <?= DetailView::widget([
@@ -83,11 +77,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'suspended',
 //            'deleted',
 //            'bd',
-                        //'system',
-                        [
-                            'attribute' => 'system',
-                            'value' => ModelsUtil::getSystem($model->system)
-                        ],
+                        'system',
+//                        [
+//                            'attribute' => 'system',
+//                            'value' => ModelsUtil::getSystem($model->system)
+//                        ],
                         //'status',
                         [
                             'attribute' => 'status',
@@ -98,11 +92,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'traffic_source',
                             'value' => ModelsUtil::getTrafficeSource($model->traffic_source)
                         ],
-                        //'pricing_mode',
-                        [
-                            'attribute' => 'pricing_mode',
-                            'value' => ModelsUtil::getPricingMode($model->pricing_mode)
-                        ],
+                        'pricing_mode',
+//                        [
+//                            'attribute' => 'pricing_mode',
+//                            'value' => ModelsUtil::getPricingMode($model->pricing_mode)
+//                        ],
                         'post_back',
                         'total_revenue',
                         'payable',

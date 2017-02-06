@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 $this->title = 'Advertiser List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="advertiser-index"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info  table-responsive">
@@ -25,10 +26,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         'id',
                         'username',
-                        'settlement_type',
-                        'bd',
+//                        'settlement_type',
+                        [
+                            'attribute' => 'settlement_type',
+                            'value' => function ($data) {
+                                return ModelsUtil::getSettlementType($data->settlement_type);
+                            },
+                            'filter' => ModelsUtil::settlement_type,
+                        ],
+                        [
+                            'attribute' => 'bd',
+                            'value'=> 'bd0.username',
+                            'filter' => false,
+                        ],
+
                         'system',
-                        'status',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($data) {
+                                return ModelsUtil::getAdvertiserStatus($data->status);
+                            },
+                            'filter' => ModelsUtil::advertiser_status,
+                        ],
                         // 'contacts',
                         'pricing_mode',
                         'created_time:datetime',
@@ -60,7 +79,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'traffic_source',
                         'note',
 
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{view}{update}'
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

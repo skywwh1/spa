@@ -10,9 +10,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Advertiser Apis', 'url' => ['index
 $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
+<div id="nav-menu" data-menu="advertiser-api-index"></div>
 <div class="advertiser-api-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
 
     <?= $this->render('_form', [
         'model' => $model,

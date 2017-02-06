@@ -36,13 +36,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            },
 //                            'filter' => ModelsUtil::campaign_tag,
 //                        ],
-                        [
-                            'attribute' => 'pricing_mode',
-                            'value' => function ($data) {
-                                return ModelsUtil::getPricingMode($data->pricing_mode);
-                            },
-                            'filter' => ModelsUtil::pricing_mode,
-                        ],
+                        'pricing_mode',
+//                        [
+//                            'attribute' => 'pricing_mode',
+//                            'value' => function ($data) {
+//                                return ModelsUtil::getPricingMode($data->pricing_mode);
+//                            },
+//                            'filter' => ModelsUtil::pricing_mode,
+//                        ],
 //                        'indirect',
                         'category',
                         'target_geo',
@@ -56,13 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'promote_end',
                         // 'end_time:datetime',
 //                    'device',
-                        [
-                            'attribute' => 'platform',
-                            'value' => function ($data) {
-                                return ModelsUtil::getPlatform($data->platform);
-                            },
-                            'filter' => ModelsUtil::platform,
-                        ],
+                        'platform',
+//                        [
+//                            'attribute' => 'platform',
+//                            'value' => function ($data) {
+//                                return ModelsUtil::getPlatform($data->platform);
+//                            },
+//                            'filter' => ModelsUtil::platform,
+//                        ],
                         // 'budget',
                         // 'open_budget',
                         // 'daily_cap',

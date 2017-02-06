@@ -1,5 +1,7 @@
 <?php
 
+use common\models\PriceModel;
+use common\models\System;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -35,12 +37,24 @@ use yii\widgets\ActiveForm;
             ]) ?>
 
             <?= $form->field($model, 'contacts')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'system')->dropDownList(ModelsUtil::system) ?>
+            <?= $form->field($model, 'system')->dropDownList(
+                System::find()
+                    ->select(['name','value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
+            ) ?>
             <?= $form->field($model, 'post_parameter')->textInput(['value' => 'click_id']) ?>
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'status')->dropDownList(ModelsUtil::advertiser_status) ?>
-            <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
+            <?= $form->field($model, 'pricing_mode')->dropDownList(
+                PriceModel::find()
+                    ->select(['name','value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
+            ) ?>
             <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'skype')->textInput() ?>
             <?= $form->field($model, 'phone1')->textInput(['maxlength' => true]) ?>

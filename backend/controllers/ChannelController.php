@@ -126,14 +126,8 @@ class ChannelController extends Controller
         $model = new Channel();
 
         if ($model->load(Yii::$app->request->post())) {
-            if (!empty($model->om)) {
-                $user = User::findByUsername($model->om);
-            }
-            $model->om = isset($user) ? $user->id : null;
-            if (!empty($model->master_channel)) {
-                $main_chan = Channel::findChannelByName($model->master_channel);
-            }
-            $model->master_channel = isset($main_chan) ? $main_chan->id : null;
+            $this->beforeCreate($model);
+
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -152,21 +146,10 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        if (!empty($model->payment_way)) {
-            $model->payment_way = explode(',', $model->payment_way);
-        }
-        if (!empty($model->payment_term)) {
-            $model->payment_term = explode(',', $model->payment_term);
-        }
+       $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
-            if (!empty($model->om)) {
-                $user = User::findByUsername($model->om);
-            }
-            $model->om = isset($user) ? $user->id : null;
-            if (!empty($model->master_channel)) {
-                $main_chan = Channel::findChannelByName($model->master_channel);
-            }
-            $model->master_channel = isset($main_chan) ? $main_chan->id : null;
+            $this->beforeCreate($model);
+
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -227,6 +210,37 @@ class ChannelController extends Controller
     public function actionGet_channel_multiple($name)
     {
         return Channel::getChannelMultiple($name);
+    }
+
+    /**
+     * @param Channel $model
+     */
+    protected function beforeCreate(&$model)
+    {
+        if (!empty($model->om)) {
+            $user = User::findByUsername($model->om);
+        }
+        $model->om = isset($user) ? $user->id : null;
+        if (!empty($model->master_channel)) {
+            $main_chan = Channel::findChannelByName($model->master_channel);
+        }
+        $model->master_channel = isset($main_chan) ? $main_chan->id : null;
+        if (!empty($model->payment_way)) {
+            $model->payment_way = implode(',', $model->payment_way);
+        }
+    }
+
+    /**
+     * @param Channel $model
+     */
+    protected function beforeUpdate(&$model)
+    {
+        if (!empty($model->payment_way)) {
+            $model->payment_way = explode(',', $model->payment_way);
+        }
+        if (!empty($model->payment_term)) {
+            $model->payment_term = explode(',', $model->payment_term);
+        }
     }
 
 ///*****************************************************************************************

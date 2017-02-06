@@ -20,7 +20,7 @@ use Yii;
  * @property double $total_revenue
  * @property double $receivable
  * @property double $received
- * @property integer $pricing_mode
+ * @property string  $pricing_mode
  * @property integer $type
  * @property string $auth_key
  * @property string $password_hash
@@ -70,12 +70,12 @@ class Advertiser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'post_parameter', 'email'], 'required'],
-            [['status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['status',  'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
             [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['contacts', 'password_hash', 'password_reset_token', 'company', 'address', 'note'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
-            [['email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
+            [['pricing_mode','email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
             [['phone1', 'phone2'], 'string', 'max' => 20],
             [['country'], 'string', 'max' => 10],
             [['city'], 'string', 'max' => 120],

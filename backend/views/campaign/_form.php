@@ -1,6 +1,8 @@
 <?php
 
 use common\models\Category;
+use common\models\Platform;
+use common\models\PriceModel;
 use kartik\date\DatePicker;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Html;
@@ -35,8 +37,13 @@ use yii\widgets\ActiveForm;
 
                 <?= $form->field($model, 'campaign_name')->textInput(['maxlength' => true]) ?>
                 <?= $form->field($model, 'campaign_uuid')->textInput(['maxlength' => true]) ?>
-
-                <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
+                <?= $form->field($model, 'pricing_mode')->dropDownList(
+                    PriceModel::find()
+                        ->select(['name','value'])
+                        ->orderBy('id')
+                        ->indexBy('value')
+                        ->column()
+                   ) ?>
 
                 <?php
                 echo '<label class="control-label">Promote start</label>';
@@ -66,7 +73,13 @@ use yii\widgets\ActiveForm;
 		
 		<?php // $form->field($model, 'effective_time')->textInput() ?>
 		<?php // $form->field($model, 'adv_update_time')->textInput() ?>
-                <?= $form->field($model, 'platform')->dropDownList(ModelsUtil::platform) ?>
+                <?= $form->field($model, 'platform')->dropDownList(
+                    Platform::find()
+                        ->select(['name','value'])
+                        ->orderBy('id')
+                        ->indexBy('value')
+                        ->column()
+                ) ?>
 		<?= $form->field($model, 'min_version')->textInput(['maxlength' => true]) ?>
 		<?= $form->field($model, 'max_version')->textInput(['maxlength' => true]) ?>
                 <div class='form-group row'>

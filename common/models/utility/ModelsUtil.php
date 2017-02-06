@@ -94,15 +94,15 @@ class ModelsUtil
     );
 
     const payment_way = array(
-        1 => "Wire",
-        2 => "Paypal"
+        "wire" => "Wire",
+        "paypal" => "Paypal"
     );
 
     const payment_term = array(
-        1 => 'NET30',
-        2 => 'NET15',
-        3 => 'Bi-weekly',
-        4 => 'Weekly',
+        "net30" => 'NET30',
+        "net15" => 'NET15',
+        "bi-weekly" => 'Bi-weekly',
+        "weekly" => 'Weekly',
     );
 
     const timezone = array(
@@ -219,8 +219,14 @@ class ModelsUtil
         return static::getValue(static::device, $k);
     }
 
-    public static function getOpenType($k){
+    public static function getOpenType($k)
+    {
         return static::getValue(static::open_type, $k);
+    }
+
+    public static function getSettlementType($k)
+    {
+        return static::getValue(static::settlement_type, $k);
     }
 
 }

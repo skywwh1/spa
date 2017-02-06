@@ -121,10 +121,11 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/advertiser/index"><i class="fa fa-circle-o"></i> ADV List</a></li>
+                        <li><a href="/advertiser/index" data-menu="advertiser-index"><i class="fa fa-circle-o"></i> ADV List</a></li>
                         <li><a href="/advertiser/create" data-menu="advertiser_create"><i class="fa fa-circle-o"></i> Create ADV</a></li>
-                        <li><a href="/advertiser-api/index" data-menu="advertiser-api_index"><i class="fa fa-circle-o"></i> Advertiser Api List</a></li>
-                        <li><a href="/advertiser-api/create" data-menu="advertiser-api_create"><i class="fa fa-circle-o"></i> Create Advertiser Api</a></li>
+                        <li><a href="/advertiser-api/index" data-menu="advertiser-api-index"><i class="fa fa-circle-o"></i> Advertiser Api List</a></li>
+                        <li><a href="/ip-table/index" data-menu="ip-table-index"><i class="fa fa-circle-o"></i> Advertiser IP List</a></li>
+
                         </li>
                     </ul>
                 </li>
@@ -140,7 +141,7 @@ AdminAsset::register($this);
                         <li><a href="/channel/index" data-menu="channel_index"><i class="fa fa-circle-o"></i> Channel List</a></li>
                         <li><a href="/channel/my-channels" data-menu="my_channels"><i class="fa fa-circle-o"></i> My Channels</a></li>
                         <li><a href="/channel/applying" data-menu="applicants"><i class="fa fa-circle-o"></i> Applicant List</a></li>
-                        <li><a href="/channel/create"><i class="fa fa-circle-o"></i> Create Channel</a></li>
+                        <li><a href="/channel/create" data-menu="channel-create"><i class="fa fa-circle-o"></i> Create Channel</a></li>
                     </ul>
                 </li>
 

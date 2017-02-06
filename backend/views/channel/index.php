@@ -35,8 +35,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'password_hash',
                         // 'password_reset_token',
                         // 'settlement_type',
-                        'om',
-                        'master_channel',
+                        [
+                            'attribute'=>'om',
+                            'value'=>'om0.username',
+                            'filter'=>false,
+                        ],
+                        [
+                            'attribute'=>'master_channel',
+                            'value'=>'masterChannel.username',
+                            'filter'=>false,
+                        ],
                         // 'account_name',
                         // 'branch_name',
                         // 'card_number',
@@ -61,7 +69,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'confirmed',
                         // 'suspended',
                         // 'deleted',
-                        'status',
+//                        'status',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($data) {
+                                return ModelsUtil::getAdvertiserStatus($data->status);
+                            },
+                            'filter' => ModelsUtil::advertiser_status,
+                        ],
+
                         // 'traffic_source',
                         // 'pricing_mode',
                         // 'post_back',
@@ -71,7 +87,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'strong_geo',
                         // 'strong_catagory',
 
-                        ['class' => 'yii\grid\ActionColumn'],
+                        ['class' => 'yii\grid\ActionColumn',
+                            'template'=>'{view}{update}'
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

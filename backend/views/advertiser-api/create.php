@@ -10,10 +10,11 @@ $this->title = 'Create Advertiser Api';
 $this->params['breadcrumbs'][] = ['label' => 'Advertiser Apis', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="advertiser-api-index"></div>
+<div class="advertiser-api-create">
 
+    <?= $this->render('_form', [
+        'model' => $model,
+    ]) ?>
 
-<?= $this->render('_form', [
-    'model' => $model,
-]) ?>
-
-
+</div>

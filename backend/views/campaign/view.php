@@ -79,7 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'epc',
                         'avg_price',
                         'status',
-                        'open_type',
                         [
                             'attribute' => 'open_type',
                             'value' => ModelsUtil::getOpenType($model->open_type),

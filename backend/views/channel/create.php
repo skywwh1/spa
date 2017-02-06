@@ -10,16 +10,9 @@ $this->title = 'Create Channel';
 $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box box-info">
-            <div class="box-body">
+<div id="nav-menu" data-menu="channel-create"></div>
 
-                <?= $this->render('_form', [
-                    'model' => $model,
-                ]) ?>
+<?= $this->render('_form', [
+    'model' => $model,
+]) ?>
 
-            </div>
-        </div>
-    </div>
-</div>
