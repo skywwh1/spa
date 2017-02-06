@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = ['label' => <?= $generator->generateString(Infl
 $this->params['breadcrumbs'][] = ['label' => $model-><?= $generator->getNameAttribute() ?>, 'url' => ['view', <?= $urlParams ?>]];
 $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
+<div id="nav-menu" data-menu="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-index"></div>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-update">
 
     <h1><?= "<?= " ?>Html::encode($this->title) ?></h1>

@@ -16,16 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-                <p>
-                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                    <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-                        'class' => 'btn btn-danger',
-                        'data' => [
-                            'confirm' => 'Are you sure you want to delete this item?',
-                            'method' => 'post',
-                        ],
-                    ]) ?>
-                </p>
 
                 <?= DetailView::widget([
                     'model' => $model,
@@ -44,26 +34,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'pricing_mode',
                             'value' => ModelsUtil::getValue(ModelsUtil::pricing_mode, $model->pricing_mode),
                         ],
-                        'promote_start',
-                        'promote_end',
-                        'end_time:datetime',
-                        'device',
+                        'promote_start:datetime',
+                        'promote_end:datetime',
+                        'effective_time:datetime',
+                        'adv_update_time:datetime',
                         'platform',
+                        'min_version',
+                        'max_version',
                         'daily_cap',
-                        'open_cap',
                         'adv_price',
                         'now_payout',
                         // 'target_geo',
-                        [
-                            'attribute' => 'target_geo',
-                            'value' => $model->targetGeo->domain,
-                        ],
+                        //   [
+                        //      'attribute' => 'target_geo',
+                        //       'value' => $model->targetGeo->domain,
+                        //    ],
                         //'traffice_source',
                         [
                             'attribute' => 'traffice_source',
                             'value' => ModelsUtil::getTrafficeSource($model->traffice_source),
                         ],
-                        'note',
+                        'note:ntext',
                         'preview_link:url',
                         'icon',
                         'package_name',
@@ -86,16 +77,28 @@ $this->params['breadcrumbs'][] = $this->title;
                         'cap',
                         'cvr',
                         'epc',
-//            'pm',
-//            'bd',
+                        'avg_price',
                         'status',
                         'open_type',
+                        [
+                            'attribute' => 'open_type',
+                            'value' => ModelsUtil::getOpenType($model->open_type),
+
+                        ],
                         'subid_status',
                         'track_way',
                         'third_party',
                         'track_link_domain',
                         'adv_link:url',
+                        'link_type',
                         'ip_blacklist',
+//            'creator0->username',
+                        [
+                            'attribute' => 'creator',
+                            'value' => $model->creator0->username,
+                        ],
+                        'create_time:datetime',
+                        'update_time:datetime',
                     ],
                 ]) ?>
 

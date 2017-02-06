@@ -1,0 +1,113 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: iven.wu
+ * Date: 2/4/2017
+ * Time: 6:49 PM
+ */
+
+namespace common\utility;
+
+
+use common\models\AdvertiserApi;
+use common\models\Campaign;
+use linslin\yii2\curl\Curl;
+use yii\db\BaseActiveRecord;
+
+class ApiUtil
+{
+
+    public static function genUrl($model)
+    {
+        $url = $model->url;
+        $param = $model->param;
+        $param = static::replaceValue($param, $model); // 替换key
+        $paras = explode('&', $param);
+        $aa = '';
+        foreach ($paras as $item) {
+            $item = static::replaceUrl($item);
+            $aa .= $item . '&';
+        }
+        $aa = rtrim($aa, '&');
+        $url .= '?' . $aa;
+        //echo $url;
+        return $url;
+    }
+
+    public static function replaceUrl($str)
+    {
+        //	m=index&cb=cb7654&time={time();}&token={md5("key".md5(time());}
+        if (strpos($str, '{') && strpos($str, '}')) {
+            $param = strstr($str, '=', true);  //前
+            $val = strstr($str, '='); // =后
+            $val = substr($val, 0, -1); //去掉后面一个
+            $val = substr($val, 2, strlen($val) - 2); //去电后面两个
+            $val = static::replaceFunc($val);
+            return $param . '=' . $val;
+        } else {
+            return $str;
+        }
+    }
+
+    public static function replaceFunc($str)
+    {
+        $fun = 'return ' . $str;
+        return eval($fun); // 15
+    }
+
+    /**
+     * @param $str
+     * @param BaseActiveRecord $model
+     * @return mixed
+     */
+    public static function replaceValue($str, $model)
+    {
+        if (strpos($str, '"')) {
+            $vs = explode('"', $str);
+            foreach ($vs as $item) {
+                if ($model->getAttribute($item)) {
+                    $str = str_replace($item, $model->getAttribute($item), $str);
+                }
+            }
+        }
+        return $str;
+    }
+
+    /**
+     * @param AdvertiserApi $apis
+     * @return Campaign[] $camps
+     */
+    public static function genCampaigns($apis)
+    {
+        $url = static::genUrl($apis);
+        $curl = new Curl();
+        $response = $curl->get($url);
+        $camps = array();
+        if (json_decode($response)) {
+            $data = json_decode($response);
+            foreach ($data as $k => $v) {
+                if ($k == $apis->json_offers_param) {
+                    foreach ($v as $item) { //循环json里面的offers
+                        $item = (array)$item;
+                        $camp = new Campaign();
+                        $camp_attrs = $camp->getAttributes();
+                        $apis_attrs = $apis->getAttributes();
+                        foreach ($apis_attrs as $api_k => $api_v) { //循环apis 的属性
+                            if (array_key_exists($api_v, $item)) { //如果 json每一个offer的属性存在apis里面。
+                                if (array_key_exists($api_k, $camp_attrs)) { // 并且campaign里面的属性也存在。
+                                    if (is_array($item[$api_v])) {
+                                        $camp->setAttribute($api_k, implode(',', $item[$api_v]));
+                                    } else {
+                                        $camp->setAttribute($api_k, $item[$api_v]);
+                                    }
+                                }
+                            }
+                        }
+                        $camps[] = $camp;
+                    }
+                }
+            }
+        }
+        return $camps;
+    }
+}

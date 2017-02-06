@@ -39,11 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'open_cap',
 //            'adv_price',
 //            'now_payout',
-            // 'target_geo',
-            [
-                'attribute' => 'target_geo',
-                'value' => $model->targetGeo->domain,
-            ],
+             'target_geo',
             //'traffice_source',
             [
                 'attribute' => 'traffice_source',
@@ -55,11 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'package_name',
 //            'app_name',
 //            'app_size',
-//            'category',
-            [
-                'attribute' => 'category',
-                'value' => Category::findOne(['id' => $model->category])->name,
-            ],
+            'category',
 //            'version',
 //            'app_rate',
             'description',

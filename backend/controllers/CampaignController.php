@@ -102,8 +102,12 @@ class CampaignController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $advertiser = Advertiser::getOneByUsername($model->advertiser);
             $model->advertiser = isset($advertiser) ? $advertiser->id : null;
-            $geo = RegionsDomain::findOne(['domain' => $model->target_geo]);
-            $model->target_geo = isset($geo) ? $geo->id : null;
+            if(!empty($model->promote_start)){
+                $model->promote_start = strtotime($model->promote_start);
+            }
+            if(!empty($model->promote_end)){
+                $model->promote_end = strtotime($model->promote_end);
+            }
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -126,11 +130,17 @@ class CampaignController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $advertiser = Advertiser::getOneByUsername($model->advertiser);
             $model->advertiser = isset($advertiser) ? $advertiser->id : null;
-            $geo = RegionsDomain::findOne(['domain' => $model->target_geo]);
-            $model->target_geo = isset($geo) ? $geo->id : null;
+            if(!empty($model->promote_start)){
+                $model->promote_start = strtotime($model->promote_start);
+            }
+            if(!empty($model->promote_end)){
+                $model->promote_end = strtotime($model->promote_end);
+            }
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+            var_dump($model->getErrors());
+            die();
         }
         return $this->render('update', [
             'model' => $model,

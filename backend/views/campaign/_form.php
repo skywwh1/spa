@@ -39,13 +39,11 @@ use yii\widgets\ActiveForm;
                 <?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
 
                 <?php
-                echo '<label class="control-label">Promote</label>';
+                echo '<label class="control-label">Promote start</label>';
                 echo DatePicker::widget([
-                    'name' => 'promote_start',
-                    'value' => Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
-                    'type' => DatePicker::TYPE_RANGE,
-                    'name2' => 'promote_end',
-                    'value2' => Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                    'name' => 'Campaign[promote_start]',
+                    'type' => DatePicker::TYPE_INPUT,
+                     'value' => isset($model->promote_start)?date("Y-m-d", $model->promote_start):Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                     'pluginOptions' => [
                         'autoclose' => true,
                         'format' => 'yyyy-mm-dd'
@@ -56,26 +54,30 @@ use yii\widgets\ActiveForm;
                 <?php
                 echo '<label class="control-label">End time</label>';
                 echo DatePicker::widget([
-                    'name' => 'end_time',
+                    'name' => 'Campaign[promote_end]',
                     'type' => DatePicker::TYPE_INPUT,
-                    // 'value' => Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                     'value' => isset($model->promote_end)?date("Y-m-d", $model->promote_start):'',
                     'pluginOptions' => [
                         'autoclose' => true,
-                        'format' => 'yyyy-MM-dd'
+                        'format' => 'yyyy-mm-dd'
                     ]
                 ]);
                 ?>
-
-                <?= $form->field($model, 'device')->dropDownList(ModelsUtil::device) ?>
-
+		
+		<?php // $form->field($model, 'effective_time')->textInput() ?>
+		<?php // $form->field($model, 'adv_update_time')->textInput() ?>
                 <?= $form->field($model, 'platform')->dropDownList(ModelsUtil::platform) ?>
-
+		<?= $form->field($model, 'min_version')->textInput(['maxlength' => true]) ?>
+		<?= $form->field($model, 'max_version')->textInput(['maxlength' => true]) ?>
                 <div class='form-group row'>
                     <div class='col-xs-5'>
                         <?= $form->field($model, 'daily_cap')->textInput() ?>
                     </div>
                     <div class='col-xs-5'>
-                        <?= $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status) ?>
+                        <div class="form-group">
+                            <label class="control-label" for="campaign-daily_cap">Open Cap</label>
+                        <?= Html::dropDownList('open_cap','0',ModelsUtil::user_status,['class'=>'form-control']) // $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status) ?>
+                        </div>
                     </div>
                 </div>
 
@@ -126,7 +128,7 @@ use yii\widgets\ActiveForm;
             <div class="box-body">
                 <?= $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
                     'pluginOptions' => ['highlight' => true],
-                    'options' => ['value' => isset($model->target_geo) ? $model->targetGeo->domain : '',],
+                    'options' => ['value' => $model->target_geo],
                     'dataset' => [
                         [
                             'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -158,9 +160,9 @@ use yii\widgets\ActiveForm;
 
                 <?= $form->field($model, 'category')->dropDownList(
                         Category::find()
-                            ->select(['name','id'])
+                            ->select(['name','name'])
                             ->orderBy('id')
-                            ->indexBy('id')
+                            ->indexBy('name')
                             ->column(),
                         ['prompt' => 'Select category ...']) ?>
 
@@ -201,3 +203,6 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 <?php ActiveForm::end(); ?>
+<?php $this->registerJsFile('@web/js/campaign.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]);
+?>

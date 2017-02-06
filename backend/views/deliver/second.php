@@ -52,6 +52,7 @@ if (!is_null($delivers)) {
                     <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>
                     <?= $form->field($deliver, 'campaign_id')->hiddenInput()->label(false) ?>
                     <?= $form->field($deliver, 'channel_id')->hiddenInput()->label(false) ?>
+                    <input type="hidden" name="idaa" value="99">
                     <?php ActiveForm::end(); ?>
 
                 </div>

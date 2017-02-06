@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Campaign;
+use common\models\AdvertiserApi;
 
 /**
- * CampaignSearch represents the model behind the search form about `common\models\Campaign`.
+ * AdvertiserApiSearch represents the model behind the search form about `common\models\AdvertiserApi`.
  */
-class CampaignSearch extends Campaign
+class AdvertiserApiSearch extends AdvertiserApi
 {
     /**
      * @inheritdoc
@@ -18,9 +18,8 @@ class CampaignSearch extends Campaign
     public function rules()
     {
         return [
-            [['id', 'advertiser', 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
-            [['adv_price', 'now_payout', 'avg_price'], 'number'],
+            [['id', 'adv_id', 'create_time', 'update_time'], 'integer'],
+            [['url', 'key', 'param', 'adv_update_time', 'effective_time', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'now_payout', 'target_geo', 'adv_link', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
         ];
     }
 
@@ -42,7 +41,7 @@ class CampaignSearch extends Campaign
      */
     public function search($params)
     {
-        $query = Campaign::find();
+        $query = AdvertiserApi::find();
 
         // add conditions that should always apply here
 
@@ -61,36 +60,27 @@ class CampaignSearch extends Campaign
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'advertiser' => $this->advertiser,
-            'promote_start' => $this->promote_start,
-            'promote_end' => $this->promote_end,
-            'effective_time' => $this->effective_time,
-            'adv_update_time' => $this->adv_update_time,
-            'adv_price' => $this->adv_price,
-            'now_payout' => $this->now_payout,
-            'recommended' => $this->recommended,
-            'indirect' => $this->indirect,
-            'cap' => $this->cap,
-            'cvr' => $this->cvr,
-            'avg_price' => $this->avg_price,
-            'status' => $this->status,
-            'open_type' => $this->open_type,
-            'subid_status' => $this->subid_status,
-            'third_party' => $this->third_party,
-            'link_type' => $this->link_type,
-            'creator' => $this->creator,
+            'adv_id' => $this->adv_id,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
         ]);
 
-        $query->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
+        $query->andFilterWhere(['like', 'url', $this->url])
+            ->andFilterWhere(['like', 'key', $this->key])
+            ->andFilterWhere(['like', 'param', $this->param])
+            ->andFilterWhere(['like', 'adv_update_time', $this->adv_update_time])
+            ->andFilterWhere(['like', 'effective_time', $this->effective_time])
             ->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
+            ->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'pricing_mode', $this->pricing_mode])
+            ->andFilterWhere(['like', 'promote_start', $this->promote_start])
+            ->andFilterWhere(['like', 'end_time', $this->end_time])
             ->andFilterWhere(['like', 'platform', $this->platform])
-            ->andFilterWhere(['like', 'min_version', $this->min_version])
-            ->andFilterWhere(['like', 'max_version', $this->max_version])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
+            ->andFilterWhere(['like', 'adv_price', $this->adv_price])
+            ->andFilterWhere(['like', 'now_payout', $this->now_payout])
             ->andFilterWhere(['like', 'target_geo', $this->target_geo])
+            ->andFilterWhere(['like', 'adv_link', $this->adv_link])
             ->andFilterWhere(['like', 'traffice_source', $this->traffice_source])
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'preview_link', $this->preview_link])
@@ -107,11 +97,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'creative_description', $this->creative_description])
             ->andFilterWhere(['like', 'carriers', $this->carriers])
             ->andFilterWhere(['like', 'conversion_flow', $this->conversion_flow])
-            ->andFilterWhere(['like', 'epc', $this->epc])
-            ->andFilterWhere(['like', 'track_way', $this->track_way])
-            ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
-            ->andFilterWhere(['like', 'adv_link', $this->adv_link])
-            ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
+            ->andFilterWhere(['like', 'status', $this->status]);
 
         return $dataProvider;
     }

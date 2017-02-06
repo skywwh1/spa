@@ -74,7 +74,7 @@ class DeliverSearch extends Deliver
 
         $query->andFilterWhere(['like', 'track_url', $this->track_url])
             ->andFilterWhere(['like', 'note', $this->note]);
-
+        $query->orderBy('create_time DESC');
         return $dataProvider;
     }
 }

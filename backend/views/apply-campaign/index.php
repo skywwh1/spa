@@ -1,7 +1,9 @@
 <?php
 
+use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -11,8 +13,13 @@ use yii\widgets\Pjax;
 $this->title = 'Applying Offers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
-
+<?php Modal::begin([
+    'id' => 'campaign-detail-modal',
+]);
+echo '<div id="campaign-detail-content"></div>';
+Modal::end(); ?>
+    <div id="nav-menu" data-menu="apply-campaign-index"></div>
+    <div class="row">
     <div class="apply-campaign-index">
 
         <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
@@ -21,6 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box box-info table-responsive">
                 <div class="box-body">
                     <?php Pjax::begin(); ?>    <?= GridView::widget([
+                        'id' => 'applying_list',
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
@@ -46,10 +54,10 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             [
                                 'class' => 'yii\grid\ActionColumn',
-                                'template' => '{approve}',
+                                'template' => '{apply}',
                                 'header' => 'Action',
                                 'buttons' => [
-                                    'approve' => function ($url, $model) {
+                                    'apply' => function ($url, $model) {
                                         if ($model->status !== 1) {
                                             $class = 'btn btn-primary btn-xs';
                                             $title = Yii::t('yii', 'Applying');
@@ -72,16 +80,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'title' => $title,
                                             ]);
                                         } else {
-                                            return Html::a('applying', $url, [
+                                            return Html::a('applying', '#', [
                                                 'class' => 'btn btn-primary btn-xs',
                                                 'title' => Yii::t('yii', 'Applying'),
-                                                'data-method' => 'post',
-                                                'data-pjax' => 'w0',
-
+//                                                'data-method' => 'post',
+//                                                'data-pjax' => 'w0',
+                                                'data-view' => '0',
+                                                'data-url' => $url,
                                             ]);
+                                            //return Html::button('view', ['class' => 'btn btn-primary btn-xs', 'value' => $url, 'data-view' => 0]);
                                         }
                                     }
                                 ],
+                                'urlCreator' => function ($action, $model, $key, $index) {
+                                    return Url::toRoute(['/apply-campaign/deliver-create', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id]);
+                                }
+
                             ],
                         ],
                     ]); ?>
@@ -90,3 +104,6 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+<?php $this->registerJsFile('@web/js/apply-campaign.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]);
+?>

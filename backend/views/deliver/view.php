@@ -6,23 +6,18 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Deliver */
 
-$this->title = $model->campaign_id;
+$this->title = $model->campaign->campaign_name;
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="deliver-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div id="nav-menu" data-menu="deliver_index"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-info table-responsive">
+            <div class="box-body">
 
     <p>
         <?= Html::a('Update', ['update', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
     </p>
 
     <?= DetailView::widget([
@@ -43,4 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+            </div>
+        </div>
+    </div>
 </div>

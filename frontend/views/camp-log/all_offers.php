@@ -53,19 +53,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //                    return ModelsUtil::getStatus($data->indirect);
             //                }
             //            ],
-            //            'category',
-            [
-                'attribute' => 'category',
-                'value' => function ($data) {
-                    return Category::findOne(['id' => $data->category])->name;
-                }
-            ],
-            [
-                'attribute' => 'target_geo',
-                'value' => function ($data) {
-                    return RegionsDomain::findOne(['id' => $data->target_geo])->domain;
-                }
-            ],
+            'category',
+            'target_geo',
             //            'target_geo',
             //             'promote_start',
             // 'promote_end',

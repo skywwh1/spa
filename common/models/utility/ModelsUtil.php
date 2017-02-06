@@ -219,4 +219,8 @@ class ModelsUtil
         return static::getValue(static::device, $k);
     }
 
+    public static function getOpenType($k){
+        return static::getValue(static::open_type, $k);
+    }
+
 }

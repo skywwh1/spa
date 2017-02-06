@@ -28,14 +28,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'advertiser0.username',
                         'campaign_name',
                         'campaign_uuid',
-                        //'tag',
-                        [
-                            'attribute' => 'tag',
-                            'value' => function ($data) {
-                                return ModelsUtil::getCampaignTag($data->tag);
-                            },
-                            'filter' => ModelsUtil::campaign_tag,
-                        ],
+//                        //'tag',
+//                        [
+//                            'attribute' => 'tag',
+//                            'value' => function ($data) {
+//                                return ModelsUtil::getCampaignTag($data->tag);
+//                            },
+//                            'filter' => ModelsUtil::campaign_tag,
+//                        ],
                         [
                             'attribute' => 'pricing_mode',
                             'value' => function ($data) {
@@ -43,14 +43,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => ModelsUtil::pricing_mode,
                         ],
-                        'indirect',
+//                        'indirect',
                         'category',
-                        [
-                            'attribute' => 'target_geo',
-                            'value' => function ($data) {
-                                return RegionsDomain::findOne(['id' => $data->target_geo])->domain;
-                            }
-                        ],
+                        'target_geo',
+//                        [
+//                            'attribute' => 'target_geo',
+//                            'value' => function ($data) {
+//                                return RegionsDomain::findOne(['id' => $data->target_geo])->domain;
+//                            }
+//                        ],
 //             'promote_start',
                         // 'promote_end',
                         // 'end_time:datetime',
@@ -94,7 +95,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'bd',
                         'status',
 
-                        ['class' => 'yii\grid\ActionColumn'],
+                        [
+                                'class' => 'yii\grid\ActionColumn',
+                                'template'=>'{view} {update}',
+                            'header'=>'Action',
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

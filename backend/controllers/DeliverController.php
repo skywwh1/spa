@@ -78,17 +78,17 @@ class DeliverController extends Controller
      */
     public function actionView($campaign_id, $channel_id)
     {
-//        return $this->render('view', [
-//            'model' => $this->findModel($campaign_id, $channel_id),
-//        ]);
-
-        $searchModel = new DeliverSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+        return $this->render('view', [
+            'model' => $this->findModel($campaign_id, $channel_id),
         ]);
+
+//        $searchModel = new DeliverSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
     }
 
     /**
@@ -101,7 +101,6 @@ class DeliverController extends Controller
         $model = new StsForm();
         if ($model->load(Yii::$app->request->post())) {
             $delivers = [];
-            $errors = [];
             foreach ($model->campaign_uuid as $campaign_id) {
                 foreach ($model->channel as $channel_id) {
                     $deliver = new Deliver();
@@ -113,28 +112,13 @@ class DeliverController extends Controller
                     $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
                     $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
                     $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
-                    $deliver->validate('channel_id');
-                    if ($deliver->hasErrors('channel_id')) {
-                        $errors[] = $deliver->getErrors('channel_id');
-                    }
                     $delivers[] = $deliver;
                 }
             }
 
-            if (empty($errors)) {
-                return $this->render('second', [
-                    'delivers' => $delivers,
-                ]);
-            } else {
-//                var_dump($errors);
-//                die();
-                $str = "";
-                $model = new StsForm();
-                foreach ($errors as $item) {
-                    $str .= implode($item) . ', ';
-                }
-                $model->addError('campaign_uuid', $str);
-            }
+            return $this->render('second', [
+                'delivers' => $delivers,
+            ]);
         }
         return $this->render('create', [
             'model' => $model,
@@ -148,12 +132,17 @@ class DeliverController extends Controller
      */
     public function actionStsCreate()
     {
-        $data = array();
         Yii::$app->response->format = Response::FORMAT_JSON;
-
-        $model = new Deliver();
+        $request = Yii::$app->request;
+        $it = $request->post('Deliver');
+        $campaign_id = $it['campaign_id'];
+        $channel_id = $it['channel_id'];
+        if (($model = $this->findUpdateModel($campaign_id, $channel_id)) === null) {
+            $model = new Deliver();
+        }
+        $data = array();
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-
+            $model->is_send_create = 0;
             if ($model->save()) {
                 $campaign = Campaign::findOne($model->campaign_id);
                 $channel = Channel::findOne($model->channel_id);
@@ -173,8 +162,7 @@ class DeliverController extends Controller
      * @param integer $channel_id
      * @return mixed
      */
-    public
-    function actionUpdate($campaign_id, $channel_id)
+    public function actionUpdate($campaign_id, $channel_id)
     {
         $model = $this->findModel($campaign_id, $channel_id);
 
@@ -210,13 +198,29 @@ class DeliverController extends Controller
      * @return Deliver the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected
-    function findModel($campaign_id, $channel_id)
+    protected function findModel($campaign_id, $channel_id)
+    {
+        if (($model = $this->findUpdateModel($campaign_id, $channel_id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * Finds the Deliver model based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @return Deliver the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findUpdateModel($campaign_id, $channel_id)
     {
         if (($model = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id])) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            return null;
         }
     }
 

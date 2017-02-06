@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Deliver;
 use Yii;
 use common\models\ApplyCampaign;
 use common\models\ApplyCampaignSearch;
@@ -9,6 +10,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\Response;
 
 /**
  * ApplyCampaignController implements the CRUD actions for ApplyCampaign model.
@@ -35,7 +37,9 @@ class ApplyCampaignController extends Controller
                             'index',
                             'create',
                             'update',
-                            'delete'
+                            'delete',
+                            'deliver-create',
+                            'reject',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -148,17 +152,48 @@ class ApplyCampaignController extends Controller
      * @param integer $channel_id
      * @return mixed
      */
-    public function actionApprove($campaign_id, $channel_id)
+    public function actionReject($campaign_id, $channel_id)
     {
-//        $this->findModel($campaign_id, $channel_id)->delete();
-//
-//        return $this->redirect(['index']);
-        $searchModel = new ApplyCampaignSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        if (Yii::$app->request->isAjax) {
+            $model = $this->findModel($campaign_id, $channel_id);
+            $model->status = 3;
+            if($model->save()){
+                return 'success';
+            }
+//            return $campaign_id.$channel_id;
+        }
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+    }
+
+    public function actionDeliverCreate($campaign_id, $channel_id)
+    {
+        $deliver = new Deliver();
+        $request = Yii::$app->request;
+        if ($request->isAjax && $request->post()) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            $deliver->load($request->post());
+            if ($deliver->save()) {
+                $model = $this->findModel($deliver->campaign_id, $deliver->channel_id);
+                $model->status = 2;
+                $model->save();
+                return "success";
+            } else {
+                return $deliver->getErrors();
+            }
+
+        } else {
+            $deliver->campaign_id = $campaign_id;
+            $deliver->channel_id = $channel_id;
+            $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+            $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+            $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+            $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+            $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+            $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+            return $this->renderAjax('deliver_create', [
+                'model' => $deliver,
+            ]);
+        }
+
     }
 }

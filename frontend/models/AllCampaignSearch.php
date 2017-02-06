@@ -18,8 +18,8 @@ class AllCampaignSearch extends Campaign
     public function rules()
     {
         return [
-            [['id', 'advertiser', 'pricing_mode', 'promote_start', 'promote_end', 'end_time', 'device', 'platform', 'daily_cap', 'open_cap', 'target_geo', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'note', 'preview_link', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'adv_link', 'ip_blacklist'], 'safe'],
+            [['id', 'advertiser', 'pricing_mode', 'promote_start', 'promote_end',  'platform', 'daily_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [[ 'target_geo','campaign_name', 'tag', 'campaign_uuid', 'traffice_source', 'note', 'preview_link', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'adv_link', 'ip_blacklist'], 'safe'],
             [['adv_price', 'now_payout'], 'number'],
         ];
     }
@@ -74,11 +74,8 @@ class AllCampaignSearch extends Campaign
             'pricing_mode' => $this->pricing_mode,
             'promote_start' => $this->promote_start,
             'promote_end' => $this->promote_end,
-            'end_time' => $this->end_time,
-            'device' => $this->device,
             'platform' => $this->platform,
             'daily_cap' => $this->daily_cap,
-            'open_cap' => $this->open_cap,
             'adv_price' => $this->adv_price,
             'now_payout' => $this->now_payout,
             'target_geo' => $this->target_geo,

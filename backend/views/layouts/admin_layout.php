@@ -96,7 +96,7 @@ AdminAsset::register($this);
                     <ul class="treeview-menu">
                         <li><a href="/deliver/create" data-menu="STS"><i class="fa fa-circle-o"></i>S2S</a></li>
                         <li><a href="/deliver/testlink" data-menu="testlink"><i class="fa fa-circle-o"></i>Test Link</a></li>
-                        <li><a href="/deliver/index"><i class="fa fa-circle-o"></i>S2S Log</a></li>
+                        <li><a href="/deliver/index" data-menu="deliver_index"><i class="fa fa-circle-o"></i>S2S Log</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -110,7 +110,7 @@ AdminAsset::register($this);
                     <ul class="treeview-menu">
                         <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign List</a></li>
                         <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create Offer</a></li>
-                        <li><a href="/apply-campaign/index"><i class="fa fa-circle-o"></i> Applying Offers</a></li>
+                        <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i class="fa fa-circle-o"></i> Applying Offers</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -123,6 +123,8 @@ AdminAsset::register($this);
                     <ul class="treeview-menu">
                         <li><a href="/advertiser/index"><i class="fa fa-circle-o"></i> ADV List</a></li>
                         <li><a href="/advertiser/create" data-menu="advertiser_create"><i class="fa fa-circle-o"></i> Create ADV</a></li>
+                        <li><a href="/advertiser-api/index" data-menu="advertiser-api_index"><i class="fa fa-circle-o"></i> Advertiser Api List</a></li>
+                        <li><a href="/advertiser-api/create" data-menu="advertiser-api_create"><i class="fa fa-circle-o"></i> Create Advertiser Api</a></li>
                         </li>
                     </ul>
                 </li>

@@ -63,6 +63,7 @@ class ApplyCampaignSearch extends ApplyCampaign
             'status' => $this->status,
             'create_time' => $this->create_time,
         ]);
+        $query->orderBy('create_time DESC');
 
         return $dataProvider;
     }

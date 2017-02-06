@@ -11,6 +11,7 @@ use Yii;
  * @property integer $channel_id
  * @property integer $status
  * @property integer $create_time
+ * @property integer $update_time
  *
  * @property Campaign $campaign
  * @property Channel $channel
@@ -32,7 +33,7 @@ class ApplyCampaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id'], 'required'],
-            [['campaign_id', 'channel_id', 'status', 'create_time'], 'safe'],
+            [['campaign_id', 'channel_id', 'status', 'create_time', 'update_time'], 'safe'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
         ];
@@ -48,6 +49,7 @@ class ApplyCampaign extends \yii\db\ActiveRecord
             'channel_id' => 'Channel ID',
             'status' => 'Status',
             'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
         ];
     }
 
@@ -79,11 +81,12 @@ class ApplyCampaign extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
+        if ($insert) {
             $this->create_time = time();
-            return true;
+        } else {
+            $this->update_time = time();
         }
-        return false;
+        return parent::beforeSave($insert);
     }
 
 

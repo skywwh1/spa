@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 $this->title = 'S2S Log';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="deliver_index"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
@@ -22,17 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                        ['class' => 'yii\grid\SerialColumn'],
-
+                      //  ['class' => 'yii\grid\SerialColumn'],
+                        [
+                                'attribute'=>'campaign.campaign_name',
+                                'filter'=>true
+                        ],
                         'campaign.campaign_name',
                         'channel.username',
                         'pricing_mode',
                         'pay_out',
                         'daily_cap',
-                        // 'discount',
+                         'discount',
                         // 'is_run',
                         // 'creator',
-                        // 'create_time:datetime',
+                         'create_time:datetime',
                         // 'update_time:datetime',
                         // 'track_url:url',
                         // 'note',
