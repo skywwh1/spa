@@ -45,11 +45,16 @@ class MailUtil
     /**
      * @param Channel $channel
      * @param Deliver[] $delivers
+     * @return string
      */
     public static function sendStsChannelMail($channel, $delivers)
     {
         $mail = Yii::$app->mailer->compose('sts_channel_created', ['delivers' => $delivers, 'channel' => $channel]);
         $mail->setTo($channel->email);
+        if (!empty($channel->cc_email) && !empty(explode(',', $channel->cc_email))) {
+            $mail->setCc(explode(',', $channel->cc_email));
+        }
+        $mail->setCc($channel->om0->email);
         $mail->setSubject('New Offers from SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -61,10 +66,10 @@ class MailUtil
         }
         $param = array('type' => 's2s create', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
-        if($isSend){
-            return "Channel ".$channel->id.' send success!';
-        }else {
-            return "Channel ".$channel->id.' send Fail!';
+        if ($isSend) {
+            return "Channel " . $channel->id . ' send success!';
+        } else {
+            return "Channel " . $channel->id . ' send Fail!';
         }
     }
 }

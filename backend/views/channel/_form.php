@@ -89,7 +89,7 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true,'placeholder'=>'Multiple: aaa@example.com;ccc@example.com']) ?>
 
                     <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
 
