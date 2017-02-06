@@ -51,7 +51,7 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('sts_channel_created', ['delivers' => $delivers, 'channel' => $channel]);
         $mail->setTo($channel->email);
-        if (!empty($channel->cc_email) && !empty(explode(',', $channel->cc_email))) {
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
             $mail->setCc(explode(',', $channel->cc_email));
         }
         $mail->setCc($channel->om0->email);
