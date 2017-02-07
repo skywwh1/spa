@@ -44,7 +44,7 @@ use yii\widgets\ActiveForm;
                     ->indexBy('value')
                     ->column()
             ) ?>
-            <?= $form->field($model, 'post_parameter')->textInput(['value' => 'click_id']) ?>
+            <?= $form->field($model, 'post_parameter')->textInput(['placeholder' => 'ex: tx={click_id}&publisher={ch_id}']) ?>
             <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'status')->dropDownList(ModelsUtil::advertiser_status) ?>

@@ -6,6 +6,7 @@ use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\Stream;
+use common\models\User;
 use frontend\models\ChannelReports;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
@@ -351,6 +352,10 @@ class AuditController extends Controller
 
     public function actionTest()
     {
-        var_dump(timezone_identifiers_list());
+//        var_dump(timezone_identifiers_list());
+        $user = User::findOne(['id'=>'3']);
+        $user->setPassword('joanna');
+        $user->save();
+
     }
 }

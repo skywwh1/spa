@@ -84,6 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'total_revenue',
                         'payable',
                         'paid',
+                        'note:text',
                         // 'strong_geo',
                         // 'strong_catagory',
 

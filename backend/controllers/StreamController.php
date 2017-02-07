@@ -85,18 +85,7 @@ class StreamController extends Controller
             if (isset($camp)) {
                 $deliver = Deliver::findIdentity($camp->id, $model->ch_id);
                 if (isset($deliver)) {
-                    $link = $camp->adv_link;
-                    if (strpos($link, '?') !== false) {
-                        $link .= '&';
-                    } else {
-                        $link .= '?';
-                    }
-                    $post_param = $deliver->campaign->advertiser0->post_parameter;
-                    if (!empty($post_param)) {
-                        $link .= $post_param . '=' . $model->click_uuid;
-                    } else {
-                        $link .= 'click_id=' . $model->click_uuid;
-                    }
+                    $link = $this->genAdvLink($camp,$model->click_uuid,$model->ch_id);
                     $model->redirect = $link;
                     $model->save();
                     return $this->redirect($link);
@@ -125,5 +114,36 @@ class StreamController extends Controller
             $model->save();
         }
         return Json::encode(['success'=>$data]);
+    }
+
+    /**
+     * 替换广告组的参数，目前只有 click_id 和ch_id
+     * @param Campaign $camp
+     * @param $click_uuid
+     * @param $ch_id
+     * @return string
+     */
+    private function genAdvLink($camp,$click_uuid,$ch_id){
+        $paras = array(
+            'click_id'=>$click_uuid,
+            'ch_id'=>$ch_id,
+        );
+
+        $link = $camp->adv_link;
+        if (strpos($link, '?') !== false) {
+            $link .= '&';
+        } else {
+            $link .= '?';
+        }
+        $post_param = $camp->advertiser0->post_parameter;
+        if (!empty($post_param)) {
+            $post_param = str_replace('{click_id}',$paras['click_id'],$post_param);
+            $post_param = str_replace('{ch_id}',$paras['ch_id'],$post_param);
+            $link .= $post_param ;
+        } else {
+            $link .= 'click_id=' . $click_uuid;
+        }
+
+        return $link;
     }
 }

@@ -45,17 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             'contacts',
                             'pricing_mode',
-                            //'created_time:datetime',
-                            [
-                                'attribute' => 'created_time',
-                                'format' => ['date', 'php:Y-m-d H:i:s']
-                            ],
-                            //'updated_time:datetime',
-                            [
-                                'attribute' => 'updated_time',
-                                'format' => ['date', 'php:Y-m-d H:i:s']
-                            ],
+                            'post_parameter',
                             'email:email',
+                            'cc_email:email',
                             'company',
                             'phone1',
                             'skype',
@@ -74,8 +66,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => ModelsUtil::getValue(ModelsUtil::user_status, $model->deleted),
                             ],
                             //'deleted',
-                            'cc_email:email',
                             'note:ntext',
+                            //'created_time:datetime',
+                            [
+                                'attribute' => 'created_time',
+                                'format' => ['date', 'php:Y-m-d H:i:s']
+                            ],
+                            //'updated_time:datetime',
+                            [
+                                'attribute' => 'updated_time',
+                                'format' => ['date', 'php:Y-m-d H:i:s']
+                            ],
                         ],
                     ]) ?>
 

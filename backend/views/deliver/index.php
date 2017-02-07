@@ -41,7 +41,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'track_url:url',
                         // 'note',
 
-                        ['class' => 'yii\grid\ActionColumn'],
+                        ['class' => 'yii\grid\ActionColumn',
+                        'template'=>'{view}{update}'
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>
