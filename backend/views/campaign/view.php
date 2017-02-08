@@ -16,7 +16,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-
+                <p>
+                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                </p>
                 <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
@@ -29,11 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'campaign_name',
                         //'tag',
                         'campaign_uuid',
-                        // 'pricing_mode',
-                        [
-                            'attribute' => 'pricing_mode',
-                            'value' => ModelsUtil::getValue(ModelsUtil::pricing_mode, $model->pricing_mode),
-                        ],
+                         'pricing_mode',
                         'promote_start:datetime',
                         'promote_end:datetime',
                         'effective_time:datetime',
@@ -44,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'daily_cap',
                         'adv_price',
                         'now_payout',
-                        // 'target_geo',
+                         'target_geo',
                         //   [
                         //      'attribute' => 'target_geo',
                         //       'value' => $model->targetGeo->domain,

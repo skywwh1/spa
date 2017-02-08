@@ -4,9 +4,11 @@ use common\models\Category;
 use common\models\Platform;
 use common\models\PriceModel;
 use kartik\date\DatePicker;
+use kartik\select2\Select2;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -143,19 +145,43 @@ use yii\widgets\ActiveForm;
             <h3 class="box-title">Target Info</h3>
         </div>
         <div class="box-body">
-            <?= $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
-                'pluginOptions' => ['highlight' => true],
-                'options' => ['value' => $model->target_geo],
-                'dataset' => [
-                    [
-                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                        'display' => 'value',
-                        'remote' => [
-                            'url' => Url::to(['campaign/get_geo']) . '?name=%QUERY',
-                            'wildcard' => '%QUERY'
-                        ]
-                    ]],
-            ]) ?>
+            <?php
+//            $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
+//                'pluginOptions' => ['highlight' => true],
+//                'options' => ['value' => $model->target_geo],
+//                'dataset' => [
+//                    [
+//                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+//                        'display' => 'value',
+//                        'remote' => [
+//                            'url' => Url::to(['campaign/get_geo']) . '?name=%QUERY',
+//                            'wildcard' => '%QUERY'
+//                        ]
+//                    ]],
+//            ])
+                echo $form->field($model, 'target_geo')->widget(Select2::classname(), [
+                'initValueText' => $model->target_geo, // set the initial display text
+                    'size' => Select2::MEDIUM,
+                    'options' => [
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'minimumInputLength' => 1,
+                        'language' => [
+                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                        ],
+                        'ajax' => [
+                            'url' => Url::to(['campaign/get_geo']),
+                            'dataType' => 'json',
+                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                        ],
+                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                        'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
+                        'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
+                    ],
+                ]);
+            ?>
             <?= $form->field($model, 'traffice_source')->dropDownList(ModelsUtil::traffic_source) ?>
             <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
         </div>

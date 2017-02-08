@@ -54,7 +54,7 @@ class CampaignController extends Controller
                     [
                         'actions' => [
                             'get_category',
-                            ],
+                        ],
                         'allow' => true,
                         'roles' => ['?'],
                     ],
@@ -100,14 +100,7 @@ class CampaignController extends Controller
         $model = new Campaign();
 
         if ($model->load(Yii::$app->request->post())) {
-            $advertiser = Advertiser::getOneByUsername($model->advertiser);
-            $model->advertiser = isset($advertiser) ? $advertiser->id : null;
-            if(!empty($model->promote_start)){
-                $model->promote_start = strtotime($model->promote_start);
-            }
-            if(!empty($model->promote_end)){
-                $model->promote_end = strtotime($model->promote_end);
-            }
+            $this->beforeSave($model);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -126,21 +119,12 @@ class CampaignController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
-            $advertiser = Advertiser::getOneByUsername($model->advertiser);
-            $model->advertiser = isset($advertiser) ? $advertiser->id : null;
-            if(!empty($model->promote_start)){
-                $model->promote_start = strtotime($model->promote_start);
-            }
-            if(!empty($model->promote_end)){
-                $model->promote_end = strtotime($model->promote_end);
-            }
+            $this->beforeSave($model);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-            var_dump($model->getErrors());
-            die();
         }
         return $this->render('update', [
             'model' => $model,
@@ -188,7 +172,23 @@ class CampaignController extends Controller
 
     public function actionGet_geo($name)
     {
-        return \JsonUtil::toTypeHeadJson(RegionsDomain::getGeoListByName($name));
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!$name) {
+            return $out;
+        }
+
+        $data = RegionsDomain::find()
+            ->select('domain id, domain text')
+            ->andFilterWhere(['like', 'domain', $name])
+            ->limit(50)
+            ->asArray()
+            ->all();
+
+        $out['results'] = array_values($data);
+
+        return $out;
+//        return \JsonUtil::toTypeHeadJson(RegionsDomain::getGeoListByName($name));
     }
 
     public function actionGet_category($q = null, $id = null)
@@ -204,8 +204,7 @@ class CampaignController extends Controller
             $command = $query->createCommand();
             $data = $command->queryAll();
             $out['results'] = array_values($data);
-        }
-        elseif ($id > 0) {
+        } elseif ($id > 0) {
             $out['results'] = ['id' => $id, 'text' => Category::findOne($id)->name];
         }
         return $out;
@@ -214,5 +213,30 @@ class CampaignController extends Controller
     public function actionGet_campaign_uuid_multiple($uuid)
     {
         return Campaign::getCampaignsByUuidMultiple($uuid);
+    }
+
+    /**
+     * @param Campaign $campaign
+     */
+    protected function beforeUpdate(&$campaign)
+    {
+        $campaign->target_geo = explode(',', $campaign->target_geo);
+    }
+
+    /**
+     * @param Campaign $model
+     */
+    protected function beforeSave(&$model)
+    {
+        $advertiser = Advertiser::getOneByUsername($model->advertiser);
+        $model->advertiser = isset($advertiser) ? $advertiser->id : null;
+        if (!empty($model->promote_start)) {
+            $model->promote_start = strtotime($model->promote_start);
+        }
+        if (!empty($model->promote_end)) {
+            $model->promote_end = strtotime($model->promote_end);
+        }
+
+        $model->target_geo = implode(',',$model->target_geo);
     }
 }

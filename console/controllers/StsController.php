@@ -184,34 +184,43 @@ class StsController extends Controller
 //            print_r($region);
 //        }
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => "https://api.mobra.in/v1/campaign/feed",
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => "",
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 30,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "GET",
-            CURLOPT_POSTFIELDS => "",
-            CURLOPT_HTTPHEADER => array(
+//        $curl = curl_init();
+//
+//        curl_setopt_array($curl, array(
+//            CURLOPT_URL => "https://api.mobra.in/v1/campaign/feed",
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 30,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => "GET",
+//            CURLOPT_POSTFIELDS => "",
+//            CURLOPT_HTTPHEADER => array(
+//                "cache-control: no-cache",
+//                "cookie: mobrain_api=eyJpdiI6IjNxNWUyendWYlVBRFhWUDRrYjBFNWRHRGNEcU5EQlZ2UGxmTmZ6VDNCRU09IiwidmFsdWUiOiJoWUpsV294Z2ZOdStiYXhRWU0wdTIraWZPMzRXN2l0QkNNeXBrekNQeVQwYWFMWGpuWmNyajkzTUtWQ085NExiTW9OZVBvQjVQZVwvQVdBWGd2QUJMcWc9PSIsIm1hYyI6IjIyMDlkZjM1MjI4NjUwNDBmMDExZDUyZmExNzQxYzM4MTk4MDA3Mjk0MTY5M2FiMzY0YWFhYTdiYzA4NGY1NzEifQ%3D%3D"
+//            ),
+//        ));
+//
+//        $response = curl_exec($curl);
+//        $err = curl_error($curl);
+//
+//        curl_close($curl);
+//
+//        if ($err) {
+//            echo "cURL Error #:" . $err;
+//        } else {
+//            var_dump($response);
+//        }
+        $curl = new Curl();
+        $response = $curl->setOption(
+            CURLOPT_HTTPHEADER,
+            array(
                 "cache-control: no-cache",
                 "cookie: mobrain_api=eyJpdiI6IjNxNWUyendWYlVBRFhWUDRrYjBFNWRHRGNEcU5EQlZ2UGxmTmZ6VDNCRU09IiwidmFsdWUiOiJoWUpsV294Z2ZOdStiYXhRWU0wdTIraWZPMzRXN2l0QkNNeXBrekNQeVQwYWFMWGpuWmNyajkzTUtWQ085NExiTW9OZVBvQjVQZVwvQVdBWGd2QUJMcWc9PSIsIm1hYyI6IjIyMDlkZjM1MjI4NjUwNDBmMDExZDUyZmExNzQxYzM4MTk4MDA3Mjk0MTY5M2FiMzY0YWFhYTdiYzA4NGY1NzEifQ%3D%3D"
-            ),
-        ));
-
-        $response = curl_exec($curl);
-        $err = curl_error($curl);
-
-        curl_close($curl);
-
-        if ($err) {
-            echo "cURL Error #:" . $err;
-        } else {
+                )
+            )
+            ->get('https://api.mobra.in/v1/campaign/feed');
             var_dump($response);
-        }
-
     }
 
 

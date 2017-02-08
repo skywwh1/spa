@@ -33,10 +33,10 @@ class AuditController extends Controller
         date_default_timezone_set("Asia/Shanghai");
         $this->echoMessage("Time : " . date("Y-m-d H:i:s", time()));
         $needCounts = Feed::findNeedCounts();
-        $this->echoMessage("Get feeds count " . count($needCounts));
         //更新点击量
         $this->count_clicks();
         if (!empty($needCounts)) {
+            $this->echoMessage("Get feeds count " . count($needCounts));
 
             $matchClicks = $this->getMatch_clicks($needCounts);
             //更新campaign的真实安装量。
@@ -46,7 +46,7 @@ class AuditController extends Controller
             //更新扣量
             $this->updatePost_status($matchClicks);
         } else {
-            $this->echoHead("No feed need to update");
+            $this->echoMessage("No feed need to update");
         }
         //post
         $this->post_back();
@@ -57,7 +57,7 @@ class AuditController extends Controller
     {
         $needPosts = Stream::getNeedPosts();
         if (empty($needPosts)) {
-            $this->echoHead("No campaign need to post back ");
+            $this->echoMessage("No campaign need to post back ");
             return;
         }
         $this->echoHead("Post action start at " . time());
@@ -251,37 +251,48 @@ class AuditController extends Controller
     {
         $this->echoMessage("channel post back is " . $postback);
         $this->echoMessage("click params are " . $allParams);
-        $homeurl = substr($postback, 0, strpos($postback, '?'));
-        $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
-        $params = explode("&", $paramstring);
-        $returnParams = "";
-        $paramsTemp = array();
-        if (!empty($params)) {
-            foreach ($params as $k) {
-                $temp = explode('=', $k);
-                $paramsTemp[$temp[0]] = isset($temp[1]) ? $temp[1] : "";
+//        $homeurl = substr($postback, 0, strpos($postback, '?'));
+//        $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
+//        $params = explode("&", $paramstring);
+//        $returnParams = "";
+//        $paramsTemp = array();
+//        if (!empty($params)) {
+//            foreach ($params as $k) {
+//                $temp = explode('=', $k);
+//                $paramsTemp[$temp[0]] = isset($temp[1]) ? $temp[1] : "";
+//            }
+//        }
+//        if (!empty($paramsTemp)) {
+//            foreach ($paramsTemp as $k => $v) {
+//                if (strpos($allParams, $k) !== false) {
+//                    $startCut = strpos($allParams, $k);
+//                    $cutLen = (strlen($allParams) - $startCut);
+//                    if (strpos($allParams, '&', $startCut)) {
+//                        $cutLen = strpos($allParams, '&', $startCut) - $startCut;
+//                    }
+//                    $returnParams .= substr($allParams, $startCut, $cutLen) . "&";
+//                }
+//            }
+//        }
+//        if (!empty($returnParams)) {
+//            $returnParams = chop($returnParams, '&');
+//            $homeurl .= "?" . $returnParams;
+//        } else {
+//            $this->echoMessage("can not found post back params");
+//        }
+
+        if(!empty($allParams)){
+            $params = explode('&',$allParams);
+            foreach ($params as $item){
+                $param = explode('=',$item);
+                $k = '{'.$param[0].'}';
+                $v = $param[1];
+                $postback = str_replace($k,$v,$postback);
             }
         }
-        if (!empty($paramsTemp)) {
-            foreach ($paramsTemp as $k => $v) {
-                if (strpos($allParams, $k) !== false) {
-                    $startCut = strpos($allParams, $k);
-                    $cutLen = (strlen($allParams) - $startCut);
-                    if (strpos($allParams, '&', $startCut)) {
-                        $cutLen = strpos($allParams, '&', $startCut) - $startCut;
-                    }
-                    $returnParams .= substr($allParams, $startCut, $cutLen) . "&";
-                }
-            }
-        }
-        if (!empty($returnParams)) {
-            $returnParams = chop($returnParams, '&');
-            $homeurl .= "?" . $returnParams;
-        } else {
-            $this->echoMessage("can not found post back params");
-        }
-        $this->echoMessage("generate url: " . $homeurl);
-        return $homeurl;
+
+        $this->echoMessage("generate url: " . $postback);
+        return $postback;
     }
 
     protected function genPostBack($postback, $track, $allParams)

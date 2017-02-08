@@ -49,7 +49,7 @@ use yii\helpers\Url;
     <table style="width: 100%;" border="1">
         <tbody>
         <?php
-        $id = '<td> ID</td>';
+        $id = '<td width="20%"> ID</td>';
         $campaign_name = '<td> Campaign name</td>';
         $version = '<td> Version</td>';
         $target_geo = '<td> Target Geo</td>';
