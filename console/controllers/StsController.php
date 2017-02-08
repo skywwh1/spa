@@ -163,15 +163,55 @@ class StsController extends Controller
 
     public function actionMat()
     {
-        $apis = AdvertiserApi::findOne(['id' => 4]);
-//        var_dump();
-        $camps = ApiUtil::genCampaigns($apis);
-        foreach ($camps as $i){
-            var_dump($i->app_size);
-//            if(!$i->save()){
-//                var_dump($i->getErrors());
-//            }
+//        $apis = AdvertiserApi::findOne(['id' => 4]);
+////        var_dump();
+//        $camps = ApiUtil::genCampaigns($apis);
+//        foreach ($camps as $i){
+//            var_dump($i->app_size);
+////            if(!$i->save()){
+////                var_dump($i->getErrors());
+////            }
+//        }
+//        $curl = new Curl();
+//       $re = $curl->post('http://api.mobra.in/v1/auth/login?user=boster@superads.cn&password=Mobrain123',false);
+
+//           ->get('https://api.mobra.in/v1/campaign/feed');
+//        var_dump($re);
+//        var_dump($curl->responseHeaders);
+//            var_dump($curl->get('https://api.mobra.in/v1/campaign/feed'));
+//        $region = geoip_region_by_name('superads.cn');
+//        if ($region) {
+//            print_r($region);
+//        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://api.mobra.in/v1/auth/login?user=boster%40superads.cn&password=Mobrain123",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "postman-token: 1c20a245-cc1f-af55-e1af-7c458aed0e4f"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            var_dump($curl);
         }
+
     }
 
 
