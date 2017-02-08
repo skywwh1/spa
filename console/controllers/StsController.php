@@ -187,17 +187,17 @@ class StsController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => "http://api.mobra.in/v1/auth/login?user=boster%40superads.cn&password=Mobrain123",
+            CURLOPT_URL => "https://api.mobra.in/v1/campaign/feed",
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => "",
             CURLOPT_MAXREDIRS => 10,
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_CUSTOMREQUEST => "GET",
             CURLOPT_POSTFIELDS => "",
             CURLOPT_HTTPHEADER => array(
                 "cache-control: no-cache",
-                "postman-token: 1c20a245-cc1f-af55-e1af-7c458aed0e4f"
+                "cookie: mobrain_api=eyJpdiI6IjNxNWUyendWYlVBRFhWUDRrYjBFNWRHRGNEcU5EQlZ2UGxmTmZ6VDNCRU09IiwidmFsdWUiOiJoWUpsV294Z2ZOdStiYXhRWU0wdTIraWZPMzRXN2l0QkNNeXBrekNQeVQwYWFMWGpuWmNyajkzTUtWQ085NExiTW9OZVBvQjVQZVwvQVdBWGd2QUJMcWc9PSIsIm1hYyI6IjIyMDlkZjM1MjI4NjUwNDBmMDExZDUyZmExNzQxYzM4MTk4MDA3Mjk0MTY5M2FiMzY0YWFhYTdiYzA4NGY1NzEifQ%3D%3D"
             ),
         ));
 
@@ -209,7 +209,7 @@ class StsController extends Controller
         if ($err) {
             echo "cURL Error #:" . $err;
         } else {
-            var_dump($curl);
+            var_dump($response);
         }
 
     }
