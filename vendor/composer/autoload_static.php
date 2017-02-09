@@ -25,6 +25,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
         ),
+        'r' => 
+        array (
+            'rmrevin\\yii\\geoip\\' => 18,
+        ),
         'p' => 
         array (
             'phpDocumentor\\Reflection\\' => 25,
@@ -121,6 +125,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'yii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
+        ),
+        'rmrevin\\yii\\geoip\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rmrevin/yii2-geoip',
         ),
         'phpDocumentor\\Reflection\\' => 
         array (

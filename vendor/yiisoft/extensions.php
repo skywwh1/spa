@@ -129,4 +129,13 @@ return array (
       '@linslin/yii2/curl' => $vendorDir . '/linslin/yii2-curl',
     ),
   ),
+  'rmrevin/yii2-geoip' => 
+  array (
+    'name' => 'rmrevin/yii2-geoip',
+    'version' => '1.1.0.0',
+    'alias' => 
+    array (
+      '@rmrevin/yii/geoip' => $vendorDir . '/rmrevin/yii2-geoip',
+    ),
+  ),
 );

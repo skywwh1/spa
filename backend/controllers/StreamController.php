@@ -8,6 +8,8 @@ use common\models\Feed;
 use Yii;
 use common\models\Stream;
 use common\models\StreamSearch;
+use yii\base\Exception;
+use yii\base\InvalidConfigException;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
@@ -73,26 +75,11 @@ class StreamController extends Controller
         $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
         $model->ip = Yii::$app->request->getUserIP();
 
-        $message = "";
-        if (!$model->validate() && $model->hasErrors()) {
-            foreach ($model->getErrors() as $k => $v) {
-                $message .= implode("", $v) . "</br>";
-            }
-
-        } else {
-
-            $camp = Campaign::findByUuid($model->cp_uid);
-            if (isset($camp)) {
-                $deliver = Deliver::findIdentity($camp->id, $model->ch_id);
-                if (isset($deliver)) {
-                    $link = $this->genAdvLink($camp,$model->click_uuid,$model->ch_id);
-                    $model->redirect = $link;
-                    $model->save();
-                    return $this->redirect($link);
-                }
-            }
+        $code = $this->restrictionTrack($model);
+        if ($code !== 200) {
+            return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
-        return Json::encode(['success'=>$message]);
+        return $this->redirect($model->redirect);
     }
 
     public function actionFeed()
@@ -113,7 +100,7 @@ class StreamController extends Controller
             $model->all_parameters = $allParameters;
             $model->save();
         }
-        return Json::encode(['success'=>$data]);
+        return Json::encode(['success' => $data]);
     }
 
     /**
@@ -123,10 +110,11 @@ class StreamController extends Controller
      * @param $ch_id
      * @return string
      */
-    private function genAdvLink($camp,$click_uuid,$ch_id){
+    private function genAdvLink($camp, $click_uuid, $ch_id)
+    {
         $paras = array(
-            'click_id'=>$click_uuid,
-            'ch_id'=>$ch_id,
+            'click_id' => $click_uuid,
+            'ch_id' => $ch_id,
         );
 
         $link = $camp->adv_link;
@@ -137,13 +125,76 @@ class StreamController extends Controller
         }
         $post_param = $camp->advertiser0->post_parameter;
         if (!empty($post_param)) {
-            $post_param = str_replace('{click_id}',$paras['click_id'],$post_param);
-            $post_param = str_replace('{ch_id}',$paras['ch_id'],$post_param);
-            $link .= $post_param ;
+            $post_param = str_replace('{click_id}', $paras['click_id'], $post_param);
+            $post_param = str_replace('{ch_id}', $paras['ch_id'], $post_param);
+            $link .= $post_param;
         } else {
-            $link .= 'click_id=' . $click_uuid;
+            $link .= 'click_id=' . $click_uuid; //默认
         }
 
         return $link;
+    }
+
+    /**
+     * @param Stream $model
+     * @return int
+     * @throws \yii\base\InvalidConfigException
+     * @internal param Campaign $campaign
+     * @internal param Deliver $deliver
+     */
+    private function restrictionTrack(&$model)
+    {
+        //1.参数 click id，ch_id
+
+        if (!$model->validate() && $model->hasErrors()) {
+            return 404;
+        }
+        $campaign = Campaign::findByUuid($model->cp_uid);
+        if ($campaign === null) {
+            return 500;
+        }
+        $deliver = Deliver::findIdentity($campaign->id, $model->ch_id);
+        if ($deliver === null) {
+            return 500;
+        }
+
+        //2.ip 限制
+        $Info = \Yii::createObject([
+            'class' => '\rmrevin\yii\geoip\HostInfo',
+            'host' => '116.66.221.210', // some host or ip
+        ]);
+        $geo = $Info->getCountryCode();   // US
+        $target = $campaign->target_geo;
+        if (strpos($target, $geo) === false) {
+            return 501;
+        }
+
+        //3.单子状态
+        //4.单子时间
+        //正常0
+        $link = $this->genAdvLink($campaign, $model->click_uuid, $model->ch_id);
+        $model->redirect = $link;
+        $model->save();
+        return 200;
+    }
+
+    private function restrictionFeed()
+    {
+        //2.ip 限制
+    }
+
+    private function _getStatusCodeMessage($status)
+    {
+        $codes = Array(
+            200 => 'OK',
+            400 => 'Bad Request',
+            401 => 'Unauthorized',
+            402 => 'Payment Required',
+            403 => 'Forbidden',
+            404 => 'Missing parameters',
+            500 => 'Can`t found the campaign',
+            501 => 'Your country is not allow!',
+        );
+        return (isset($codes[$status])) ? $codes[$status] : '';
     }
 }

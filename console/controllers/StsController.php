@@ -8,6 +8,7 @@ use common\models\Deliver;
 use common\utility\ApiUtil;
 use common\utility\MailUtil;
 use linslin\yii2\curl\Curl;
+use rmrevin\yii\geoip\HostInfo;
 use yii\base\Model;
 use yii\console\Controller;
 use yii\db\BaseActiveRecord;
@@ -211,17 +212,18 @@ class StsController extends Controller
 //        } else {
 //            var_dump($response);
 //        }
+
         $curl = new Curl();
         $response = $curl->setOption(
             CURLOPT_HTTPHEADER,
             array(
                 "cache-control: no-cache",
                 "cookie: mobrain_api=eyJpdiI6IjNxNWUyendWYlVBRFhWUDRrYjBFNWRHRGNEcU5EQlZ2UGxmTmZ6VDNCRU09IiwidmFsdWUiOiJoWUpsV294Z2ZOdStiYXhRWU0wdTIraWZPMzRXN2l0QkNNeXBrekNQeVQwYWFMWGpuWmNyajkzTUtWQ085NExiTW9OZVBvQjVQZVwvQVdBWGd2QUJMcWc9PSIsIm1hYyI6IjIyMDlkZjM1MjI4NjUwNDBmMDExZDUyZmExNzQxYzM4MTk4MDA3Mjk0MTY5M2FiMzY0YWFhYTdiYzA4NGY1NzEifQ%3D%3D"
-                )
             )
+        )
             ->get('https://api.mobra.in/v1/campaign/feed');
-            var_dump($response);
-    }
+        var_dump($response);
 
+    }
 
 }

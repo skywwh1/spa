@@ -111,6 +111,8 @@ AdminAsset::register($this);
                         <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign List</a></li>
                         <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create Offer</a></li>
                         <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i class="fa fa-circle-o"></i> Applying Offers</a></li>
+                        <li><a href="/api-campaigns/index"  data-menu="api-campaigns-index"><i class="fa fa-circle-o"></i> API Offers</a></li>
+
                     </ul>
                 </li>
                 <li class="treeview">
