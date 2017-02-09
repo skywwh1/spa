@@ -214,11 +214,14 @@ class StsController extends Controller
 //        }
 
         $curl = new Curl();
+//        $re = $curl->post('http://api.mobra.in/v1/auth/login?user=boster@superads.cn&password=Mobrain123',false);
+//        var_dump($curl->responseHeaders);
+//        die();
         $response = $curl->setOption(
             CURLOPT_HTTPHEADER,
             array(
                 "cache-control: no-cache",
-                "cookie: mobrain_api=eyJpdiI6IjNxNWUyendWYlVBRFhWUDRrYjBFNWRHRGNEcU5EQlZ2UGxmTmZ6VDNCRU09IiwidmFsdWUiOiJoWUpsV294Z2ZOdStiYXhRWU0wdTIraWZPMzRXN2l0QkNNeXBrekNQeVQwYWFMWGpuWmNyajkzTUtWQ085NExiTW9OZVBvQjVQZVwvQVdBWGd2QUJMcWc9PSIsIm1hYyI6IjIyMDlkZjM1MjI4NjUwNDBmMDExZDUyZmExNzQxYzM4MTk4MDA3Mjk0MTY5M2FiMzY0YWFhYTdiYzA4NGY1NzEifQ%3D%3D"
+                "cookie: mobrain_api=eyJpdiI6InhEbk5xcmtcL3dPTHNOa3BVdTFjZjZaYVZvWmttNTdcL3hBRUlzVFdDV0c2WT0iLCJ2YWx1ZSI6Im1nV0pseVZPVGRkUDNjNkpOUTB4eitKUGNEY0gxT3FDRzgydm1HOTZXTVVnWDd3MWJXclpJNUlXZTN4MmhTMW4yQzdpK0FDR3VcL0x1bHdJXC9QTmNlcHc9PSIsIm1hYyI6IjAxMDg2ZmQ0YzNlYjhiZWViYjc2YzQ3NDg3MjRiYjE1MzI5Y2NiYjUyZGYxN2Q5OTdkYmY5NDA3ZTFjNTdlZjYifQ%3D%3D"
             )
         )
             ->get('https://api.mobra.in/v1/campaign/feed');

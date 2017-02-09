@@ -9,6 +9,8 @@ use Yii;
  *
  * @property integer $id
  * @property integer $adv_id
+ * @property string $username
+ * @property string $password
  * @property string $url
  * @property string $key
  * @property string $param
@@ -17,6 +19,7 @@ use Yii;
  * @property integer $update_time
  * @property string $adv_update_time
  * @property string $effective_time
+ * @property string $campaign_id
  * @property string $campaign_uuid
  * @property string $campaign_name
  * @property string $pricing_mode
@@ -25,6 +28,8 @@ use Yii;
  * @property string $platform
  * @property string $daily_cap
  * @property string $adv_price
+ * @property string $payout_currency
+ * @property string $daily_budget
  * @property string $now_payout
  * @property string $target_geo
  * @property string $adv_link
@@ -64,10 +69,10 @@ class AdvertiserApi extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [[ 'create_time', 'update_time'], 'integer'],
-            [['adv_id', 'url', 'key'], 'required'],
+            [['create_time', 'update_time'], 'integer'],
+            [['adv_id', 'url'], 'required'],
             [['url', 'key', 'param'], 'string', 'max' => 255],
-            [['campaign_uuid', 'campaign_name',
+            [['username', 'password', 'campaign_uuid', 'campaign_name',
                 'pricing_mode', 'promote_start',
                 'end_time', 'platform', 'daily_cap',
                 'adv_price', 'now_payout',
@@ -76,7 +81,13 @@ class AdvertiserApi extends \yii\db\ActiveRecord
                 'package_name', 'app_name', 'app_size',
                 'category', 'version', 'app_rate', 'description',
                 'creative_link', 'creative_type', 'creative_description',
-                'carriers', 'conversion_flow', 'status','adv_update_time','effective_time','json_offers_param'], 'string', 'max' => 100],
+                'carriers', 'conversion_flow', 'status', 'adv_update_time', 'effective_time',
+                'json_offers_param',
+                'campaign_id',
+                'payout_currency',
+                'daily_budget',
+
+            ], 'string', 'max' => 100],
             [['adv_id'], 'unique'],
             [['adv_id'], 'safe'],
             [['adv_id'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['adv_id' => 'id']],
@@ -91,14 +102,17 @@ class AdvertiserApi extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'adv_id' => 'Adv ID',
+            'username' => 'Username',
+            'password' => 'Password',
             'url' => 'Url',
             'key' => 'Key',
             'param' => 'Param',
-            'json_offers_param'=>'Json Offers Param',
+            'json_offers_param' => 'Json Offers Param',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
             'adv_update_time' => 'Adv Update Time',
             'effective_time' => 'Effective Time',
+            'campaign_id' => 'Campaign ID',
             'campaign_uuid' => 'Campaign Uuid',
             'campaign_name' => 'Campaign Name',
             'pricing_mode' => 'Pricing Mode',
@@ -107,6 +121,8 @@ class AdvertiserApi extends \yii\db\ActiveRecord
             'platform' => 'Platform',
             'daily_cap' => 'Daily Cap',
             'adv_price' => 'Adv Price',
+            'payout_currency' => 'Payout Currency',
+            'daily_budget' => 'Daily Budget',
             'now_payout' => 'Now Payout',
             'target_geo' => 'Target Geo',
             'adv_link' => 'Adv Link',

@@ -33,6 +33,8 @@ use yii\widgets\ActiveForm;
                                     ]
                                 ]],
                         ]) ?>
+                        <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'url')->textInput(['maxlength' => true, 'placeholder' => 'like: http://example.com/v4.php']) ?>
                         <?= $form->field($model, 'key')->textInput(['maxlength' => true, 'placeholder' => 'like : UDXBT02KMWXZYD8FBBWM']) ?>
                         <?= $form->field($model, 'param')->textInput(['maxlength' => true, 'placeholder' => 'like : m=index&cb=cb7654&time={time();}&token={md5("key".md5(time()));}']) ?>
@@ -48,7 +50,7 @@ use yii\widgets\ActiveForm;
             <div class="box box-info">
                 <div class="box-body">
                     <div class="advertiser-api-create">
-
+                        <?= $form->field($model, 'campaign_id')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'campaign_uuid')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'campaign_name')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'pricing_mode')->textInput(['maxlength' => true]) ?>
@@ -59,6 +61,8 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($model, 'platform')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'daily_cap')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'adv_price')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'payout_currency')->textInput(['maxlength' => true]) ?>
+                        <?= $form->field($model, 'daily_budget')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'now_payout')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'target_geo')->textInput(['maxlength' => true]) ?>
                         <?= $form->field($model, 'adv_link')->textInput(['maxlength' => true]) ?>
