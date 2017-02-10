@@ -11,6 +11,7 @@ namespace console\controllers;
 
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
+use common\models\Campaign;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
@@ -21,7 +22,7 @@ class ApiController extends Controller
 
     public function actionGetHeadway()
     {
-        $apiModel = AdvertiserApi::findOne(['id'=>5]);
+        $apiModel = AdvertiserApi::findOne(['id' => 5]);
         $data_key = $apiModel->json_offers_param;
 
 
@@ -43,25 +44,36 @@ class ApiController extends Controller
                 "cookie:$cook",
             )
         )->get('https://api.mobra.in/v1/campaign/feed');
+        if ($response === false) {
+            echo "cannot get the cookies";
+            return;
+        }
         $response = json_decode($response);
         $data = $response->$data_key;
-        $camps = ApiUtil::genApiCampaigns($apiModel,$data);
+        $camps = ApiUtil::genApiCampaigns($apiModel, $data);
         //ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
-        foreach($camps as $item){
-            $old = ApiCampaign::findOne(['adv_id'=>$item->adv_id,'campaign_id'=>$item->campaign_id]);
-            if(isset($old)){
-                $old->load(ArrayHelper::toArray($item));
-                $old->save();
-            }else {
+        foreach ($camps as $item) {
+//            echo $apiModel->adv_id.'-';
+//            echo $item->campaign_id;
+            $old = ApiCampaign::findOne(['adv_id' => $apiModel->adv_id, 'campaign_id' => $item->campaign_id]);
 
-                $item->adv_id=$apiModel->adv_id;
+            if (isset($old)) {
+                $old->load(ArrayHelper::toArray($item));
+                echo "update";
+                $old->save();
+                var_dump($old->getErrors());
+            } else {
+
+                $item->adv_id = $apiModel->adv_id;
                 $item->save();
+                var_dump($item->getErrors());
             }
-            var_dump($item->getErrors());
         }
     }
 
-    private function transferApiModel($old,$new){
-        ArrayHelper::toArray();
+    private function transferApiModel(ApiCampaign $model)
+    {
+        $camp = Campaign::getCampaignsByUuid($model->campaign_id);
+
     }
 }
