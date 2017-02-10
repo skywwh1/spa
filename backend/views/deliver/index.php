@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute'=>'campaign.campaign_name',
                                 'filter'=>true
                         ],
-                        'campaign.campaign_name',
+//                        'campaign.campaign_name',
                         'channel.username',
                         'pricing_mode',
                         'pay_out',

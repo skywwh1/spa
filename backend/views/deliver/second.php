@@ -1,5 +1,6 @@
 <?php
 
+use common\models\PriceModel;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -35,7 +36,13 @@ if (!is_null($delivers)) {
 
                     <?= $form->field($deliver, 'campaign_uuid')->textInput(['readonly' => true]) ?>
                     <?= $form->field($deliver, 'channel0')->textInput(['readonly' => true]) ?>
-                    <?= $form->field($deliver, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
+                    <?= $form->field($deliver, 'pricing_mode')->dropDownList(
+                        PriceModel::find()
+                            ->select(['name', 'value'])
+                            ->orderBy('id')
+                            ->indexBy('value')
+                            ->column()
+                    ) ?>
                     <div class="col-lg-12">
                         <div class="form-group col-lg-4">
                             <label class="control-label">Adv price:</label>
@@ -52,7 +59,6 @@ if (!is_null($delivers)) {
                     <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>
                     <?= $form->field($deliver, 'campaign_id')->hiddenInput()->label(false) ?>
                     <?= $form->field($deliver, 'channel_id')->hiddenInput()->label(false) ?>
-                    <input type="hidden" name="idaa" value="99">
                     <?php ActiveForm::end(); ?>
 
                 </div>
