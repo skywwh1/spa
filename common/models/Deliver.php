@@ -12,7 +12,7 @@ use Yii;
  * @property integer $channel_id
  * @property string $campaign_uuid
  * @property string $adv_price
- * @property integer $pricing_mode
+ * @property string $pricing_mode
  * @property string $pay_out
  * @property integer $daily_cap
  * @property string $actual_discount
@@ -61,9 +61,9 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
+            [['campaign_id', 'channel_id', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
-            [['campaign_uuid'], 'string', 'max' => 100],
+            [['campaign_uuid','pricing_mode'], 'string', 'max' => 100],
             [['track_url', 'note'], 'string', 'max' => 255],
             ['channel0', 'safe'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],

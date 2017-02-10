@@ -18,9 +18,9 @@ class DeliverSearch extends Deliver
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['pay_out', 'discount'], 'number'],
-            [['track_url', 'note'], 'safe'],
+            [['campaign_id', 'channel_id', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
+            [['campaign_uuid', 'pricing_mode', 'track_url', 'note'], 'safe'],
+            [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
 
@@ -62,19 +62,35 @@ class DeliverSearch extends Deliver
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-            'pricing_mode' => $this->pricing_mode,
+            'adv_price' => $this->adv_price,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
+            'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
             'is_run' => $this->is_run,
             'creator' => $this->creator,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
+            'click' => $this->click,
+            'unique_click' => $this->unique_click,
+            'install' => $this->install,
+            'cvr' => $this->cvr,
+            'cost' => $this->cost,
+            'match_install' => $this->match_install,
+            'match_cvr' => $this->match_cvr,
+            'revenue' => $this->revenue,
+            'def' => $this->def,
+            'deduction_percent' => $this->deduction_percent,
+            'profit' => $this->profit,
+            'margin' => $this->margin,
+            'is_send_create' => $this->is_send_create,
         ]);
 
-        $query->andFilterWhere(['like', 'track_url', $this->track_url])
+        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
+            ->andFilterWhere(['like', 'pricing_mode', $this->pricing_mode])
+            ->andFilterWhere(['like', 'track_url', $this->track_url])
             ->andFilterWhere(['like', 'note', $this->note]);
-        $query->orderBy('create_time DESC');
+
         return $dataProvider;
     }
 }
