@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use common\models\AdvertiserApi;
+use common\models\ApiCampaign;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
@@ -44,10 +45,19 @@ class ApiController extends Controller
         $response = json_decode($response);
         $data = $response->$data_key;
         $camps = ApiUtil::genApiCampaigns($apiModel,$data);
+        ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
         foreach($camps as $item){
+//            $old = ApiCampaign::findOne(['adv_id'=>$item->adv_id,'campaign_id'=>$item->campaign_id]);
+//            if(isset($old)){
+//                $old->load
+//            }
             $item->adv_id=$apiModel->adv_id;
             $item->save();
             var_dump($item->getErrors());
         }
+    }
+
+    private function transferApiModel($old,$new){
+
     }
 }

@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'platform',
             'daily_cap',
             'adv_price',
+            'payout_currency',
             'daily_budget',
             'target_geo',
             'adv_link',

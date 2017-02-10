@@ -88,6 +88,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
         $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid]);
 //            ->andFilterWhere(['like', 'track_url', $this->track_url])
 //            ->andFilterWhere(['like', 'note', $this->note]);
+        $query->orderBy('create_time Desc');
 
         return $dataProvider;
     }

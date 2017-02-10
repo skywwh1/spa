@@ -19,6 +19,7 @@ use Yii;
  * @property string $platform
  * @property string $daily_cap
  * @property string $adv_price
+ * @property string $payout_currency
  * @property string $daily_budget
  * @property string $target_geo
  * @property string $adv_link
@@ -86,6 +87,7 @@ class ApiCampaign extends \yii\db\ActiveRecord
             'platform' => 'Platform',
             'daily_cap' => 'Daily Cap',
             'adv_price' => 'Adv Price',
+            'payout_currency' => 'Payout Currency',
             'daily_budget' => 'Daily Budget',
             'target_geo' => 'Target Geo',
             'adv_link' => 'Adv Link',

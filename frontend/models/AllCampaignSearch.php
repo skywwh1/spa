@@ -86,7 +86,7 @@ class AllCampaignSearch extends Campaign
             'cap' => $this->cap,
             'cvr' => $this->cvr,
             'status' => $this->status,
-            'open_type' => $this->open_type,
+            'open_type' => 1,
             'subid_status' => $this->subid_status,
             'track_way' => $this->track_way,
             'third_party' => $this->third_party,
@@ -116,6 +116,7 @@ class AllCampaignSearch extends Campaign
 //            ->andFilterWhere(['like', 'epc', $this->epc])
 //            ->andFilterWhere(['like', 'adv_link', $this->adv_link])
 //            ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
+        $query->orderBy('id DESC');
 
         return $dataProvider;
     }

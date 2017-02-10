@@ -39,6 +39,8 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'adv_price') ?>
 
+    <?php // echo $form->field($model, 'payout_currency') ?>
+
     <?php // echo $form->field($model, 'daily_budget') ?>
 
     <?php // echo $form->field($model, 'target_geo') ?>

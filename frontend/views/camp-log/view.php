@@ -50,12 +50,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'label' => 'Preview Link',
-                    'value' => Url::to('@track' . $model->campaign->preview_link),
+                    'value' => $model->campaign->preview_link,
                     'format' => 'url'
                 ],
                 [
                     'label' => 'Creative Link',
-                    'value' => Url::to('@track' . $model->campaign->creative_link),
+                    'value' => $model->campaign->creative_link,
                     'format' => 'url'
                 ],
                 'click',
