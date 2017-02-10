@@ -7,45 +7,41 @@ use yii\widgets\ActiveForm;
 /* @var $model common\models\Stream */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<div class="row">
+    <div class="col-lg-6">
+        <div class="box box-info">
+            <div class="box-body">
+                <div class="stream-form">
 
-<div class="stream-form">
+                    <?php $form = ActiveForm::begin(); ?>
 
-    <?php $form = ActiveForm::begin(); ?>
-
- <div class='form-group row'>
-   <div class='col-lg-4'>
+                        <?= $form->field($model, 'click_uuid')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'click_id')->textInput(['maxlength' => true]) ?>
-   </div>
- </div>
-
- <div class='form-group row'>
-   <div class='col-lg-4'>
     <?= $form->field($model, 'cp_uid')->textInput(['maxlength' => true]) ?>
-   </div>
- </div>
-
- <div class='form-group row'>
-   <div class='col-lg-4'>
     <?= $form->field($model, 'ch_id')->textInput(['maxlength' => true]) ?>
-   </div>
- </div>
-
- <div class='form-group row'>
-   <div class='col-lg-4'>
     <?= $form->field($model, 'pl')->textInput(['maxlength' => true]) ?>
-   </div>
- </div>
-
- <div class='form-group row'>
-   <div class='col-lg-4'>
+    <?= $form->field($model, 'tx_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'all_parameters')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'ip')->textInput(['maxlength' => true]) ?>
-   </div>
- </div>
+    <?= $form->field($model, 'redirect')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'browser')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'browser_type')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'post_link')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'post_status')->textInput() ?>
+    <?= $form->field($model, 'post_time')->textInput() ?>
+    <?= $form->field($model, 'is_count')->textInput() ?>
+    <?= $form->field($model, 'create_time')->textInput() ?>
+                    <div class="form-group">
+                        <?= Html::submitButton($model->isNewRecord
+                        ? 'Create'                        : 'Update', ['class' => $model->isNewRecord ? 'btn
+                        btn-success' :
+                        'btn btn-primary']) ?>
+                    </div>
 
-    <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                    <?php ActiveForm::end(); ?>
+
+                </div>
+            </div>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

@@ -4,25 +4,21 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ApiCampaigns */
+/* @var $model common\models\ApiCampaign */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
     <div class="col-lg-6">
         <div class="box box-info">
             <div class="box-body">
-                <div class="api-campaigns-form">
+                <div class="api-campaign-form">
 
                     <?php $form = ActiveForm::begin(); ?>
 
                         <?= $form->field($model, 'adv_id')->textInput() ?>
-    <?= $form->field($model, 'url')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'key')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'param')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'json_offers_param')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'adv_update_time')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'effective_time')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'adv_campaign_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'campaign_id')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'campaign_uuid')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'campaign_name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'pricing_mode')->textInput(['maxlength' => true]) ?>

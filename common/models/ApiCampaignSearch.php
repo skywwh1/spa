@@ -5,12 +5,12 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\ApiCampaigns;
+use common\models\ApiCampaign;
 
 /**
- * ApiCampaignsSearch represents the model behind the search form about `common\models\ApiCampaigns`.
+ * ApiCampaignSearch represents the model behind the search form about `common\models\ApiCampaign`.
  */
-class ApiCampaignsSearch extends ApiCampaigns
+class ApiCampaignSearch extends ApiCampaign
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class ApiCampaignsSearch extends ApiCampaigns
     public function rules()
     {
         return [
-            [['id', 'adv_id', 'create_time', 'update_time'], 'integer'],
-            [['url', 'key', 'param', 'json_offers_param', 'adv_update_time', 'effective_time', 'adv_campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
+            [['adv_id', 'create_time', 'update_time'], 'integer'],
+            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class ApiCampaignsSearch extends ApiCampaigns
      */
     public function search($params)
     {
-        $query = ApiCampaigns::find();
+        $query = ApiCampaign::find();
 
         // add conditions that should always apply here
 
@@ -59,19 +59,14 @@ class ApiCampaignsSearch extends ApiCampaigns
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'adv_id' => $this->adv_id,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
         ]);
 
-        $query->andFilterWhere(['like', 'url', $this->url])
-            ->andFilterWhere(['like', 'key', $this->key])
-            ->andFilterWhere(['like', 'param', $this->param])
-            ->andFilterWhere(['like', 'json_offers_param', $this->json_offers_param])
-            ->andFilterWhere(['like', 'adv_update_time', $this->adv_update_time])
+        $query->andFilterWhere(['like', 'adv_update_time', $this->adv_update_time])
             ->andFilterWhere(['like', 'effective_time', $this->effective_time])
-            ->andFilterWhere(['like', 'adv_campaign_id', $this->adv_campaign_id])
+            ->andFilterWhere(['like', 'campaign_id', $this->campaign_id])
             ->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'pricing_mode', $this->pricing_mode])

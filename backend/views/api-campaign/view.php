@@ -4,39 +4,26 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ApiCampaigns */
+/* @var $model common\models\ApiCampaign */
 
-$this->title = $model->id;
+$this->title = $model->adv_id;
 $this->params['breadcrumbs'][] = ['label' => 'Api Campaigns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="api-campaigns-view">
+<div class="row">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+    <div id="nav-menu" data-menu="api-campaign-view"></div>
+    <div class="col-lg-12">
+        <div class="box box-info">
+            <div class="box-body">
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'adv_id',
-            'url:url',
-            'key',
-            'param',
-            'json_offers_param',
             'adv_update_time',
             'effective_time',
-            'adv_campaign_id',
+            'campaign_id',
             'campaign_uuid',
             'campaign_name',
             'pricing_mode',
@@ -70,4 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-</div>
+            </div>
+        </div>
+    </div>
+</div

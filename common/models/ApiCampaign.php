@@ -5,17 +5,12 @@ namespace common\models;
 use Yii;
 
 /**
- * This is the model class for table "api_campaigns".
+ * This is the model class for table "api_campaign".
  *
- * @property integer $id
  * @property integer $adv_id
- * @property string $url
- * @property string $key
- * @property string $param
- * @property string $json_offers_param
  * @property string $adv_update_time
  * @property string $effective_time
- * @property string $adv_campaign_id
+ * @property string $campaign_id
  * @property string $campaign_uuid
  * @property string $campaign_name
  * @property string $pricing_mode
@@ -49,14 +44,14 @@ use Yii;
  *
  * @property Advertiser $adv
  */
-class ApiCampaigns extends \yii\db\ActiveRecord
+class ApiCampaign extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'api_campaigns';
+        return 'api_campaign';
     }
 
     /**
@@ -65,11 +60,10 @@ class ApiCampaigns extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['adv_id', 'campaign_id'], 'required'],
             [['adv_id', 'create_time', 'update_time'], 'integer'],
-            [['url'], 'required'],
             [['note'], 'string'],
-            [['url', 'key', 'param', 'json_offers_param', 'adv_update_time', 'effective_time', 'adv_campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffice_source', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'string', 'max' => 255],
-            [['adv_id'], 'unique'],
+            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffice_source', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
             [['adv_id'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['adv_id' => 'id']],
         ];
     }
@@ -80,15 +74,10 @@ class ApiCampaigns extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'adv_id' => 'Adv ID',
-            'url' => 'Url',
-            'key' => 'Key',
-            'param' => 'Param',
-            'json_offers_param' => 'Json Offers Param',
             'adv_update_time' => 'Adv Update Time',
             'effective_time' => 'Effective Time',
-            'adv_campaign_id' => 'Adv Campaign ID',
+            'campaign_id' => 'Campaign ID',
             'campaign_uuid' => 'Campaign Uuid',
             'campaign_name' => 'Campaign Name',
             'pricing_mode' => 'Pricing Mode',

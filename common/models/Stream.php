@@ -24,6 +24,8 @@ use Yii;
  * @property integer $post_time
  * @property integer $is_count
  * @property integer $create_time
+ *
+ * @property Channel $ch
  */
 class Stream extends \yii\db\ActiveRecord
 {
@@ -56,7 +58,7 @@ class Stream extends \yii\db\ActiveRecord
             'id' => 'ID',
             'click_uuid' => 'Click Uuid',
             'click_id' => 'Click ID',
-            'cp_uid' => 'Cp Uid',
+            'cp_uid' => 'Campaign UUID',
             'ch_id' => 'Ch ID',
             'pl' => 'Pl',
             'tx_id' => 'Tx ID',
@@ -116,5 +118,13 @@ class Stream extends \yii\db\ActiveRecord
             return null;
         }
         return $aa[0];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCh()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'ch_id']);
     }
 }

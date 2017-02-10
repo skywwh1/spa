@@ -10,28 +10,45 @@ use yii\widgets\Pjax;
 $this->title = 'Streams';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="stream-index"></div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-info table-responsive">
+            <div class="box-body">
 <div class="stream-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
-    <p>
-        <?= Html::a('Create Stream', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-<?php Pjax::begin(); ?>    <?= GridView::widget([
+                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    
+    <?php Pjax::begin(); ?>            <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'click_id',
+                    'id',
+            'click_uuid',
             'cp_uid',
-            'ch_id',
-            'pl',
+            'ch.username',
+            // 'pl',
+            // 'tx_id',
+            // 'all_parameters',
             // 'ip',
+            // 'redirect',
+            // 'browser',
+            // 'browser_type',
+            // 'post_link',
+            // 'post_status',
+            // 'post_time:datetime',
+            // 'is_count',
+            // 'create_time:datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+        [
+        'class' => 'yii\grid\ActionColumn',
+        'header' => 'Action',
+        'template' => '{view}',
         ],
-    ]); ?>
-<?php Pjax::end(); ?></div>
+        ],
+        ]); ?>
+        <?php Pjax::end(); ?></div>
+</div>
+</div>
+</div>

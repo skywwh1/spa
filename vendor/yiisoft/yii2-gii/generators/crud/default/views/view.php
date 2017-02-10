@@ -21,9 +21,12 @@ $this->title = $model-><?= $generator->getNameAttribute() ?>;
 $this->params['breadcrumbs'][] = ['label' => <?= $generator->generateString(Inflector::pluralize(Inflector::camel2words(StringHelper::basename($generator->modelClass)))) ?>, 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-view">
+<div class="row">
 
-    <h1><?= "<?= " ?>Html::encode($this->title) ?></h1>
+    <div id="nav-menu" data-menu="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-view"></div>
+    <div class="col-lg-12">
+        <div class="box box-info">
+            <div class="box-body">
 
     <p>
         <?= "<?= " ?>Html::a(<?= $generator->generateString('Update') ?>, ['update', <?= $urlParams ?>], ['class' => 'btn btn-primary']) ?>
@@ -54,4 +57,7 @@ if (($tableSchema = $generator->getTableSchema()) === false) {
         ],
     ]) ?>
 
-</div>
+            </div>
+        </div>
+    </div>
+</div

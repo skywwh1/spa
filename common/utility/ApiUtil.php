@@ -10,6 +10,8 @@ namespace common\utility;
 
 
 use common\models\AdvertiserApi;
+use common\models\ApiCampaign;
+use common\models\ApiCampaigns;
 use common\models\Campaign;
 use linslin\yii2\curl\Curl;
 use yii\db\BaseActiveRecord;
@@ -107,6 +109,35 @@ class ApiUtil
                     }
                 }
             }
+        }
+        return $camps;
+    }
+
+    /**
+     * @param AdvertiserApi $apis
+     * @param $data
+     * @return \common\models\ApiCampaign[] $camps
+     */
+    public static function genApiCampaigns($apis,$data)
+    {
+        $camps = array();
+        foreach ($data as $item) { //循环json里面的offers
+            $item = (array)$item;
+            $camp = new ApiCampaign();
+            $camp_attrs = $camp->getAttributes();
+            $apis_attrs = $apis->getAttributes();
+            foreach ($apis_attrs as $api_k => $api_v) { //循环apis 的属性
+                if (array_key_exists($api_v, $item)) { //如果 json每一个offer的属性存在apis里面。
+                    if (array_key_exists($api_k, $camp_attrs)) { // 并且campaign里面的属性也存在。
+                        if (is_array($item[$api_v])) {
+                            $camp->setAttribute($api_k, implode(',', $item[$api_v]));
+                        } else {
+                            $camp->setAttribute($api_k, $item[$api_v]);
+                        }
+                    }
+                }
+            }
+            $camps[] = $camp;
         }
         return $camps;
     }

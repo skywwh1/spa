@@ -22,7 +22,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="nav-menu" data-menu="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create"></div>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create">
 
-    <h1><?= "<?= " ?>Html::encode($this->title) ?></h1>
 
     <?= "<?= " ?>$this->render('_form', [
         'model' => $model,

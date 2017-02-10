@@ -4,36 +4,26 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ApiCampaignsSearch */
+/* @var $model common\models\ApiCampaignSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="api-campaigns-search">
+<div class="api-campaign-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
-    <?= $form->field($model, 'id') ?>
-
     <?= $form->field($model, 'adv_id') ?>
 
-    <?= $form->field($model, 'url') ?>
+    <?= $form->field($model, 'adv_update_time') ?>
 
-    <?= $form->field($model, 'key') ?>
+    <?= $form->field($model, 'effective_time') ?>
 
-    <?= $form->field($model, 'param') ?>
+    <?= $form->field($model, 'campaign_id') ?>
 
-    <?php // echo $form->field($model, 'json_offers_param') ?>
-
-    <?php // echo $form->field($model, 'adv_update_time') ?>
-
-    <?php // echo $form->field($model, 'effective_time') ?>
-
-    <?php // echo $form->field($model, 'adv_campaign_id') ?>
-
-    <?php // echo $form->field($model, 'campaign_uuid') ?>
+    <?= $form->field($model, 'campaign_uuid') ?>
 
     <?php // echo $form->field($model, 'campaign_name') ?>
 
