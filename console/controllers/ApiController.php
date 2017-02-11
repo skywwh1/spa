@@ -66,7 +66,9 @@ class ApiController extends Controller
             }
             $old->save();
             var_dump($item->getErrors());
-            $this->transferApiModel($old);
+            $camp = $this->transferApiModel($old);
+            $camp->advertiser = $apiModel->adv_id;
+
         }
     }
 
@@ -82,16 +84,23 @@ class ApiController extends Controller
         $camp->campaign_name = $model->campaign_name;
         $camp->platform = strtolower($model->platform);
         $camp->adv_price = $model->adv_price;
+        $camp->now_payout = $model->adv_price;
         $camp->payout_currency = $model->payout_currency;
         $camp->daily_budget = $model->daily_budget;
-        $camp->daily_cap = intval($model->daily_budget / $model->adv_price);
+        $daily_cap = $model->daily_budget / $model->adv_price;
+        if (isset($daily_cap)) {
+            $daily_cap = intval($model->daily_budget / $model->adv_price);
+
+        } else {
+            $daily_cap = 'open';
+        }
+        $camp->daily_cap = $daily_cap;
         $camp->target_geo = $model->target_geo;
         $camp->adv_link = $model->adv_link;
         $camp->note = $model->note . PHP_EOL . $model->description;
         $camp->preview_link = $model->preview_link;
         $camp->status = ($model->status == 'pause') ? 2 : 1;
-        $camp->save();
-        var_dump($camp->getErrors());
+        return $camp;
 
     }
 }

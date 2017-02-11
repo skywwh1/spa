@@ -92,11 +92,11 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
-            [[ 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
-            [['target_geo', 'advertiser','payout_currency','device','daily_budget' ], 'safe'],
-            [['campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'traffice_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
+            [['target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap'], 'safe'],
+            [['campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'traffice_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
             [['preview_link', 'icon', 'category', 'description', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
             [['campaign_uuid'], 'unique'],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
