@@ -36,7 +36,7 @@ class StsController extends Controller
                 $this->echoMessage(MailUtil::sendStsChannelMail($channel, $v));
                 $this->echoMessage("waiting 90s");
                 sleep(90);
-                
+
             }
         }
     }

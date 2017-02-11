@@ -68,12 +68,20 @@ class ApiController extends Controller
                 $item->save();
                 var_dump($item->getErrors());
             }
+            $this->transferApiModel($item);
         }
     }
 
     private function transferApiModel(ApiCampaign $model)
     {
-        $camp = Campaign::getCampaignsByUuid($model->campaign_id);
+        $uuid = $model->adv_id.'_'.$model->campaign_id;
+        $camp = Campaign::getCampaignsByUuid($uuid);
+        if (empty($camp)){
+            $camp = new Campaign();
+        }
+        $camp->load(ArrayHelper::toArray($model));
+
+        var_dump($camp);
 
     }
 }
