@@ -60,14 +60,12 @@ class ApiController extends Controller
             if (isset($old)) {
                 $old->load(ArrayHelper::toArray($item));
                 echo "update";
-                $old->save();
-                var_dump($old->getErrors());
             } else {
-
-                $item->adv_id = $apiModel->adv_id;
-                $item->save();
-                var_dump($item->getErrors());
+                $old=$item;
+                $old->adv_id = $apiModel->adv_id;
             }
+            $old->save();
+            var_dump($item->getErrors());
             $this->transferApiModel($item);
         }
     }
@@ -79,9 +77,9 @@ class ApiController extends Controller
         if (empty($camp)){
             $camp = new Campaign();
         }
-        $camp->load(ArrayHelper::toArray($model));
+//        $camp->load();
 
-        var_dump($camp);
+        var_dump(ArrayHelper::toArray($model));
 
     }
 }
