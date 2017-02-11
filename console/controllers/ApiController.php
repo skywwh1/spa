@@ -73,7 +73,7 @@ class ApiController extends Controller
     private function transferApiModel(ApiCampaign $model)
     {
         $uuid = $model->adv_id . '_' . $model->campaign_id;
-        $camp = Campaign::getCampaignsByUuid($uuid);
+        $camp = Campaign::findByUuid($uuid);
         if (empty($camp)) {
             $camp = new Campaign();
         }
@@ -84,14 +84,14 @@ class ApiController extends Controller
         $camp->adv_price = $model->adv_price;
         $camp->payout_currency = $model->payout_currency;
         $camp->daily_budget = $model->daily_budget;
+        $camp->daily_cap = intval($model->daily_budget / $model->adv_price);
         $camp->target_geo = $model->target_geo;
         $camp->adv_link = $model->adv_link;
         $camp->note = $model->note . PHP_EOL . $model->description;
         $camp->preview_link = $model->preview_link;
-//        $camp->description =
         $camp->status = ($model->status == 'pause') ? 2 : 1;
-
-        var_dump($camp);
+        $camp->save();
+        var_dump($camp->getErrors());
 
     }
 }
