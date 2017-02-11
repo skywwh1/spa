@@ -84,6 +84,7 @@ class ApiController extends Controller
         $camp->campaign_uuid = $uuid;
         $camp->campaign_name = $model->campaign_name;
         $camp->platform = strtolower($model->platform);
+        $camp->pricing_mode = strtolower($model->pricing_mode);
         $camp->adv_price = $model->adv_price;
         $camp->now_payout = $model->adv_price;
         $camp->payout_currency = $model->payout_currency;
