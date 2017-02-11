@@ -68,7 +68,8 @@ class ApiController extends Controller
             var_dump($item->getErrors());
             $camp = $this->transferApiModel($old);
             $camp->advertiser = $apiModel->adv_id;
-
+            $camp->save();
+            var_dump($camp->getErrors());
         }
     }
 
