@@ -61,25 +61,37 @@ class ApiController extends Controller
                 $old->load(ArrayHelper::toArray($item));
                 echo "update";
             } else {
-                $old=$item;
+                $old = $item;
                 $old->adv_id = $apiModel->adv_id;
             }
             $old->save();
             var_dump($item->getErrors());
-            $this->transferApiModel($item);
+            $this->transferApiModel($old);
         }
     }
 
     private function transferApiModel(ApiCampaign $model)
     {
-        $uuid = $model->adv_id.'_'.$model->campaign_id;
+        $uuid = $model->adv_id . '_' . $model->campaign_id;
         $camp = Campaign::getCampaignsByUuid($uuid);
-        if (empty($camp)){
+        if (empty($camp)) {
             $camp = new Campaign();
         }
-//        $camp->load();
 
-        var_dump(ArrayHelper::toArray($model));
+        $camp->campaign_uuid = $uuid;
+        $camp->campaign_name = $model->campaign_name;
+        $camp->platform = strtolower($model->platform);
+        $camp->adv_price = $model->adv_price;
+        $camp->payout_currency = $model->payout_currency;
+        $camp->daily_budget = $model->daily_budget;
+        $camp->target_geo = $model->target_geo;
+        $camp->adv_link = $model->adv_link;
+        $camp->note = $model->note . PHP_EOL . $model->description;
+        $camp->preview_link = $model->preview_link;
+//        $camp->description =
+        $camp->status = ($model->status == 'pause') ? 2 : 1;
+
+        var_dump($camp);
 
     }
 }

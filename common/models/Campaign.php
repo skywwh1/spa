@@ -17,14 +17,17 @@ use yii\helpers\Json;
  * @property string $tag
  * @property string $campaign_uuid
  * @property string $pricing_mode
+ * @property string $payout_currency
  * @property integer $promote_start
  * @property integer $promote_end
  * @property integer $effective_time
  * @property integer $adv_update_time
+ * @property string $device
  * @property string $platform
  * @property string $min_version
  * @property string $max_version
  * @property string $daily_cap
+ * @property string $daily_budget
  * @property string $adv_price
  * @property string $now_payout
  * @property string $target_geo
@@ -92,7 +95,7 @@ class Campaign extends \yii\db\ActiveRecord
             [[ 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
-            [['target_geo', 'advertiser'], 'safe'],
+            [['target_geo', 'advertiser','payout_currency','device','daily_budget' ], 'safe'],
             [['campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'traffice_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
             [['preview_link', 'icon', 'category', 'description', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
             [['campaign_uuid'], 'unique'],
@@ -114,14 +117,17 @@ class Campaign extends \yii\db\ActiveRecord
             'campaign_name' => 'Campaign Name',
             'campaign_uuid' => 'Campaign Uuid',
             'pricing_mode' => 'Pricing Mode',
+            'payout_currency' => 'Payout Currency',
             'promote_start' => 'Promote Start',
             'promote_end' => 'Promote End',
             'effective_time' => 'Effective Time',
             'adv_update_time' => 'Adv Update Time',
+            'device' => 'Device',
             'platform' => 'Platform',
             'min_version' => 'Min Version',
             'max_version' => 'Max Version',
             'daily_cap' => 'Daily Cap',
+            'daily_budget' => 'Daily Budget',
             'adv_price' => 'Adv Price',
             'now_payout' => 'Now Payout',
             'target_geo' => 'Target Geo',
