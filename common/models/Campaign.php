@@ -249,8 +249,10 @@ class Campaign extends \yii\db\ActiveRecord
             if ($insert) {
                 $this->create_time = time();
                 $this->update_time = time();
-                if(isset(Yii::$app->user)){
+                if (isset(Yii::$app->user)) {
                     $this->creator = Yii::$app->user->identity->getId();
+                } else {
+                    $this->creator = 1;
                 }
             } else {
                 $this->update_time = time();
