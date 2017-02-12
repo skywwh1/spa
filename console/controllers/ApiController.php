@@ -49,6 +49,10 @@ class ApiController extends Controller
             return;
         }
         $response = json_decode($response);
+        if (isset($response->code) && $response->code == 500) {
+            echo $response->message;
+            return;
+        }
         $data = $response->$data_key;
         $camps = ApiUtil::genApiCampaigns($apiModel, $data);
         //ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
@@ -100,7 +104,7 @@ class ApiController extends Controller
         $camp->target_geo = $model->target_geo;
         $camp->adv_link = $model->adv_link;
         $camp->note = $model->note . PHP_EOL . $model->description;
-        $camp->preview_link = $model->preview_link;
+        $camp->preview_link = substr($model->preview_link,0,stripos($model->preview_link,'?'));
         $camp->status = ($model->status == 'pause') ? 2 : 1;
         return $camp;
 

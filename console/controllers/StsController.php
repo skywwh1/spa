@@ -216,19 +216,23 @@ class StsController extends Controller
 //            var_dump($response);
 //        }
 
-        $curl = new Curl();
-//        $re = $curl->post('http://api.mobra.in/v1/auth/login?user=boster@superads.cn&password=Mobrain123',false);
-//        var_dump($curl->responseHeaders);
-//        die();
-        $response = $curl->setOption(
-            CURLOPT_HTTPHEADER,
-            array(
-                "cache-control: no-cache",
-                "cookie: mobrain_api=eyJpdiI6InhEbk5xcmtcL3dPTHNOa3BVdTFjZjZaYVZvWmttNTdcL3hBRUlzVFdDV0c2WT0iLCJ2YWx1ZSI6Im1nV0pseVZPVGRkUDNjNkpOUTB4eitKUGNEY0gxT3FDRzgydm1HOTZXTVVnWDd3MWJXclpJNUlXZTN4MmhTMW4yQzdpK0FDR3VcL0x1bHdJXC9QTmNlcHc9PSIsIm1hYyI6IjAxMDg2ZmQ0YzNlYjhiZWViYjc2YzQ3NDg3MjRiYjE1MzI5Y2NiYjUyZGYxN2Q5OTdkYmY5NDA3ZTFjNTdlZjYifQ%3D%3D"
-            )
-        )
-            ->get('https://api.mobra.in/v1/campaign/feed');
-        var_dump($response);
+//        $curl = new Curl();
+////        $re = $curl->post('http://api.mobra.in/v1/auth/login?user=boster@superads.cn&password=Mobrain123',false);
+////        var_dump($curl->responseHeaders);
+////        die();
+//        $response = $curl->setOption(
+//            CURLOPT_HTTPHEADER,
+//            array(
+//                "cache-control: no-cache",
+//                "cookie: mobrain_api=eyJpdiI6InhEbk5xcmtcL3dPTHNOa3BVdTFjZjZaYVZvWmttNTdcL3hBRUlzVFdDV0c2WT0iLCJ2YWx1ZSI6Im1nV0pseVZPVGRkUDNjNkpOUTB4eitKUGNEY0gxT3FDRzgydm1HOTZXTVVnWDd3MWJXclpJNUlXZTN4MmhTMW4yQzdpK0FDR3VcL0x1bHdJXC9QTmNlcHc9PSIsIm1hYyI6IjAxMDg2ZmQ0YzNlYjhiZWViYjc2YzQ3NDg3MjRiYjE1MzI5Y2NiYjUyZGYxN2Q5OTdkYmY5NDA3ZTFjNTdlZjYifQ%3D%3D"
+//            )
+//        )
+//            ->get('https://api.mobra.in/v1/campaign/feed');
+//        var_dump($response);
+        $url = "https://go4.mobrain.xyz/b19a58d?p={subID}&sid={click_id}&android_a_id={GAID}&idfa={IDFA}";
+        $aa = substr($url,0,stripos($url,'?'));
+        echo $aa.'\n';
+
 
     }
 

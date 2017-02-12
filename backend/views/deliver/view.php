@@ -24,7 +24,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'campaign_id',
-            'channel_id',
+            'channel.username',
             'pricing_mode',
             'pay_out',
             'daily_cap',
@@ -33,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'creator',
             'create_time:datetime',
             'update_time:datetime',
-            'track_url:url',
+            [
+                    'attribute'=>'track_url',
+                'value'=>\yii\helpers\Url::to('@track'.$model->track_url),
+                'format'=>'url'
+            ],
             'note',
         ],
     ]) ?>

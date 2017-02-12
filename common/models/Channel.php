@@ -277,34 +277,16 @@ class Channel extends ActiveRecord implements IdentityInterface
 
     public static function genPostBack($postback, $allParams)
     {
-        $homeurl = substr($postback, 0, strpos($postback, '?'));
-        $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
-        $params = explode("&", $paramstring);
-        $returnParams = "";
-        $paramsTemp = array();
-        if (!empty($params)) {
-            foreach ($params as $k) {
-                $temp = explode('=', $k);
-                $paramsTemp[$temp[0]] = isset($temp[1]) ? $temp[1] : "";
+        if(!empty($allParams)){
+            $params = explode('&',$allParams);
+            foreach ($params as $item){
+                $param = explode('=',$item);
+                $k = '{'.$param[0].'}';
+                $v = $param[1];
+                $postback = str_replace($k,$v,$postback);
             }
         }
-        if (!empty($paramsTemp)) {
-            foreach ($paramsTemp as $k => $v) {
-                if (strpos($allParams, $k) !== false) {
-                    $startCut = strpos($allParams, $k);
-                    $cutLen = (strlen($allParams) - $startCut);
-                    if (strpos($allParams, '&', $startCut)) {
-                        $cutLen = strpos($allParams, '&', $startCut) - $startCut;
-                    }
-                    $returnParams .= substr($allParams, $startCut, $cutLen) . "&";
-                }
-            }
-        }
-        if (!empty($returnParams)) {
-            $returnParams = chop($returnParams, '&');
-            $homeurl .= "?" . $returnParams;
-        }
-        return $homeurl;
+        return $postback;
     }
 
     /**

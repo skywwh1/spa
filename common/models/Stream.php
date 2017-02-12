@@ -111,13 +111,15 @@ class Stream extends \yii\db\ActiveRecord
         return static::findBySql($sql, ['cp_uid' => $cp_uid, 'ch_id' => $ch_id])->count();
     }
 
-    public static function getLatestClick($channel_id, $time)
+    public static function getLatestClick($channel_id)
     {
-        $aa = static::find()->where(['>', 'create_time', $time])->andWhere(['ch_id' => $channel_id])->limit(1)->all();
-        if (empty($aa)) {
-            return null;
-        }
-        return $aa[0];
+//        static::findOne();
+        $aa = static::find()->where(['ch_id' => $channel_id])->orderBy('create_time DESC')->one();
+        return $aa;
+//        if (empty($aa)) {
+//            return null;
+//        }
+//        return $aa[0];
     }
 
     /**

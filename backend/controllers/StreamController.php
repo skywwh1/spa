@@ -39,7 +39,7 @@ class StreamController extends Controller
                         'roles' => ['?', '@'],
                     ],
                     [
-                        'actions' => ['index','view'],
+                        'actions' => ['index', 'view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -183,28 +183,28 @@ class StreamController extends Controller
     private function restrictionTrack(&$model)
     {
         //1.参数 click id，ch_id
-
+        $code = 200;
         if (!$model->validate() && $model->hasErrors()) {
-            return 404;
+            $code = 404;
         }
         $campaign = Campaign::findByUuid($model->cp_uid);
         if ($campaign === null) {
-            return 500;
+            $code = 500;
         }
         $deliver = Deliver::findIdentity($campaign->id, $model->ch_id);
         if ($deliver === null) {
-            return 500;
+            $code = 500;
         }
 
         //2.ip 限制
         $Info = \Yii::createObject([
             'class' => '\rmrevin\yii\geoip\HostInfo',
-            'host' => '116.66.221.210', // some host or ip
+            'host' => $model->ip, // some host or ip
         ]);
         $geo = $Info->getCountryCode();   // US
         $target = $campaign->target_geo;
         if (strpos($target, $geo) === false) {
-            return 501;
+            $code = 501;
         }
 
         //3.单子状态
@@ -213,7 +213,7 @@ class StreamController extends Controller
         $link = $this->genAdvLink($campaign, $model->click_uuid, $model->ch_id);
         $model->redirect = $link;
         $model->save();
-        return 200;
+        return $code;
     }
 
     private function restrictionFeed()

@@ -25,7 +25,22 @@ $this->params['breadcrumbs'][] = $this->title;
                     //'enableAjaxValidation' => true,
                 ]); ?>
 
-                <?= $form->field($model, 'channel')->textInput() ?>
+                <?php
+//                $form->field($model, 'channel')->textInput()
+                          echo  $form->field($model, 'channel')->widget(Typeahead::classname(), [
+                                'options' => ['placeholder' => 'Channel'],
+                                'pluginOptions' => ['highlight' => true],
+                                'dataset' => [
+                                    [
+                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                        'display' => 'value',
+                                        'remote' => [
+                                            'url' => Url::to(['channel/get_channel_name']) . '?name=%QUERY',
+                                            'wildcard' => '%QUERY'
+                                        ]
+                                    ]],
+                            ])
+                ?>
                 <?= $form->field($model, 'tracking_link')->textInput() ?>
                 <div class="form-group">
                     <?= Html::button('Test', ['class' => 'btn btn-primary', 'onclick' => 'testPost();', '']) ?>

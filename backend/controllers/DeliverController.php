@@ -224,8 +224,7 @@ class DeliverController extends Controller
         }
     }
 
-    public
-    function actionTestlink()
+    public function actionTestlink()
     {
         $model = new TestLinkForm();
 
@@ -235,14 +234,21 @@ class DeliverController extends Controller
             if (empty($channel)) {
                 return "Can found channel";
             }
-            $t = time();
             $curl = new Curl();
+            $message = '';
             if ($curl->get($model->tracking_link) !== false) {
-                $stream = Stream::getLatestClick($channel->id, $t);
+                echo 'Superads response: '.$curl->response.PHP_EOL;
+                $stream = Stream::getLatestClick($channel->id);
+//                var_dump($stream->all_parameters);
+//                die();
                 $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+                echo 'post back link: '.$link.PHP_EOL;
+//                var_dump($link);
                 $curl = new Curl();
                 if ($curl->get($link) !== false) {
-                    return "Post back success";
+                    echo 'Channel response: '.$curl->response.PHP_EOL;
+//                    var_dump($curl);
+//                    return "Post back success";
                 }
 
             } else {
