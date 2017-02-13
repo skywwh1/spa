@@ -228,37 +228,47 @@ class DeliverController extends Controller
     {
         $model = new TestLinkForm();
 
-        if (Yii::$app->request->isAjax) {
-            $model->load(Yii::$app->request->post());
+//        if (Yii::$app->request->isAjax) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->result = array();
             $channel = Channel::findChannelByName($model->channel);
             if (empty($channel)) {
-                return "Can found channel";
+//                return "Can found channel";
+                $model->result[] = "Can found channel";
+                return $this->render('test_link', [
+                    'model' => $model,
+                ]);
             }
             $curl = new Curl();
-            $message = '';
+
             if ($curl->get($model->tracking_link) !== false) {
-                echo 'Superads response: '.$curl->response.PHP_EOL;
+                $model->result[] = 'Superads response: ' . $curl->response . PHP_EOL;
+//                echo 'Superads response: '.$curl->response.PHP_EOL;
                 $stream = Stream::getLatestClick($channel->id);
 //                var_dump($stream->all_parameters);
 //                die();
                 $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
-                echo 'post back link: '.$link.PHP_EOL;
+                $model->result[] = 'post back link: ' . $link . PHP_EOL;
+//                echo 'post back link: '.$link.PHP_EOL;
 //                var_dump($link);
                 $curl = new Curl();
                 if ($curl->get($link) !== false) {
-                    echo 'Channel response: '.$curl->response.PHP_EOL;
+//                    echo 'Channel response: '.$curl->response.PHP_EOL;
 //                    var_dump($curl);
 //                    return "Post back success";
+                    $model->result[] = 'Channel response: ' . $curl->response . PHP_EOL;
+                } else {
+                    $model->result[] = 'Channel response: none' . PHP_EOL;
                 }
 
             } else {
-                return "Test fail";
+//                return "Test fail";
+                $model->result[]= "Test fail";
             }
-
-        } else {
-            return $this->render('test_link', [
-                'model' => $model,
-            ]);
+//            $model->result = $message;
         }
+        return $this->render('test_link', [
+            'model' => $model,
+        ]);
     }
 }

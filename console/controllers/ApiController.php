@@ -96,7 +96,7 @@ class ApiController extends Controller
         $camp->platform = strtolower($model->platform);
         $camp->pricing_mode = strtolower($model->pricing_mode);
         $camp->adv_price = $model->adv_price;
-        $camp->now_payout = $model->adv_price;
+        $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
         $camp->payout_currency = $model->payout_currency;
         $camp->daily_budget = $model->daily_budget;
         $daily_cap = $model->daily_budget / $model->adv_price;
@@ -118,7 +118,7 @@ class ApiController extends Controller
             $camp->creative_type = 'banners';
         }
         $ad = Advertiser::findOne($model->adv_id);
-        $camp->creator =$ad->bd;
+        $camp->creator = $ad->bd;
         return $camp;
 
     }
