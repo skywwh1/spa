@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use common\models\Advertiser;
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\Campaign;
@@ -54,6 +55,8 @@ class ApiController extends Controller
             return;
         }
         $data = $response->$data_key;
+//        var_dump($data);
+//        die();
         $camps = ApiUtil::genApiCampaigns($apiModel, $data);
         //ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
         foreach ($camps as $item) {
@@ -68,8 +71,9 @@ class ApiController extends Controller
                 $old = $item;
                 $old->adv_id = $apiModel->adv_id;
             }
+//            var_dump($item);
             $old->save();
-            var_dump($item->getErrors());
+            var_dump($old->getErrors());
             $camp = $this->transferApiModel($old);
             $camp->advertiser = $apiModel->adv_id;
             $camp->save();
@@ -87,6 +91,8 @@ class ApiController extends Controller
 
         $camp->campaign_uuid = $uuid;
         $camp->campaign_name = $model->campaign_name;
+        $camp->campaign_name = str_replace('MB|||', '', $camp->campaign_name);
+        $camp->campaign_name = str_replace('|M1120', '', $camp->campaign_name);
         $camp->platform = strtolower($model->platform);
         $camp->pricing_mode = strtolower($model->pricing_mode);
         $camp->adv_price = $model->adv_price;
@@ -102,10 +108,17 @@ class ApiController extends Controller
         }
         $camp->daily_cap = $daily_cap;
         $camp->target_geo = $model->target_geo;
-        $camp->adv_link = $model->adv_link;
+        $camp->adv_link = substr($model->adv_link, 0, stripos($model->adv_link, '?'));
         $camp->note = $model->note . PHP_EOL . $model->description;
-        $camp->preview_link = substr($model->preview_link,0,stripos($model->preview_link,'?'));
-        $camp->status = ($model->status == 'pause') ? 2 : 1;
+        $camp->preview_link = $model->preview_link;
+        $camp->status = ($model->status == 'active') ? 1 : 2;
+        if (isset($model->creative_link)) {
+            $aa = explode(';', $model->creative_link);
+            $camp->creative_link = str_replace('path:', '', $aa[0]);
+            $camp->creative_type = 'banners';
+        }
+        $ad = Advertiser::findOne($model->adv_id);
+        $camp->creator =$ad->bd;
         return $camp;
 
     }

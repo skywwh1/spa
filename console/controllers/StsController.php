@@ -34,8 +34,8 @@ class StsController extends Controller
                 $channel = Channel::findOne(['id' => $k]);
                 $this->echoMessage("Time : " . date("Y-m-d H:i:s", time()));
                 $this->echoMessage(MailUtil::sendStsChannelMail($channel, $v));
-                $this->echoMessage("waiting 90s");
-                sleep(90);
+                $this->echoMessage("waiting 30s");
+                sleep(30);
 
             }
         }

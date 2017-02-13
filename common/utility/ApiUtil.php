@@ -118,7 +118,7 @@ class ApiUtil
      * @param $data
      * @return \common\models\ApiCampaign[] $camps
      */
-    public static function genApiCampaigns($apis,$data)
+    public static function genApiCampaigns($apis, $data)
     {
         $camps = array();
         foreach ($data as $item) { //循环json里面的offers
@@ -128,9 +128,13 @@ class ApiUtil
             $apis_attrs = $apis->getAttributes();
             foreach ($apis_attrs as $api_k => $api_v) { //循环apis 的属性
                 if (array_key_exists($api_v, $item)) { //如果 json每一个offer的属性存在apis里面。
-                    if (array_key_exists($api_k, $camp_attrs)) { // 并且campaign里面的属性也存在。
+                    if (array_key_exists($api_k, $camp_attrs)) { // 并且campaign api里面的属性也存在。
                         if (is_array($item[$api_v])) {
-                            $camp->setAttribute($api_k, implode(',', $item[$api_v]));
+//                            var_dump($api_v);
+//                            die();
+//                            $camp->setAttribute($api_k, implode(',', $item[$api_v]));
+                            $camp->setAttribute($api_k, static::arrayToString($item[$api_v]));
+
                         } else {
                             $camp->setAttribute($api_k, $item[$api_v]);
                         }
@@ -139,6 +143,28 @@ class ApiUtil
             }
             $camps[] = $camp;
         }
+//        var_dump($camps);
+//        die();
         return $camps;
+    }
+
+    public static function arrayToString($array)
+    {
+        $string = "";
+        if (isset($array)) {
+            foreach ($array as $k => $v) {
+                if (is_string($v)) {
+                    $string = implode(',', $array);
+                    return $string;
+                }
+                if (is_object($v)) {
+                    $aa = (array)$v;
+                    foreach($aa as $i=>$j){
+                        $string.=$i.':'.$j.';';
+                    }
+                }
+            }
+        }
+        return $string;
     }
 }
