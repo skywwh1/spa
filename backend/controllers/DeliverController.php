@@ -46,6 +46,7 @@ class DeliverController extends Controller
                             'delete',
                             'testlink',
                             'sts-create',
+                            'pause',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -166,10 +167,32 @@ class DeliverController extends Controller
     {
         $model = $this->findModel($campaign_id, $channel_id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
             return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
         } else {
-            return $this->render('update', [
+            return $this->renderAjax('update', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @return mixed
+     */
+    public function actionPause($campaign_id, $channel_id)
+    {
+        $model = $this->findModel($campaign_id, $channel_id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+            return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
+        } else {
+            return $this->renderAjax('update', [
                 'model' => $model,
             ]);
         }

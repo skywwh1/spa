@@ -14,8 +14,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="nav-menu" data-menu="advertiser-index"></div>
 <div class="row">
     <div class="col-lg-12">
-        <div class="box box-info  table-responsive">
-            <div class="box-body">
+        <div class="box box-info ">
+            <div class="box-body table-responsive no-padding">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 

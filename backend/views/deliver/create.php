@@ -1,6 +1,7 @@
 <?php
 
 use kartik\select2\Select2;
+use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
@@ -103,6 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
                 ?>
                 <?= $form->field($model, 'step')->hiddenInput(['value' => 1])->label(false) ?>
+
                 <div class="form-group">
                     <?= Html::submitButton('Go ahead', ['class' => 'btn btn-success']) ?>
                 </div>
