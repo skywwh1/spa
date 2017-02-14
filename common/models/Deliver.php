@@ -19,6 +19,7 @@ use Yii;
  * @property string $discount
  * @property integer $is_run
  * @property integer $status
+ * @property integer $end_time
  * @property integer $creator
  * @property integer $create_time
  * @property integer $update_time
@@ -62,7 +63,7 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'daily_cap', 'is_run','status', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
+            [['campaign_id', 'channel_id', 'daily_cap', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
             [['track_url'], 'string', 'max' => 255],
@@ -94,6 +95,7 @@ class Deliver extends \yii\db\ActiveRecord
             'creator' => 'Creator',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
+            'end_time' => 'End Time',
             'track_url' => 'Track Url',
             'click' => 'Click',
             'unique_click' => 'Unique Click',

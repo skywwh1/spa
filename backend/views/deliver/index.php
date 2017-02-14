@@ -20,8 +20,9 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body table-responsive no-padding">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+                <?php Pjax::begin(); ?>
                 <?= GridView::widget([
+                    'id' => 'applying_list',
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
@@ -36,8 +37,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         'pay_out',
                         'daily_cap',
                          'discount',
+                        'end_time:datetime',
                         // 'is_run',
                         // 'creator',
+                        [
+                            'attribute'=>'status',
+                            'value'=>function($model){
+                                return ModelsUtil::getCampaignStatus($model->status);
+                            }
+                        ],
                          'create_time:datetime',
                         // 'update_time:datetime',
                         // 'track_url:url',
@@ -62,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 [
                                                     'label' => \Yii::t('yii', 'Paused'),
                                                     'url' => ['#'],
-                                                    'visible' => true,  // if you want to hide an item based on a condition, use this
+                                                    'visible' => isset($model->end_time)?false:true,  // if you want to hide an item based on a condition, use this
                                                     'linkOptions'=>['data-view'=>0,'data-url'=>'/deliver/pause?channel_id='.$model->channel_id.'&campaign_id='.$model->campaign_id],
                                                 ],
                                                 [
@@ -102,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ],
                 ]); ?>
-
+                <?php Pjax::end(); ?>
             </div>
         </div>
     </div>
@@ -120,6 +128,11 @@ $(document).on("click", "a[data-view=0]", function (e) {
     //$.pjax.reload({container:"#countries"});  //Reload GridView
 
 });
+
+$('#campaign-detail-modal').on('hidden.bs.modal', function () {
+    // do something…
+    $.pjax.reload({container: "#applying_list"});  //Reload GridView
+})
 JS
 );
 ?>

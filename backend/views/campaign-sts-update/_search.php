@@ -27,6 +27,8 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'type') ?>
 
+    <?php // echo $form->field($model, 'is_send') ?>
+
     <?php // echo $form->field($model, 'effect_time') ?>
 
     <?php // echo $form->field($model, 'create_time') ?>

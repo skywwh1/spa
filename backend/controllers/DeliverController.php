@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\StsForm;
 use backend\models\TestLinkForm;
 use common\models\Campaign;
+use common\models\CampaignStsUpdate;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -186,13 +187,27 @@ class DeliverController extends Controller
      */
     public function actionPause($campaign_id, $channel_id)
     {
+//        $model = new CampaignStsUpdate();
+//        $model->campaign_id = $campaign_id;
+//        $model->channel_id = $channel_id;
+//        if ($model->load(Yii::$app->request->post())) {
+//            $model->create_time = time();
+//            $model->effect_time = strtotime($model->effect_time);
+//            $model->save();
+//            return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
+//        } else {
+//            return $this->renderAjax('pause', [
+//                'model' => $model,
+//            ]);
+//        }
         $model = $this->findModel($campaign_id, $channel_id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->end_time = strtotime($model->end_time);
             $model->save();
             return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
         } else {
-            return $this->renderAjax('update', [
+            return $this->renderAjax('pause', [
                 'model' => $model,
             ]);
         }
@@ -286,7 +301,7 @@ class DeliverController extends Controller
 
             } else {
 //                return "Test fail";
-                $model->result[]= "Test fail";
+                $model->result[] = "Test fail";
             }
 //            $model->result = $message;
         }

@@ -16,10 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-info table-responsive">
             <div class="box-body">
 
-    <p>
-        <?= Html::a('Update', ['update', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id], ['class' => 'btn btn-primary']) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -29,8 +25,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'pay_out',
             'daily_cap',
             'discount',
-            'is_run',
-            'creator',
+            'status',
+            [
+                'attribute'=>'creator',
+                'value'=>$model->creator0->username,
+            ],
+            'end_time:datetime',
             'create_time:datetime',
             'update_time:datetime',
             [
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=>\yii\helpers\Url::to('@track'.$model->track_url),
                 'format'=>'url'
             ],
-            'note',
+            'note:text',
         ],
     ]) ?>
 

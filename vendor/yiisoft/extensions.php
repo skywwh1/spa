@@ -138,4 +138,13 @@ return array (
       '@rmrevin/yii/geoip' => $vendorDir . '/rmrevin/yii2-geoip',
     ),
   ),
+  'kartik-v/yii2-widget-datetimepicker' => 
+  array (
+    'name' => 'kartik-v/yii2-widget-datetimepicker',
+    'version' => '1.4.3.0',
+    'alias' => 
+    array (
+      '@kartik/datetime' => $vendorDir . '/kartik-v/yii2-widget-datetimepicker',
+    ),
+  ),
 );

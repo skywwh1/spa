@@ -13,6 +13,7 @@ use Yii;
  * @property string $name
  * @property string $value
  * @property integer $type
+ * @property integer $is_send
  * @property integer $effect_time
  * @property integer $create_time
  */
@@ -32,8 +33,8 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'effect_time', 'create_time'], 'required'],
-            [['campaign_id', 'channel_id', 'type', 'effect_time', 'create_time'], 'integer'],
+            [['campaign_id', 'is_send', 'effect_time', 'create_time'], 'required'],
+            [['campaign_id', 'channel_id', 'type', 'is_send', 'effect_time', 'create_time'], 'integer'],
             [['name', 'value'], 'string', 'max' => 255],
         ];
     }
@@ -50,6 +51,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
             'name' => 'Name',
             'value' => 'Value',
             'type' => 'Type',
+            'is_send' => 'If Send Email',
             'effect_time' => 'Effect Time',
             'create_time' => 'Create Time',
         ];

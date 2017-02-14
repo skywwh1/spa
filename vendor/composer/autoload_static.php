@@ -43,6 +43,7 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
             'kartik\\select2\\' => 15,
             'kartik\\plugins\\checkbox\\' => 24,
             'kartik\\field\\' => 13,
+            'kartik\\datetime\\' => 16,
             'kartik\\daterange\\' => 17,
             'kartik\\date\\' => 12,
             'kartik\\checkbox\\' => 16,
@@ -155,6 +156,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'kartik\\field\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-field-range',
+        ),
+        'kartik\\datetime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-widget-datetimepicker',
         ),
         'kartik\\daterange\\' => 
         array (

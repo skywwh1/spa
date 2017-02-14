@@ -164,6 +164,17 @@ class ModelsUtil
         '3' => 'Rejected',
     );
 
+    const campaign_status = array(
+        '1' => 'Running',
+        '2' => 'Paused',
+//        '3' => 'Rejected',
+    );
+
+    public static function getCampaignStatus($k)
+    {
+        return static::getValue(static::campaign_status, $k);
+    }
+
     public static function getApplyStatus($k)
     {
         return static::getValue(static::apply_status, $k);

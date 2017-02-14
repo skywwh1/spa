@@ -20,6 +20,7 @@ return array(
     'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2'),
     'kartik\\plugins\\checkbox\\' => array($vendorDir . '/kartik-v/bootstrap-checkbox-x'),
     'kartik\\field\\' => array($vendorDir . '/kartik-v/yii2-field-range'),
+    'kartik\\datetime\\' => array($vendorDir . '/kartik-v/yii2-widget-datetimepicker'),
     'kartik\\daterange\\' => array($vendorDir . '/kartik-v/yii2-date-range'),
     'kartik\\date\\' => array($vendorDir . '/kartik-v/yii2-widget-datepicker'),
     'kartik\\checkbox\\' => array($vendorDir . '/kartik-v/yii2-checkbox-x'),
