@@ -5,7 +5,6 @@ namespace backend\controllers;
 use backend\models\StsForm;
 use backend\models\TestLinkForm;
 use common\models\Campaign;
-use common\models\CampaignStsUpdate;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -17,7 +16,6 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\widgets\ActiveForm;
 
 /**
  * DeliverController implements the CRUD actions for Deliver model.
@@ -266,67 +264,39 @@ class DeliverController extends Controller
     {
         $model = new TestLinkForm();
 
-//        if (Yii::$app->request->isAjax) {
         if ($model->load(Yii::$app->request->post())) {
             $model->result = array();
             $channel = Channel::findChannelByName($model->channel);
             if (empty($channel)) {
-//                return "Can found channel";
                 $model->result[] = "Can found channel";
                 return $this->render('test_link', [
                     'model' => $model,
                 ]);
             }
 
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => $model->tracking_link,
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => "",
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 30,
-//                CURLOPT_SSL_VERIFYPEER =>false,
-                CURLOPT_SSL_VERIFYHOST =>0,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => "GET",
-                CURLOPT_HTTPHEADER => array(
-                    "cache-control: no-cache",
-                    "postman-token: e687afd5-8c08-1f39-89bb-3c47e3c68830"
-                ),
+            $curl = new Curl();
+            $curl->setOptions(array(
+                CURLOPT_FOLLOWLOCATION => 1,
             ));
+//            $curl->get($model->tracking_link);
+//            var_dump($curl->responseHeaders);
+//            var_dump($curl->response);
+//            die();
+            if ($curl->get($model->tracking_link) !== false) {
+                $model->result[] = 'Click response: ' . $curl->response;
+                $stream = Stream::getLatestClick($channel->id);
+                $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+                $model->result[] = 'post back link: ' . $link;
+                $curl = new Curl();
+                if ($curl->get($link) !== false) {
+                    $model->result[] = 'Post back response: ' . $curl->response;
+                } else {
+                    $model->result[] = 'Post back fail';
+                }
 
-            $response = curl_exec($curl);
-            $err = curl_error($curl);
-
-            curl_close($curl);
-
-            if ($err) {
-                $model->result[] = $err;
             } else {
-                $model->result[] = $response;
+                $model->result[] = "Test fail";
             }
-//            $model->result[] = 'Superads response: ' . $curl->response . PHP_EOL;
-////                echo 'Superads response: '.$curl->response.PHP_EOL;
-//            $stream = Stream::getLatestClick($channel->id);
-////                var_dump($stream->all_parameters);
-////                die();
-//            $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
-//            $model->result[] = 'post back link: ' . $link . PHP_EOL;
-////                echo 'post back link: '.$link.PHP_EOL;
-////                var_dump($link);
-//            $curl = new Curl();
-//            if ($curl->get($link) !== false) {
-////                    echo 'Channel response: '.$curl->response.PHP_EOL;
-////                    var_dump($curl);
-////                    return "Post back success";
-//                $model->result[] = 'Channel response: ' . $curl->response . PHP_EOL;
-//            } else {
-//                $model->result[] = 'Channel response: none' . PHP_EOL;
-//            }
-
-
-//            $model->result = $message;
         }
         return $this->render('test_link', [
             'model' => $model,
