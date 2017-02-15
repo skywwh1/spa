@@ -20,7 +20,7 @@ use yii\helpers\Url;
     table tr {
         height: 30px;
         vertical-align: middle;
-        font-size: 16px;
+        font-size: 13px;
         background-color: #fefefe;
         border: 1px solid #ddd
     }
@@ -41,15 +41,13 @@ use yii\helpers\Url;
 
     <p>&nbsp;&nbsp; &nbsp;Hope this email finds you well.</p>
 
-    <p>&nbsp;&nbsp; &nbsp;Here are some new campaigns for you today. If you need any help, please feel free to contact
-        me.</p>
+    <p>&nbsp;&nbsp; &nbsp;Here are some new campaigns for you today. Please kindly set live and start sending good
+        traffic on them.</p>
 
-    <p>&nbsp;&nbsp; &nbsp;Note:&nbsp;This email&nbsp;is a <strong>NO-REPLY</strong> email. Please reply to your
-        beloved account managers ONLY.</p>
-    <table style="width: 100%;" border="1">
+    <table border="1">
         <tbody>
         <?php
-        $id = '<td width="20%"> ID</td>';
+        $id = '<td width="100px"> ID</td>';
         $campaign_name = '<td> Campaign name</td>';
         $version = '<td> Version</td>';
         $target_geo = '<td> Target Geo</td>';
@@ -65,16 +63,17 @@ use yii\helpers\Url;
 
         foreach ($delivers as $deliver) {
             $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
-            $campaign_name .= '<td>' . Html::encode($deliver->campaign->campaign_name) . '</td>';
+            $campaign_name .= '<td width="130px">' . Html::encode($deliver->campaign->campaign_name) . '</td>';
             $version .= '<td>' . Html::encode($deliver->campaign->version) . '</td>';
             $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
             $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
             $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
             $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
-            $creative .= '<td>' . Html::encode($deliver->campaign->creative_link) . '</td>';
+            $creativeSet = !empty($deliver->campaign->creative_link) ? '<a href="' . Url::to($deliver->campaign->creative_link) . '">Banner</a>' : '';
+            $creative .= '<td>' . $creativeSet . '</td>';
             $traffic_source .= '<td>' . Html::encode(ModelsUtil::getTrafficeSource($deliver->campaign->traffice_source)) . '</td>';
             $daily_cap .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';
-            $notes .= '<td>' . Html::encode($deliver->note) . '</td>';
+            $notes .= '<td width="130px">' . Html::encode($deliver->note) . '</td>';
             $conversion_flow .= '<td>' . Html::encode($deliver->campaign->conversion_flow) . '</td>';
             $carrier .= '<td>' . Html::encode($deliver->campaign->carriers) . '</td>';
         }
@@ -112,7 +111,9 @@ use yii\helpers\Url;
         ?>
         </tbody>
     </table>
+    <p>&nbsp;&nbsp; &nbsp;Note:&nbsp;This email&nbsp;is a <strong>NO-REPLY</strong> email. If you need any help, please
+        feel free to contact your beloved account managers.</p>
     <p>Have a nice day. </p>
     <p>Best regards</p>
-    <p>SuperAds Admin</p>
+    <p>SuperADS Support Team</p>
 </div>

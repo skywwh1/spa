@@ -277,32 +277,55 @@ class DeliverController extends Controller
                     'model' => $model,
                 ]);
             }
-            $curl = new Curl();
 
-            if ($curl->get($model->tracking_link) !== false) {
-                $model->result[] = 'Superads response: ' . $curl->response . PHP_EOL;
-//                echo 'Superads response: '.$curl->response.PHP_EOL;
-                $stream = Stream::getLatestClick($channel->id);
-//                var_dump($stream->all_parameters);
-//                die();
-                $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
-                $model->result[] = 'post back link: ' . $link . PHP_EOL;
-//                echo 'post back link: '.$link.PHP_EOL;
-//                var_dump($link);
-                $curl = new Curl();
-                if ($curl->get($link) !== false) {
-//                    echo 'Channel response: '.$curl->response.PHP_EOL;
-//                    var_dump($curl);
-//                    return "Post back success";
-                    $model->result[] = 'Channel response: ' . $curl->response . PHP_EOL;
-                } else {
-                    $model->result[] = 'Channel response: none' . PHP_EOL;
-                }
+            $curl = curl_init();
 
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => $model->tracking_link,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+//                CURLOPT_SSL_VERIFYPEER =>false,
+                CURLOPT_SSL_VERIFYHOST =>0,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "GET",
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "postman-token: e687afd5-8c08-1f39-89bb-3c47e3c68830"
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+                $model->result[] = $err;
             } else {
-//                return "Test fail";
-                $model->result[] = "Test fail";
+                $model->result[] = $response;
             }
+//            $model->result[] = 'Superads response: ' . $curl->response . PHP_EOL;
+////                echo 'Superads response: '.$curl->response.PHP_EOL;
+//            $stream = Stream::getLatestClick($channel->id);
+////                var_dump($stream->all_parameters);
+////                die();
+//            $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+//            $model->result[] = 'post back link: ' . $link . PHP_EOL;
+////                echo 'post back link: '.$link.PHP_EOL;
+////                var_dump($link);
+//            $curl = new Curl();
+//            if ($curl->get($link) !== false) {
+////                    echo 'Channel response: '.$curl->response.PHP_EOL;
+////                    var_dump($curl);
+////                    return "Post back success";
+//                $model->result[] = 'Channel response: ' . $curl->response . PHP_EOL;
+//            } else {
+//                $model->result[] = 'Channel response: none' . PHP_EOL;
+//            }
+
+
 //            $model->result = $message;
         }
         return $this->render('test_link', [
