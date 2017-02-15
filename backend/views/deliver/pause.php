@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = 'Update';
     'pluginOptions' => [
         'autoclose' => true,
         'format' => 'yyyy-mm-dd hh:ii',
-        'startDate' => date('Y-m-d h:i')
+        'startDate' => date('Y-m-d h:i',strtotime("+1 day"))
     ],
     'readonly'=>true,
 ]);
