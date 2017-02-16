@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = 'Update';
     'type' => DateTimePicker::TYPE_INPUT,
 //     'value' => isset($model->promote_end) ? date("Y-m-d", $model->promote_start) : '',
     'pluginOptions' => [
-        'autoclose' => true,
+//        'autoclose' => true,
         'format' => 'yyyy-mm-dd hh:ii',
         'startDate' => date('Y-m-d h:i',strtotime("+1 day"))
     ],
