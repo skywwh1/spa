@@ -140,7 +140,9 @@ class Deliver extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
+     * @param $campaignId
+     * @param $channelId
+     * @return Deliver
      */
     public static function findIdentity($campaignId, $channelId)
     {

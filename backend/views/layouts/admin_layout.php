@@ -82,7 +82,7 @@ AdminAsset::register($this);
                 <li class="header">MAIN NAVIGATION</li>
                 <!-- sidebar menu: : Dashboard -->
                 <li>
-                    <a href="#">
+                    <a href="/site/info" data-menu="site-info">
                         <i class="fa fa-dashboard"></i> <span>Dashboard</span>
                     </a>
                 </li>

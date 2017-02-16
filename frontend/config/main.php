@@ -24,7 +24,7 @@ return [
             // this is the name of the session cookie used for login on the frontend
             'class' => 'yii\web\Session',
             'name' => 'advanced-frontend',
-            'timeout' => 3600 * 1,
+            'timeout' => 3600 * 10,
             'useCookies' => true,
         ],
         'log' => [

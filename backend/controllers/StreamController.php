@@ -2,20 +2,21 @@
 
 namespace backend\controllers;
 
+use backend\models\AdvertiserAuthToken;
+use backend\models\ViewAdvertiserAuthToken;
+use backend\models\ViewClickLog;
+use backend\models\ViewFeedLog;
 use common\models\Campaign;
 use common\models\Deliver;
 use common\models\Feed;
-use Yii;
+use common\models\IpTable;
 use common\models\Stream;
 use common\models\StreamSearch;
-use yii\base\Exception;
-use yii\base\InvalidConfigException;
+use Yii;
 use yii\filters\AccessControl;
-use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * StreamController implements the CRUD actions for Stream model.
@@ -111,6 +112,10 @@ class StreamController extends Controller
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->pl = isset($data['pl']) ? $data['pl'] : null;
         $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
+        $model->ch_subid = isset($data['ch_subid']) ? $data['ch_subid'] : null;
+        $model->gaid = isset($data['gaid']) ? $data['gaid'] : null;
+        $model->idfa = isset($data['idfa']) ? $data['idfa'] : null;
+        $model->site = isset($data['site']) ? $data['site'] : null;
         $model->ip = Yii::$app->request->getUserIP();
 
         $code = $this->restrictionTrack($model);
@@ -133,9 +138,14 @@ class StreamController extends Controller
         }
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
+        $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : null;
         $model->ip = Yii::$app->request->getUserIP();
+        $model->all_parameters = $allParameters;
+        $code = $this->restrictionFeed($model);
+        if ($code !== 200) {
+            return Json::encode(['error' => $this->_getAdvCodeMessage($code)]);
+        }
         if (!empty($allParameters)) {
-            $model->all_parameters = $allParameters;
             $model->save();
         }
         return Json::encode(['success' => $data]);
@@ -197,28 +207,70 @@ class StreamController extends Controller
         }
 
         //2.ip 限制
-        $Info = \Yii::createObject([
-            'class' => '\rmrevin\yii\geoip\HostInfo',
-            'host' => $model->ip, // some host or ip
-        ]);
-        $geo = $Info->getCountryCode();   // US
         $target = $campaign->target_geo;
-        if (strpos($target, $geo) === false) {
-            $code = 501;
+        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+            $Info = \Yii::createObject([
+                'class' => '\rmrevin\yii\geoip\HostInfo',
+                'host' => $model->ip, // some host or ip
+            ]);
+            $geo = $Info->getCountryCode();   // US
+            if (strpos($target, $geo) === false) {
+                $code = 501;
+            }
         }
 
         //3.单子状态
-        //4.单子时间
+        if ($deliver->status !== 1) {
+            $code = 403;
+        }
+        if ($campaign->status !== 1) {
+            $code = 403;
+        }
         //正常0
+        $model->pay_out = $deliver->pay_out;
+        $model->daily_cap = $deliver->daily_cap;
+        $model->discount = $deliver->discount;
         $link = $this->genAdvLink($campaign, $model->click_uuid, $model->ch_id);
         $model->redirect = $link;
         $model->save();
         return $code;
     }
 
-    private function restrictionFeed()
+    /**
+     * @param Feed $model
+     * @return int
+     */
+    private function restrictionFeed(&$model)
     {
-        //2.ip 限制
+        return 200;
+        $code = 200;
+        //1.token 限制
+        $token = $model->auth_token;
+        $adt = ViewAdvertiserAuthToken::findOne(['auth_token' => $token]);
+        if ($adt === null) {
+            $code = 400;
+            return $code;
+        }
+        //2.click uuid 限制
+        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_id]);
+        if ($clickuuid === null) {
+            $code = 401;
+            return $code;
+        }
+        //3.ip 限制
+        $ip = IpTable::findOne(['value' => $model->ip]);
+        if ($ip === null) {
+            $code = 402;
+            return $code;
+        }
+        //4.唯一限制
+        $feed = ViewFeedLog::findOne(['auth_token' => $token, 'click_id' => $model->click_id]);
+        if ($feed !== null) {
+            $code = 403;
+            return $code;
+        }
+
+        return $code;
     }
 
     private function _getStatusCodeMessage($status)
@@ -227,8 +279,23 @@ class StreamController extends Controller
             200 => 'OK',
             400 => 'Bad Request',
             401 => 'Unauthorized',
-            402 => 'Payment Required',
-            403 => 'Forbidden',
+            402 => 'IP address not allow',
+            403 => 'Campaign paused',
+            404 => 'Missing parameters',
+            500 => 'Can`t found the campaign',
+            501 => 'Your country is not allow!',
+        );
+        return (isset($codes[$status])) ? $codes[$status] : '';
+    }
+
+    private function _getAdvCodeMessage($status)
+    {
+        $codes = Array(
+            200 => 'OK',
+            400 => 'Invalid token',
+            401 => 'Invalid click id',
+            402 => 'IP address not allow',
+            403 => 'Duplicate transaction',
             404 => 'Missing parameters',
             500 => 'Can`t found the campaign',
             501 => 'Your country is not allow!',

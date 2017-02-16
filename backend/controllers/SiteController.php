@@ -1,7 +1,9 @@
 <?php
 namespace backend\controllers;
 
+use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\Channel;
 use common\models\SignupForm;
 use common\models\User;
 use Yii;
@@ -32,7 +34,7 @@ class SiteController extends Controller
                         'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout', 'index', 'forget', 'test'],
+                        'actions' => ['logout', 'index', 'forget', 'test','info'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -95,7 +97,7 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect(['channel/index']);
+            return $this->redirect(['site/info']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -135,11 +137,22 @@ class SiteController extends Controller
         }
     }
 
-    public function actionTest($uuid){
-        $a=$uuid;
-//        var_dump($a);
-//        die();
-//        var_dump(Campaign::getCampaignsByUuid($a));
-        die();
+    public function actionInfo(){
+        $this->layout = 'admin_layout';
+        return $this->render('info');
+    }
+    public function actionTest(){
+        $aa = Advertiser::find()->where(['auth_token'=>null])->all();
+        foreach($aa as $item){
+            $item->auth_token = uniqid('adv').uniqid();
+            $item->save();
+        }
+
+        $bb = Channel::find()->where(['auth_token'=>null])->all();
+        foreach($bb as $item){
+            $item->auth_token = uniqid('ch').uniqid();
+            $item->save();
+        }
+//        var_dump($aa);
     }
 }

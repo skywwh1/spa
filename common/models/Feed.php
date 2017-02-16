@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "feedback_advertiser_feed_log".
  *
  * @property integer $id
+ * @property string $auth_token
  * @property string $click_id
  * @property string $ch_id
  * @property integer $is_count
@@ -34,6 +35,7 @@ class Feed extends \yii\db\ActiveRecord
     {
         return [
             [['is_count', 'create_time', 'update_time'], 'integer'],
+            [['auth_token'], 'safe'],
             [['click_id', 'ch_id', 'all_parameters', 'ip', 'host_name'], 'string', 'max' => 255],
         ];
     }
@@ -45,6 +47,7 @@ class Feed extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'auth_token' => 'Auth Token',
             'click_id' => 'Click ID',
             'ch_id' => 'Ch ID',
             'is_count' => 'Is Count',

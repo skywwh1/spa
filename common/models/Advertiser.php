@@ -22,6 +22,7 @@ use Yii;
  * @property double $received
  * @property string  $pricing_mode
  * @property integer $type
+ * @property string $auth_token
  * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
@@ -74,7 +75,7 @@ class Advertiser extends \yii\db\ActiveRecord
             [['total_revenue', 'receivable', 'received'], 'number'],
             [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['contacts', 'password_hash', 'password_reset_token', 'company', 'address', 'note'], 'string', 'max' => 255],
-            [['auth_key'], 'string', 'max' => 32],
+            [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['pricing_mode','email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
             [['phone1', 'phone2'], 'string', 'max' => 20],
             [['country'], 'string', 'max' => 10],
@@ -85,6 +86,7 @@ class Advertiser extends \yii\db\ActiveRecord
             ['email', 'email'],
             ['cc_email', 'email'],
             [['password_reset_token'], 'unique'],
+            [['auth_token'], 'unique'],
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
             [['bd'], 'required', 'message' => 'Can not found BD'],
         ];
@@ -112,6 +114,7 @@ class Advertiser extends \yii\db\ActiveRecord
             'received' => 'Received',
             'pricing_mode' => 'Pricing Mode',
             'type' => 'Type',
+            'auth_token' => 'Auth Token',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password Hash',
             'password_reset_token' => 'Password Reset Token',
@@ -159,19 +162,14 @@ class Advertiser extends \yii\db\ActiveRecord
 
     public function beforeSave($insert)
     {
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->created_time = time();
-                $this->updated_time = time();
-            } else {
-                $this->updated_time = time();
-            }
-
-            return true;
-
+        if ($insert) {
+            $this->created_time = time();
+            $this->updated_time = time();
+            $this->auth_token = uniqid('adv').uniqid();
         } else {
-            return false;
+            $this->updated_time = time();
         }
+        return parent::beforeSave($insert);
     }
 
     public static function getAdvNameListByName($name)

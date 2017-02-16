@@ -25,7 +25,7 @@ return [
             // this is the name of the session cookie used for login on the backend
             'class' => 'yii\web\Session',
             'name' => 'spa-backend',
-            'timeout' => 3600 * 1,
+            'timeout' => 3600 * 10,
             'useCookies' => true,
         ],
         'log' => [

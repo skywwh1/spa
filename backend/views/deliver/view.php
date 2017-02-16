@@ -25,7 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
             'pay_out',
             'daily_cap',
             'discount',
-            'status',
+//            'status',
+            [
+                'attribute'=>'status',
+                'value'=>ModelsUtil::getCampaignStatus($model->status)
+            ],
             [
                 'attribute'=>'creator',
                 'value'=>$model->creator0->username,

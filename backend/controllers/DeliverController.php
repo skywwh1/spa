@@ -274,16 +274,12 @@ class DeliverController extends Controller
                 ]);
             }
 
-            $curl = new Curl();
-            $curl->setOptions(array(
-                CURLOPT_FOLLOWLOCATION => 1,
-            ));
-//            $curl->get($model->tracking_link);
-//            var_dump($curl->responseHeaders);
-//            var_dump($curl->response);
-//            die();
-            if ($curl->get($model->tracking_link) !== false) {
-                $model->result[] = 'Click response: ' . $curl->response;
+//            $curl = new Curl();
+//            $curl->setOptions(array(
+//                CURLOPT_FOLLOWLOCATION => 1,
+//            ));
+//            if ($curl->get($model->tracking_link) !== false) {
+//                $model->result[] = 'Click response: ' . $curl->response;
                 $stream = Stream::getLatestClick($channel->id);
                 $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
                 $model->result[] = 'post back link: ' . $link;
@@ -294,9 +290,9 @@ class DeliverController extends Controller
                     $model->result[] = 'Post back fail';
                 }
 
-            } else {
-                $model->result[] = "Test fail";
-            }
+//            } else {
+//                $model->result[] = "Test fail";
+//            }
         }
         return $this->render('test_link', [
             'model' => $model,

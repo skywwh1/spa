@@ -101,6 +101,7 @@ class CampaignController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeSave($model);
+            $model->status = 1; //running
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -236,7 +237,8 @@ class CampaignController extends Controller
         if (!empty($model->promote_end)) {
             $model->promote_end = strtotime($model->promote_end);
         }
-
-        $model->target_geo = implode(',',$model->target_geo);
+        if(!empty($model->target_geo)){
+            $model->target_geo = implode(',',$model->target_geo);
+        }
     }
 }

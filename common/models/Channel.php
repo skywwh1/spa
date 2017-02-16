@@ -18,6 +18,7 @@ use yii\web\IdentityInterface;
  * @property string $firstname
  * @property string $lastname
  * @property integer $type
+ * @property string $auth_token
  * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
@@ -60,7 +61,7 @@ use yii\web\IdentityInterface;
  * @property integer $deleted
  * @property integer $status
  * @property integer $traffic_source
- * @property string  $pricing_mode
+ * @property string $pricing_mode
  * @property string $post_back
  * @property integer $total_revenue
  * @property integer $payable
@@ -96,8 +97,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
             [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'total_revenue', 'payable'], 'integer'],
-            [['pricing_mode','username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
-            [['auth_key'], 'string', 'max' => 32],
+            [['pricing_mode', 'username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
+            [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'string', 'max' => 255],
             [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 100],
             [['country'], 'string', 'max' => 255],
@@ -108,6 +109,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['email', 'cc_email'], 'email'],
             [['password_reset_token'], 'unique'],
+            [['auth_token'], 'unique'],
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
             [['om'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['om' => 'id']],
             ['om', 'required', 'message' => 'OM does not exist'],
@@ -125,6 +127,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'type' => 'Type',
+            'auth_token' => 'Auth Token',
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password',
             'password_reset_token' => 'Password Reset Token',
@@ -241,19 +244,14 @@ class Channel extends ActiveRecord implements IdentityInterface
         if (!empty($this->payment_term) && is_array($this->payment_term)) {
             $this->payment_term = implode(',', $this->payment_term);
         }
-        if (parent::beforeSave($insert)) {
-            if ($insert) {
-                $this->created_time = time();
-                $this->updated_time = time();
-            } else {
-                $this->updated_time = time();
-            }
-
-            return true;
-
+        if ($insert) {
+            $this->created_time = time();
+            $this->updated_time = time();
+            $this->auth_token = uniqid('ch').uniqid();
         } else {
-            return false;
+            $this->updated_time = time();
         }
+        return parent::beforeSave($insert);
     }
 
     public function afterSave($insert, $changedAttributes)
@@ -277,13 +275,13 @@ class Channel extends ActiveRecord implements IdentityInterface
 
     public static function genPostBack($postback, $allParams)
     {
-        if(!empty($allParams)){
-            $params = explode('&',$allParams);
-            foreach ($params as $item){
-                $param = explode('=',$item);
-                $k = '{'.$param[0].'}';
+        if (!empty($allParams)) {
+            $params = explode('&', $allParams);
+            foreach ($params as $item) {
+                $param = explode('=', $item);
+                $k = '{' . $param[0] . '}';
                 $v = $param[1];
-                $postback = str_replace($k,$v,$postback);
+                $postback = str_replace($k, $v, $postback);
             }
         }
         return $postback;

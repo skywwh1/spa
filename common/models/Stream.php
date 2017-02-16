@@ -14,6 +14,13 @@ use Yii;
  * @property string $ch_id
  * @property string $pl
  * @property string $tx_id
+ * @property string $ch_subid
+ * @property string $gaid
+ * @property string $idfa
+ * @property string $site
+ * @property string $pay_out
+ * @property integer $daily_cap
+ * @property string $discount
  * @property string $all_parameters
  * @property string $ip
  * @property string $redirect
@@ -43,9 +50,11 @@ class Stream extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
-            [['post_status', 'post_time', 'create_time', 'is_count',], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'string', 'max' => 255],
+            [['click_uuid','cp_uid', 'ch_id'], 'required'],
+            [['pay_out', 'discount'], 'number'],
+            [['daily_cap', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ch_subid', 'gaid', 'idfa', 'site','all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
+            [['click_uuid'], 'unique'],
         ];
     }
 
@@ -62,6 +71,13 @@ class Stream extends \yii\db\ActiveRecord
             'ch_id' => 'Ch ID',
             'pl' => 'Pl',
             'tx_id' => 'Tx ID',
+            'ch_subid' => 'Ch Subid',
+            'gaid' => 'Gaid',
+            'idfa' => 'Idfa',
+            'site' => 'Site',
+            'pay_out' => 'Pay Out',
+            'daily_cap' => 'Daily Cap',
+            'discount' => 'Discount',
             'all_parameters' => 'All Parameters',
             'ip' => 'Ip',
             'redirect' => 'Redirect',

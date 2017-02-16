@@ -267,6 +267,10 @@ class Campaign extends \yii\db\ActiveRecord
         }
     }
 
+    /**
+     * @param $uuid
+     * @return Campaign
+     */
     public static function findByUuid($uuid)
     {
         return Campaign::findOne(['campaign_uuid' => $uuid]);
