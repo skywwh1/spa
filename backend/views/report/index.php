@@ -56,7 +56,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'pay_out',
 //            'daily_cap',
                         // 'actual_discount',
-                        'note',
+//                        'note',
 
                         //['class' => 'yii\grid\ActionColumn'],
                         // 'track_url:url',
