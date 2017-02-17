@@ -18,8 +18,8 @@ class DeliverSearch extends Deliver
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
-            [['campaign_uuid', 'pricing_mode', 'track_url', 'note'], 'safe'],
+            [['daily_cap', 'status', 'creator', 'end_time', 'create_time', 'is_run', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
+            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -57,19 +57,22 @@ class DeliverSearch extends Deliver
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->joinWith('campaign');
+        $query->joinWith('channel');
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
+//            'campaign_id' => $this->campaign_id,
+//            'channel_id' => $this->channel_id,
             'adv_price' => $this->adv_price,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
-            'is_run' => $this->is_run,
+            'status' => $this->status,
             'creator' => $this->creator,
+            'end_time' => $this->end_time,
             'create_time' => $this->create_time,
+            'is_run' => $this->is_run,
             'update_time' => $this->update_time,
             'click' => $this->click,
             'unique_click' => $this->unique_click,
@@ -89,6 +92,8 @@ class DeliverSearch extends Deliver
         $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'pricing_mode', $this->pricing_mode])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
+            ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'channel.username', $this->channel_id])
             ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;

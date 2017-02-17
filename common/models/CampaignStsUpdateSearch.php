@@ -18,7 +18,7 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
     public function rules()
     {
         return [
-            [['id', 'campaign_id', 'channel_id', 'type', 'is_send', 'effect_time', 'create_time'], 'integer'],
+            [['id', 'campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'effect_time', 'create_time'], 'integer'],
             [['name', 'value'], 'safe'],
         ];
     }
@@ -64,6 +64,8 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
             'channel_id' => $this->channel_id,
             'type' => $this->type,
             'is_send' => $this->is_send,
+            'send_time' => $this->send_time,
+            'is_effected' => $this->is_effected,
             'effect_time' => $this->effect_time,
             'create_time' => $this->create_time,
         ]);

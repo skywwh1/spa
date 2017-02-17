@@ -25,7 +25,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'filterModel' => $searchModel,
                     'columns' => [
                         'id',
-                        'advertiser0.username',
+                        [
+                            'attribute' => 'advertiser',
+                            'value' => 'advertiser0.username',
+                        ],
+
                         'campaign_name',
                         'campaign_uuid',
 //                        //'tag',
@@ -98,9 +102,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         'status',
 
                         [
-                                'class' => 'yii\grid\ActionColumn',
-                                'template'=>'{view} {update}',
-                            'header'=>'Action',
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{view} {update}',
+                            'header' => 'Action',
                         ],
                     ],
                 ]); ?>

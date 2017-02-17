@@ -15,19 +15,21 @@ use yii\widgets\ActiveForm;
 
                     <?php $form = ActiveForm::begin(); ?>
 
-                    <?= $form->field($model, 'campaign_id')->textInput() ?>
-                    <?= $form->field($model, 'channel_id')->textInput() ?>
-                    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-                    <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
-                    <?= $form->field($model, 'type')->textInput() ?>
-                    <?= $form->field($model, 'is_send')->textInput() ?>
-                    <?= $form->field($model, 'effect_time')->textInput() ?>
-                    <?= $form->field($model, 'create_time')->textInput() ?>
+                        <?= $form->field($model, 'campaign_id')->textInput() ?>
+    <?= $form->field($model, 'channel_id')->textInput() ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'value')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'type')->textInput() ?>
+    <?= $form->field($model, 'is_send')->textInput() ?>
+    <?= $form->field($model, 'send_time')->textInput() ?>
+    <?= $form->field($model, 'is_effected')->textInput() ?>
+    <?= $form->field($model, 'effect_time')->textInput() ?>
+    <?= $form->field($model, 'create_time')->textInput() ?>
                     <div class="form-group">
                         <?= Html::submitButton($model->isNewRecord
-                            ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn
+                        ? 'Create'                        : 'Update', ['class' => $model->isNewRecord ? 'btn
                         btn-success' :
-                            'btn btn-primary']) ?>
+                        'btn btn-primary']) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>

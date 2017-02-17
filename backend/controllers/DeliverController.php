@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\StsForm;
 use backend\models\TestLinkForm;
 use common\models\Campaign;
+use common\models\CampaignStsUpdate;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -185,30 +186,26 @@ class DeliverController extends Controller
      */
     public function actionPause($campaign_id, $channel_id)
     {
-//        $model = new CampaignStsUpdate();
-//        $model->campaign_id = $campaign_id;
-//        $model->channel_id = $channel_id;
-//        if ($model->load(Yii::$app->request->post())) {
-//            $model->create_time = time();
-//            $model->effect_time = strtotime($model->effect_time);
-//            $model->save();
-//            return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
-//        } else {
-//            return $this->renderAjax('pause', [
-//                'model' => $model,
-//            ]);
-//        }
-        $model = $this->findModel($campaign_id, $channel_id);
-
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
         if ($model->load(Yii::$app->request->post())) {
-            $model->end_time = strtotime($model->end_time);
+//            $model =
+            $model->create_time = time();
+            $model->type = 2;//2 is sts 1 is campaign
+            $model->name = 'pause';
+            $model->effect_time = strtotime($model->effect_time);
             $model->save();
-            return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id]);
+            $sts = $this->findModel($campaign_id, $channel_id);
+            $sts->end_time = $model->effect_time;
+            $sts->save();
+            return $this->redirect(['index']);
         } else {
             return $this->renderAjax('pause', [
                 'model' => $model,
             ]);
         }
+
     }
 
     /**
@@ -280,15 +277,15 @@ class DeliverController extends Controller
 //            ));
 //            if ($curl->get($model->tracking_link) !== false) {
 //                $model->result[] = 'Click response: ' . $curl->response;
-                $stream = Stream::getLatestClick($channel->id);
-                $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
-                $model->result[] = 'post back link: ' . $link;
-                $curl = new Curl();
-                if ($curl->get($link) !== false) {
-                    $model->result[] = 'Post back response: ' . $curl->response;
-                } else {
-                    $model->result[] = 'Post back fail';
-                }
+            $stream = Stream::getLatestClick($channel->id);
+            $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+            $model->result[] = 'post back link: ' . $link;
+            $curl = new Curl();
+            if ($curl->get($link) !== false) {
+                $model->result[] = 'Post back response: ' . $curl->response;
+            } else {
+                $model->result[] = 'Post back fail';
+            }
 
 //            } else {
 //                $model->result[] = "Test fail";

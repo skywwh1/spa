@@ -26,27 +26,33 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-                      //  ['class' => 'yii\grid\SerialColumn'],
+                        //  ['class' => 'yii\grid\SerialColumn'],
                         [
-                                'attribute'=>'campaign.campaign_name',
-                                'filter'=>true
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign.campaign_name',
+                            'label' => 'Campaign',
                         ],
 //                        'campaign.campaign_name',
-                        'channel.username',
+                        [
+                            'attribute' => 'channel_id',
+                            'value' => 'channel.username',
+                            'label' => 'Channel'
+                        ],
+
                         'pricing_mode',
                         'pay_out',
                         'daily_cap',
-                         'discount',
+                        'discount',
                         'end_time:datetime',
                         // 'is_run',
                         // 'creator',
                         [
-                            'attribute'=>'status',
-                            'value'=>function($model){
+                            'attribute' => 'status',
+                            'value' => function ($model) {
                                 return ModelsUtil::getCampaignStatus($model->status);
                             }
                         ],
-                         'create_time:datetime',
+                        'create_time:datetime',
                         // 'update_time:datetime',
                         // 'track_url:url',
                         // 'note',
@@ -54,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class' => 'yii\grid\ActionColumn',
                             'template' => '{all}',
-                            'header'=>'Action',
+                            'header' => 'Action',
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
                                     return ButtonDropdown::widget([
@@ -65,22 +71,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'items' => [
                                                 [
                                                     'label' => \Yii::t('yii', 'View'),
-                                                    'url' => ['view', 'channel_id' => $model->channel_id,'campaign_id'=>$model->campaign_id],
+                                                    'url' => ['view', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
                                                 ],
                                                 [
                                                     'label' => \Yii::t('yii', 'Paused'),
                                                     'url' => ['#'],
-                                                    'visible' => isset($model->end_time)?false:true,  // if you want to hide an item based on a condition, use this
-                                                    'linkOptions'=>['data-view'=>0,'data-url'=>'/deliver/pause?channel_id='.$model->channel_id.'&campaign_id='.$model->campaign_id],
+                                                  //  'visible' => isset($model->end_time) ? false : true,  // if you want to hide an item based on a condition, use this
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/deliver/pause?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
                                                 [
                                                     'label' => \Yii::t('yii', 'Daily Cap'),
-                                                    'url' => ['daily_cap',  'channel_id' => $model->channel_id,'campaign_id'=>$model->campaign_id],
+                                                    'url' => ['daily_cap', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
                                                     'visible' => true,  // if you want to hide an item based on a condition, use this
                                                 ],
                                                 [
                                                     'label' => \Yii::t('yii', 'Discount'),
-                                                    'url' => ['discount',  'channel_id' => $model->channel_id,'campaign_id'=>$model->campaign_id],
+                                                    'url' => ['discount', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
                                                     'visible' => true,  // if you want to hide an item based on a condition, use this
                                                 ],
 //                                                [
@@ -103,7 +109,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'class' => 'btn-primary dropup',   // btn-success, btn-info, et cetera
 //                                            'aria-haspopup'=>true,
                                         ],
-                                       // 'split' => true,    // if you want a split button
+                                        // 'split' => true,    // if you want a split button
                                     ]);
                                 },
                             ],
@@ -131,7 +137,7 @@ $(document).on("click", "a[data-view=0]", function (e) {
 
 $('#campaign-detail-modal').on('hidden.bs.modal', function () {
     // do something…
-    $.pjax.reload({container: "#applying_list"});  //Reload GridView
+  //  $.pjax.reload({container: "#applying_list"});  //Reload GridView
 })
 JS
 );

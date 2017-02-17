@@ -35,6 +35,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'value',
             // 'type',
             // 'is_send',
+            // 'send_time:datetime',
+            // 'is_effected',
             // 'effect_time:datetime',
             // 'create_time:datetime',
 

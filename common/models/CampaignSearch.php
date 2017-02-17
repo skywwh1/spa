@@ -18,8 +18,8 @@ class CampaignSearch extends Campaign
     public function rules()
     {
         return [
-            [['id', 'advertiser', 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
+            [['id', 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['advertiser', 'campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
         ];
     }
@@ -57,11 +57,10 @@ class CampaignSearch extends Campaign
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->joinWith('advertiser0');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'advertiser' => $this->advertiser,
             'promote_start' => $this->promote_start,
             'promote_end' => $this->promote_end,
             'effective_time' => $this->effective_time,
@@ -111,6 +110,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'track_way', $this->track_way])
             ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
+            ->andFilterWhere(['like', 'advertiser.username', $this->advertiser])
             ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
         $query->orderBy('create_time DESC');
 
