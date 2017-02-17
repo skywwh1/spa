@@ -156,7 +156,7 @@ AdminAsset::register($this);
                     </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/report/index"><i class="fa fa-circle-o"></i> Campaign Reports</a></li>
+                        <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign Reports</a></li>
                     </ul>
                 </li>
 

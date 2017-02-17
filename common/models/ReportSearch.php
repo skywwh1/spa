@@ -90,7 +90,7 @@ class ReportSearch extends Deliver
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
             ->andFilterWhere(['like', 'channel.username', $this->channel_id]);
-
+        $query->orderBy('update_time desc');
 
         return $dataProvider;
     }

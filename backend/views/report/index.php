@@ -11,6 +11,7 @@ use yii\widgets\Pjax;
 $this->title = 'Campaign report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<div id="nav-menu" data-menu="report-index"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
