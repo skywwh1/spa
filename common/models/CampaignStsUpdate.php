@@ -12,6 +12,7 @@ use Yii;
  * @property integer $channel_id
  * @property string $name
  * @property string $value
+ * @property string $old_value
  * @property integer $type
  * @property integer $is_send
  * @property integer $send_time
@@ -36,8 +37,8 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'is_send', 'effect_time', 'create_time'], 'required'],
-            [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'effect_time', 'create_time'], 'integer'],
-            [['name', 'value'], 'string', 'max' => 255],
+            [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'create_time'], 'integer'],
+            [['effect_time', 'name', 'value', 'old_value'], 'safe'],
         ];
     }
 
@@ -52,12 +53,33 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
             'channel_id' => 'Channel ID',
             'name' => 'Name',
             'value' => 'Value',
+            'old_value' => 'Old Value',
             'type' => 'Type',
-            'is_send' => 'Is Send',
+            'is_send' => 'If Send Notify',
             'send_time' => 'Send Time',
             'is_effected' => 'Is Effected',
             'effect_time' => 'Effect Time',
             'create_time' => 'Create Time',
         ];
     }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdateCap()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'update_cap'])
+            ->andWhere(['<', ['effect_time' => time()]])
+            ->all();
+    }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdateEmail()
+    {
+        return static::find()->where(['is_send' => 0, 'type' => 2])
+            ->all();
+    }
+
 }

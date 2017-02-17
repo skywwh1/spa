@@ -102,6 +102,7 @@ class AuditController extends Controller
                 $camp_chanl = explode(',', $k);
                 $deliver = Deliver::findIdentity($camp_chanl[0], $camp_chanl[1]);
                 $deliver->match_install += $v; //累加
+                $deliver->discount_denominator += $v; //扣量基数
                 $this->statistics($deliver);
                 if (!$deliver->save()) {
                     var_dump($deliver->getErrors());
@@ -130,6 +131,7 @@ class AuditController extends Controller
     }
 
     /**
+     * 扣量算法
      * @param array|\common\models\Stream[] $matchClicks
      */
     protected function updatePost_status($matchClicks)
@@ -148,14 +150,16 @@ class AuditController extends Controller
                 $this->echoMessage("can not find deliver $campaign_uuid-$channel_id");
                 continue;
             }
-            $actual_install_percent = (($deliver->install + 1) / $deliver->match_install) * 100;
+            $actual_install_percent = (($deliver->discount_numerator + 1) / $deliver->discount_denominator) * 100; //扣量分子除以分母。
+//            $actual_install_percent = (($deliver->install + 1) / $deliver->match_install) * 100;
             $discount = 100 - $deliver->discount;
             $this->echoMessage("this deliver install is $deliver->install");
             $this->echoMessage("this deliver match install is $deliver->match_install");
             if (($deliver->install < 5) || $actual_install_percent <= $discount) { //还没达到扣标准。
                 $this->echoMessage("this click will be post back");
                 $deliver->install += 1;
-                $deliver->actual_discount = $actual_install_percent;
+                $deliver->discount_numerator += 1; //扣量计算分子.
+                $deliver->actual_discount = ($deliver->install / $deliver->match_install) * 100; // 实际扣量。
                 $k->post_status = 1; // ready to send
                 $post_back = $deliver->channel->post_back;
                 $k->post_link = "";
@@ -281,13 +285,13 @@ class AuditController extends Controller
 //            $this->echoMessage("can not found post back params");
 //        }
 
-        if(!empty($allParams)){
-            $params = explode('&',$allParams);
-            foreach ($params as $item){
-                $param = explode('=',$item);
-                $k = '{'.$param[0].'}';
+        if (!empty($allParams)) {
+            $params = explode('&', $allParams);
+            foreach ($params as $item) {
+                $param = explode('=', $item);
+                $k = '{' . $param[0] . '}';
                 $v = $param[1];
-                $postback = str_replace($k,$v,$postback);
+                $postback = str_replace($k, $v, $postback);
             }
         }
 
@@ -295,39 +299,6 @@ class AuditController extends Controller
         return $postback;
     }
 
-    protected function genPostBack($postback, $track, $allParams)
-    {
-        echo "genarate url start \n";
-        $homeurl = substr($postback, 0, strpos($postback, '?'));
-        $paramstring = substr($postback, strpos($postback, '?') + 1, strlen($postback) - 1);
-        $params = explode("&", $paramstring);
-        $returnParams = "";
-        $paramsTemp = array();
-        if (!empty($params)) {
-            foreach ($params as $k) {
-                $temp = explode('=', $k);
-                $paramsTemp[$temp[0]] = isset($temp[1]) ? $temp[1] : "";
-            }
-        }
-        if (!empty($paramsTemp)) {
-            foreach ($paramsTemp as $k => $v) {
-                if (strpos($allParams, $k)) {
-                    $startCut = strpos($allParams, $k);
-                    $cutLen = (strlen($allParams) - $startCut);
-                    if (strpos($allParams, '&', $startCut)) {
-                        $cutLen = strpos($allParams, '&', $startCut) - $startCut;
-                    }
-                    $returnParams .= substr($allParams, $startCut, $cutLen) . "&";
-                }
-            }
-        }
-        if (!empty($returnParams)) {
-            $returnParams = chop($returnParams, '&');
-            $homeurl .= "?" . $returnParams;
-        }
-        echo "\n genarate url : " . $homeurl . "\n";
-        return $homeurl;
-    }
 
     /**
      *计算转化率
@@ -364,7 +335,7 @@ class AuditController extends Controller
     public function actionTest()
     {
 //        var_dump(timezone_identifiers_list());
-        $user = User::findOne(['id'=>'3']);
+        $user = User::findOne(['id' => '3']);
         $user->setPassword('joanna');
         $user->save();
 

@@ -18,8 +18,8 @@ class AdvertiserSearch extends Advertiser
     public function rules()
     {
         return [
-            [['id', 'pm', 'bd', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
-            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'post_parameter', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'lang', 'timezone', 'note'], 'safe'],
+            [['id', 'pm', 'status', 'pricing_mode', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['bd', 'username', 'firstname', 'lastname', 'settlement_type', 'system', 'contacts', 'auth_key', 'password_hash', 'password_reset_token', 'post_parameter', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'weixin', 'skype', 'alipay', 'lang', 'timezone', 'note'], 'safe'],
             [['total_revenue', 'receivable', 'received'], 'number'],
         ];
     }
@@ -57,12 +57,11 @@ class AdvertiserSearch extends Advertiser
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->joinWith('bd0');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'pm' => $this->pm,
-            'bd' => $this->bd,
             'status' => $this->status,
             'total_revenue' => $this->total_revenue,
             'receivable' => $this->receivable,
@@ -103,7 +102,9 @@ class AdvertiserSearch extends Advertiser
             ->andFilterWhere(['like', 'alipay', $this->alipay])
             ->andFilterWhere(['like', 'lang', $this->lang])
             ->andFilterWhere(['like', 'timezone', $this->timezone])
+            ->andFilterWhere(['like', 'user.username', $this->bd,])
             ->andFilterWhere(['like', 'note', $this->note]);
+        $query->orderBy('created_time desc');
 
         return $dataProvider;
     }

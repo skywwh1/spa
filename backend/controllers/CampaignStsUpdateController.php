@@ -2,12 +2,15 @@
 
 namespace backend\controllers;
 
+use common\models\Deliver;
 use Yii;
 use common\models\CampaignStsUpdate;
 use common\models\CampaignStsUpdateSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\widgets\ActiveForm;
 
 /**
  * CampaignStsUpdateController implements the CRUD actions for CampaignStsUpdate model.
@@ -24,6 +27,25 @@ class CampaignStsUpdateController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => [
+                            'pause',
+                            'update-cap',
+                            'update-discount',
+//                            'view',
+//                            'delete',
+//                            'testlink',
+//                            'sts-create',
+//                            'pause',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -119,6 +141,139 @@ class CampaignStsUpdateController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @param integer $type //1 campaign 2. sts
+     * @return mixed
+     */
+    public function actionPause($campaign_id, $channel_id, $type)
+    {
+        $this->layout=false;
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+//            $model =
+            if ($type == 2) {
+                $model->create_time = time();
+                $model->type = $type;//2 is sts 1 is campaign
+                $model->name = 'pause';
+                $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+                $model->save();
+
+                $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
+                $sts->end_time = $model->effect_time;
+                $sts->save();
+                return $this->redirect(['deliver/index']);
+            }
+
+            if ($type == 1) {
+
+            }
+
+        } else {
+            return $this->renderAjax('pause', [
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @param integer $type //1 campaign 2. sts
+     * @return mixed
+     */
+    public function actionUpdateCap($campaign_id, $channel_id, $type)
+    {
+
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+        if ($type == 2) {
+            $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
+            $model->old_value = $sts->daily_cap;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+//            $model =
+            if ($type == 2) {
+                $model->create_time = time();
+                $model->type = $type;//2 is sts 1 is campaign
+                $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+                $model->save();
+
+                return $this->redirect(['deliver/index']);
+            }
+
+            if ($type == 1) {
+
+            }
+
+        } else {
+            return $this->renderAjax('update_cap', [
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $type
+     * @return string|\yii\web\Response
+     */
+    public function actionUpdateDiscount($campaign_id, $channel_id, $type)
+    {
+
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+        $sts = new Deliver();
+        if ($type == 2) {
+            $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
+            $model->old_value = $sts->discount;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($type == 2) {
+                $model->create_time = time();
+                $model->type = $type;//2 is sts 1 is campaign
+                $model->effect_time = time();
+                $model->is_send = 1; // 不发
+                $model->save();
+
+                $sts->discount = (int)$model->value;
+                //修改扣量基数
+                $sts->discount_numerator = 1;
+                $sts->discount_denominator = 1;
+                $sts->save();
+                return $this->redirect(['deliver/index']);
+            }
+
+        } else {
+            return $this->renderAjax('update_discount', [
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    public function actionValidate()
+    {
+        $model = new CampaignStsUpdate();
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = 'json';
+            return ActiveForm::validate($model);
         }
     }
 }

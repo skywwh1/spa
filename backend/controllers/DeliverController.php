@@ -79,17 +79,10 @@ class DeliverController extends Controller
      */
     public function actionView($campaign_id, $channel_id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($campaign_id, $channel_id),
         ]);
 
-//        $searchModel = new DeliverSearch();
-//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-//
-//        return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
-//        ]);
     }
 
     /**

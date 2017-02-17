@@ -71,23 +71,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                             'items' => [
                                                 [
                                                     'label' => \Yii::t('yii', 'View'),
-                                                    'url' => ['view', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
+                                                    'url' => ['#'],
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
                                                 [
                                                     'label' => \Yii::t('yii', 'Paused'),
                                                     'url' => ['#'],
-                                                  //  'visible' => isset($model->end_time) ? false : true,  // if you want to hide an item based on a condition, use this
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/deliver/pause?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
+                                                    //  'visible' => isset($model->end_time) ? false : true,  // if you want to hide an item based on a condition, use this
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
                                                 [
-                                                    'label' => \Yii::t('yii', 'Daily Cap'),
-                                                    'url' => ['daily_cap', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
-                                                    'visible' => true,  // if you want to hide an item based on a condition, use this
+                                                    'label' => \Yii::t('yii', 'Update Cap'),
+                                                    'url' => ['#'],
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
                                                 [
-                                                    'label' => \Yii::t('yii', 'Discount'),
-                                                    'url' => ['discount', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id],
-                                                    'visible' => true,  // if you want to hide an item based on a condition, use this
+                                                    'label' => \Yii::t('yii', 'Update Discount'),
+                                                    'url' => ['#'],
+                                                    // 'visible' => true,  // if you want to hide an item based on a condition, use this
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
 //                                                [
 //                                                    'label' => \Yii::t('yii', 'Delete'),
@@ -126,31 +128,21 @@ $this->registerJsFile(
     '@web/admin/js/dropdown.js',
     ['depends' => [yii\bootstrap\BootstrapAsset::className()]]
 );
-$this->registerJs(<<<JS
-$(document).on("click", "a[data-view=0]", function (e) {
-     //alert('aaa');
-     //console.log($(this));
-    $('#campaign-detail-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
-    //$.pjax.reload({container:"#countries"});  //Reload GridView
-
-});
-
-$('#campaign-detail-modal').on('hidden.bs.modal', function () {
-    // do something…
-  //  $.pjax.reload({container: "#applying_list"});  //Reload GridView
-})
-JS
+$this->registerJsFile(
+    '@web/js/deliver.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 ?>
 <?php Modal::begin([
-    'id' => 'campaign-detail-modal',
+    'id' => 'deliver-modal',
     'size' => 'modal-md',
+//    'header' =>'00',
     'clientOptions' => [
         'backdrop' => 'static',
         'keyboard' => false,
     ],
 ]);
 
-echo '<div id="campaign-detail-content"></div>';
+echo '<div id="deliver-detail-content"></div>';
 
 Modal::end(); ?>

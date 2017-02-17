@@ -17,6 +17,8 @@ use Yii;
  * @property integer $daily_cap
  * @property string $actual_discount
  * @property string $discount
+ * @property integer $discount_numerator
+ * @property integer $discount_denominator
  * @property integer $is_run
  * @property integer $status
  * @property integer $end_time
@@ -63,8 +65,9 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'daily_cap', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
-            [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
+            [['campaign_id', 'channel_id', 'daily_cap', 'discount_numerator', 'discount_denominator', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
+            [['adv_price', 'pay_out', 'actual_discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
+            ['discount', 'number', 'max' => 99, 'min' => 0],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
             [['track_url'], 'string', 'max' => 255],
             [['channel0', 'note'], 'safe'],
@@ -91,6 +94,8 @@ class Deliver extends \yii\db\ActiveRecord
             'actual_discount' => 'Actual Discount',
             'discount' => 'Discount',
             'is_run' => 'Is Run',
+            'discount_numerator' => 'Discount Numerator',
+            'discount_denominator' => 'Discount Denominator',
             'status' => 'Status',
             'creator' => 'Creator',
             'create_time' => 'Create Time',
@@ -198,5 +203,18 @@ class Deliver extends \yii\db\ActiveRecord
     public static function getAllNeedSendCreate()
     {
         return static::find()->where(['is_send_create' => 0])->all();
+    }
+
+    /**
+     * 查出需要停止的单子
+     * @return array|Deliver[]
+     */
+    public static function getNeedPause()
+    {
+        return Deliver::find()
+            ->where(['status' => 1])
+            ->andWhere(['not', ['end' => null]])
+            ->andWhere(['<', ['end_time' => time()]])
+            ->all();
     }
 }

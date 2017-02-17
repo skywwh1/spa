@@ -95,6 +95,7 @@ class DeliverSearch extends Deliver
             ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
             ->andFilterWhere(['like', 'channel.username', $this->channel_id])
             ->andFilterWhere(['like', 'note', $this->note]);
+        $query->orderBy('create_time desc');
 
         return $dataProvider;
     }

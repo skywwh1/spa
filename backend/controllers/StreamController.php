@@ -154,15 +154,19 @@ class StreamController extends Controller
     /**
      * 替换广告组的参数，目前只有 click_id 和ch_id
      * @param Campaign $camp
-     * @param $click_uuid
-     * @param $ch_id
+     * @param Stream $model
      * @return string
+     * @internal param $click_uuid
+     * @internal param $ch_id
      */
-    private function genAdvLink($camp, $click_uuid, $ch_id)
+    private function genAdvLink($camp, $model)
     {
         $paras = array(
-            'click_id' => $click_uuid,
-            'ch_id' => $ch_id,
+            'click_id' => $model->click_uuid,
+            'ch_id' => $model->ch_id,
+            'idfa' => $model->idfa,
+            'gaid' => $model->gaid,
+            'site' => $model->site,
         );
 
         $link = $camp->adv_link;
@@ -177,7 +181,7 @@ class StreamController extends Controller
             $post_param = str_replace('{ch_id}', $paras['ch_id'], $post_param);
             $link .= $post_param;
         } else {
-            $link .= 'click_id=' . $click_uuid; //默认
+            $link .= 'click_id=' . $model->click_uuid; //默认
         }
 
         return $link;
