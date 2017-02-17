@@ -103,6 +103,10 @@ class AuditController extends Controller
                 $deliver = Deliver::findIdentity($camp_chanl[0], $camp_chanl[1]);
                 $deliver->match_install += $v; //累加
                 $deliver->discount_denominator += $v; //扣量基数
+                if ($deliver->discount_denominator >= 30 && $v < 10) { //达到30条重置扣量基数,5分钟装10个不正常的。
+                    $deliver->discount_denominator = 1;
+                    $deliver->discount_numerator = 1;
+                }
                 $this->statistics($deliver);
                 if (!$deliver->save()) {
                     var_dump($deliver->getErrors());
