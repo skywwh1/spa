@@ -13,4 +13,5 @@ use yii\helpers\Url;
     <p>username: <?= $channel->username ?></p>
     <p>password: <?= $channel->password_hash?></p>
     <p>please login in SuperADS <?= Html::a('Home ', Url::home(true)) ?> to reset your password</p>
+    <p>Notice : This email is none reply, if any question please contact service@superads.cn</p>
 </div>

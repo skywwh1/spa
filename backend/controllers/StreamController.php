@@ -234,7 +234,7 @@ class StreamController extends Controller
         $model->pay_out = $deliver->pay_out;
         $model->daily_cap = $deliver->daily_cap;
         $model->discount = $deliver->discount;
-        $link = $this->genAdvLink($campaign, $model->click_uuid, $model->ch_id);
+        $link = $this->genAdvLink($campaign, $model);
         $model->redirect = $link;
         $model->save();
         return $code;
