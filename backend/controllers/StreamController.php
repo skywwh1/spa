@@ -224,12 +224,12 @@ class StreamController extends Controller
         }
 
         //3.单子状态
-        if ($deliver->status !== 1) {
-            $code = 403;
-        }
-        if ($campaign->status !== 1) {
-            $code = 403;
-        }
+//        if ($deliver->status !== 1) {
+//            $code = 403;
+//        }
+//        if ($campaign->status !== 1) {
+//            $code = 403;
+//        }
         //正常0
         $model->pay_out = $deliver->pay_out;
         $model->daily_cap = $deliver->daily_cap;
