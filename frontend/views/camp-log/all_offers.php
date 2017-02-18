@@ -86,13 +86,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => false,
             ],
 
-            //             'traffice_source',
+//                         'traffic_source',
             [
                 'attribute' => 'traffic_source',
-//                'value' => function ($data) {
-//                    return ModelsUtil::getTrafficeSource($data->traffice_source);
-//                },
-//                'filter' => ModelsUtil::traffic_source,
                 'filter' => TrafficSource::find()
                     ->select(['name', 'value'])
                     ->orderBy('id')
@@ -186,3 +182,9 @@ $this->params['breadcrumbs'][] = $this->title;
     ]); ?>
     <?php Pjax::end(); ?>
 </div>
+<?php
+$this->registerJsFile(
+    '@web/dist/js/dropdown.js',
+    ['depends' => [yii\bootstrap\BootstrapAsset::className()]]
+);
+?>

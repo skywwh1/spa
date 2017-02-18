@@ -48,10 +48,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         //      'attribute' => 'target_geo',
                         //       'value' => $model->targetGeo->domain,
                         //    ],
-                        'traffice_source',
+                        'traffic_source',
 //                        [
-//                            'attribute' => 'traffice_source',
-//                            'value' => ModelsUtil::getTrafficeSource($model->traffice_source),
+//                            'attribute' => 'traffic_source',
+//                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source),
 //                        ],
                         'note:ntext',
                         'preview_link:url',

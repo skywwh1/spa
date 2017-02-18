@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'label' => 'Traffic Source',
-                    'value' => $model->campaign->traffice_source,
+                    'value' => $model->campaign->traffic_source,
                 ],
                 'pay_out',
                 'daily_cap',

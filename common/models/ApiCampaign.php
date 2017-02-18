@@ -23,7 +23,7 @@ use Yii;
  * @property string $daily_budget
  * @property string $target_geo
  * @property string $adv_link
- * @property string $traffice_source
+ * @property string $traffic_source
  * @property string $note
  * @property string $preview_link
  * @property string $icon
@@ -64,7 +64,7 @@ class ApiCampaign extends \yii\db\ActiveRecord
             [['adv_id', 'campaign_id'], 'required'],
             [['adv_id', 'create_time', 'update_time'], 'integer'],
             [['note'], 'string'],
-            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffice_source', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
+            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'daily_budget', 'target_geo', 'adv_link', 'traffic_source', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
             [['adv_id'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['adv_id' => 'id']],
         ];
     }
@@ -91,7 +91,7 @@ class ApiCampaign extends \yii\db\ActiveRecord
             'daily_budget' => 'Daily Budget',
             'target_geo' => 'Target Geo',
             'adv_link' => 'Adv Link',
-            'traffice_source' => 'Traffice Source',
+            'traffic_source' => 'Traffice Source',
             'note' => 'Note',
             'preview_link' => 'Preview Link',
             'icon' => 'Icon',

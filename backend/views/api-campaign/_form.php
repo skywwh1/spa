@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'daily_budget')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'target_geo')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'adv_link')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'traffice_source')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'traffic_source')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
     <?= $form->field($model, 'preview_link')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'icon')->textInput(['maxlength' => true]) ?>

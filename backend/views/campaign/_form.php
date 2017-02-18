@@ -192,14 +192,14 @@ use yii\widgets\ActiveForm;
                 ],
             ]);
             ?>
-            <?= $form->field($model, 'traffice_source')->checkboxList(
+            <?= $form->field($model, 'traffic_source')->checkboxList(
                 TrafficSource::find()
                     ->select(['name', 'value'])
                     ->orderBy('id')
                     ->indexBy('value')
                     ->column()
             ) ?>
-            <?php // $form->field($model, 'traffice_source')->dropDownList(ModelsUtil::traffic_source) ?>
+            <?php // $form->field($model, 'traffic_source')->dropDownList(ModelsUtil::traffic_source) ?>
             <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
         </div>
     </div>

@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'now_payout',
             'target_geo',
             'adv_link',
-            'traffice_source',
+            'traffic_source',
             'note',
             'preview_link',
             'icon',
