@@ -171,37 +171,6 @@ class DeliverController extends Controller
     }
 
     /**
-     * Updates an existing Deliver model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $campaign_id
-     * @param integer $channel_id
-     * @return mixed
-     */
-    public function actionPause($campaign_id, $channel_id)
-    {
-        $model = new CampaignStsUpdate();
-        $model->campaign_id = $campaign_id;
-        $model->channel_id = $channel_id;
-        if ($model->load(Yii::$app->request->post())) {
-//            $model =
-            $model->create_time = time();
-            $model->type = 2;//2 is sts 1 is campaign
-            $model->name = 'pause';
-            $model->effect_time = strtotime($model->effect_time);
-            $model->save();
-            $sts = $this->findModel($campaign_id, $channel_id);
-            $sts->end_time = $model->effect_time;
-            $sts->save();
-            return $this->redirect(['index']);
-        } else {
-            return $this->renderAjax('pause', [
-                'model' => $model,
-            ]);
-        }
-
-    }
-
-    /**
      * Deletes an existing Deliver model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $campaign_id

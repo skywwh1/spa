@@ -37,6 +37,7 @@ class CampaignStsUpdateController extends Controller
                             'pause',
                             'update-cap',
                             'update-discount',
+                            'update-payout',
 //                            'view',
 //                            'delete',
 //                            'testlink',
@@ -154,7 +155,7 @@ class CampaignStsUpdateController extends Controller
      */
     public function actionPause($campaign_id, $channel_id, $type)
     {
-        $this->layout=false;
+        $this->layout = false;
         $model = new CampaignStsUpdate();
         $model->campaign_id = $campaign_id;
         $model->channel_id = $channel_id;
@@ -262,6 +263,42 @@ class CampaignStsUpdateController extends Controller
 
         } else {
             return $this->renderAjax('update_discount', [
+                'model' => $model,
+            ]);
+        }
+
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $type
+     * @return string|\yii\web\Response
+     */
+    public function actionUpdatePayout($campaign_id, $channel_id, $type)
+    {
+
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+        $sts = new Deliver();
+        if ($type == 2) {
+            $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
+            $model->old_value = $sts->pay_out;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($type == 2) {
+                $model->create_time = time();
+                $model->type = $type;//2 is sts 1 is campaign
+//                $model->is_send = 1; // 不发
+                $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+                $model->save();
+
+                return $this->redirect(['deliver/index']);
+            }
+
+        } else {
+            return $this->renderAjax('update_payout', [
                 'model' => $model,
             ]);
         }

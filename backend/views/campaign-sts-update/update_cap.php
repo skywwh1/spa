@@ -10,15 +10,15 @@ use yii\widgets\ActiveForm;
 ?>
 <?php $form = ActiveForm::begin([
     'id' => $model->formName(),
-    'enableAjaxValidation' => true,
-    'validationUrl' => \yii\helpers\Url::toRoute('campaign-sts-update/validate'),
+//    'enableAjaxValidation' => true,
+//    'validationUrl' => \yii\helpers\Url::toRoute('campaign-sts-update/validate'),
 ]); ?>
 
 <?= $form->field($model, 'channel_id')->hiddenInput()->label(false) ?>
 <?= $form->field($model, 'campaign_id')->hiddenInput()->label(false) ?>
-<?= $form->field($model, 'name')->hiddenInput(['value' => 'update_cap'])->label(false) ?>
+<?= $form->field($model, 'name')->hiddenInput(['value' => 'cap'])->label(false) ?>
 <div class="row">
-    <label class="col-sm-2">Old cap :</label>
+    <label class="col-sm-2">Now cap :</label>
 
     <div class="col-sm-10">
         <label><?= $model->old_value ?></label>
@@ -40,7 +40,7 @@ use yii\widgets\ActiveForm;
 ]);
 ?>
 
-<?= $form->field($model, 'is_send')->dropDownList(['0' => 'Yes', '1' => "No"]) ?>
+<?= $form->field($model, 'is_send')->dropDownList(['1' => 'Yes', '0' => "No"]) ?>
 <div class="form-group">
     <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
 </div>

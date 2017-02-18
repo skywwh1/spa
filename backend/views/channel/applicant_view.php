@@ -50,11 +50,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'status',
                             'value' => ModelsUtil::getAdvertiserStatus($model->status)
                         ],
-                        //'traffic_source',
-                        [
-                            'attribute' => 'traffic_source',
-                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source)
-                        ],
+                        'traffic_source',
+//                        [
+//                            'attribute' => 'traffic_source',
+//                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source)
+//                        ],
                     ],
                 ]) ?>
 

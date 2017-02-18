@@ -1,8 +1,10 @@
 <?php
 
 use common\models\Category;
+use common\models\Device;
 use common\models\Platform;
 use common\models\PriceModel;
+use common\models\TrafficSource;
 use kartik\date\DatePicker;
 use kartik\select2\Select2;
 use kartik\typeahead\Typeahead;
@@ -79,6 +81,14 @@ use yii\widgets\ActiveForm;
 
             <?php // $form->field($model, 'effective_time')->textInput() ?>
             <?php // $form->field($model, 'adv_update_time')->textInput() ?>
+            <?= $form->field($model, 'device')->checkboxList(
+                Device::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
+            ) ?>
+
             <?= $form->field($model, 'platform')->dropDownList(
                 Platform::find()
                     ->select(['name', 'value'])
@@ -95,7 +105,7 @@ use yii\widgets\ActiveForm;
                 <div class='col-xs-5'>
                     <div class="form-group">
                         <label class="control-label" for="campaign-daily_cap">Open Cap</label>
-                        <?= Html::dropDownList('open_cap', '0', ModelsUtil::user_status, ['class' => 'form-control']) // $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status)  ?>
+                        <?= Html::dropDownList('open_cap', '0', ModelsUtil::user_status, ['class' => 'form-control']) // $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status)     ?>
                     </div>
                 </div>
             </div>
@@ -146,43 +156,50 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="box-body">
             <?php
-//            $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
-//                'pluginOptions' => ['highlight' => true],
-//                'options' => ['value' => $model->target_geo],
-//                'dataset' => [
-//                    [
-//                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-//                        'display' => 'value',
-//                        'remote' => [
-//                            'url' => Url::to(['campaign/get_geo']) . '?name=%QUERY',
-//                            'wildcard' => '%QUERY'
-//                        ]
-//                    ]],
-//            ])
-                echo $form->field($model, 'target_geo')->widget(Select2::classname(), [
+            //            $form->field($model, 'target_geo')->widget(Typeahead::classname(), [
+            //                'pluginOptions' => ['highlight' => true],
+            //                'options' => ['value' => $model->target_geo],
+            //                'dataset' => [
+            //                    [
+            //                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+            //                        'display' => 'value',
+            //                        'remote' => [
+            //                            'url' => Url::to(['campaign/get_geo']) . '?name=%QUERY',
+            //                            'wildcard' => '%QUERY'
+            //                        ]
+            //                    ]],
+            //            ])
+            echo $form->field($model, 'target_geo')->widget(Select2::classname(), [
                 'initValueText' => $model->target_geo, // set the initial display text
-                    'size' => Select2::MEDIUM,
-                    'options' => [
-                        'multiple' => true,
+                'size' => Select2::MEDIUM,
+                'options' => [
+                    'multiple' => true,
+                ],
+                'pluginOptions' => [
+                    'allowClear' => true,
+                    'minimumInputLength' => 1,
+                    'language' => [
+                        'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
                     ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'minimumInputLength' => 1,
-                        'language' => [
-                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-                        ],
-                        'ajax' => [
-                            'url' => Url::to(['campaign/get_geo']),
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
-                        ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
-                        'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
+                    'ajax' => [
+                        'url' => Url::to(['util/geo']),
+                        'dataType' => 'json',
+                        'data' => new JsExpression('function(params) { return {name:params.term}; }')
                     ],
-                ]);
+                    'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                    'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
+                    'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
+                ],
+            ]);
             ?>
-            <?= $form->field($model, 'traffice_source')->dropDownList(ModelsUtil::traffic_source) ?>
+            <?= $form->field($model, 'traffice_source')->checkboxList(
+                TrafficSource::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
+            ) ?>
+            <?php // $form->field($model, 'traffice_source')->dropDownList(ModelsUtil::traffic_source) ?>
             <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
         </div>
     </div>

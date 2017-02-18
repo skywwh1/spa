@@ -2,9 +2,12 @@
 
 use common\models\PriceModel;
 use common\models\System;
+use common\models\TrafficSource;
+use kartik\select2\Select2;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -80,7 +83,7 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'system')->dropDownList(
                         System::find()
-                            ->select(['name','value'])
+                            ->select(['name', 'value'])
                             ->orderBy('id')
                             ->indexBy('value')
                             ->column()
@@ -89,7 +92,7 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true,'placeholder'=>'Multiple: aaa@example.com;ccc@example.com']) ?>
+                    <?= $form->field($model, 'cc_email')->textInput(['maxlength' => true, 'placeholder' => 'Multiple: aaa@example.com;ccc@example.com']) ?>
 
                     <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
 
@@ -102,12 +105,18 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'status')->dropDownList(ModelsUtil::advertiser_status) ?>
 
-
-                    <?= $form->field($model, 'traffic_source')->dropDownList(ModelsUtil::traffic_source) ?>
+                    <?= $form->field($model, 'traffic_source')->checkboxList(
+                        TrafficSource::find()
+                            ->select(['name', 'value'])
+                            ->orderBy('id')
+                            ->indexBy('value')
+                            ->column()
+                    ) ?>
+                    <?php // $form->field($model, 'traffic_source')->dropDownList(ModelsUtil::traffic_source) ?>
 
                     <?= $form->field($model, 'pricing_mode')->dropDownList(
                         PriceModel::find()
-                            ->select(['name','value'])
+                            ->select(['name', 'value'])
                             ->orderBy('id')
                             ->indexBy('value')
                             ->column()
@@ -116,10 +125,52 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'post_back')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'strong_geo')->textInput(['maxlength' => true]) ?>
+                    <?php
+                    echo $form->field($model, 'strong_geo')->widget(Select2::classname(), [
+                        'initValueText' => $model->strong_geo, // set the initial display text
+                        'size' => Select2::MEDIUM,
+                        'options' => [
+                            'multiple' => true,
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 1,
+                            'language' => [
+                                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                            ],
+                            'ajax' => [
+                                'url' => Url::to(['util/geo']),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                            ],
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
+                            'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
+                        ],
+                    ]); ?>
 
-
-                    <?= $form->field($model, 'strong_catagory')->textInput(['maxlength' => true]) ?>
+                    <?php echo $form->field($model, 'strong_category')->widget(Select2::classname(), [
+                        'initValueText' => $model->strong_category, // set the initial display text
+                        'size' => Select2::MEDIUM,
+                        'options' => [
+                            'multiple' => true,
+                        ],
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 1,
+                            'language' => [
+                                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                            ],
+                            'ajax' => [
+                                'url' => Url::to(['util/category']),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                            ],
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
+                            'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
+                        ],
+                    ]); ?>
                     <div class="form-group">
                         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
                     </div><?php ActiveForm::end(); ?>

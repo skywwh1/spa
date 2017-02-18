@@ -4,11 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
-<<<<<<< HEAD
- * @version   3.1.3
-=======
- * @version   3.1.1
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
+ * @version   3.1.4
  */
 
 namespace kartik\grid;
@@ -23,7 +19,6 @@ use kartik\editable\Editable;
 use kartik\base\Config;
 
 /**
-<<<<<<< HEAD
  * The EditableColumn converts the data to editable using the Editable widget [[\kartik\editable\Editable]].
  *
  * To add an EditableColumn to the gridview, add it to the [[GridView::columns|columns]] configuration as follows:
@@ -37,16 +32,12 @@ use kartik\base\Config;
  *     ],
  * ]
  * ```
-=======
- * The EditableColumn converts the data to editable using the Editable widget [[\kartik\editable\Editable]]
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
  */
 class EditableColumn extends DataColumn
 {
-<<<<<<< HEAD
     /**
      * @var array|Closure the configuration options for the [[\kartik\editable\Editable]] widget. If not set as an
      * array, this can be passed as a callback function of the signature: `function ($model, $key, $index)`, where:
@@ -54,17 +45,6 @@ class EditableColumn extends DataColumn
      * - `$key`: _string|object_, is the primary key value associated with the data model.
      * - `$index`: _integer_, is the zero-based index of the data model among the model array returned by [[dataProvider]].
      * - `$column`: _EditableColumn_, is the column object instance.
-=======
-
-    /**
-     * @var array|Closure the configuration options for the [[\kartik\editable\Editable]] widget. If not set as an
-     *     array, this can be passed as a callback function of the signature: `function ($model, $key, $index)`, where:
-     * - $model mixed is the data model
-     * - $key mixed is the key associated with the data model
-     * - $index integer is the zero-based index of the data model among the models array returned by
-     *     [[GridView::dataProvider]].
-     * - $widget EditableColumn is the editable column widget instance
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $editableOptions = [];
 
@@ -74,7 +54,6 @@ class EditableColumn extends DataColumn
     public $refreshGrid = false;
 
     /**
-<<<<<<< HEAD
      * @var boolean|Closure whether to prevent rendering the editable behavior and display a readonly data. You can
      * also set this up as an anonymous function of the form `function($model, $key, $index, $widget)` that will return
      * a boolean value, where:
@@ -82,15 +61,6 @@ class EditableColumn extends DataColumn
      * - `$key`: _string|object_, is the primary key value associated with the data model.
      * - `$index`: _integer_, is the zero-based index of the data model among the model array returned by [[dataProvider]].
      * - `$column`: _EditableColumn_, is the column object instance.     */
-=======
-     * @var boolean|Closure whether to prevent rendering the editable behavior and display a readonly data. You can also set this up as an anonymous function of the form `function($model, $key, $index, $widget)` that will return a boolean value, where:
-     * - $model mixed is the data model
-     * - $key mixed is the key associated with the data model
-     * - $index integer is the zero-based index of the data model among the models array
-     *   returned by [[GridView::dataProvider]].
-     * - $widget EditableColumn is the editable column widget instance
-     */
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
     public $readonly = false;
 
     /**
@@ -118,18 +88,7 @@ class EditableColumn extends DataColumn
     }
 
     /**
-<<<<<<< HEAD
      * @inheritdoc
-=======
-     * Renders the data cell content.
-     *
-     * @param mixed   $model the data model
-     * @param mixed   $key the key associated with the data model
-     * @param integer $index the zero-based index of the data model among the models array returned by
-     *     [[GridView::dataProvider]].
-     *
-     * @return string the rendering result
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      * @throws InvalidConfigException
      */
     public function renderDataCellContent($model, $key, $index)

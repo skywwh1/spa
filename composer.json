@@ -29,8 +29,9 @@
         "rmrevin/yii2-geoip": "~1.1",
         "kartik-v/yii2-widget-datetimepicker": "*",
         "kartik-v/yii2-mpdf": "*",
-        "kartik-v/yii2-grid": "@dev",
-        "kartik-v/yii2-export": "*"
+        "kartik-v/yii2-export": "*",
+        "kartik-v/yii2-grid": "@dev"
+
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

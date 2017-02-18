@@ -223,6 +223,12 @@ class CampaignController extends Controller
     protected function beforeUpdate(&$campaign)
     {
         $campaign->target_geo = explode(',', $campaign->target_geo);
+        if (!empty($campaign->traffice_source)) {
+            $campaign->traffice_source = explode(',', $campaign->traffice_source);
+        }
+        if (!empty($campaign->device)) {
+            $campaign->device = explode(',', $campaign->device);
+        }
     }
 
     /**
@@ -238,8 +244,14 @@ class CampaignController extends Controller
         if (!empty($model->promote_end)) {
             $model->promote_end = strtotime($model->promote_end);
         }
-        if(!empty($model->target_geo)){
-            $model->target_geo = implode(',',$model->target_geo);
+        if (!empty($model->target_geo)) {
+            $model->target_geo = implode(',', $model->target_geo);
+        }
+        if (!empty($model->traffice_source)) {
+            $model->traffice_source = implode(',', $model->traffice_source);
+        }
+        if (!empty($model->device)) {
+            $model->device = implode(',', $model->device);
         }
     }
 }

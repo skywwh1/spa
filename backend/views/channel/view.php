@@ -87,11 +87,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'status',
                             'value' => ModelsUtil::getAdvertiserStatus($model->status)
                         ],
-                        //'traffic_source',
-                        [
-                            'attribute' => 'traffic_source',
-                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source)
-                        ],
+                        'traffic_source',
+//                        [
+//                            'attribute' => 'traffic_source',
+//                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source)
+//                        ],
                         'pricing_mode',
 //                        [
 //                            'attribute' => 'pricing_mode',
@@ -102,7 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'payable',
                         'paid',
                         'strong_geo',
-                        'strong_catagory',
+                        'strong_category',
                     ],
                 ]) ?>
 

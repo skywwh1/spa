@@ -5,28 +5,38 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Deliver */
+/* @var $model common\models\CampaignStsUpdate */
 
 ?>
-<h3>Pause campaign</h3>
 <?php $form = ActiveForm::begin([
     'id' => $model->formName(),
 //    'enableAjaxValidation' => true,
-   // 'validationUrl' => \yii\helpers\Url::toRoute('campaign-sts-update/validate'),
+//    'validationUrl' => \yii\helpers\Url::toRoute('campaign-sts-update/validate'),
 ]); ?>
 
 <?= $form->field($model, 'channel_id')->hiddenInput()->label(false) ?>
 <?= $form->field($model, 'campaign_id')->hiddenInput()->label(false) ?>
+<?= $form->field($model, 'name')->hiddenInput(['value' => 'payout'])->label(false) ?>
+<div class="row">
+    <label class="col-sm-4">Now Payout :</label>
 
+    <div class="col-sm-7">
+        <label><?= $model->old_value ?></label>
+    </div>
+    <?= $form->field($model, 'old_value')->hiddenInput()->label(false) ?>
+</div>
+<?= $form->field($model, 'value')->textInput(['type' => 'number', 'required' => "required", 'min' => '0'])->label('New Payout') ?>
 <?= $form->field($model, 'effect_time')->widget(DateTimePicker::classname(), [
     'type' => DateTimePicker::TYPE_INPUT,
-//     'value' => isset($model->promote_end) ? date("Y-m-d", $model->promote_start) : '',
+    'value' => '',
     'pluginOptions' => [
         'autoclose' => true,
         'format' => 'yyyy-mm-dd hh:ii',
         'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
     ],
     'readonly' => true,
+    'options' => ['required' => "required",],
+
 ]);
 ?>
 

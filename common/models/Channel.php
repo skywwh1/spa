@@ -60,14 +60,14 @@ use yii\web\IdentityInterface;
  * @property integer $suspended
  * @property integer $deleted
  * @property integer $status
- * @property integer $traffic_source
+ * @property string $traffic_source
  * @property string $pricing_mode
  * @property string $post_back
  * @property integer $total_revenue
  * @property integer $payable
  * @property string $paid
  * @property string $strong_geo
- * @property string $strong_catagory
+ * @property string $strong_category
  *
  * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
@@ -96,10 +96,10 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['payment_way', 'payment_term'], 'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
-            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'total_revenue', 'payable'], 'integer'],
+            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable'], 'integer'],
             [['pricing_mode', 'username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
-            [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'string', 'max' => 255],
+            [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'company', 'address', 'post_back', 'paid'], 'string', 'max' => 255],
             [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 100],
             [['country'], 'string', 'max' => 255],
             [['city'], 'string', 'max' => 200],
@@ -108,7 +108,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['email'], 'email'],
-            ['cc_email', 'safe'],
+            [['cc_email', 'traffic_source', 'strong_category', 'strong_geo'], 'safe'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
@@ -177,7 +177,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             'payable' => 'Payable',
             'paid' => 'Paid',
             'strong_geo' => 'Strong Geo',
-            'strong_catagory' => 'Strong Catagory',
+            'strong_category' => 'Strong Category',
         ];
     }
 

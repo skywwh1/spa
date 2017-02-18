@@ -146,7 +146,7 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-       $this->beforeUpdate($model);
+        $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeCreate($model);
 
@@ -228,6 +228,17 @@ class ChannelController extends Controller
         if (!empty($model->payment_way)) {
             $model->payment_way = implode(',', $model->payment_way);
         }
+        if (!empty($model->traffic_source)) {
+            $model->traffic_source = implode(',', $model->traffic_source);
+        }
+
+        if (!empty($model->strong_geo)) {
+            $model->strong_geo = implode(',', $model->strong_geo);
+        }
+
+        if (!empty($model->strong_category)) {
+            $model->strong_category = implode(',', $model->strong_category);
+        }
     }
 
     /**
@@ -240,6 +251,18 @@ class ChannelController extends Controller
         }
         if (!empty($model->payment_term)) {
             $model->payment_term = explode(',', $model->payment_term);
+        }
+
+        if (!empty($model->traffic_source)) {
+            $model->traffic_source = explode(',', $model->traffic_source);
+        }
+
+        if (!empty($model->strong_geo)) {
+            $model->strong_geo = explode(',', $model->strong_geo);
+        }
+
+        if (!empty($model->strong_category)) {
+            $model->strong_category = explode(',', $model->strong_category);
         }
     }
 

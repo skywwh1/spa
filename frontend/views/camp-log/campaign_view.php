@@ -40,11 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'adv_price',
 //            'now_payout',
              'target_geo',
-            //'traffice_source',
-            [
-                'attribute' => 'traffice_source',
-                'value' => ModelsUtil::getTrafficeSource($model->traffice_source),
-            ],
+            'traffice_source',
+//            [
+//                'attribute' => 'traffice_source',
+//                'value' => ModelsUtil::getTrafficeSource($model->traffice_source),
+//            ],
             'note:text',
             'preview_link:url',
 //            'icon',

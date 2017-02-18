@@ -2,6 +2,7 @@
 
 use common\models\Category;
 use common\models\RegionsDomain;
+use common\models\TrafficSource;
 use yii\bootstrap\Button;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -88,10 +89,15 @@ $this->params['breadcrumbs'][] = $this->title;
             //             'traffice_source',
             [
                 'attribute' => 'traffice_source',
-                'value' => function ($data) {
-                    return ModelsUtil::getTrafficeSource($data->traffice_source);
-                },
-                'filter' => ModelsUtil::traffic_source,
+//                'value' => function ($data) {
+//                    return ModelsUtil::getTrafficeSource($data->traffice_source);
+//                },
+//                'filter' => ModelsUtil::traffic_source,
+                'filter' => TrafficSource::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
             ],
             // 'note',
             // 'preview_link',

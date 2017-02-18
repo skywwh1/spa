@@ -46,6 +46,7 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
             'kartik\\grid\\' => 12,
             'kartik\\field\\' => 13,
             'kartik\\export\\' => 14,
+            'kartik\\dialog\\' => 14,
             'kartik\\datetime\\' => 16,
             'kartik\\daterange\\' => 17,
             'kartik\\date\\' => 12,
@@ -171,6 +172,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'kartik\\export\\' => 
         array (
             0 => __DIR__ . '/..' . '/kartik-v/yii2-export',
+        ),
+        'kartik\\dialog\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/kartik-v/yii2-dialog',
         ),
         'kartik\\datetime\\' => 
         array (

@@ -4,11 +4,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
-<<<<<<< HEAD
- * @version   3.1.3
-=======
- * @version   3.1.1
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
+ * @version   3.1.4
  */
 
 namespace kartik\grid;
@@ -16,7 +12,6 @@ namespace kartik\grid;
 use Yii;
 
 /**
-<<<<<<< HEAD
  * This module allows global level configurations for the enhanced Krajee [[GridView]]. One can configure the module
  * in their Yii configuration file as shown below:
  *
@@ -28,29 +23,31 @@ use Yii;
  *     ]
  * ]
  * ```
-=======
- * Module with various modifications to the Yii 2 grid.
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
- * @since 1.0
+ * @since  1.0
  */
 class Module extends \kartik\base\Module
 {
-<<<<<<< HEAD
     /**
      * The module name for Krajee gridview
      */
     const MODULE = "gridview";
 
     /**
-     * @var string|array the action (url) used for downloading exported file
-=======
-    const MODULE = "gridview";
+     * Session key variable name for storing the export encryption salt.
+     */
+    const SALT_SESS_KEY = "krajeeGridExportSalt";
 
     /**
-     * @var mixed the action (url) used for downloading exported file
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
+     * @var string a random salt that will be used to generate a hash string for export configuration. If not set, this
+     * will be generated using [[\yii\base\Security::generateRandomKey()]] to generate a random key. The randomly
+     * generated salt will be stored in a session variable identified by [[SALT_SESS_KEY]].
+     */
+    public $exportEncryptSalt;
+
+    /**
+     * @var string|array the action (url) used for downloading exported file
      */
     public $downloadAction = '/gridview/export/download';
 
@@ -61,6 +58,13 @@ class Module extends \kartik\base\Module
     {
         $this->_msgCat = 'kvgrid';
         parent::init();
+        if (!isset($this->exportEncryptSalt)) {
+            $session = Yii::$app->session;
+            if (!$session->get(self::SALT_SESS_KEY)) {
+                $session->set(self::SALT_SESS_KEY, Yii::$app->security->generateRandomKey());
+            }
+            $this->exportEncryptSalt = $session->get(self::SALT_SESS_KEY);
+        }
         if (isset($dummyDemoTranslations)) {
             /** @noinspection PhpUnusedLocalVariableInspection */
             $dummyMessages = Yii::t('kvgrid', 'Add Book') .

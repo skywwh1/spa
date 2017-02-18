@@ -19,7 +19,7 @@ class ChannelSearch extends Channel
     {
         return [
             [['id', 'type', 'om', 'master_channel', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
-            [['username', 'firstname', 'lastname', 'auth_key', 'password_hash', 'password_reset_token', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'system', 'contacts', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'wechat', 'skype', 'alipay', 'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_catagory'], 'safe'],
+            [['username', 'firstname', 'lastname', 'auth_key', 'password_hash', 'password_reset_token', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'system', 'contacts', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'wechat', 'skype', 'alipay', 'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_category'], 'safe'],
         ];
     }
 
@@ -112,7 +112,7 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'post_back', $this->post_back])
             ->andFilterWhere(['like', 'paid', $this->paid])
             ->andFilterWhere(['like', 'strong_geo', $this->strong_geo])
-            ->andFilterWhere(['like', 'strong_catagory', $this->strong_catagory]);
+            ->andFilterWhere(['like', 'strong_category', $this->strong_category]);
 
         return $dataProvider;
     }

@@ -18,17 +18,16 @@
         }
     ],
     "require": {
-<<<<<<< HEAD
         "kartik-v/yii2-krajee-base": "~1.7",
         "kartik-v/yii2-dialog": "~1.0"
-=======
-        "kartik-v/yii2-krajee-base": "~1.7"
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
     },
     "autoload": {
         "psr-4": {
             "kartik\\grid\\": ""
         }
+    },
+    "suggest": {
+        "kartik-v/yii2-mpdf": "For exporting grids to PDF"
     },
     "extra": {
         "branch-alias": {

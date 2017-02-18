@@ -91,6 +91,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     // 'visible' => true,  // if you want to hide an item based on a condition, use this
                                                     'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
+                                                [
+                                                    'label' => \Yii::t('yii', 'Update Payout'),
+                                                    'url' => ['#'],
+                                                    // 'visible' => true,  // if you want to hide an item based on a condition, use this
+                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
+                                                ],
 //                                                [
 //                                                    'label' => \Yii::t('yii', 'Delete'),
 //                                                    'linkOptions' => [

@@ -2,11 +2,7 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
-<<<<<<< HEAD
- * @version   3.1.3
-=======
- * @version   3.1.1
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
+ * @version   3.1.4
  *
  * Grid Export Validation Module for Yii's Gridview. Supports export of
  * grid data as CSV, HTML, or Excel.
@@ -92,18 +88,15 @@
         var self = this, gridOpts = options.gridOpts, genOpts = options.genOpts;
         self.$element = $(element);
         //noinspection JSUnresolvedVariable
-<<<<<<< HEAD
         self.gridId = gridOpts.gridId;
         self.$grid = $("#" + gridOpts.gridId);
         self.dialogLib = options.dialogLib;
-=======
-        self.$grid = $("#" + gridOpts.gridId);
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         self.messages = gridOpts.messages;
         self.target = gridOpts.target;
         self.exportConversions = gridOpts.exportConversions;
         self.showConfirmAlert = gridOpts.showConfirmAlert;
         self.filename = genOpts.filename;
+        self.expHash = genOpts.expHash;
         self.showHeader = genOpts.showHeader;
         self.showFooter = genOpts.showFooter;
         self.showPageSummary = genOpts.showPageSummary;
@@ -141,44 +134,6 @@
             });
             return data;
         },
-<<<<<<< HEAD
-=======
-        notify: function (e) {
-            var self = this;
-            if (!self.showConfirmAlert) {
-                e.preventDefault();
-                return true;
-            }
-            var msgs = self.messages, msg1 = isEmpty(self.alertMsg) ? '' : self.alertMsg,
-                msg2 = isEmpty(msgs.allowPopups) ? '' : msgs.allowPopups,
-                msg3 = isEmpty(msgs.confirmDownload) ? '' : msgs.confirmDownload, msg = '';
-            if (msg1.length && msg2.length) {
-                msg = msg1 + '\n\n' + msg2;
-            } else {
-                if (!msg1.length && msg2.length) {
-                    msg = msg2;
-                } else {
-                    msg = (msg1.length && !msg2.length) ? msg1 : '';
-                }
-            }
-            if (msg3.length) {
-                msg = msg + '\n\n' + msg3;
-            }
-            e.preventDefault();
-            if (isEmpty(msg)) {
-                return true;
-            }
-            return self.kvConfirm(msg);
-        },
-        kvConfirm: function (msg) {
-            try {
-                return window.confirm(msg);
-            }
-            catch (err) {
-                return true;
-            }
-        },
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         setPopupAlert: function (msg) {
             var self = this;
             if (self.popup.document === undefined) {
@@ -194,24 +149,14 @@
                 self.popup.document.write(newmsg);
             }
         },
-<<<<<<< HEAD
-        processExport: function(callback, arg) {
+        processExport: function (callback, arg) {
             var self = this;
-            setTimeout(function() {
-=======
-        listenClick: function (callback) {
-            var self = this, arg = arguments.length > 1 ? arguments[1] : '';
-            self.$element.on("click", function (e) {
-                if (!self.notify(e)) {
-                    return;
-                }
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
+            setTimeout(function () {
                 if (!isEmpty(arg)) {
                     self[callback](arg);
                 } else {
                     self[callback]();
                 }
-<<<<<<< HEAD
             }, 100);
         },
         listenClick: function (callback) {
@@ -241,26 +186,19 @@
                 if (isEmpty(msg)) {
                     return;
                 }
-                lib.confirm(msg, function(result) {
+                lib.confirm(msg, function (result) {
                     if (result) {
                         self.processExport(callback, arg);
                     }
                     e.preventDefault();
                 });
                 return false;
-=======
-                e.preventDefault();
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             });
         },
         listen: function () {
             var self = this;
             if (self.target === '_popup') {
-<<<<<<< HEAD
                 self.$form.on('submit.gridexport', function () {
-=======
-                self.$form.on('submit', function () {
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                     setTimeout(function () {
                         self.setPopupAlert(self.messages.downloadComplete, true);
                     }, 1000);
@@ -287,14 +225,10 @@
         },
         clean: function (expType) {
             var self = this, $table = self.$table.clone(),
-<<<<<<< HEAD
                 $tHead = self.$table.closest('.kv-grid-container').find('.kv-thead-float thead'),
-                safeRemove = function(selector) {
+                safeRemove = function (selector) {
                     $table.find(selector + '.' + self.gridId).remove();
                 };
-=======
-                $tHead = self.$table.closest('.kv-grid-container').find('.kv-thead-float thead');
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             if ($tHead.length) {
                 $tHead = $tHead.clone();
                 $table.find('thead').before($tHead).remove();
@@ -308,7 +242,6 @@
             });
             $table.find('input').remove(); // remove any form inputs
             if (!self.showHeader) {
-<<<<<<< HEAD
                 $table.children('thead').remove();
             }
             if (!self.showPageSummary) {
@@ -319,28 +252,12 @@
             }
             if (!self.showCaption) {
                 safeRemove('.kv-caption-container');
-=======
-                $table.find('thead').remove();
-            }
-            if (!self.showPageSummary) {
-                $table.find('tfoot.kv-page-summary').remove();
-            }
-            if (!self.showFooter) {
-                $table.find('tfoot.kv-table-footer').remove();
-            }
-            if (!self.showCaption) {
-                $table.find('kv-table-caption').remove();
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             }
             $table.find('.skip-export').remove();
             $table.find('.skip-export-' + expType).remove();
             var htmlContent = $table.html();
             htmlContent = self.preProcess(htmlContent);
             $table.html(htmlContent);
-<<<<<<< HEAD
-=======
-            console.log($table);
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             return $table;
         },
         preProcess: function (content) {
@@ -354,24 +271,26 @@
             return processed;
         },
         download: function (type, content) {
-            var self = this, fmt = self.$element.data('format'),
-                config = isEmpty(self.config) ? {} : self.config;
-            self.$form.find('[name="export_filetype"]').val(type);
-            self.$form.find('[name="export_filename"]').val(self.filename);
-            self.$form.find('[name="export_content"]').val(content);
-            self.$form.find('[name="export_mime"]').val(fmt);
-            if (type === 'pdf') {
-                self.$form.find('[name="export_config"]').val(JSON.stringify(config));
-            } else {
-                self.$form.find('[name="export_config"]').val('');
+            var self = this, $el = self.$element, mime = $el.attr('data-mime') || 'text/plain',
+                hashData = $el.attr('data-hash') || '', config = isEmpty(self.config) ? {} : self.config,
+                setValue = function (f, v) {
+                    self.$form.find('[name="export_' + f + '"]').val(v);
+                };
+            if (type === 'json' && config.jsonReplacer) {
+                delete config.jsonReplacer;
             }
+            setValue('filetype', type);
+            setValue('filename', self.filename);
+            setValue('content', content);
+            setValue('mime', mime);
+            setValue('hash', hashData);
+            setValue('config', JSON.stringify(config));
             if (self.target === '_popup') {
                 self.popup = popupDialog('', 'kvDownloadDialog', 350, 120);
                 self.popup.focus();
                 self.setPopupAlert(self.messages.downloadProgress);
             }
             self.$form.submit();
-
         },
         exportHTML: function () {
             /** @namespace self.config.cssFile */
@@ -461,13 +380,6 @@
         });
     };
 
-<<<<<<< HEAD
     $.fn.gridexport.defaults = {dialogLib: 'krajeeDialog'};
     $.fn.gridexport.Constructor = GridExport;
-=======
-    $.fn.gridexport.defaults = {};
-
-    $.fn.gridexport.Constructor = GridExport;
-
->>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
 })(window.jQuery);
