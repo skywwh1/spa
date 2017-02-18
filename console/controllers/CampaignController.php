@@ -1,8 +1,10 @@
 <?php
 namespace console\controllers;
 
+use common\models\Campaign;
 use common\models\CampaignStsUpdate;
 use common\models\Deliver;
+use common\utility\MailUtil;
 use yii\console\Controller;
 
 /**
@@ -45,7 +47,69 @@ class CampaignController extends Controller
 
     public function actionSendUpdate()
     {
-        CampaignStsUpdate::getStsUpdateCap();
+        // 发送 payout
+
+        // 发送 cap
+        // 发送 paused
+        $pause = array();
+        $cap = array();
+        $payout = array();
+        $models = CampaignStsUpdate::getStsSendMail();
+        if (isset($models)) {
+            foreach ($models as $item) {
+                if ($item->type === 1) { // campaign 群发
+                    $camp = Campaign::findById($item->campaign_id);
+                    if (isset($camp)) {
+                        $delivers = Deliver::findRunningByCampaignId($camp->id);
+                        if ($item->name == 'pause') {
+                            foreach ($delivers as $d) {
+                                $d->newValue = $item->value;
+                                $pause[$camp->id][] = $d;
+                            }
+                        } else if ($item->name == 'cap') {
+                            foreach ($delivers as $d) {
+                                $d->newValue = $item->value;
+                                $cap[$camp->id][] = $d;
+                            }
+                        } else if ($item->name == 'payout') {
+                            foreach ($delivers as $d) {
+                                $d->newValue = $item->value;
+                                $payout[$camp->id][] = $d;
+                            }
+                        }
+                    }
+
+                } else if ($item->type == 2) {  //单独发
+                    $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                    if (isset($sts)) {
+                        if ($item->name == 'pause') {
+                            $sts->newValue = $item->value;
+                            $pause[$item->campaign_id][] = $sts;
+                        } else if ($item->name == 'cap') {
+                            $sts->newValue = $item->value;
+                            $cap[$item->campaign_id][] = $sts;
+                        } else if ($item->name == 'payout') {
+                            $sts->newValue = $item->value;
+                            $payout[$item->campaign_id][] = $sts;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!empty($payout)) {
+
+        }
+
+        if (!empty($cap)) {
+            foreach ($cap as $item) {
+                MailUtil::capUpdate($item);
+            }
+        }
+
+        if (!empty($pause)) {
+
+        }
     }
 
     private function echoMessage($str)

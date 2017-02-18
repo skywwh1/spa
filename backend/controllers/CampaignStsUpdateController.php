@@ -163,7 +163,6 @@ class CampaignStsUpdateController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 //            $model =
             if ($type == 2) {
-                $model->create_time = time();
                 $model->type = $type;//2 is sts 1 is campaign
                 $model->name = 'pause';
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
@@ -206,13 +205,10 @@ class CampaignStsUpdateController extends Controller
             $model->old_value = $sts->daily_cap;
         }
         if ($model->load(Yii::$app->request->post())) {
-//            $model =
             if ($type == 2) {
-                $model->create_time = time();
                 $model->type = $type;//2 is sts 1 is campaign
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
                 $model->save();
-
                 return $this->redirect(['deliver/index']);
             }
 
@@ -247,7 +243,6 @@ class CampaignStsUpdateController extends Controller
         }
         if ($model->load(Yii::$app->request->post())) {
             if ($type == 2) {
-                $model->create_time = time();
                 $model->type = $type;//2 is sts 1 is campaign
                 $model->effect_time = time();
                 $model->is_send = 1; // 不发
@@ -288,7 +283,6 @@ class CampaignStsUpdateController extends Controller
         }
         if ($model->load(Yii::$app->request->post())) {
             if ($type == 2) {
-                $model->create_time = time();
                 $model->type = $type;//2 is sts 1 is campaign
 //                $model->is_send = 1; // 不发
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);

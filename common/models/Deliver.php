@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\utility\MailUtil;
+use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 
 /**
@@ -49,6 +50,7 @@ class Deliver extends \yii\db\ActiveRecord
 {
     public $channel0;
     public $step;
+    public $newValue;
 
     /**
      * @inheritdoc
@@ -216,5 +218,14 @@ class Deliver extends \yii\db\ActiveRecord
             ->andWhere(['not', ['end' => null]])
             ->andWhere(['<', ['end_time' => time()]])
             ->all();
+    }
+
+    /**
+     * @param Integer $campaignId
+     * @return array|Deliver[]
+     */
+    public static function findRunningByCampaignId($campaignId)
+    {
+        return static::find()->where(['campaign_id' => $campaignId])->andWhere(['status' => 1])->all();
     }
 }

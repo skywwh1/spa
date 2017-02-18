@@ -132,10 +132,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 <?php
 $this->registerJsFile(
-    '@web/admin/js/dropdown.js',
-    ['depends' => [yii\bootstrap\BootstrapAsset::className()]]
-);
-$this->registerJsFile(
     '@web/js/deliver.js',
     ['depends' => [\yii\web\JqueryAsset::className()]]
 );

@@ -108,7 +108,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'adv_price',
                         // 'now_payout',
 
-                        // 'traffice_source',
+                         'traffic_source',
                         // 'note',
                         // 'preview_link',
                         // 'icon',
@@ -129,8 +129,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'cap',
                         'cvr',
                         'epc',
-//             'pm',
-//             'bd',
                         //'status',
                         [
                             'attribute' => 'status',

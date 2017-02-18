@@ -64,7 +64,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'create_time:datetime',
                         // 'creator',
                         // 'is_run',
-                        'discount',
+//                        'discount',
+                        [
+                            'attribute' => 'discount',
+                            'filter' => false
+                        ],
+                        [
+                            'attribute' => 'deduction_percent',
+                            'value' => function ($model) {
+                                if ($model->match_install !== 0) {
+                                    return ($model->def / $model->match_install);
+                                } else {
+                                    return 0;
+                                }
+                            },
+                            'filter' => false
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

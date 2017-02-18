@@ -61,7 +61,7 @@ class CampaignSearch extends Campaign
         $query->joinWith('advertiser0 a');
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'c.id' => $this->id,
             'promote_start' => $this->promote_start,
             'promote_end' => $this->promote_end,
             'effective_time' => $this->effective_time,

@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use phpDocumentor\Reflection\Types\Integer;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use Yii;
 use yii\db\Query;
@@ -249,7 +250,7 @@ class Campaign extends \yii\db\ActiveRecord
             if ($insert) {
                 $this->create_time = time();
                 $this->update_time = time();
-                if(empty($this->creator)){
+                if (empty($this->creator)) {
                     if (isset(Yii::$app->user)) {
                         $this->creator = Yii::$app->user->identity->getId();
                     } else {
@@ -290,5 +291,14 @@ class Campaign extends \yii\db\ActiveRecord
         }
         return false;
 
+    }
+
+    /**
+     * @param Integer $id
+     * @return Campaign
+     */
+    public static function findById($id)
+    {
+        return static::findOne($id);
     }
 }

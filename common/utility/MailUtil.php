@@ -73,4 +73,52 @@ class MailUtil
             return "Channel " . $channel->id . ' send Fail!';
         }
     }
+
+
+    /**
+     * @param Deliver $deliver
+     * @return string
+     */
+    public static function capUpdate($deliver)
+    {
+        $channel = $deliver->channel;
+        $mail = Yii::$app->mailer->compose('update_cap', ['deliver' => $deliver]);
+        $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+        $mail->setSubject('Cap Update - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'cap update', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return "Channel " . $channel->id . ' send success!';
+        } else {
+            return "Channel " . $channel->id . ' send Fail!';
+        }
+
+    }
+
+    /**
+     * @param Deliver[] $delivers
+     * @return string
+     */
+    public static function payoutUpdate($delivers)
+    {
+
+    }
+
+    /**
+     * @param Deliver[] $delivers
+     * @return string
+     */
+    public static function paused($delivers)
+    {
+
+    }
 }

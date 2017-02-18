@@ -18,6 +18,7 @@ use Yii;
  * @property integer $send_time
  * @property integer $is_effected
  * @property integer $effect_time
+ * @property integer $creator
  * @property integer $create_time
  */
 class CampaignStsUpdate extends \yii\db\ActiveRecord
@@ -36,8 +37,8 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'is_send', 'effect_time', 'create_time'], 'required'],
-            [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'create_time'], 'integer'],
+            [['campaign_id', 'is_send', 'effect_time'], 'required'],
+            [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'creator', 'create_time'], 'integer'],
             [['effect_time', 'name', 'value', 'old_value'], 'safe'],
         ];
     }
@@ -59,8 +60,19 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
             'send_time' => 'Send Time',
             'is_effected' => 'Is Effected',
             'effect_time' => 'Effect Time',
+            'creator' => 'Creator',
             'create_time' => 'Create Time',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+
+        if ($insert) {
+            $this->create_time = time();
+            $this->creator = Yii::$app->user->identity->getId();
+        }
+        return parent::beforeSave($insert);
     }
 
     /**
@@ -68,7 +80,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
      */
     public static function getStsUpdateCap()
     {
-        return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'update_cap'])
+        return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'cap'])
             ->andWhere(['<', ['effect_time' => time()]])
             ->all();
     }
@@ -76,10 +88,14 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     /**
      * @return array|CampaignStsUpdate[]
      */
-    public static function getStsUpdateEmail()
+    public static function getStsSendMail()
     {
-        return static::find()->where(['is_send' => 0, 'type' => 2])
+        return static::find()->where(['is_send' => 1, 'is_effected' => 0])
             ->all();
     }
 
+    public static function getSendEmail()
+    {
+
+    }
 }
