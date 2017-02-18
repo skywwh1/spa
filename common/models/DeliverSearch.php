@@ -90,10 +90,10 @@ class DeliverSearch extends Deliver
         ]);
 
         $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
-            ->andFilterWhere(['like', 'pricing_mode', $this->pricing_mode])
+            ->andFilterWhere(['like', 'de.pricing_mode', $this->pricing_mode])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
-            ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
-            ->andFilterWhere(['like', 'channel.username', $this->channel_id])
+            ->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_id])
             ->andFilterWhere(['like', 'note', $this->note]);
         $query->orderBy('create_time desc');
 
