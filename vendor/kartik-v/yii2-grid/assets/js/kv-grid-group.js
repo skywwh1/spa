@@ -2,10 +2,17 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+<<<<<<< HEAD
  * @version   3.1.3
  *
  * Grid grouping jquery library created for yii2-grid.
  *
+=======
+ * @version   3.1.1
+ *
+ * Grid grouping jquery library created for yii2-grid.
+ * 
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  * Author: Kartik Visweswaran
  * Copyright: 2015, Kartik Visweswaran, Krajee.com
  * For more JQuery plugins visit http://plugins.krajee.com
@@ -16,7 +23,11 @@ var kvGridGroup;
     "use strict";
     kvGridGroup = function (gridId) {
         var $grid, data, groups, $groupRows, i, n, colCount, $pageSum, $firstRow, $lastRow, isEmpty, initPageSummary,
+<<<<<<< HEAD
             formatNumber, getParentGroup, getLastGroupRow, getColValue, getSummarySource, getSummaryContent, addRowSpan,
+=======
+            formatNumber, applyFormat, getParentGroup, getLastGroupRow, getSummarySource, getSummaryContent, addRowSpan,
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             adjustLastRow, createSummary;
         $grid = $('#' + gridId);
         data = {};
@@ -38,6 +49,7 @@ var kvGridGroup;
                 i++;
             });
         };
+<<<<<<< HEAD
         /**
          * Format a number
          * @param n float, the number
@@ -55,6 +67,47 @@ var kvGridGroup;
             }
             num = num.toFixed(isNaN(dec) || dec < 0 ? 0 : dec);
             return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+=======
+        formatNumber = function (number, decimals, dec_point, thousands_sep) {
+            number = (number + '').replace(/[^0-9+\-Ee.]/g, '');
+            var n = !isFinite(+number) ? 0 : +number, s,
+                prec = !isFinite(+decimals) ? 0 : Math.abs(decimals),
+                sep = (typeof thousands_sep === 'undefined') ? ',' : thousands_sep,
+                dec = (typeof dec_point === 'undefined') ? '.' : dec_point,
+                toFixedFix = function (n, prec) {
+                    var k = Math.pow(10, prec);
+                    return '' + Math.round(n * k) / k;
+                };
+            s = (prec ? toFixedFix(n, prec) : '' + Math.round(n)).split('.');
+            if (s[0].length > 3) {
+                s[0] = s[0].replace(/\B(?=(?:\d{3})+(?!\d))/g, sep);
+            }
+            if ((s[1] || '').length < prec) {
+                s[1] = s[1] || '';
+                s[1] += [(prec - s[1].length + 1)].join('0');
+            }
+            return s.join(dec);
+        };
+        applyFormat = function (source, config, $tr, $td, i) {
+            var decimals, decPoint, thousandSep, data, func;
+            /** @namespace config.thousandSep */
+            /** @namespace config.decPoint */
+            /** @namespace config.func */
+            if (config.format === 'number') {
+                decimals = config.decimals || 0;
+                decPoint = config.decPoint || '.';
+                thousandSep = config.thousandSep || ',';
+                return formatNumber(source, decimals, decPoint, thousandSep);
+            }
+            if (config.format === 'callback') {
+                func = window[config.func];
+                if (typeof func === 'function') {
+                    data = getSummarySource($tr, $td, i);
+                    return func(source, data);
+                }
+            }
+            return source;
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         };
         getParentGroup = function ($cell) {
             var $tr, $td, id = $cell.attr('data-sub-group-of'), i, tag;
@@ -87,6 +140,7 @@ var kvGridGroup;
             }
             return $endRow.length ? $endRow : $lastRow;
         };
+<<<<<<< HEAD
         getColValue = function($col, decPoint, thousandSep) {
             var flag, out;
             if (!$col || !$col.length) {
@@ -105,6 +159,9 @@ var kvGridGroup;
             return out ? parseFloat(out) : 0;
         };
         getSummarySource = function ($tr, $td, i, decPoint, thousandSep) {
+=======
+        getSummarySource = function ($tr, $td, i) {
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             var j = 1, data = [], $row = $tr, isGrouped = $row.hasClass('kv-grid-group-row'),
                 rowspan = $td.attr('rowspan') || 1;
             if (isGrouped) {
@@ -112,7 +169,13 @@ var kvGridGroup;
                 $row = $row.next(':not(.kv-grid-group-row');
                 while (!j && $row.length) {
                     $row.find('td[data-col-seq="' + i + '"]').each(function () {
+<<<<<<< HEAD
                         data.push(getColValue($(this), decPoint, thousandSep));
+=======
+                        var out = $(this).text().replace(/[\s,]+/g, '');
+                        out = parseFloat(out);
+                        data.push(out);
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                     }); // jshint ignore:line
                     j = $row.hasClass('kv-grid-group-row');
                     $row = $row.next();
@@ -120,7 +183,13 @@ var kvGridGroup;
             } else {
                 while (j <= rowspan && $row.length) {
                     $row.find('td[data-col-seq="' + i + '"]').each(function () {
+<<<<<<< HEAD
                         data.push(getColValue($(this), decPoint, thousandSep));
+=======
+                        var out = $(this).text().replace(/[\s,]+/g, '');
+                        out = parseFloat(out);
+                        data.push(out);
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                     }); // jshint ignore:line
                     $row = $row.next();
                     j++;
@@ -128,6 +197,7 @@ var kvGridGroup;
             }
             return data;
         };
+<<<<<<< HEAD
         getSummaryContent = function (source, $tr, $td, i, config) {
             var out = 0, n, decimals, decPoint, thousandSep, data, func;
             /** @namespace config.thousandSep */
@@ -136,23 +206,35 @@ var kvGridGroup;
             decimals = config.decimals || 0;
             decPoint = config.decPoint || '.';
             thousandSep = config.thousandSep || ',';
+=======
+        getSummaryContent = function (source, $tr, $td, i) {
+            var func, data, out = 0, n;
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             switch (source) {
                 case 'f_count':
                 case 'f_sum':
                 case 'f_avg':
                 case 'f_max':
                 case 'f_min':
+<<<<<<< HEAD
                     data = getSummarySource($tr, $td, i, decPoint, thousandSep);
                     switch (source) {
                         case 'f_count':
                             out = data.length;
                             break;
+=======
+                    data = getSummarySource($tr, $td, i);
+                    switch (source) {
+                        case 'f_count':
+                            return data.length;
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                         case 'f_sum':
                         case 'f_avg':
                             $.each(data, function (key, val) {
                                 out += val;
                             });
                             if (source === 'f_sum') {
+<<<<<<< HEAD
                                 break;
                             }
                             n = data.length;
@@ -181,6 +263,21 @@ var kvGridGroup;
                 }
             }
             return out;
+=======
+                                return out;
+                            }
+                            n = data.length;
+                            return n ? out / n : out;
+                        case 'f_max':
+                        case 'f_min':
+                            func = source.replace('f_', '');
+                            return Math[func].apply(null, data);
+                    }
+                    return null;
+                default:
+                    return source;
+            }
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         };
         addRowSpan = function ($el, n) {
             n = n || 1;
@@ -208,7 +305,11 @@ var kvGridGroup;
             }
         };
         createSummary = function ($cell, type) {
+<<<<<<< HEAD
             var data = $cell.data(type), $parent, key, $tr, $td, i, j, $row, $col, $target, content, config,
+=======
+            var data = $cell.data(type), $parent, key, $tr, $td, i, j, $row, $col, $target, content,
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                 isGroupedRow = false, css = (type === 'groupHeader') ? 'kv-group-header' : 'kv-group-footer';
             if (!data) {
                 return;
@@ -231,10 +332,19 @@ var kvGridGroup;
                 if (!key || i != key || isGroupedRow) { // jshint ignore:line
                     $col = $(document.createElement('td')).attr('data-summary-col-seq', i);
                     if (data.content && data.content[i]) {
+<<<<<<< HEAD
                         /** @namespace data.contentFormats */
                         /** @namespace data.contentOptions */
                         config = data.contentFormats && data.contentFormats[i] || {};
                         content = getSummaryContent(data.content[i], $tr, $cell, i, config);
+=======
+                        content = getSummaryContent(data.content[i], $tr, $cell, i);
+                        /** @namespace data.contentFormats */
+                        /** @namespace data.contentOptions */
+                        if (data.contentFormats && data.contentFormats[i]) {
+                            content = applyFormat(content, data.contentFormats[i], $tr, $cell, i);
+                        }
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
                         $col.html(content);
                     }
                     if (data.contentOptions && data.contentOptions[i]) {
@@ -395,4 +505,8 @@ var kvGridGroup;
         }
         adjustLastRow();
     };
+<<<<<<< HEAD
 })(window.jQuery);
+=======
+})(window.jQuery);
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b

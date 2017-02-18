@@ -4,12 +4,20 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+<<<<<<< HEAD
  * @version   3.1.3
+=======
+ * @version   3.1.1
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  */
 
 namespace kartik\grid;
 
+<<<<<<< HEAD
 use Closure;
+=======
+use \Closure;
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -17,6 +25,7 @@ use yii\helpers\Json;
 use kartik\base\Config;
 
 /**
+<<<<<<< HEAD
  * ColumnTrait maintains generic methods used by all column widgets in [[GridView]].
  *
  * @property boolean $mergeHeader
@@ -41,6 +50,32 @@ use kartik\base\Config;
  * @property string $_clientScript
  * @property GridView $grid
  * @property string $format
+=======
+ * Trait for all column widgets in yii2-grid
+ *
+ * @property bool           $mergeHeader
+ * @property bool           $hidden
+ * @property bool           $noWrap
+ * @property array          $options
+ * @property array          $headerOptions
+ * @property array          $filterOptions
+ * @property array          $footerOptions
+ * @property array          $contentOptions
+ * @property array          $pageSummaryOptions
+ * @property bool           $hidePageSummary
+ * @property bool           $hiddenFromExport
+ * @property bool|Closure   $pageSummary
+ * @property string|Closure $pageSummaryFunc
+ * @property string         $footer
+ * @property string         $hAlign
+ * @property string         $vAlign
+ * @property string         $width
+ * @property array          $_rows
+ * @property string         $_columnKey
+ * @property string         $_clientScript
+ * @property GridView       $grid
+ * @property string         $format
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  * @method getDataCellValue() getDataCellValue($model, $key, $index)
  * @method renderCell()
  *
@@ -140,6 +175,7 @@ trait ColumnTrait
      */
     protected function calculateSummary()
     {
+<<<<<<< HEAD
         $data = $this->_rows;
         $type = $this->pageSummaryFunc;
         if ($type instanceof Closure) {
@@ -148,6 +184,13 @@ trait ColumnTrait
         if (empty($this->_rows)) {
             return '';
         }
+=======
+        if (empty($this->_rows)) {
+            return '';
+        }
+        $data = $this->_rows;
+        $type = $this->pageSummaryFunc;
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         switch ($type) {
             case null:
                 return array_sum($data);
@@ -167,6 +210,11 @@ trait ColumnTrait
 
     /**
      * Checks if the filter input types are valid
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function checkValidFilters()
     {
@@ -182,6 +230,11 @@ trait ColumnTrait
      * @param Model $model the current model being rendered
      * @param mixed $key the primary key value for the model
      * @param int   $index the zero-based index of the model being rendered
+<<<<<<< HEAD
+=======
+     *
+     * @return string
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public function parseExcelFormats(&$options, $model, $key, $index)
     {
@@ -260,6 +313,11 @@ trait ColumnTrait
 
     /**
      * Checks `hidden` property and hides the column from display
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function parseVisibility()
     {
@@ -289,6 +347,11 @@ trait ColumnTrait
 
     /**
      * Parses and formats a grid column
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function parseFormat()
     {
@@ -321,7 +384,11 @@ trait ColumnTrait
      *
      * @param string $type the alignment type
      *
+<<<<<<< HEAD
      * @return boolean
+=======
+     * @return bool
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function isValidAlignment($type = 'hAlign')
     {
@@ -347,7 +414,11 @@ trait ColumnTrait
      * @param mixed   $model the data model being rendered
      * @param mixed   $key the key associated with the data model
      * @param integer $index the zero-based index of the data item among the item array returned by
+<<<<<<< HEAD
      * [[GridView::dataProvider]].
+=======
+     *     [[GridView::dataProvider]].
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      *
      * @return array
      */
@@ -387,6 +458,11 @@ trait ColumnTrait
 
     /**
      * Store all rows for the column for the current page
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function setPageRows()
     {
@@ -417,6 +493,11 @@ trait ColumnTrait
      * Initialize column specific JS functionality whenever pjax request completes
      *
      * @param string $script the js script to be used as a callback
+<<<<<<< HEAD
+=======
+     *
+     * @return void
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     protected function initPjax($script = '')
     {
@@ -432,10 +513,17 @@ trait ColumnTrait
     /**
      * Parses a value if Closure and returns the right value
      *
+<<<<<<< HEAD
      * @param string|int|Closure $var the variable to parse
      * @param Model $model the model instance
      * @param string|object $key the current model key value
      * @param int   $index the index of the current record in the data provider
+=======
+     * @param mixed $var
+     * @param Model $model
+     * @param mixed $key
+     * @param int   $index
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      *
      * @return mixed
      */

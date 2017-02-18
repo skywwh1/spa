@@ -51,10 +51,11 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('sts_channel_created', ['delivers' => $delivers, 'channel' => $channel]);
         $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
         if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
-            $mail->setCc(explode(',', $channel->cc_email));
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
         }
-        $mail->setCc($channel->om0->email);
+        $mail->setCc($cc);
         $mail->setSubject('New Offers from SuperADS');
         $isSend = 0;
         if ($mail->send()) {

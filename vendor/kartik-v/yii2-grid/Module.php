@@ -4,7 +4,11 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+<<<<<<< HEAD
  * @version   3.1.3
+=======
+ * @version   3.1.1
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  */
 
 namespace kartik\grid;
@@ -12,6 +16,7 @@ namespace kartik\grid;
 use Yii;
 
 /**
+<<<<<<< HEAD
  * This module allows global level configurations for the enhanced Krajee [[GridView]]. One can configure the module
  * in their Yii configuration file as shown below:
  *
@@ -23,12 +28,16 @@ use Yii;
  *     ]
  * ]
  * ```
+=======
+ * Module with various modifications to the Yii 2 grid.
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
  */
 class Module extends \kartik\base\Module
 {
+<<<<<<< HEAD
     /**
      * The module name for Krajee gridview
      */
@@ -36,6 +45,12 @@ class Module extends \kartik\base\Module
 
     /**
      * @var string|array the action (url) used for downloading exported file
+=======
+    const MODULE = "gridview";
+
+    /**
+     * @var mixed the action (url) used for downloading exported file
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $downloadAction = '/gridview/export/download';
 

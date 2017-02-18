@@ -1,6 +1,7 @@
 Change Log: `yii2-grid`
 =======================
 
+<<<<<<< HEAD
 ## Version 3.1.3
 
 **Date:** 22-Oct-2016
@@ -57,6 +58,8 @@ Change Log: `yii2-grid`
 30. (bug #538): Correct export callback validation
 31. (enh #541, #543): Update French translations.
 
+=======
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
 ## Version 3.1.1
 
 **Date:** 10-Apr-2016

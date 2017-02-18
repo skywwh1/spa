@@ -4,7 +4,11 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+<<<<<<< HEAD
  * @version   3.1.3
+=======
+ * @version   3.1.1
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  */
 
 namespace kartik\grid;
@@ -12,6 +16,7 @@ namespace kartik\grid;
 use yii\base\InvalidConfigException;
 
 /**
+<<<<<<< HEAD
  * A FormulaColumn to calculate values based on other column indexes for the Grid widget [[\kartik\grid\GridView]].
  * This extends and builds upon the [[DataColumn]] in the [[GridView]] widget.
  *
@@ -26,6 +31,11 @@ use yii\base\InvalidConfigException;
  *     ],
  * ]
  * ```
+=======
+ * A FormulaColumn to calculate values based on other column indexes for the Grid widget [[\kartik\widgets\GridView]]
+ *
+ * DataColumn is the default column type for the [[GridView]] widget.
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
  * @since 1.0
@@ -44,6 +54,7 @@ class FormulaColumn extends DataColumn
      * Gets the value of a column
      *
      * @param integer $i the index of the grid column (the first column in the grid will be zero indexed). Note a
+<<<<<<< HEAD
      * column's index is to be considered, even if the `visible` property is set to false.
      * @param array   $params which will contain these keys:
      * - `model`: _yii\base\Model`, the data model being rendered
@@ -51,6 +62,15 @@ class FormulaColumn extends DataColumn
      * - `index`: _integer_, the zero-based index of the data item among the item array returned by
      *   [[GridView::dataProvider]].
      * - widget: _FormulaColumn_, the current column widget instance
+=======
+     *     column's index is to be considered, even if the `visible` property is set to false.
+     * @param array   $params which will contain these keys:
+     * - model: mixed the data model being rendered
+     * - key: mixed the key associated with the data model
+     * - index: integer the zero-based index of the data item among the item array returned by
+     *     [[GridView::dataProvider]].
+     * - widget: the current column widget instance
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      *
      * @return string
      * @throws InvalidConfigException

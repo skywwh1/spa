@@ -4,7 +4,11 @@
  * @package   yii2-grid
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
  * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
+<<<<<<< HEAD
  * @version   3.1.3
+=======
+ * @version   3.1.1
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  */
 
 namespace kartik\grid;
@@ -15,12 +19,21 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use yii\rest\Action;
+<<<<<<< HEAD
 use yii\web\Response;
 use yii\web\BadRequestHttpException;
 
 /**
  * EditableAction is useful for processing the update of [[EditableColumn]] attributes via form submission. A typical
  * usage of this action in your controller could look like below:
+=======
+use yii\web\BadRequestHttpException;
+use yii\web\Response;
+
+/**
+ * Action for processing the editable column form submission. A typical usage of this action in your controller could
+ * look like below:
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *
  * ```php
  *
@@ -37,6 +50,7 @@ use yii\web\BadRequestHttpException;
  *    public function actions()
  *    {
  *        return array_replace_recursive(parent::actions(), [
+<<<<<<< HEAD
  *            'editbook' => [                                   // identifier for your editable column action
  *                'class' => EditableColumnAction::className(), // action class name
  *                'modelClass' => Book::className(),            // the model for the record being edited
@@ -49,6 +63,19 @@ use yii\web\BadRequestHttpException;
  *                },
  *                'showModelErrors' => true,                    // show model validation errors after save
  *                'errorOptions' => ['header' => '']            // error summary HTML options
+=======
+ *            'editbook' => [                                       // identifier for your editable column action
+ *                'class' => EditableColumnAction::className(),     // action class name
+ *                'modelClass' => Book::className(),                // the model for the record being edited
+ *                'outputValue' => function ($model, $attribute, $key, $index) {
+ *                      return (int) $model->$attribute / 100;      // return a calculated output value if desired
+ *                },
+ *                'outputMessage' => function($model, $attribute, $key, $index) {
+ *                      return '';                                  // any custom error to return after model save
+ *                },
+ *                'showModelErrors' => true,                        // show model validation errors after save
+ *                'errorOptions' => ['header' => '']                // error summary HTML options
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
  *                // 'postOnly' => true,
  *                // 'ajaxOnly' => true,
  *                // 'findModel' => function($id, $action) {},
@@ -65,6 +92,7 @@ use yii\web\BadRequestHttpException;
 class EditableColumnAction extends Action
 {
     /**
+<<<<<<< HEAD
      * @var string the scenario to be assigned to the model before it is validated and updated.
      */
     public $scenario = ActiveRecord::SCENARIO_DEFAULT;
@@ -76,25 +104,46 @@ class EditableColumnAction extends Action
      * - `$attribute`: _string_, the attribute name for which the editable plugin is initialized.
      * - `$key`: _mixed_, is the model primary key value.
      * - `$index`: _integer_, is the zero-based index of the data model among the model array returned by [[dataProvider]].
+=======
+     * @var string|Closure the output value from the editable. If set as a string, will be returned as is. If set as a
+     * Closure, the signature of the callback would be `function ($model, $attribute, $key, $index) { }`, where:
+     * - `$model`: \yii\base\Model, is the model data retrieved via POST.
+     * - `$attribute`: string, the attribute name for which the editable plugin is initialized
+     * - `$key`: mixed, is the model primary key value
+     * - `$index`: int, is the row index for the EditableColumn cell
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $outputValue = '';
 
     /**
      * @var string|Closure the output error message from the editable. If set as a string, will be returned as is. If
+<<<<<<< HEAD
      * set as a [[Closure]], the signature of the callback would be `function ($model, $attribute, $key, $index) { }`, where:
      * - `$model`: _\yii\base\Model_, is the model data retrieved via POST.
      * - `$attribute`: _string_, the attribute name for which the editable plugin is initialized.
      * - `$key`: _mixed_, is the model primary key value.
      * - `$index`: _integer_, is the zero-based index of the data model among the model array returned by [[dataProvider]].
+=======
+     * set as a Closure, the signature of the callback would be `function ($model, $attribute, $key, $index) { }`, where:
+     * - `$model`: \yii\base\Model, is the model data retrieved via POST.
+     * - `$attribute`: string, the attribute name for which the editable plugin is initialized
+     * - `$key`: mixed, is the model primary key value
+     * - `$index`: int, is the row index for the EditableColumn cell
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $outputMessage = '';
 
     /**
+<<<<<<< HEAD
      * @var boolean whether to show model errors if `outputMessage` is empty or not set.
+=======
+     * @var bool whether to show model errors if `outputMessage` is empty or not set.
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $showModelErrors = true;
 
     /**
+<<<<<<< HEAD
      * @var array the special error messages configuration for displaying editable submission errors other than model
      * validation errors. The following keys can be set to configure the relevant error messages:
      *
@@ -114,26 +163,39 @@ class EditableColumnAction extends Action
     public $errorMessages = [];
 
     /**
+=======
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      * @var array the options for error summary as supported by `options` param in `yii\helpers\Html::errorSummary()`
      */
     public $errorOptions = ['header' => ''];
 
     /**
+<<<<<<< HEAD
      * @var boolean whether to allow access to this action for POST requests only. Defaults to `true`.
+=======
+     * @var bool whether to allow access to this action for POST requests only. Defaults to `true`.
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $postOnly = true;
 
     /**
+<<<<<<< HEAD
      * @var boolean whether to allow access to this action for AJAX requests only. Defaults to `true`.
+=======
+     * @var bool whether to allow access to this action for AJAX requests only. Defaults to `true`.
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      */
     public $ajaxOnly = true;
 
     /**
+<<<<<<< HEAD
      * @var string allows overriding the form name which is used to access posted data
      */
     public $formName;
 
     /**
+=======
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      * @inheritdoc
      */
     public function run()
@@ -145,17 +207,28 @@ class EditableColumnAction extends Action
     }
 
     /**
+<<<<<<< HEAD
      * Validates the EditableColumn post request submission
+=======
+     * Validates the EditableColumn post submission
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      *
      * @return array the output for the Editable action response
      * @throws BadRequestHttpException
      */
     protected function validateEditable()
     {
+<<<<<<< HEAD
+=======
+        if ($this->checkAccess && is_callable($this->checkAccess)) {
+            call_user_func($this->checkAccess, $this->id);
+        }
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
         $request = Yii::$app->request;
         if ($this->postOnly && !$request->isPost || $this->ajaxOnly && !$request->isAjax) {
             throw new BadRequestHttpException('This operation is not allowed!');
         }
+<<<<<<< HEAD
         $this->initErrorMessages();
         $post = $request->post();
         if (!isset($post['hasEditable'])) {
@@ -192,12 +265,47 @@ class EditableColumnAction extends Action
                 }
             }
             $value = static::parseValue($this->outputValue, $params);
+=======
+        $post = $request->post();
+        if (!isset($post['hasEditable'])) {
+            return ['output' => '', 'message' => Yii::t('kvgrid', 'Invalid or bad editable data')];
+        }
+        /**
+         * @var ActiveRecord $modelClass
+         * @var ActiveRecord $model
+         */
+        $modelClass = $this->modelClass;
+        $key = ArrayHelper::getValue($post, 'editableKey');
+        $model = $modelClass::findOne($key);
+        if (!$model) {
+            return ['output' => '', 'message' => Yii::t('kvgrid', 'No valid editable model found')];
+        }
+        $index = ArrayHelper::getValue($post, 'editableIndex');
+        $attribute = ArrayHelper::getValue($post, 'editableAttribute');
+        $formName = $model->formName();
+        if (!$formName || is_null($index) || !isset($post[$formName][$index])) {
+            return ['output' => '', 'message' => Yii::t('kvgrid', 'Invalid editable index or model form name')];
+        }
+        $postData = [$formName => $post[$formName][$index]];
+        if ($model->load($postData)) {
+            $params = [$model, $attribute, $key, $index];
+            $value = static::parseValue($this->outputValue, $params);
+            if (!$model->save()) {
+                $message = static::parseValue($this->outputMessage, $params);
+                if (empty($message) && $this->showModelErrors) {
+                    $message = Html::errorSummary($model, $this->errorOptions);
+                }
+            } else {
+                $message = static::parseValue($this->outputMessage, $params);
+            }
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
             return ['output' => $value, 'message' => $message];
         }
         return ['output' => '', 'message' => ''];
     }
 
     /**
+<<<<<<< HEAD
      * Initializes the error messages if not set.
      */
     protected function initErrorMessages()
@@ -211,6 +319,8 @@ class EditableColumnAction extends Action
     }
 
     /**
+=======
+>>>>>>> 1573a9060b7902eed903c868288fbd5421b8399b
      * Parses a variable if callable and computes and returns value accordingly
      *
      * @param mixed $var the variable to be parsed

@@ -107,7 +107,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['lang'], 'string', 'max' => 30],
             [['username'], 'unique'],
             [['email'], 'unique'],
-            [['email', 'cc_email'], 'email'],
+            [['email'], 'email'],
+            ['cc_email', 'safe'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
@@ -247,7 +248,7 @@ class Channel extends ActiveRecord implements IdentityInterface
         if ($insert) {
             $this->created_time = time();
             $this->updated_time = time();
-            $this->auth_token = uniqid('ch').uniqid();
+            $this->auth_token = uniqid('ch') . uniqid();
         } else {
             $this->updated_time = time();
         }
