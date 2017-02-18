@@ -31,7 +31,7 @@ use yii\helpers\Json;
  * @property string $adv_price
  * @property string $now_payout
  * @property string $target_geo
- * @property string $traffice_source
+ * @property string $traffic_source
  * @property string $note
  * @property string $preview_link
  * @property string $icon
@@ -96,7 +96,7 @@ class Campaign extends \yii\db\ActiveRecord
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
             [['target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap'], 'safe'],
-            [['campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'traffice_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
+            [['campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'traffic_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
             [['campaign_name', 'preview_link', 'icon', 'category', 'description', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
             [['campaign_uuid'], 'unique'],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
@@ -131,7 +131,7 @@ class Campaign extends \yii\db\ActiveRecord
             'adv_price' => 'Adv Price',
             'now_payout' => 'Now Payout',
             'target_geo' => 'Target Geo',
-            'traffice_source' => 'Traffice Source',
+            'traffic_source' => 'Traffice Source',
             'note' => 'Note',
             'preview_link' => 'Preview Link',
             'icon' => 'Icon',

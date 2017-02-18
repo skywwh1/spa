@@ -50,7 +50,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'status',
                             'value' => function ($model) {
                                 return ModelsUtil::getCampaignStatus($model->status);
-                            }
+                            },
+                            'filter' => ModelsUtil::campaign_status
                         ],
                         'create_time:datetime',
                         // 'update_time:datetime',

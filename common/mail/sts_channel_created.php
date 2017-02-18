@@ -71,7 +71,7 @@ use yii\helpers\Url;
             $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
             $creativeSet = !empty($deliver->campaign->creative_link) ? '<a href="' . Url::to($deliver->campaign->creative_link) . '">Banner</a>' : '';
             $creative .= '<td>' . $creativeSet . '</td>';
-            $traffic_source .= '<td>' . $deliver->campaign->traffice_source . '</td>';
+            $traffic_source .= '<td>' . $deliver->campaign->traffic_source . '</td>';
             $daily_cap .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';
             $notes .= '<td width="130px">' . Html::encode($deliver->note) . '</td>';
             $conversion_flow .= '<td>' . Html::encode($deliver->campaign->conversion_flow) . '</td>';

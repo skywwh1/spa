@@ -33,7 +33,7 @@ use Yii;
  * @property string $now_payout
  * @property string $target_geo
  * @property string $adv_link
- * @property string $traffice_source
+ * @property string $traffic_source
  * @property string $note
  * @property string $preview_link
  * @property string $icon
@@ -76,7 +76,7 @@ class AdvertiserApi extends \yii\db\ActiveRecord
                 'pricing_mode', 'promote_start',
                 'end_time', 'platform', 'daily_cap',
                 'adv_price', 'now_payout',
-                'target_geo', 'adv_link', 'traffice_source',
+                'target_geo', 'adv_link', 'traffic_source',
                 'note', 'preview_link', 'icon',
                 'package_name', 'app_name', 'app_size',
                 'category', 'version', 'app_rate', 'description',
@@ -126,7 +126,7 @@ class AdvertiserApi extends \yii\db\ActiveRecord
             'now_payout' => 'Now Payout',
             'target_geo' => 'Target Geo',
             'adv_link' => 'Adv Link',
-            'traffice_source' => 'Traffice Source',
+            'traffic_source' => 'Traffice Source',
             'note' => 'Note',
             'preview_link' => 'Preview Link',
             'icon' => 'Icon',

@@ -79,7 +79,7 @@ use yii\helpers\Url;
                 $preview_link .= '<div class="divTableCell"><a href="' . $deliver->campaign->preview_link . '">Preview Link Link</a></div>';
                 $link .= '<div class="divTableCell"><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></div>';
                 $creative .= '<div class="divTableCell">' . Html::encode($deliver->campaign->creative_link) . '</div>';
-                $traffic_source .= '<div class="divTableCell">' . Html::encode(ModelsUtil::getTrafficeSource($deliver->campaign->traffice_source)) . '</div>';
+                $traffic_source .= '<div class="divTableCell">' . Html::encode(ModelsUtil::getTrafficeSource($deliver->campaign->traffic_source)) . '</div>';
                 $daily_cap .= '<div class="divTableCell">' . Html::encode($deliver->daily_cap) . '</div>';
                 $notes .= '<div class="divTableCell">' . Html::encode($deliver->note) . '</div>';
                 $conversion_flow .= '<div class="divTableCell">' . Html::encode($deliver->campaign->conversion_flow) . '</div>';

@@ -19,7 +19,7 @@ class CampaignSearch extends Campaign
     {
         return [
             [['id', 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['advertiser', 'campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
+            [['advertiser', 'campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffic_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
         ];
     }
@@ -91,7 +91,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'max_version', $this->max_version])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
             ->andFilterWhere(['like', 'target_geo', $this->target_geo])
-            ->andFilterWhere(['like', 'traffice_source', $this->traffice_source])
+            ->andFilterWhere(['like', 'traffic_source', $this->traffic_source])
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'preview_link', $this->preview_link])
             ->andFilterWhere(['like', 'icon', $this->icon])

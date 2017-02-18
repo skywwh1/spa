@@ -110,7 +110,7 @@ use yii\helpers\Url;
                 echo Html::a('Tracking Link ', $url) ?>
             </td>
             <td><?= Html::encode($deliver->campaign->creative_link) ?></td>
-            <td><?= Html::encode($deliver->campaign->traffice_source) ?></td>
+            <td><?= Html::encode($deliver->campaign->traffic_source) ?></td>
             <td><?= Html::encode($deliver->daily_cap) ?></td>
             <td><?= Html::encode($deliver->note) ?></td>
             <td></td>

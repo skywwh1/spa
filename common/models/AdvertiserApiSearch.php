@@ -19,7 +19,7 @@ class AdvertiserApiSearch extends AdvertiserApi
     {
         return [
             [['id', 'adv_id', 'create_time', 'update_time'], 'integer'],
-            [['url', 'key', 'param', 'adv_update_time', 'effective_time', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'now_payout', 'target_geo', 'adv_link', 'traffice_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
+            [['url', 'key', 'param', 'adv_update_time', 'effective_time', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'now_payout', 'target_geo', 'adv_link', 'traffic_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
         ];
     }
 
@@ -81,7 +81,7 @@ class AdvertiserApiSearch extends AdvertiserApi
             ->andFilterWhere(['like', 'now_payout', $this->now_payout])
             ->andFilterWhere(['like', 'target_geo', $this->target_geo])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
-            ->andFilterWhere(['like', 'traffice_source', $this->traffice_source])
+            ->andFilterWhere(['like', 'traffic_source', $this->traffic_source])
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'preview_link', $this->preview_link])
             ->andFilterWhere(['like', 'icon', $this->icon])

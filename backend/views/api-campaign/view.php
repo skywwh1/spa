@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'daily_budget',
             'target_geo',
             'adv_link',
-            'traffice_source',
+            'traffic_source',
             'note:ntext',
             'preview_link',
             'icon',

@@ -43,7 +43,7 @@ class DeliverSearch extends Deliver
     public function search($params)
     {
         $query = Deliver::find();
-
+        $query->alias('de');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -57,8 +57,8 @@ class DeliverSearch extends Deliver
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->joinWith('campaign');
-        $query->joinWith('channel');
+        $query->joinWith('campaign cp');
+        $query->joinWith('channel ch');
         // grid filtering conditions
         $query->andFilterWhere([
 //            'campaign_id' => $this->campaign_id,
@@ -68,7 +68,7 @@ class DeliverSearch extends Deliver
             'daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
-            'status' => $this->status,
+            'de.status' => $this->status,
             'creator' => $this->creator,
             'end_time' => $this->end_time,
             'create_time' => $this->create_time,

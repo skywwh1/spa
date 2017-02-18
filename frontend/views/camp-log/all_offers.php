@@ -88,7 +88,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             //             'traffice_source',
             [
-                'attribute' => 'traffice_source',
+                'attribute' => 'traffic_source',
 //                'value' => function ($data) {
 //                    return ModelsUtil::getTrafficeSource($data->traffice_source);
 //                },
