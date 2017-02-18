@@ -69,6 +69,7 @@ class CampaignController extends Controller
      */
     public function actionIndex()
     {
+//        $this->layout='main';
         $searchModel = new CampaignSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 

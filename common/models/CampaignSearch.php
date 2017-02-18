@@ -43,6 +43,7 @@ class CampaignSearch extends Campaign
     public function search($params)
     {
         $query = Campaign::find();
+        $query->alias('c');
 
         // add conditions that should always apply here
 
@@ -57,7 +58,7 @@ class CampaignSearch extends Campaign
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->joinWith('advertiser0');
+        $query->joinWith('advertiser0 a');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -72,7 +73,7 @@ class CampaignSearch extends Campaign
             'cap' => $this->cap,
             'cvr' => $this->cvr,
             'avg_price' => $this->avg_price,
-            'status' => $this->status,
+            'c.status' => $this->status,
             'open_type' => $this->open_type,
             'subid_status' => $this->subid_status,
             'third_party' => $this->third_party,

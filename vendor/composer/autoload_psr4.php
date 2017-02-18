@@ -19,6 +19,8 @@ return array(
     'kartik\\typeahead\\' => array($vendorDir . '/kartik-v/yii2-widget-typeahead'),
     'kartik\\select2\\' => array($vendorDir . '/kartik-v/yii2-widget-select2'),
     'kartik\\plugins\\checkbox\\' => array($vendorDir . '/kartik-v/bootstrap-checkbox-x'),
+    'kartik\\mpdf\\' => array($vendorDir . '/kartik-v/yii2-mpdf'),
+    'kartik\\grid\\' => array($vendorDir . '/kartik-v/yii2-grid'),
     'kartik\\field\\' => array($vendorDir . '/kartik-v/yii2-field-range'),
     'kartik\\datetime\\' => array($vendorDir . '/kartik-v/yii2-widget-datetimepicker'),
     'kartik\\daterange\\' => array($vendorDir . '/kartik-v/yii2-date-range'),

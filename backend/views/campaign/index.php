@@ -1,8 +1,8 @@
 <?php
 
 use common\models\RegionsDomain;
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -15,14 +15,41 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div id="nav-menu" data-menu="campaign_index"></div>
     <div class="col-lg-12">
-        <div class="box box-info table-responsive">
-            <div class="box-body">
+        <div class="box box-info">
+            <div class="box-body table-responsive">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                <?php Pjax::begin(); ?>    <?= GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
+                    'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+                    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+                    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+                    'pjax' => true, // pjax is set to always true for this demo
+                    // set your toolbar
+                    'toolbar' => [
+                        ['content' =>
+                            Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type' => 'button', 'title' => 'Add Book', 'class' => 'btn btn-success', 'onclick' => 'alert("This will launch the book creation form.\n\nDisabled for this demo!");']) . ' ' .
+                            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['grid-demo'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid'])
+                        ],
+                        '{export}',
+                        '{toggleData}',
+                    ],
+                    // set export properties
+                    'export' => [
+                        'fontAwesome' => true
+                    ],
+                    // parameters from the demo form
+                    'bordered' => true,
+                    'striped' => true ,
+                    'condensed' => true,
+                    'responsive' => true,
+                    'hover' => true,
+                    'resizableColumns'=>true,
+                    'resizeStorageKey'=>Yii::$app->user->id . '-' . date("m"),
+                    'showPageSummary' => true,
+//                    'exportConfig' => $exportConfig,
                     'columns' => [
                         'id',
                         [
@@ -30,7 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'advertiser0.username',
                         ],
 
-                        'campaign_name',
+//                        'campaign_name',
+                        [
+                            'attribute' => 'campaign_name',
+                            'value' => 'campaign_name',
+//                            'contentOptions'=>['style'=>'max-width: 100px;'] // <-- right here
+                        ],
                         'campaign_uuid',
 //                        //'tag',
 //                        [
@@ -99,16 +131,24 @@ $this->params['breadcrumbs'][] = $this->title;
                         'epc',
 //             'pm',
 //             'bd',
-                        'status',
+                        //'status',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignStatus($model->status);
+                            },
+                            'filter' => ModelsUtil::campaign_status,
+                        ],
 
                         [
-                            'class' => 'yii\grid\ActionColumn',
+                            'class' => 'kartik\grid\ActionColumn',
                             'template' => '{view} {update}',
                             'header' => 'Action',
                         ],
                     ],
+
+
                 ]); ?>
-                <?php Pjax::end(); ?>
             </div>
         </div>
     </div>
