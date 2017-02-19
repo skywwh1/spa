@@ -95,13 +95,13 @@ class MyReportSearch extends Deliver
             'de.campaign_id',
             'cp.campaign_name campaign_name',
             'COUNT(DISTINCT(fc.ip)) unique_clicks',
-            'de.pay_out',
+            'fc.pay_out',
             'COUNT(ff.id)*de.pay_out revenue',
         ]);
 
         $query->from('campaign_channel_log de');
         $query->leftJoin('campaign cp', 'de.campaign_id = cp.id');
-        $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid');
+        $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid and de.channel_id = fc.ch_id');
         $query->leftJoin('feedback_advertiser_feed_log ff', 'fc.click_uuid = ff.click_id');
         $query->andFilterWhere(['de.channel_id' => Yii::$app->user->getId()]);
         if (isset($this->start_time)) {
@@ -125,8 +125,9 @@ class MyReportSearch extends Deliver
         } else {
             $query->groupBy('time');
         }
-        $query->orderBy('time');
-
+        $query->orderBy('time desc');
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 

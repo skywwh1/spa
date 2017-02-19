@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div id="nav-menu" data-menu="campaign_index"></div>
     <div class="col-lg-12">
         <div class="box box-info">
-            <div class="box-body table-responsive">
+            <div class="box-body">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -27,29 +27,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     'headerRowOptions' => ['class' => 'kartik-sheet-style'],
                     'filterRowOptions' => ['class' => 'kartik-sheet-style'],
                     'pjax' => true, // pjax is set to always true for this demo
-                    // set your toolbar
-                    'toolbar' => [
-                        ['content' =>
-                            Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type' => 'button', 'title' => 'Add Book', 'class' => 'btn btn-success', 'onclick' => 'alert("This will launch the book creation form.\n\nDisabled for this demo!");']) . ' ' .
-                            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['grid-demo'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid'])
-                        ],
-                        '{export}',
-                        '{toggleData}',
+                    'showPageSummary'=>true,
+                    'panel'=>[
+                        'type'=>'primary',
+                        'heading'=>'Products'
                     ],
-                    // set export properties
+                    'autoXlFormat' => true,
                     'export' => [
-                        'fontAwesome' => true
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK
                     ],
-                    // parameters from the demo form
-                    'bordered' => true,
-                    'striped' => true ,
-                    'condensed' => true,
-                    'responsive' => true,
-                    'hover' => true,
-                    'resizableColumns'=>true,
-                    'resizeStorageKey'=>Yii::$app->user->id . '-' . date("m"),
-                    'showPageSummary' => true,
-//                    'exportConfig' => $exportConfig,
                     'columns' => [
                         'id',
                         [
@@ -108,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'adv_price',
                         // 'now_payout',
 
-                         'traffic_source',
+                        'traffic_source',
                         // 'note',
                         // 'preview_link',
                         // 'icon',

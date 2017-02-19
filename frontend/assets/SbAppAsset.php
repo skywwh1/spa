@@ -20,7 +20,7 @@ class SbAppAsset extends AssetBundle
         'vendor/font-awesome/css/font-awesome.min.css',
     ];
     public $js = [
-        'vendor/jquery/jquery.min.js',
+//        'vendor/jquery/jquery.min.js',
         'vendor/bootstrap/js/bootstrap.min.js',
         'vendor/metisMenu/metisMenu.min.js',
         'vendor/raphael/raphael.min.js',
