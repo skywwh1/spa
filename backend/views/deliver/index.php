@@ -17,47 +17,17 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info ">
-            <div class="box-body table-responsive no-padding">
+            <div class="box-body">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-                <?php Pjax::begin(); ?>
                 <?= GridView::widget([
                     'id' => 'applying_list',
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
+                    'pjax' => true, // pjax is set to always true for this demo
+                    'responsive' => true,
+                    'hover' => true,
                     'columns' => [
-                        //  ['class' => 'yii\grid\SerialColumn'],
-                        [
-                            'attribute' => 'campaign_id',
-                            'value' => 'campaign.campaign_name',
-                            'label' => 'Campaign',
-                        ],
-//                        'campaign.campaign_name',
-                        [
-                            'attribute' => 'channel_id',
-                            'value' => 'channel.username',
-                            'label' => 'Channel'
-                        ],
-
-                        'pricing_mode',
-                        'pay_out',
-                        'daily_cap',
-                        'discount',
-                        'end_time:datetime',
-                        // 'is_run',
-                        // 'creator',
-                        [
-                            'attribute' => 'status',
-                            'value' => function ($model) {
-                                return ModelsUtil::getCampaignStatus($model->status);
-                            },
-                            'filter' => ModelsUtil::campaign_status
-                        ],
-                        'create_time:datetime',
-                        // 'update_time:datetime',
-                        // 'track_url:url',
-                        // 'note',
-
                         [
                             'class' => 'kartik\grid\ActionColumn',
                             'template' => '{all}',
@@ -98,20 +68,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     // 'visible' => true,  // if you want to hide an item based on a condition, use this
                                                     'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
                                                 ],
-//                                                [
-//                                                    'label' => \Yii::t('yii', 'Delete'),
-//                                                    'linkOptions' => [
-//                                                        'data' => [
-//                                                            'method' => 'post',
-//                                                            'confirm' => \Yii::t('yii', 'Are you sure you want to delete this item?'),
-//                                                        ],
-//                                                    ],
-//                                                    'url' => ['delete', 'id' => $key],
-//                                                    'visible' => true,   // same as above
-//                                                ],
                                             ],
                                             'options' => [
-                                                'class' => 'dropdown-menu-right', // right dropdown
+                                                'class' => 'dropdown-menu-left', // right dropdown
                                             ],
                                         ],
                                         'options' => [
@@ -123,9 +82,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                             ],
                         ],
+                        //  ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign.campaign_name',
+                            'label' => 'Campaign',
+                        ],
+//                        'campaign.campaign_name',
+                        [
+                            'attribute' => 'channel_id',
+                            'value' => 'channel.username',
+                            'label' => 'Channel'
+                        ],
+
+                        'pricing_mode',
+                        'pay_out',
+                        'daily_cap',
+                        'discount',
+                        'end_time:datetime',
+                        // 'is_run',
+                        // 'creator',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignStatus($model->status);
+                            },
+                            'filter' => ModelsUtil::campaign_status
+                        ],
+                        'create_time:datetime',
+                        // 'update_time:datetime',
+                        // 'track_url:url',
+                        // 'note',
+
+
                     ],
                 ]); ?>
-                <?php Pjax::end(); ?>
             </div>
         </div>
     </div>

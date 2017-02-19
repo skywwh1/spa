@@ -1,8 +1,7 @@
 <?php
 
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ReportSearch */
@@ -14,17 +13,34 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="nav-menu" data-menu="report-index"></div>
 <div class="row">
     <div class="col-lg-12">
-        <div class="box box-info table-responsive">
+        <div class="box box-info">
             <div class="box-body">
                 <?php //echo $this->render('_search', ['model' => $searchModel]); ?>
 
-                <?php Pjax::begin(); ?>    <?= GridView::widget([
+                <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'tableOptions' => ['class' => 'table table-striped table-bordered table-hover'],
+                    'containerOptions' => ['style' => 'overflow: auto'],
+                    'pjax' => true, // pjax is set to always true for this demo
+                    'responsive' => true,
+                    'hover' => true,
+                    'showPageSummary' => true,
+                    'layout' => '{toolbar}{summary} {items} {pager}',
+                    'toolbar' => [
+                        '{toggleData}',
+                        '{export}',
+                    ],
+                    'export' => [
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK
+                    ],
                     'columns' => [
 //                    ['class' => 'yii\grid\SerialColumn'],
-                        'campaign_id',
+                        [
+                            'attribute' => 'campaign_id',
+                            'pageSummary' => 'Total'
+                        ],
                         [
                             'attribute' => 'campaign_id',
                             'value' => 'campaign.campaign_name',
@@ -38,13 +54,28 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'channel.username',
                             'label' => 'Channel Name',
                         ],
-                        'click',
-                        'unique_click',
-                        'install',
+                        [
+                            'attribute' => 'click',
+                            'pageSummary' => true,
+                        ],
+
+                        [
+                            'attribute' => 'unique_click',
+                            'pageSummary' => true,
+                        ],
+
+                        [
+                            'attribute' => 'install',
+                            'pageSummary' => true,
+                        ],
                         'cvr',
                         'campaign.avg_price',
                         'cost',
-                        'match_install',
+                        [
+                            'attribute' =>  'match_install',
+                            'pageSummary' => true,
+                        ],
+
                         'match_cvr',
                         'campaign.adv_price',
                         'revenue',
@@ -82,7 +113,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ],
                 ]); ?>
-                <?php Pjax::end(); ?>
 
             </div>
         </div>

@@ -1,9 +1,7 @@
 <?php
 
-use common\models\RegionsDomain;
 use kartik\grid\GridView;
-use yii\helpers\Html;
-use yii\widgets\Pjax;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CampaignSearch */
@@ -18,31 +16,60 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-info">
             <div class="box-body">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+                <?php // echo $this->render('_search', ['model' => $searchModel]);
+                ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
-                    'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
-                    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
-                    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
-                    'pjax' => true, // pjax is set to always true for this demo
-                    'showPageSummary'=>true,
-                    'panel'=>[
-                        'type'=>'primary',
-                        'heading'=>'Products'
+                        'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
+//                    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
+//                    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
+//                    'autoXlFormat' => true,
+//                    'showPageSummary' => true,
+                    'layout' => '{toolbar}{summary} {items} {pager}',
+                    'toolbar' => [
+                        '{toggleData}',
+                        '{export}',
                     ],
-                    'autoXlFormat' => true,
                     'export' => [
                         'fontAwesome' => true,
                         'showConfirmAlert' => false,
                         'target' => GridView::TARGET_BLANK
                     ],
+                    'pjax' => true, // pjax is set to always true for this demo
+                    'pjaxSettings' => [
+                        'neverTimeout' => true,
+                        'options' => [
+                            'id' => 'kv-unique-id-1',
+                        ]
+                    ],
+                    'responsive' => true,
+                    'hover' => true,
                     'columns' => [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      
+                                      <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
+                                      <li><a href="/campaign/update?id=' . $model->id . '" >Update</a></li>
+                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
+                                      </ul>
+                                    </div>';
+                                },
+                            ],
+                        ],
                         'id',
                         [
                             'attribute' => 'advertiser',
                             'value' => 'advertiser0.username',
+//                                'pageSummary' => 'Total'
                         ],
 
 //                        'campaign_name',
@@ -52,49 +79,17 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'contentOptions'=>['style'=>'max-width: 100px;'] // <-- right here
                         ],
                         'campaign_uuid',
-//                        //'tag',
-//                        [
-//                            'attribute' => 'tag',
-//                            'value' => function ($data) {
-//                                return ModelsUtil::getCampaignTag($data->tag);
-//                            },
-//                            'filter' => ModelsUtil::campaign_tag,
-//                        ],
                         'pricing_mode',
-//                        [
-//                            'attribute' => 'pricing_mode',
-//                            'value' => function ($data) {
-//                                return ModelsUtil::getPricingMode($data->pricing_mode);
-//                            },
-//                            'filter' => ModelsUtil::pricing_mode,
-//                        ],
 //                        'indirect',
                         'category',
                         'target_geo',
-//                        [
-//                            'attribute' => 'target_geo',
-//                            'value' => function ($data) {
-//                                return RegionsDomain::findOne(['id' => $data->target_geo])->domain;
-//                            }
-//                        ],
-//             'promote_start',
-                        // 'promote_end',
-                        // 'end_time:datetime',
 //                    'device',
                         'platform',
-//                        [
-//                            'attribute' => 'platform',
-//                            'value' => function ($data) {
-//                                return ModelsUtil::getPlatform($data->platform);
-//                            },
-//                            'filter' => ModelsUtil::platform,
-//                        ],
-                        // 'budget',
-                        // 'open_budget',
-                        // 'daily_cap',
-                        // 'open_cap',
-                        'adv_price',
-                        // 'now_payout',
+//                        'adv_price',
+                        [
+                            'attribute' => 'adv_price',
+//                                'pageSummary' => true
+                        ],
 
                         'traffic_source',
                         // 'note',
@@ -117,7 +112,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'cap',
                         'cvr',
                         'epc',
-                        //'status',
                         [
                             'attribute' => 'status',
                             'value' => function ($model) {
@@ -125,17 +119,41 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => ModelsUtil::campaign_status,
                         ],
-
-                        [
-                            'class' => 'kartik\grid\ActionColumn',
-                            'template' => '{view} {update}',
-                            'header' => 'Action',
-                        ],
                     ],
-
-
                 ]); ?>
             </div>
         </div>
     </div>
 </div>
+<?php
+$this->registerJsFile(
+    '@web/js/campaign.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>
+<?php Modal::begin([
+    'id' => 'campaign-modal',
+    'size' => 'modal-lg',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+echo '<div id="campaign-detail-content"></div>';
+Modal::end(); ?>
+
+<?php Modal::begin([
+    'id' => 'campaign-update-modal',
+    'size' => 'modal-sm',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="campaign-update-content"></div>';
+
+Modal::end(); ?>
+

@@ -55,6 +55,7 @@ class ApplyCampaignController extends Controller
      */
     public function actionIndex()
     {
+        $this->updateStatus();
         $searchModel = new ApplyCampaignSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -157,7 +158,7 @@ class ApplyCampaignController extends Controller
         if (Yii::$app->request->isAjax) {
             $model = $this->findModel($campaign_id, $channel_id);
             $model->status = 3;
-            if($model->save()){
+            if ($model->save()) {
                 return 'success';
             }
 //            return $campaign_id.$channel_id;
@@ -178,7 +179,9 @@ class ApplyCampaignController extends Controller
                 $model->save();
                 return "success";
             } else {
-                return $deliver->getErrors();
+                var_dump($deliver->getErrors());
+//                die();
+//                return $deliver->getErrors();
             }
 
         } else {
@@ -195,5 +198,17 @@ class ApplyCampaignController extends Controller
             ]);
         }
 
+    }
+
+    public function updateStatus()
+    {
+        $applys = ApplyCampaign::findAll(['status' => 1]);
+        foreach ($applys as $item) {
+            $de = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+            if (isset($de)) {
+                $item->status = 2;
+                $item->save();
+            }
+        }
     }
 }

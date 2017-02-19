@@ -69,7 +69,7 @@ class CampaignController extends Controller
      */
     public function actionIndex()
     {
-//        $this->layout='main';
+//        $this->layout='mylayout';
         $searchModel = new CampaignSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -86,7 +86,7 @@ class CampaignController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
+        return $this->renderAjax('view', [
             'model' => $this->findModel($id),
         ]);
     }
@@ -125,7 +125,7 @@ class CampaignController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeSave($model);
             if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index']);
             }
         }
         return $this->render('update', [

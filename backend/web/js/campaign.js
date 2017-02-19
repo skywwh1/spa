@@ -17,3 +17,21 @@ $('select[name="open_cap"]').change(function () {
         $('input[name="Campaign[daily_cap]"]').val('');
     }
 });
+
+$(document).on("click", "a[data-view=0]", function (e) {
+    $('#campaign-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
+
+});
+
+$('#campaign-modal').on('hidden.bs.modal', function () {
+    $('#campaign-detail-content').empty();
+})
+
+$(document).on("click", "a[data-view=1]", function (e) {
+    $('#campaign-update-modal').modal('show').find('#campaign-update-content').load($(this).attr('data-url'));
+
+});
+
+$('#campaign-update-modal').on('hidden.bs.modal', function () {
+    $('#campaign-update-content').empty();
+})

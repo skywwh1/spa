@@ -10,101 +10,89 @@ $this->title = $model->campaign_name;
 $this->params['breadcrumbs'][] = ['label' => 'Campaigns', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="row">
 
-    <div id="nav-menu" data-menu="campaign_index"></div>
-    <div class="col-lg-12">
-        <div class="box box-info table-responsive">
-            <div class="box-body">
-                <p>
-                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-                </p>
-                <?= DetailView::widget([
-                    'model' => $model,
-                    'attributes' => [
-                        'id',
-                        //'advertiser',
-                        [
-                            'attribute' => 'advertiser',
-                            'value' => $model->advertiser0->username,
-                        ],
-                        'campaign_name',
-                        //'tag',
-                        'campaign_uuid',
-                        'pricing_mode',
-                        'promote_start:datetime',
-                        'promote_end:datetime',
-                        'effective_time:datetime',
-                        'adv_update_time:datetime',
-                        'device',
-                        'platform',
-                        'min_version',
-                        'max_version',
-                        'daily_cap',
-                        'adv_price',
-                        'now_payout',
-                        'target_geo',
-                        //   [
-                        //      'attribute' => 'target_geo',
-                        //       'value' => $model->targetGeo->domain,
-                        //    ],
-                        'traffic_source',
+    <?= DetailView::widget([
+        'model' => $model,
+        'attributes' => [
+            'id',
+            //'advertiser',
+            [
+                'attribute' => 'advertiser',
+                'value' => $model->advertiser0->username,
+            ],
+            'campaign_name',
+            //'tag',
+            'campaign_uuid',
+            'pricing_mode',
+            'promote_start:datetime',
+            'promote_end:datetime',
+            'effective_time:datetime',
+            'adv_update_time:datetime',
+            'device',
+            'platform',
+            'min_version',
+            'max_version',
+            'daily_cap',
+            'adv_price',
+            'now_payout',
+            'target_geo',
+            //   [
+            //      'attribute' => 'target_geo',
+            //       'value' => $model->targetGeo->domain,
+            //    ],
+            'traffic_source',
 //                        [
 //                            'attribute' => 'traffic_source',
 //                            'value' => ModelsUtil::getTrafficeSource($model->traffic_source),
 //                        ],
-                        'note:ntext',
-                        'preview_link:url',
-                        'icon',
-                        'package_name',
-                        'app_name',
-                        'app_size',
-                        'category',
-                        'version',
-                        'app_rate',
-                        'description',
-                        'creative_link',
-                        //'creative_type',
-                        [
-                            'attribute' => 'creative_type',
-                            'value' => ModelsUtil::getCreateType($model->creative_type),
-                        ],
-                        'carriers',
-                        'conversion_flow',
-                        'recommended',
-                        'indirect',
-                        'cap',
-                        'cvr',
-                        'epc',
-                        'avg_price',
+            'note:ntext',
+            'preview_link:url',
+            'icon',
+            'package_name',
+            'app_name',
+            'app_size',
+            'category',
+            'version',
+            'app_rate',
+            'description',
+            'creative_link',
+            //'creative_type',
+            [
+                'attribute' => 'creative_type',
+                'value' => ModelsUtil::getCreateType($model->creative_type),
+            ],
+            'carriers',
+            'conversion_flow',
+            'recommended',
+            'indirect',
+            'cap',
+            'cvr',
+            'epc',
+            'avg_price',
 //                        'status',
-                        [
-                            'attribute' => 'status',
-                            'value' => ModelsUtil::getCampaignStatus($model->status),
-                        ],
-                        [
-                            'attribute' => 'open_type',
-                            'value' => ModelsUtil::getOpenType($model->open_type),
+            [
+                'attribute' => 'status',
+                'value' => ModelsUtil::getCampaignStatus($model->status),
+            ],
+            [
+                'attribute' => 'open_type',
+                'value' => ModelsUtil::getOpenType($model->open_type),
 
-                        ],
-                        'subid_status',
-                        'track_way',
-                        'third_party',
-                        'track_link_domain',
-                        'adv_link:url',
-                        'link_type',
-                        'ip_blacklist',
+            ],
+            'subid_status',
+            'track_way',
+            'third_party',
+            'track_link_domain',
+            'adv_link:url',
+            'link_type',
+            'ip_blacklist',
 //            'creator0->username',
-                        [
-                            'attribute' => 'creator',
-                            'value' => $model->creator0->username,
-                        ],
-                        'create_time:datetime',
-                        'update_time:datetime',
-                    ],
-                ]) ?>
+            [
+                'attribute' => 'creator',
+                'value' => $model->creator0->username,
+            ],
+            'create_time:datetime',
+            'update_time:datetime',
+        ],
+    ]) ?>
 
-            </div>
-        </div>
-    </div>
-</div>

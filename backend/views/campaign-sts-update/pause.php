@@ -30,7 +30,7 @@ use yii\widgets\ActiveForm;
 ]);
 ?>
 
-<?= $form->field($model, 'is_send')->dropDownList(['0' => 'Yes', '1' => "No"]) ?>
+<?= $form->field($model, 'is_send')->dropDownList(['1' => 'Yes', '0' => "No"]) ?>
 <div class="form-group">
     <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
 </div>

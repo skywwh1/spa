@@ -240,6 +240,12 @@ class DeliverController extends Controller
 //            if ($curl->get($model->tracking_link) !== false) {
 //                $model->result[] = 'Click response: ' . $curl->response;
             $stream = Stream::getLatestClick($channel->id);
+            if ($stream == null) {
+                $model->result[] = 'Please run tracking link on browser';
+                return $this->render('test_link', [
+                    'model' => $model,
+                ]);
+            }
             $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
             $model->result[] = 'post back link: ' . $link;
             $curl = new Curl();

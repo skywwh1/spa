@@ -111,7 +111,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'track_way', $this->track_way])
             ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
-            ->andFilterWhere(['like', 'advertiser.username', $this->advertiser])
+            ->andFilterWhere(['like', 'a.username', $this->advertiser])
             ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
         $query->orderBy('create_time DESC');
 

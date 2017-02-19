@@ -170,7 +170,7 @@ use yii\widgets\ActiveForm;
             //                    ]],
             //            ])
             echo $form->field($model, 'target_geo')->widget(Select2::classname(), [
-                'initValueText' => $model->target_geo, // set the initial display text
+//                'initValueText' => $model->target_geo, // set the initial display text
                 'size' => Select2::MEDIUM,
                 'options' => [
                     'multiple' => true,

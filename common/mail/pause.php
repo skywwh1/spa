@@ -52,8 +52,7 @@ use yii\helpers\Url;
         $target_geo = '<td> Target Geo</td>';
         $preview_link = '<td>Preview Link</td>';
         $link = '<td> Link</td>';
-        $daily_cap = '<td> Previous Cap</td>';
-        $new = '<td> New Cap</td>';
+        $new = '<td><b>Pausing Time(GMT+8)</b></td>';
 
 
         $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
@@ -62,8 +61,7 @@ use yii\helpers\Url;
         $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
         $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
         $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
-        $daily_cap .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';
-        $new .= '<td style="background-color:yellow">' . Html::encode($deliver->newValue) . '</td>';
+        $new .= '<td style="background-color:yellow">' . Html::encode(date('Y-m-d H:i', $deliver->effect_time)) . '</td>';
 
         $id = '<tr>' . $id . '</tr>';
         $campaign_name = '<tr>' . $campaign_name . '</tr>';
@@ -71,7 +69,6 @@ use yii\helpers\Url;
         $target_geo = '<tr>' . $target_geo . '</tr>';
         $preview_link = '<tr>' . $preview_link . '</tr>';
         $link = '<tr>' . $link . '</tr>';
-        $daily_cap = '<tr>' . $daily_cap . '</tr>';
         $new = '<tr>' . $new . '</tr>';
 
         echo $id;
@@ -80,7 +77,6 @@ use yii\helpers\Url;
         echo $target_geo;
         echo $preview_link;
         echo $link;
-        echo $daily_cap;
         echo $new;
 
         ?>

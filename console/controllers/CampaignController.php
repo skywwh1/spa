@@ -47,10 +47,6 @@ class CampaignController extends Controller
 
     public function actionSendUpdate()
     {
-        // 发送 payout
-
-        // 发送 cap
-        // 发送 paused
         $pause = array();
         $cap = array();
         $payout = array();
@@ -63,7 +59,7 @@ class CampaignController extends Controller
                         $delivers = Deliver::findRunningByCampaignId($camp->id);
                         if ($item->name == 'pause') {
                             foreach ($delivers as $d) {
-                                $d->newValue = $item->value;
+                                $d->effect_time = $item->effect_time;
                                 $pause[$camp->id][] = $d;
                             }
                         } else if ($item->name == 'cap') {
@@ -74,6 +70,7 @@ class CampaignController extends Controller
                         } else if ($item->name == 'payout') {
                             foreach ($delivers as $d) {
                                 $d->newValue = $item->value;
+                                $d->effect_time = $item->effect_time;
                                 $payout[$camp->id][] = $d;
                             }
                         }
@@ -83,32 +80,70 @@ class CampaignController extends Controller
                     $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
                     if (isset($sts)) {
                         if ($item->name == 'pause') {
-                            $sts->newValue = $item->value;
+                            $sts->effect_time = $item->effect_time;
                             $pause[$item->campaign_id][] = $sts;
                         } else if ($item->name == 'cap') {
                             $sts->newValue = $item->value;
                             $cap[$item->campaign_id][] = $sts;
                         } else if ($item->name == 'payout') {
                             $sts->newValue = $item->value;
+                            $sts->effect_time = $item->effect_time;
                             $payout[$item->campaign_id][] = $sts;
+                        }
+                    }
+                }
+
+                $item->is_send = 2;
+                $item->save();
+            }
+        }
+        // 每一个都是 [campaign_id][delivers]
+        if (!empty($payout)) {
+            $this->echoMessage('update payout');
+            foreach ($payout as $campaign_id => $delivers) {
+                $this->echoMessage('Campaign id : ' . $campaign_id);
+                if (isset($delivers)) {
+                    foreach ($delivers as $item) {
+                        if (MailUtil::payoutUpdate($item)) {
+                            $this->echoMessage($item->channel_id . ' send success');
+                        } else {
+                            $this->echoMessage($item->channel_id . ' send fail');
                         }
                     }
                 }
             }
         }
 
-        if (!empty($payout)) {
-
-        }
-
         if (!empty($cap)) {
-            foreach ($cap as $item) {
-                MailUtil::capUpdate($item);
+            $this->echoMessage('update cap');
+            foreach ($cap as $campaign_id => $delivers) {
+                $this->echoMessage('Campaign id : ' . $campaign_id);
+                if (isset($delivers)) {
+                    foreach ($delivers as $item) {
+                        if (MailUtil::capUpdate($item)) {
+                            $this->echoMessage($item->channel_id . ' send success');
+                        } else {
+                            $this->echoMessage($item->channel_id . ' send fail');
+                        }
+                    }
+                }
             }
         }
 
         if (!empty($pause)) {
-
+            $this->echoMessage('Paused');
+            foreach ($pause as $campaign_id => $delivers) {
+                $this->echoMessage('');
+                if (isset($delivers)) {
+                    foreach ($delivers as $item) {
+                        if (MailUtil::paused($item)) {
+                            $this->echoMessage($item->username . ' send success');
+                        } else {
+                            $this->echoMessage($item->username . ' send fail');
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -127,7 +127,7 @@ use yii\widgets\ActiveForm;
 
                     <?php
                     echo $form->field($model, 'strong_geo')->widget(Select2::classname(), [
-                        'initValueText' => $model->strong_geo, // set the initial display text
+//                        'initValueText' => $model->strong_geo, // set the initial display text
                         'size' => Select2::MEDIUM,
                         'options' => [
                             'multiple' => true,
@@ -150,7 +150,7 @@ use yii\widgets\ActiveForm;
                     ]); ?>
 
                     <?php echo $form->field($model, 'strong_category')->widget(Select2::classname(), [
-                        'initValueText' => $model->strong_category, // set the initial display text
+//                        'initValueText' => $model->strong_category, // set the initial display text
                         'size' => Select2::MEDIUM,
                         'options' => [
                             'multiple' => true,

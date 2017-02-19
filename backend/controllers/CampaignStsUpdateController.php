@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Campaign;
 use common\models\Deliver;
 use Yii;
 use common\models\CampaignStsUpdate;
@@ -161,23 +162,21 @@ class CampaignStsUpdateController extends Controller
         $model->channel_id = $channel_id;
 
         if ($model->load(Yii::$app->request->post())) {
-//            $model =
+            $model->type = $type;//2 is sts 1 is campaign
+            $model->name = 'pause';
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
             if ($type == 2) {
-                $model->type = $type;//2 is sts 1 is campaign
-                $model->name = 'pause';
-                $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
-                $model->save();
-
                 $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
                 $sts->end_time = $model->effect_time;
                 $sts->save();
                 return $this->redirect(['deliver/index']);
+            } else if ($type == 1) {
+                $camp = Campaign::findById($model->campaign_id);
+                $camp->promote_end = $model->effect_time;
+                $camp->save();
+                return $this->redirect(['campaign/index']);
             }
-
-            if ($type == 1) {
-
-            }
-
         } else {
             return $this->renderAjax('pause', [
                 'model' => $model,
@@ -211,11 +210,6 @@ class CampaignStsUpdateController extends Controller
                 $model->save();
                 return $this->redirect(['deliver/index']);
             }
-
-            if ($type == 1) {
-
-            }
-
         } else {
             return $this->renderAjax('update_cap', [
                 'model' => $model,

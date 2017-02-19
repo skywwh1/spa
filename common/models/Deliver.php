@@ -51,6 +51,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $channel0;
     public $step;
     public $newValue;
+    public $effect_time;
 
     /**
      * @inheritdoc

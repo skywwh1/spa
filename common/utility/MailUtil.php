@@ -81,7 +81,7 @@ class MailUtil
      */
     public static function capUpdate($deliver)
     {
-        $channel = $deliver->channel;
+        $channel = Channel::findIdentity($deliver->channel_id);
         $mail = Yii::$app->mailer->compose('update_cap', ['deliver' => $deliver]);
         $mail->setTo($channel->email);
         $cc = array($channel->om0->email);
@@ -97,28 +97,67 @@ class MailUtil
         $param = array('type' => 'cap update', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
         if ($isSend) {
-            return "Channel " . $channel->id . ' send success!';
+            return true;
         } else {
-            return "Channel " . $channel->id . ' send Fail!';
+            return false;
         }
-
     }
 
     /**
-     * @param Deliver[] $delivers
+     * @param Deliver $deliver
      * @return string
      */
-    public static function payoutUpdate($delivers)
+    public static function payoutUpdate($deliver)
     {
 
+        $channel = Channel::findIdentity($deliver->channel_id);
+        $mail = Yii::$app->mailer->compose('update_payout', ['deliver' => $deliver]);
+        $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+        $mail->setSubject('Payout Update - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'update_payout', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
-     * @param Deliver[] $delivers
+     * @param Deliver $deliver
      * @return string
      */
-    public static function paused($delivers)
+    public static function paused($deliver)
     {
 
+        $channel = Channel::findIdentity($deliver->channel_id);
+        $mail = Yii::$app->mailer->compose('pause', ['deliver' => $deliver]);
+        $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+        $mail->setSubject('Pausing Campaign - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'pause', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
