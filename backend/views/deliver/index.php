@@ -1,10 +1,7 @@
 <?php
 
 use kartik\grid\GridView;
-use yii\bootstrap\ButtonDropdown;
 use yii\bootstrap\Modal;
-use yii\helpers\Html;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DeliverSearch */
@@ -34,51 +31,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => 'Action',
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
-                                    return ButtonDropdown::widget([
-                                        'encodeLabel' => false, // if you're going to use html on the button label
-                                        'label' => 'Actions',
-                                        'dropdown' => [
-                                            'encodeLabels' => false, // if you're going to use html on the items' labels
-                                            'items' => [
-                                                [
-                                                    'label' => \Yii::t('yii', 'View'),
-                                                    'url' => ['#'],
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
-                                                ],
-                                                [
-                                                    'label' => \Yii::t('yii', 'Paused'),
-                                                    'url' => ['#'],
-                                                    //  'visible' => isset($model->end_time) ? false : true,  // if you want to hide an item based on a condition, use this
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
-                                                ],
-                                                [
-                                                    'label' => \Yii::t('yii', 'Update Cap'),
-                                                    'url' => ['#'],
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
-                                                ],
-                                                [
-                                                    'label' => \Yii::t('yii', 'Update Discount'),
-                                                    'url' => ['#'],
-                                                    // 'visible' => true,  // if you want to hide an item based on a condition, use this
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
-                                                ],
-                                                [
-                                                    'label' => \Yii::t('yii', 'Update Payout'),
-                                                    'url' => ['#'],
-                                                    // 'visible' => true,  // if you want to hide an item based on a condition, use this
-                                                    'linkOptions' => ['data-view' => 0, 'data-url' => '/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id],
-                                                ],
-                                            ],
-                                            'options' => [
-                                                'class' => 'dropdown-menu-left', // right dropdown
-                                            ],
-                                        ],
-                                        'options' => [
-                                            'class' => 'btn-primary dropup',   // btn-success, btn-info, et cetera
-//                                            'aria-haspopup'=>true,
-                                        ],
-                                        // 'split' => true,    // if you want a split button
-                                    ]);
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+
+                                      <li><a data-view="0" data-url="/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Cap</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Payout</a></li>
+                                      </ul>
+                                    </div>';
                                 },
                             ],
                         ],

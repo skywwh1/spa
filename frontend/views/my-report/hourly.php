@@ -1,10 +1,9 @@
 <?php
 
 use kartik\date\DatePicker;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\MyReportSearch */
@@ -87,20 +86,36 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="panel-body">
                 <div class="row">
                     <div class="col-lg-12">
-                        <?php Pjax::begin(); ?>    <?= GridView::widget([
+                        <?= GridView::widget([
                             'dataProvider' => $dataProvider,
 //                            'filterModel' => $searchModel,
+                            'pjax' => true, // pjax is set to always true for this demo
+                            'responsive' => true,
+                            'hover' => true,
+                            'showPageSummary' => true,
                             'columns' => [
-                                'time',
+                                [
+                                    'attribute' => 'time',
+                                    'pageSummary' => 'Total'
+                                ],
                                 'campaign_id',
                                 'campaign_name',
-                                'clicks',
-                                'unique_clicks',
-                                'installs',
                                 [
-                                    'attribute'=>'cvr0',
-                                    'value'=>$searchModel->cvr0,
-                                    'label'=>'CVR(100%)',
+                                    'attribute' => 'clicks',
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'unique_clicks',
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'installs',
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'cvr0',
+                                    'value' => $searchModel->cvr0,
+                                    'label' => 'CVR(100%)',
                                 ],
 //                                'pricing_mode',
                                 'pay_out',
@@ -120,7 +135,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'cost',
                                 // 'match_install',
                                 // 'match_cvr',
-                                 'revenue',
+                                'revenue',
                                 // 'def',
                                 // 'deduction_percent',
                                 // 'profit',
@@ -129,7 +144,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             ],
                         ]); ?>
-                        <?php Pjax::end(); ?>
                     </div>
                 </div>
             </div>

@@ -92,9 +92,6 @@ class CampaignController extends Controller
                         }
                     }
                 }
-
-                $item->is_send = 2;
-                $item->save();
             }
         }
         // 每一个都是 [campaign_id][delivers]
@@ -143,6 +140,13 @@ class CampaignController extends Controller
                         }
                     }
                 }
+            }
+        }
+
+        if (isset($models)) {
+            foreach ($models as $item) {
+                $item->is_send = 2;
+                $item->save();
             }
         }
     }
