@@ -9,7 +9,7 @@ $params = array_merge(
 
 return [
     'id' => 'app-api',
-    'basePath' => dirname(__DIR__),    
+    'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'modules' => [
         'v1' => [
@@ -17,10 +17,11 @@ return [
             'class' => 'api\modules\v1\Module'
         ]
     ],
-    'components' => [        
+    'components' => [
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'api\modules\v1\models\Channel',
             'enableAutoLogin' => false,
+            'enableSession'=>false
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -28,6 +29,7 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
+                    'logFile'  => '@api/runtime/logs/error.log'
                 ],
             ],
         ],
@@ -37,14 +39,22 @@ return [
             'showScriptName' => false,
             'rules' => [
                 [
-                    'class' => 'yii\rest\UrlRule', 
-                    'controller' => 'v1/country',
-                    'tokens' => [
-                        '{id}' => '<id:\\w+>'
-                    ]
-                    
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'v1/country',
+                        'v1/user'
+                    ],
+//                    'tokens' => [
+//                        '{id}' => '<id:\\w+>'
+//                    ]
+
                 ]
-            ],        
+            ],
+        ],
+        'request' => [
+            'parsers' => [
+                'application/json' => 'yii\web\JsonParser',
+            ]
         ]
     ],
     'params' => $params,

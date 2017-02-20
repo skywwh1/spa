@@ -301,4 +301,17 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return static::findOne($id);
     }
+
+    /**
+     * 查出需要停止的单子
+     * @return array|Campaign[]
+     */
+    public static function getNeedPause()
+    {
+        return Campaign::find()
+            ->where(['status' => 1])
+            ->andWhere(['not', ['promote_end' => null]])
+            ->andWhere(['<', 'promote_end', time()])
+            ->all();
+    }
 }

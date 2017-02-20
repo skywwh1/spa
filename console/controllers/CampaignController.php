@@ -23,25 +23,35 @@ class CampaignController extends Controller
         // 2 sts update
         // 更新sts paused
         $delivers = Deliver::getNeedPause();
+
         if (isset($delivers)) {
             foreach ($delivers as $item) {
                 $item->status = 2;
                 $item->save();
             }
         }
-        // 更新sts daily cap
-        $updateCaps = CampaignStsUpdate::getStsUpdateCap();
-        if (isset($updateCaps)) {
-            foreach ($updateCaps as $item) {
-                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
-                if (isset($deliver)) {
-                    $deliver->daily_cap = (int)$item->value;
-                    $deliver->save();
-                }
-                $item->is_effected = 1;
+
+        $camps = Campaign::getNeedPause();
+        if (isset($camps)) {
+            foreach ($camps as $item) {
+                $item->status = 2;
                 $item->save();
             }
         }
+
+//        // 更新sts daily cap
+//        $updateCaps = CampaignStsUpdate::getStsUpdateCap();
+//        if (isset($updateCaps)) {
+//            foreach ($updateCaps as $item) {
+//                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+//                if (isset($deliver)) {
+//                    $deliver->daily_cap = (int)$item->value;
+//                    $deliver->save();
+//                }
+//                $item->is_effected = 1;
+//                $item->save();
+//            }
+//        }
 
     }
 

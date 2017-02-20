@@ -1,6 +1,8 @@
 <?php
 namespace api\modules\v1\models;
+
 use \yii\db\ActiveRecord;
+
 /**
  * Country Model
  *
@@ -8,13 +10,13 @@ use \yii\db\ActiveRecord;
  */
 class Country extends ActiveRecord
 {
-	/**
-	 * @inheritdoc
-	 */
-	public static function tableName()
-	{
-		return 'country';
-	}
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'country';
+    }
 
     /**
      * @inheritdoc
@@ -33,4 +35,13 @@ class Country extends ActiveRecord
             [['code', 'name', 'population'], 'required']
         ];
     }
+
+    public function fields()
+    {
+        return [
+            'id' => 'code'
+        ];
+    }
+
+
 }

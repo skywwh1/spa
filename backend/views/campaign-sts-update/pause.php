@@ -24,7 +24,7 @@ use yii\widgets\ActiveForm;
     'pluginOptions' => [
         'autoclose' => true,
         'format' => 'yyyy-mm-dd hh:ii',
-        'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
+//        'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
     ],
     'readonly' => true,
 ]);

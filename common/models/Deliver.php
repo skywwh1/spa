@@ -216,8 +216,8 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return Deliver::find()
             ->where(['status' => 1])
-            ->andWhere(['not', ['end' => null]])
-            ->andWhere(['<', ['end_time' => time()]])
+            ->andWhere(['not', ['end_time' => null]])
+            ->andWhere(['<', 'end_time', time()])
             ->all();
     }
 
