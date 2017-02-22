@@ -16,7 +16,7 @@ use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
 use yii\rest\ActiveController;
 
-class UserController extends ActiveController
+class OfferController extends ActiveController
 {
     public $modelClass = 'api\modules\v1\models\ChannelCampaign';
 
@@ -54,14 +54,14 @@ class UserController extends ActiveController
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => [
-                'defaultPageSize' => 100,
+//                'defaultPageSize' => 100,
 //                'pageSizeLimit' => false,
-                'pageSizeParam'=>'page_size',
-                'pageSizeLimit' => [1, 5],
+                'pageSizeParam' => 'page_size',
+                'pageSizeLimit' => [1, 100],
             ],
 
         ]);
-//        $query->where(['channel_id'=>\Yii::$app->user->getId()]);
+        $query->where(['channel_id' => \Yii::$app->user->getId()]);
         $query->orderBy('create_time DESC');
         return $dataProvider;
     }

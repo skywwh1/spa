@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        'campaign_name',
                         [
                             'attribute' => 'campaign_name',
-                            'value' => 'campaign_name',
+                            'value' => 'name',
 //                            'contentOptions'=>['style'=>'max-width: 100px;'] // <-- right here
                         ],
                         'campaign_uuid',

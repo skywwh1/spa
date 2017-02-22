@@ -318,6 +318,9 @@ class Channel extends ActiveRecord implements IdentityInterface
 
     public static function findIdentityByAccessToken($token, $type = null)
     {
+//        if($token === md5($this->auth_token)){
+//
+//        }
         throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
     }
 

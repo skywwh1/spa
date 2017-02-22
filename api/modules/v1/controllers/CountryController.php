@@ -2,6 +2,7 @@
 
 namespace api\modules\v1\controllers;
 
+use api\auth\QueryParamAuth;
 use yii\rest\ActiveController;
 
 /**
@@ -19,7 +20,6 @@ class CountryController extends ActiveController
 
         $behaviors['authenticator'] = [
             'class' =>QueryParamAuth::className(),
-            'tokenParam' => 'token',
         ];
 
         return $behaviors;

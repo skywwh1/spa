@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'card_number',
                         // 'contacts',
                         // 'updated_at',
-                        // 'email:email',
+                         'email:email',
                         // 'country',
                         // 'city',
                         // 'address',

@@ -206,7 +206,7 @@ class Channel extends \yii\db\ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['auth_token' => $token]);
+        return static::findOne(['username' => $token]);
     }
 
     /**

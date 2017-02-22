@@ -21,7 +21,7 @@ return [
         'user' => [
             'identityClass' => 'api\modules\v1\models\Channel',
             'enableAutoLogin' => false,
-            'enableSession'=>false
+            'enableSession' => false
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -29,7 +29,7 @@ return [
                 [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
-                    'logFile'  => '@api/runtime/logs/error.log'
+                    'logFile' => '@api/runtime/logs/error.log'
                 ],
             ],
         ],
@@ -42,7 +42,8 @@ return [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'v1/country',
-                        'v1/user'
+                        'v1/user',
+                        'v1/offer'
                     ],
 //                    'tokens' => [
 //                        '{id}' => '<id:\\w+>'
@@ -55,7 +56,12 @@ return [
             'parsers' => [
                 'application/json' => 'yii\web\JsonParser',
             ]
-        ]
+        ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'nullDisplay' => '',
+        ],
+
     ],
     'params' => $params,
 ];
