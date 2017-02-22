@@ -17,23 +17,43 @@ class ChannelCampaign extends Deliver
     public function fields()
     {
         return [
-            "campaign_id",
-            "campaign_name" => function ($model) {
+            'ID' => 'campaign_id',
+            'Campaign name' => function ($model) {
                 return $model->campaign->campaign_name;
             },
-            "campaign_uuid",
-            "pricing_mode",
-            "pay_out",
-            "daily_cap",
-            "status" => function ($model) {
+//            'campaign_uuid',
+            'OS' => function ($model) {
+                return $model->campaign->platform;
+            },
+            'Target Geo' => function ($model) {
+                return $model->campaign->target_geo;
+            },
+            'Payout' => 'pay_out',
+            'Pricing Mode' => 'pricing_mode',
+            'Daily Cap' => 'daily_cap',
+            'Status' => function ($model) {
                 return \ModelsUtil::getCampaignStatus($model->status);
             },
-            "end_time",
-            "create_time",
-            "track_url" => function ($model) {
+            'Created Time' => function ($model) {
+                return date("Y-m-d H:i:s", $model->create_time);
+            },
+            'End Time' => function ($model) {
+                return date("Y-m-d H:i:s", $model->end_time);
+            },
+            'Preview Link' => function ($model) {
+                return Url::to($model->campaign->preview_link);
+            },
+            'Link' => function ($model) {
                 return Url::to('@track' . $model->track_url);
             },
-            "note",
+            'Conversion Flow' => function ($model) {
+                return $model->campaign->conversion_flow;
+            },
+            'Carrier' => function ($model) {
+                return $model->campaign->carriers;
+            },
+
+            'Notes' => 'note',
         ];
     }
 }

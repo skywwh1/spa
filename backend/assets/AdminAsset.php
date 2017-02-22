@@ -25,7 +25,7 @@ class AdminAsset extends AssetBundle
         'admin/js/bootstrap.min.js', // 注掉会引起菜单默认选择问题，不注掉，就会引起action dropdown问题
         'admin/js/fastclick.js',
         'admin/js/select2.full.min.js',
-//        'admin/js/dropdown.js', //表格和表单冲突
+        'admin/js/dropdown.js', //表格和表单冲突
         'admin/js/app.min.js',
 //        'admin/js/demo.js',
         'admin/js/custom.js',

@@ -40,7 +40,7 @@ SbAppAsset::register($this);
         <ul class="nav navbar-top-links navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
+                    Welcome <?= Yii::$app->user->identity->username?> <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
 <!--                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
@@ -108,7 +108,7 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Support<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="#">API</a>
+                                <a href="/support/api" data-menu="channel-api">API</a>
                             </li>
 
                         </ul>
@@ -119,7 +119,7 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-user fa-fw"></i> Account<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <a href="####">Payment</a>
+                                <a href="/account/payment" data-menu="channel-payment">Payment</a>
                             </li>
                             <li>
                                 <a href="#">Setting</a>
