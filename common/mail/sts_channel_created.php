@@ -49,7 +49,7 @@ use yii\helpers\Url;
         <?php
         $id = '<td width="100px"> ID</td>';
         $campaign_name = '<td> Campaign name</td>';
-        $version = '<td> Version</td>';
+        $version = '<td> OS </td>';
         $target_geo = '<td> Target Geo</td>';
         $payout = '<td> Payout</td>';
         $preview_link = '<td>Preview Link</td>';
@@ -64,7 +64,7 @@ use yii\helpers\Url;
         foreach ($delivers as $deliver) {
             $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
             $campaign_name .= '<td width="130px">' . Html::encode($deliver->campaign->campaign_name) . '</td>';
-            $version .= '<td>' . Html::encode($deliver->campaign->version) . '</td>';
+            $version .= '<td>' . Html::encode($deliver->campaign->platform) . '</td>';
             $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
             $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
             $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
