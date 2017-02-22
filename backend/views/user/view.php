@@ -10,9 +10,12 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-view">
+<div class="row">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div id="nav-menu" data-menu="user-view"></div>
+    <div class="col-lg-12">
+        <div class="box box-info">
+            <div class="box-body">
 
     <p>
         <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
@@ -61,4 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
-</div>
+            </div>
+        </div>
+    </div>
+</div

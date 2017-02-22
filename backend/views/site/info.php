@@ -15,8 +15,8 @@
                     </li>
                     <li><h3>Post back：</h3>
                         <ul>
-                            <li><h4>https://track.superads.cn/stream/feed?auth_token={please check the ADV
-                                    token}&click_id={click_id}&ch_id={ch_id}</h4></li>
+                            <li><h4>https://track.superads.cn/stream/feed?auth_token=<strong style='color:red'>please find the ADV
+                                    token on SuperADS</strong>&click_id={click_id}&ch_id={ch_id}</h4></li>
 
                         </ul>
                     </li>

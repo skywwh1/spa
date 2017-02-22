@@ -147,9 +147,9 @@ class CampaignController extends Controller
                 if (isset($delivers)) {
                     foreach ($delivers as $item) {
                         if (MailUtil::paused($item)) {
-                            $this->echoMessage($item->username . ' send success');
+                            $this->echoMessage($item->channel_id . ' send success');
                         } else {
-                            $this->echoMessage($item->username . ' send fail');
+                            $this->echoMessage($item->channel_id . ' send fail');
                         }
                     }
                 }
