@@ -44,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <div class="panel-footer">
                 <p>
-                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
+                    <?php // Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary btn-sm']) ?>
                 </p>
             </div>
         </div>
