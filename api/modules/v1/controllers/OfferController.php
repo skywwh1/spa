@@ -11,6 +11,7 @@ namespace api\modules\v1\controllers;
 
 use api\auth\QueryParamAuth;
 use api\modules\v1\models\ChannelCampaign;
+use common\models\ApiCampaign;
 use common\models\Campaign;
 use yii\data\ActiveDataProvider;
 use yii\filters\auth\HttpBearerAuth;
@@ -37,7 +38,7 @@ class OfferController extends ActiveController
         $actions = parent::actions();
 
         // disable the "delete" and "create" actions
-        unset($actions['delete'], $actions['create']);
+        unset($actions['delete'], $actions['create'], $actions['update'], $actions['options']);
 
         // customize the data provider preparation with the "prepareDataProvider()" method
         $actions['index']['prepareDataProvider'] = [$this, 'prepareDataProvider'];
@@ -49,16 +50,21 @@ class OfferController extends ActiveController
     //&per-page=2&page=1
     public function prepareDataProvider()
     {
+        $parameters = $_REQUEST;
+        if (isset($parameters['page']) || isset($parameters['page_size'])) {
+            $pagination = [
+                'defaultPageSize' => 100,
+                'pageSizeParam' => 'page_size',
+                'pageSizeLimit' => [1, 100],
+            ];
+        } else {
+            $pagination = false;
+        }
         // prepare and return a data provider for the "index" action
         $query = ChannelCampaign::find();
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-//                'defaultPageSize' => 100,
-//                'pageSizeLimit' => false,
-                'pageSizeParam' => 'page_size',
-                'pageSizeLimit' => [1, 100],
-            ],
+            'pagination' => $pagination,
 
         ]);
         $query->where(['channel_id' => \Yii::$app->user->getId()]);

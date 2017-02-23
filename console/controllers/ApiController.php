@@ -58,7 +58,7 @@ class ApiController extends Controller
 //        var_dump($data);
 //        die();
         $camps = ApiUtil::genApiCampaigns($apiModel, $data);
-        //ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
+        ApiCampaign::deleteAll(['adv_id'=>$apiModel->adv_id]);
         foreach ($camps as $item) {
 //            echo $apiModel->adv_id.'-';
 //            echo $item->campaign_id;
