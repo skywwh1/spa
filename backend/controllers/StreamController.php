@@ -179,6 +179,9 @@ class StreamController extends Controller
         if (!empty($post_param)) {
             $post_param = str_replace('{click_id}', $paras['click_id'], $post_param);
             $post_param = str_replace('{ch_id}', $paras['ch_id'], $post_param);
+            $post_param = str_replace('{idfa}', $paras['idfa'], $post_param);
+            $post_param = str_replace('{gaid}', $paras['gaid'], $post_param);
+            $post_param = str_replace('{site}', $paras['site'], $post_param);
             $link .= $post_param;
         } else {
             $link .= 'click_id=' . $model->click_uuid; //默认
@@ -224,12 +227,12 @@ class StreamController extends Controller
         }
 
         //3.单子状态
-//        if ($deliver->status !== 1) {
-//            $code = 403;
-//        }
-//        if ($campaign->status !== 1) {
-//            $code = 403;
-//        }
+        if ($deliver->status !== 1) {
+            $code = 403;
+        }
+        if ($campaign->status !== 1) {
+            $code = 403;
+        }
         //正常0
         $model->pay_out = $deliver->pay_out;
         $model->daily_cap = $deliver->daily_cap;

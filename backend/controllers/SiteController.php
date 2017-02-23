@@ -142,17 +142,20 @@ class SiteController extends Controller
         return $this->render('info');
     }
     public function actionTest(){
-        $aa = Advertiser::find()->where(['auth_token'=>null])->all();
-        foreach($aa as $item){
-            $item->auth_token = uniqid('adv').uniqid();
-            $item->save();
-        }
-
-        $bb = Channel::find()->where(['auth_token'=>null])->all();
-        foreach($bb as $item){
-            $item->auth_token = uniqid('ch').uniqid();
-            $item->save();
-        }
+        Yii::$app->params['test']='ppp';
+        var_dump(Yii::$app->params['test']);
+        die();
+//        $aa = Advertiser::find()->where(['auth_token'=>null])->all();
+//        foreach($aa as $item){
+//            $item->auth_token = uniqid('adv').uniqid();
+//            $item->save();
+//        }
+//
+//        $bb = Channel::find()->where(['auth_token'=>null])->all();
+//        foreach($bb as $item){
+//            $item->auth_token = uniqid('ch').uniqid();
+//            $item->save();
+//        }
 //        var_dump($aa);
     }
 }

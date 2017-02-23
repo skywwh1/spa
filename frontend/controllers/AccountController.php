@@ -46,7 +46,8 @@ class AccountController extends Controller
     public function actionUpdate()
     {
         $model = $this->findPaymentForm();
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+
             return $this->redirect(['payment']);
         } else {
             return $this->render('update', [
@@ -79,7 +80,7 @@ class AccountController extends Controller
     {
         $model = $this->findModel(Yii::$app->user->getId());
         $form = new PaymentForm();
-        $form->payment_way = $model->payment_way;
+        $form->payment_way = explode(',', $model->payment_way);
         $form->beneficiary_name = $model->beneficiary_name;
         $form->bank_country = $model->bank_country;
         $form->bank_name = $model->bank_name;
@@ -88,4 +89,10 @@ class AccountController extends Controller
         $form->account_nu_iban = $model->account_nu_iban;
         return $form;
     }
+
+    public function actionReset()
+    {
+
+    }
+
 }
