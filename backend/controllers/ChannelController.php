@@ -269,7 +269,11 @@ class ChannelController extends Controller
 ///*****************************************************************************************
     public function actionTest()
     {
-        var_dump($GLOBALS['pp']);
+        echo 'aa';
+        die();
+        $cache = Yii::$app->cache;
+        $data = $cache->get('cache_data_key');
+        var_dump($data);
 //        $aa = Channel::findOne(['id'=>25]);
 //        MailUtil::sendCreateChannel($aa);
 //        $aa = Deliver::findIdentity(3,29);

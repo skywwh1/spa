@@ -6,6 +6,7 @@ use common\models\Campaign;
 use common\models\Channel;
 use common\models\SignupForm;
 use common\models\User;
+use linslin\yii2\curl\Curl;
 use Yii;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -142,9 +143,28 @@ class SiteController extends Controller
         return $this->render('info');
     }
     public function actionTest(){
-        Yii::$app->session['key'] = 'value';
-        $GLOBALS['pp']='pp';
-        var_dump($GLOBALS['pp']);
+
+                    $curl = new Curl();
+//            $curl->setOptions(array(
+//                CURLOPT_FOLLOWLOCATION => 1,
+//            ));
+         $responst = $curl->get('baidu.com') ;
+        var_dump($curl->responseCode);
+        die();
+        $cache = Yii::$app->cache;
+        $cache->delete('cache_data_key');
+        $data = $cache->get('cache_data_key');
+        if ($data === false) {
+            //这里我们可以操作数据库获取数据，然后通过$cache->set方法进行缓存
+            $cacheData = 'ppp';
+    //set方法的第一个参数是我们的数据对应的key值，方便我们获取到
+    //第二个参数即是我们要缓存的数据
+    //第三个参数是缓存时间，如果是0，意味着永久缓存。默认是0
+        }
+        $c = Channel::findOne(['id'=>29]);
+        $cache->set('cache_data_key', $c, 5);
+//        var_dump($data);
+
         die();
 //        $aa = Advertiser::find()->where(['auth_token'=>null])->all();
 //        foreach($aa as $item){

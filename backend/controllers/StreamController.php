@@ -212,7 +212,14 @@ class StreamController extends Controller
         if ($deliver === null) {
             $code = 500;
         }
-
+        /**
+         * test link
+         */
+        $cache = Yii::$app->cache;
+        $test = $cache->get('test_link');
+        if ($test !== false) {
+            $cache->set('test_post', $model, 30);
+        }
         //2.ip 限制
         $target = $campaign->target_geo;
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
