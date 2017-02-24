@@ -233,22 +233,20 @@ class DeliverController extends Controller
                 ]);
             }
             $cache = Yii::$app->cache;
-            $cache->set($channel->id, 'test', 5);
+            $cache->set($channel->id . '', 'test', 0);
             $curl = new Curl();
             $curl->setOptions(array(
                 CURLOPT_FOLLOWLOCATION => 1,
             ));
             $curl->get($model->tracking_link);
-            $model->result[] = 'Click response: ' . $curl->responseHeaders;
-
-            $data = $cache->get($channel->id);
+            $model->result[] = ['Click response: ' => $curl->responseHeaders];
+            $data = $cache->get($channel->id . "");
             $stream = null;
             if ($data !== false && $data !== 'test') {
                 $stream = $data;
             }
-            var_dump($stream);
-            $cache->delete($channel->id);
-            die();
+            $cache->delete($channel->id . "");
+
 //            $stream = Stream::getLatestClick($channel->id);
             if ($stream == null) {
                 $model->result[] = 'Please run tracking link on browser';
