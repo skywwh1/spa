@@ -142,8 +142,9 @@ class SiteController extends Controller
         return $this->render('info');
     }
     public function actionTest(){
-        Yii::$app->params['test']='ppp';
-        var_dump(Yii::$app->params['test']);
+        Yii::$app->session['key'] = 'value';
+        $GLOBALS['pp']='pp';
+        var_dump($GLOBALS['pp']);
         die();
 //        $aa = Advertiser::find()->where(['auth_token'=>null])->all();
 //        foreach($aa as $item){
