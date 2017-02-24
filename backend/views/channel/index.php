@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 //
-//            'id',
+                        'id',
                         'username',
 //            'firstname',
 //            'lastname',
@@ -36,21 +36,21 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'password_reset_token',
                         // 'settlement_type',
                         [
-                            'attribute'=>'om',
-                            'value'=>'om0.username',
-                            'filter'=>false,
+                            'attribute' => 'om',
+                            'value' => 'om0.username',
+                            'filter' => false,
                         ],
                         [
-                            'attribute'=>'master_channel',
-                            'value'=>'masterChannel.username',
-                            'filter'=>false,
+                            'attribute' => 'master_channel',
+                            'value' => 'masterChannel.username',
+                            'filter' => false,
                         ],
                         // 'account_name',
                         // 'branch_name',
                         // 'card_number',
                         // 'contacts',
                         // 'updated_at',
-                         'email:email',
+                        'email:email',
                         // 'country',
                         // 'city',
                         // 'address',
@@ -89,7 +89,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'strong_catagory',
 
                         ['class' => 'yii\grid\ActionColumn',
-                            'template'=>'{view}{update}'
+                            'template' => '{view}{update}'
                         ],
                     ],
                 ]); ?>

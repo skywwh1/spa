@@ -144,13 +144,7 @@ class SiteController extends Controller
     }
     public function actionTest(){
 
-                    $curl = new Curl();
-//            $curl->setOptions(array(
-//                CURLOPT_FOLLOWLOCATION => 1,
-//            ));
-         $responst = $curl->get('baidu.com') ;
-        var_dump($curl->responseCode);
-        die();
+
         $cache = Yii::$app->cache;
         $cache->delete('cache_data_key');
         $data = $cache->get('cache_data_key');

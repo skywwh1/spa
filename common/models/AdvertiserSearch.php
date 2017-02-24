@@ -43,7 +43,7 @@ class AdvertiserSearch extends Advertiser
     public function search($params)
     {
         $query = Advertiser::find();
-
+        $query->alias('a');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -79,7 +79,7 @@ class AdvertiserSearch extends Advertiser
             'deleted' => $this->deleted,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
+        $query->andFilterWhere(['like', 'a.username', $this->username])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
             ->andFilterWhere(['like', 'settlement_type', $this->settlement_type])

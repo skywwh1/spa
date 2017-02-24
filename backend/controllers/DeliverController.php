@@ -232,14 +232,24 @@ class DeliverController extends Controller
                     'model' => $model,
                 ]);
             }
+            $cache = Yii::$app->cache;
+            $cache->set($channel->id, 'test', 5);
+            $curl = new Curl();
+            $curl->setOptions(array(
+                CURLOPT_FOLLOWLOCATION => 1,
+            ));
+            $curl->get($model->tracking_link);
+            $model->result[] = 'Click response: ' . $curl->responseHeaders;
 
-//            $curl = new Curl();
-//            $curl->setOptions(array(
-//                CURLOPT_FOLLOWLOCATION => 1,
-//            ));
-//            if ($curl->get($model->tracking_link) !== false) {
-//                $model->result[] = 'Click response: ' . $curl->response;
-            $stream = Stream::getLatestClick($channel->id);
+            $data = $cache->get($channel->id);
+            $stream = null;
+            if ($data !== false && $data !== 'test') {
+                $stream = $data;
+            }
+            var_dump($stream);
+            $cache->delete($channel->id);
+            die();
+//            $stream = Stream::getLatestClick($channel->id);
             if ($stream == null) {
                 $model->result[] = 'Please run tracking link on browser';
                 return $this->render('test_link', [
@@ -255,9 +265,6 @@ class DeliverController extends Controller
                 $model->result[] = 'Post back fail';
             }
 
-//            } else {
-//                $model->result[] = "Test fail";
-//            }
         }
         return $this->render('test_link', [
             'model' => $model,

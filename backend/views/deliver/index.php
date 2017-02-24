@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         //  ['class' => 'yii\grid\SerialColumn'],
                         [
                             'attribute' => 'campaign_id',
-                            'value' => 'campaign.campaign_name',
+                            'value' => 'campaign.name',
                             'label' => 'Campaign',
                         ],
 //                        'campaign.campaign_name',
