@@ -239,7 +239,14 @@ class DeliverController extends Controller
                 CURLOPT_FOLLOWLOCATION => 1,
             ));
             $curl->get($model->tracking_link);
-            $model->result[] = ['Click response: ' => $curl->responseHeaders];
+            $headers = $curl->responseHeaders;
+            $clicks = '';
+            if (!empty($headers) && is_array($headers)) {
+                foreach ($headers as $k => $v) {
+                    $clicks .= $v;
+                }
+            }
+            $model->result[] = 'Click response: ' . $clicks;
             $data = $cache->get($channel->id . "");
             $stream = null;
             if ($data !== false && $data !== 'test') {
