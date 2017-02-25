@@ -50,10 +50,10 @@ class Stream extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_uuid','cp_uid', 'ch_id'], 'required'],
+            [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
             [['pay_out', 'discount'], 'number'],
             [['daily_cap', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ch_subid', 'gaid', 'idfa', 'site','all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
             [['click_uuid'], 'unique'],
         ];
     }
@@ -117,7 +117,7 @@ class Stream extends \yii\db\ActiveRecord
      */
     public static function getCountClicks()
     {
-        return static::findAll(['is_count' => 0]);
+        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(1000)->all();
     }
 
     public static function getDistinctIpClick($cp_uid, $ch_id)
