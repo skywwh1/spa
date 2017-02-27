@@ -58,11 +58,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => $gridColumns,
                     'fontAwesome' => true,
                     'showConfirmAlert' => false,
+                    'pjaxContainerId' => 'sdfsdfdf',
                     'target' => GridView::TARGET_BLANK,
                     'dropdownOptions' => [
                         'label' => 'Export All',
                         'class' => 'btn btn-default'
-                    ]
+                    ],
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_EXCEL_X => false,
+                        ExportMenu::FORMAT_HTML => false,
+                    ],
                 ]); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
@@ -74,9 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    'showPageSummary' => true,
                     'layout' => '{toolbar}{summary} {items} {pager}',
                     'toolbar' => [
-                        $fullExportMenu,
                         '{toggleData}',
-                        '{export}',
+//                        '{export}',
+                        $fullExportMenu,
                     ],
                     'export' => [
                         'fontAwesome' => true,
@@ -84,13 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'target' => GridView::TARGET_BLANK,
                         'label' => 'Page',
                     ],
-                    'pjax' => true, // pjax is set to always true for this demo
-                    'pjaxSettings' => [
-                        'neverTimeout' => true,
-                        'options' => [
-                            'id' => 'kv-unique-id-1',
-                        ]
-                    ],
+//                    'pjax' => true, // pjax is set to always true for this demo
+//                    'pjaxSettings' => [
+//                        'neverTimeout' => true,
+//                        'options' => [
+//                            'id' => 'kv-unique-id-1',
+//                        ]
+//                    ],
                     'responsive' => true,
                     'hover' => true,
                     'columns' => [
