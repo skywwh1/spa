@@ -1,6 +1,14 @@
 Change Log: `yii2-krajee-base`
 ==============================
 
+## Version 1.8.8
+
+**Date:** 22-Feb-2017
+
+- (enh #74): Allow registering variables in closures by setting them in global namespace.
+- (enh #75): Better validation for default attribute value.
+- (enh #76): Create `BaseAssetBundle` without JQuery and Bootstrap assets dependency.
+
 ## Version 1.8.7
 
 **Date:** 04-Sep-2016

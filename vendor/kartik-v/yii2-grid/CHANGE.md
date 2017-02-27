@@ -3,7 +3,7 @@ Change Log: `yii2-grid`
 
 ## Version 3.1.4
 
-**Date:** 03-Jan-2017
+**Date:** 25-Feb-2017
 
 1. (enh #542): More correct group summation.
 2. (enh #586, #587): Fix for expanding row on init.
@@ -16,6 +16,8 @@ Change Log: `yii2-grid`
     - Export settings will be signed and the same data via POST will be cross checked using `yii\base\Security::hashData` and `yii\base\Security::validateData`.  
 7. (enh #604): Fix PDF class name check error.
 8. Code enhancements for grid group.
+9. (enh #619): Correct nested expanded rows using `GridView::ROW_EXPANDED`.
+10. (bug #624): Call floatThead('reflow') after resizing columns so that the floating head is also resized.
 
 ## Version 3.1.3
 

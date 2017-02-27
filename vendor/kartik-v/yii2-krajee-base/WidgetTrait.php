@@ -3,8 +3,8 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   1.8.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
+ * @version   1.8.8
  */
 
 namespace kartik\base;
@@ -16,7 +16,7 @@ use yii\web\View;
 /**
  * WidgetTrait manages all methods used by Krajee widgets and input widgets.
  *
- * @property bool   $enablePopStateFix
+ * @property boolean $enablePopStateFix
  * @property string $pluginName
  * @property string $pluginDestroyJs
  * @property array  $options
@@ -110,7 +110,7 @@ trait WidgetTrait
     {
         $this->hashPluginOptions($name);
         $encOptions = empty($this->_encOptions) ? '{}' : $this->_encOptions;
-        $this->registerWidgetJs("var {$this->_hashVar} = {$encOptions};\n", View::POS_HEAD);
+        $this->registerWidgetJs("window.{$this->_hashVar} = {$encOptions};\n", View::POS_HEAD);
     }
 
     /**

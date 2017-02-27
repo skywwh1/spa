@@ -3,8 +3,8 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   1.8.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
+ * @version   1.8.8
  */
 
 namespace kartik\base;
@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
  * @property array $i18n
  *
  * @author Kartik Visweswaran <kartikv2@gmail.com>
- * @since 1.8.7
+ * @since 1.8.8
  */
 trait TranslationTrait
 {

@@ -3,8 +3,8 @@
 /**
  * @package   yii2-krajee-base
  * @author    Kartik Visweswaran <kartikv2@gmail.com>
- * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2016
- * @version   1.8.7
+ * @copyright Copyright &copy; Kartik Visweswaran, Krajee.com, 2014 - 2017
+ * @version   1.8.8
  */
 
 namespace kartik\base;
@@ -186,9 +186,8 @@ class InputWidget extends YiiInputWidget
             $this->_loadIndicator = self::LOAD_PROGRESS;
         }
         if ($this->hasModel()) {
-            $this->name = empty($this->options['name']) ? Html::getInputName($this->model, $this->attribute) :
-                $this->options['name'];
-            $this->value = Html::getAttributeValue($this->model, $this->attribute);
+            $this->name = !isset($this->options['name']) ? Html::getInputName($this->model, $this->attribute) : $this->options['name'];
+            $this->value = !isset($this->options['value'])? Html::getAttributeValue($this->model, $this->attribute) : $this->options['value'];
         }
         $this->initDisability($this->options);
     }
