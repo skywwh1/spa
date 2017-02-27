@@ -73,7 +73,7 @@ class Feed extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return array|\yii\db\ActiveRecord[]
+     * @return array|Feed[]
      */
     public static function findNeedCounts()
     {

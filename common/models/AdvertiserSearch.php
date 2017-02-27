@@ -60,7 +60,7 @@ class AdvertiserSearch extends Advertiser
         $query->joinWith('bd0');
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'a.id' => $this->id,
             'pm' => $this->pm,
             'status' => $this->status,
             'total_revenue' => $this->total_revenue,
