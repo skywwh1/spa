@@ -109,7 +109,7 @@ class Stream extends \yii\db\ActiveRecord
      */
     public static function getNeedPosts()
     {
-        return static::find()->where(['post_status' => 1])->all();
+        return static::find()->where(['post_status' => 1])->orderBy('id Desc')->indexBy('id')->all();
     }
 
     /**

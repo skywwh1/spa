@@ -112,11 +112,11 @@ class ApiController extends Controller
         $camp->note = $model->note . PHP_EOL . $model->description;
         $camp->preview_link = $model->preview_link;
         $camp->status = ($model->status == 'active') ? 1 : 2;
-        if (isset($model->creative_link)) {
-            $aa = explode(';', $model->creative_link);
-            $camp->creative_link = str_replace('path:', '', $aa[0]);
-            $camp->creative_type = 'banners';
-        }
+//        if (isset($model->creative_link)) {
+//            $aa = explode(';', $model->creative_link);
+//            $camp->creative_link = str_replace('path:', '', $aa[0]);
+//            $camp->creative_type = 'banners';
+//        }
         $ad = Advertiser::findOne($model->adv_id);
         $camp->creator = $ad->bd;
         return $camp;
