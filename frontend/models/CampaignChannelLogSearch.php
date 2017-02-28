@@ -42,7 +42,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
     public function search($params)
     {
         $query = CampaignChannelLog::find();
-
+        $query->alias('cc');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -56,6 +56,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             // $query->where('0=1');
             return $dataProvider;
         }
+//        $query->join('campaign c');
 
         // grid filtering conditions
         $query->andFilterWhere([

@@ -96,7 +96,6 @@ class CountController extends Controller
         //2. 更新feed
         $feeds = Feed::findNeedCounts();
         $this->echoMessage('Total Feeds ' . count($feeds));
-        $installs = array();
         if (isset($feeds)) {
             foreach ($feeds as $item) {
                 $logClick = LogClick::findByClickUuid($item->click_id);
