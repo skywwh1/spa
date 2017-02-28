@@ -82,20 +82,8 @@ class CountController extends Controller
                 foreach ($clicks as $k => $v) {
                     $de = explode('-', $k);
                     $sts = Deliver::findIdentity($de[0], $de[1]);
-                    $ips = $newIpClicks[$k];
-                    $this->echoMessage($de[0] . '-' . $de[1] . ' original unique click to ' . $sts->unique_click);
-                    if (!empty($ips)) {
-                        $ips = array_unique($ips);
-                        foreach ($ips as $ip) {
-                            $is = LogClick::findClickIpExist($de[0], $de[1], $ip);
-                            if ($is === false) {
-                                $sts->unique_click += 1;
-                            }
-                        }
-                    }
                     $sts->click += $v;
                     $this->echoMessage($de[0] . '-' . $de[1] . ' update click to ' . $sts->click);
-                    $this->echoMessage($de[0] . '-' . $de[1] . ' update unique click to ' . $sts->unique_click);
                     $sts->save();
                 }
             }
