@@ -13,12 +13,16 @@ use Yii;
  * @property integer $channel_id
  * @property string $campaign_uuid
  * @property string $adv_price
- * @property integer $pricing_mode
+ * @property string $pricing_mode
  * @property string $pay_out
- * @property integer $daily_cap
+ * @property string $daily_cap
  * @property string $actual_discount
  * @property string $discount
+ * @property integer $discount_numerator
+ * @property integer $discount_denominator
+ * @property integer $status
  * @property integer $is_run
+ * @property integer $end_time
  * @property integer $creator
  * @property integer $create_time
  * @property integer $update_time
@@ -36,6 +40,7 @@ use Yii;
  * @property string $profit
  * @property string $margin
  * @property string $note
+ * @property integer $is_send_create
  *
  * @property Campaign $campaign
  * @property Channel $channel
@@ -56,10 +61,12 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'creator'], 'required'],
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
+            [['campaign_id', 'channel_id', 'creator'], 'required'],
+            [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'status', 'is_run', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
-            [['campaign_uuid'], 'string', 'max' => 100],
+            [['note'], 'string'],
+            [['campaign_uuid', 'track_url'], 'string', 'max' => 255],
+            [['pricing_mode', 'daily_cap'], 'string', 'max' => 100],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
         ];
@@ -80,8 +87,14 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
             'daily_cap' => 'Daily Cap',
             'actual_discount' => 'Actual Discount',
             'discount' => 'Discount',
+            'discount_numerator' => 'Discount Numerator',
+            'discount_denominator' => 'Discount Denominator',
+            'status' => 'Status',
             'is_run' => 'Is Run',
+            'end_time' => 'End Time',
+            'creator' => 'Creator',
             'create_time' => 'Create Time',
+            'update_time' => 'Update Time',
             'track_url' => 'Track Url',
             'click' => 'Click',
             'unique_click' => 'Unique Click',
@@ -96,6 +109,7 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
             'profit' => 'Profit',
             'margin' => 'Margin',
             'note' => 'Note',
+            'is_send_create' => 'Is Send Create',
         ];
     }
 

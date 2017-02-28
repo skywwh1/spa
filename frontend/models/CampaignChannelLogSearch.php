@@ -67,6 +67,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             'daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
+            'status' => 1,
             'is_run' => $this->is_run,
             'creator' => $this->creator,
             'create_time' => $this->create_time,

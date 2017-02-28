@@ -16,7 +16,9 @@ use Yii;
  * @property string $ch_subid
  * @property string $all_parameters
  * @property string $ip
+ * @property string $adv_price
  * @property integer $feed_time
+ * @property integer $is_post
  * @property integer $create_time
  */
 class LogFeed extends \yii\db\ActiveRecord
@@ -36,8 +38,9 @@ class LogFeed extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
-            [['channel_id', 'campaign_id', 'feed_time', 'create_time'], 'integer'],
+            [['channel_id', 'campaign_id', 'feed_time', 'is_post', 'create_time'], 'integer'],
             [['all_parameters'], 'string'],
+            [['adv_price'], 'number'],
             [['auth_token'], 'string', 'max' => 32],
             [['click_uuid', 'click_id', 'ch_subid', 'ip'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
@@ -59,7 +62,9 @@ class LogFeed extends \yii\db\ActiveRecord
             'ch_subid' => 'Ch Subid',
             'all_parameters' => 'All Parameters',
             'ip' => 'Ip',
+            'adv_price' => 'Adv Price',
             'feed_time' => 'Feed Time',
+            'is_post' => 'Is Post',
             'create_time' => 'Create Time',
         ];
     }

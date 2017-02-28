@@ -93,4 +93,19 @@ class LogClick extends \yii\db\ActiveRecord
     {
         return static::findOne(['click_uuid' => $uuid]);
     }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @return int|string
+     */
+    public static function findUniqueClicks($campaign_id, $channel_id)
+    {
+        $query = static::find();
+        $query->select('ip');
+        $query->distinct();
+        $query->where(['campaign_id' => $campaign_id]);
+        $query->andWhere(['channel_id' => $channel_id]);
+        return $query->count();
+    }
 }
