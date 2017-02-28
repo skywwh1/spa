@@ -42,7 +42,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
     public function search($params)
     {
         $query = CampaignChannelLog::find();
-        $query->alias('cc');
+        $query->alias('cl');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -56,19 +56,20 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             // $query->where('0=1');
             return $dataProvider;
         }
-//        $query->join('campaign c');
+        $query->joinWith('campaign c');
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => Yii::$app->user->identity->getId(),
-            'adv_price' => $this->adv_price,
+            'cl.campaign_id' => $this->campaign_id,
+            'cl.channel_id' => Yii::$app->user->identity->getId(),
+            'cl.adv_price' => $this->adv_price,
             'pricing_mode' => $this->pricing_mode,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
-            'status' => 1,
+            'cl.status' => 1,
+            'c.status' => 1,
             'is_run' => $this->is_run,
             'creator' => $this->creator,
             'create_time' => $this->create_time,

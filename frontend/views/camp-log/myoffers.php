@@ -50,14 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'actual_discount',
 //             'discount',
             //'is_run',
-            [
-                'label' => 'Running',
-                'attribute' => 'is_run',
-                'value' => function ($data) {
-                    return ModelsUtil::getStatus($data->is_run);
-                },
-                'filter' => ModelsUtil::status,
-            ],
+//            [
+//                'label' => 'Running',
+//                'attribute' => 'is_run',
+//                'value' => function ($data) {
+//                    return ModelsUtil::getStatus($data->is_run);
+//                },
+//                'filter' => ModelsUtil::status,
+//            ],
 //             'creator',
 //             'create_time:datetime',
 //             'update_time:datetime',

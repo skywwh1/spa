@@ -85,7 +85,7 @@ class AllCampaignSearch extends Campaign
             'indirect' => $this->indirect,
             'cap' => $this->cap,
             'cvr' => $this->cvr,
-            'status' => $this->status,
+            'status' => 1,
             'open_type' => 1,
             'subid_status' => $this->subid_status,
             'track_way' => $this->track_way,

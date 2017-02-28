@@ -38,9 +38,22 @@ class CampaignController extends Controller
             foreach ($camps as $item) {
                 $item->status = 2;
                 $this->echoMessage('campaign paused ' . $item->campaign_uuid);
-                $item->save();
+                if ($item->save()) {
+                    $delivers = Deliver::findRunningByCampaignId($item->id);
+                    if (isset($delivers)) {
+                        foreach ($delivers as $sts) {
+                            $sts->status = 2;
+                            $this->echoMessage('sts paused ' . $item->campaign_uuid . '-' . $sts->channel_id);
+                            if (!$sts->save())
+                                var_dump($sts->getErrors());
+                        }
+                    }
+                } else {
+                    var_dump($item->getErrors());
+                }
             }
         }
+
 
 //        // 更新sts daily cap
 //        $updateCaps = CampaignStsUpdate::getStsUpdateCap();
@@ -58,7 +71,8 @@ class CampaignController extends Controller
 
     }
 
-    public function actionSendUpdate()
+    public
+    function actionSendUpdate()
     {
         $pause = array();
         $cap = array();
@@ -164,7 +178,8 @@ class CampaignController extends Controller
         }
     }
 
-    private function echoMessage($str)
+    private
+    function echoMessage($str)
     {
         echo " \t $str \n";
     }
