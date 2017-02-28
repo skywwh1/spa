@@ -65,4 +65,12 @@ class LogPost extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+
+    /**
+     * @return array|LogPost[]
+     */
+    public static function findPost()
+    {
+        return static::find()->where(['post_status' => 0])->indexBy('id')->limit(10000)->all();
+    }
 }

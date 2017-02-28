@@ -147,6 +147,9 @@ class CountController extends Controller
                 $item->save();
             }
         }
+
+        // post back
+        $this->postBack();
     }
 
     /**
@@ -194,5 +197,36 @@ class CountController extends Controller
     private function echoMessage($str)
     {
         echo " \t $str \n";
+    }
+
+    public function postBack()
+    {
+        $needPost = LogPost::findPost();
+        if (!empty($needPost)) {
+            $this->echoHead("Post action start at " . time());
+            foreach ($needPost as $k) {
+                $this->echoMessage("Click  $k->click_uuid going to post ");
+                $this->echoMessage("Post to " . $k->post_link);
+                $curl = new Curl();
+                $response = $curl->get($k->post_link);
+                var_dump($response);
+                $k->post_status = 1; // 已经post
+                $k->post_time = time();
+                if (!$k->save()) {
+                    var_dump($k->getErrors());
+                }
+                $this->echoMessage("Wait 1 second");
+                sleep(1);
+            }
+            $this->echoHead("Post action end at " . time());
+        } else {
+            $this->echoMessage("No campaign need to post back ");
+            return;
+        }
+    }
+
+    private function echoHead($str)
+    {
+        echo "#######  $str \n\n";
     }
 }
