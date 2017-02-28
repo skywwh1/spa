@@ -77,7 +77,7 @@ class Feed extends \yii\db\ActiveRecord
      */
     public static function findNeedCounts()
     {
-        return static::find()->where(['is_count' => 0])->all();
+        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(100000)->all();
     }
 
     public static function getOneByClickId($clickId)

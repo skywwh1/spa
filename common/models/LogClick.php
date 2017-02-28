@@ -21,7 +21,7 @@ use Yii;
  * @property string $site
  * @property string $pay_out
  * @property string $discount
- * @property integer $daily_cap
+ * @property string $daily_cap
  * @property string $all_parameters
  * @property string $ip
  * @property string $redirect
@@ -47,9 +47,9 @@ class LogClick extends \yii\db\ActiveRecord
     {
         return [
             [['tx_id', 'click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid'], 'required'],
-            [['tx_id', 'channel_id', 'campaign_id', 'daily_cap', 'click_time', 'create_time'], 'integer'],
+            [['tx_id', 'channel_id', 'campaign_id', 'click_time', 'create_time'], 'integer'],
             [['pay_out', 'discount'], 'number'],
-            [['click_uuid', 'click_id', 'campaign_uuid', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'string', 'max' => 255],
+            [['click_uuid', 'click_id', 'campaign_uuid', 'daily_cap', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
         ];
     }
@@ -107,5 +107,25 @@ class LogClick extends \yii\db\ActiveRecord
         $query->where(['campaign_id' => $campaign_id]);
         $query->andWhere(['channel_id' => $channel_id]);
         return $query->count();
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $ip
+     * @return bool
+     */
+    public static function findClickIpExist($campaign_id, $channel_id, $ip)
+    {
+        $query = static::find();
+        $query->select('id');
+        $query->where(['campaign_id' => $campaign_id]);
+        $query->andWhere(['channel_id' => $channel_id]);
+        $query->andWhere(['ip' => $ip]);
+        $result = $query->count();
+        if ($result > 1) {
+            return true;
+        }
+        return false;
     }
 }

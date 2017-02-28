@@ -19,7 +19,7 @@ use Yii;
  * @property string $idfa
  * @property string $site
  * @property string $pay_out
- * @property integer $daily_cap
+ * @property string $daily_cap
  * @property string $discount
  * @property string $all_parameters
  * @property string $ip
@@ -52,8 +52,8 @@ class Stream extends \yii\db\ActiveRecord
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
             [['pay_out', 'discount'], 'number'],
-            [['daily_cap', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
+            [['post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'daily_cap', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
             [['click_uuid'], 'unique'],
         ];
     }
@@ -117,7 +117,7 @@ class Stream extends \yii\db\ActiveRecord
      */
     public static function getCountClicks()
     {
-        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(1000)->all();
+        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(100000)->all();
     }
 
     public static function getDistinctIpClick($cp_uid, $ch_id)

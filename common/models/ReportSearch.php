@@ -43,7 +43,7 @@ class ReportSearch extends Deliver
     public function search($params)
     {
         $query = Deliver::find();
-
+        $query->alias('d');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -58,8 +58,8 @@ class ReportSearch extends Deliver
             return $dataProvider;
         }
 
-        $query->joinWith('campaign');
-        $query->joinWith('channel');
+        $query->joinWith('campaign ca');
+        $query->joinWith('channel ch');
         // grid filtering conditions
         $query->andFilterWhere([
             'adv_price' => $this->adv_price,
@@ -88,8 +88,8 @@ class ReportSearch extends Deliver
         $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
             ->andFilterWhere(['like', 'note', $this->note])
-            ->andFilterWhere(['like', 'campaign.campaign_name', $this->campaign_id])
-            ->andFilterWhere(['like', 'channel.username', $this->channel_id]);
+            ->andFilterWhere(['like', 'ca.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_id]);
         $query->orderBy(['click' => SORT_DESC, 'update_time' => SORT_DESC]);
 
         return $dataProvider;

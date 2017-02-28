@@ -9,9 +9,6 @@
 namespace console\controllers;
 
 
-use common\models\Advertiser;
-use common\models\AdvertiserApi;
-use common\models\ApiCampaign;
 use common\models\Campaign;
 use common\models\Deliver;
 use common\models\Feed;
@@ -19,36 +16,22 @@ use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
-use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
-use yii\helpers\ArrayHelper;
 
 /**
  * Class TestController
  * @package console\controllers
  */
-class TestController extends Controller
+class CountController extends Controller
 {
-
-    public function actionTest()
-    {
-//        var_dump(Stream::getCountClicks());
-//        var_dump(md5('ch58a6d7f5e4fec58a6d7f5e5091'));
-
-        http://api.superads.cn/v1/offers?token=8e5c1e70c5507cf8a556638e68de38c8&u=oneapi&page_size=10&page=1
-
-        $c = new Curl();
-        $c->get('http://api.superads.cn/v1/offers?token=8e5c1e70c5507cf8a556638e68de38c8&u=oneapi&page_size=10&page=1');
-        var_dump($c->response);
-    }
 
     public function actionUpdateClicks()
     {
         //1. 更新点击
         $clicks = array(); // 用来
         $posts = array();
-        $newIpClicks = array();
+        $newIpClicks = array(); //weiyi ip
         $streams = Stream::getCountClicks();
         $this->echoMessage('count click ' . count($streams));
         if (isset($streams)) {
@@ -161,6 +144,7 @@ class TestController extends Controller
                             $post->discount = $logClick->discount;
                             $post->daily_cap = $logClick->daily_cap;
                             $post->post_link = $this->genPostLink($sts->channel->post_back, $logClick->all_parameters);
+                            //* 0:need to post, 1.posted
                             $post->post_status = 0;
                             if ($post->save() == false) {
                                 var_dump($logFeed->getErrors());

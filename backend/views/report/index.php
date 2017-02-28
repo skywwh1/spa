@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'containerOptions' => ['style' => 'overflow: auto'],
-                    'pjax' => true, // pjax is set to always true for this demo
+//                    'pjax' => true, // pjax is set to always true for this demo
                     'responsive' => true,
                     'hover' => true,
                     'showPageSummary' => true,
