@@ -63,7 +63,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             'cl.campaign_id' => $this->campaign_id,
             'cl.channel_id' => Yii::$app->user->identity->getId(),
             'cl.adv_price' => $this->adv_price,
-            'pricing_mode' => $this->pricing_mode,
+            'cl.pricing_mode' => $this->pricing_mode,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
