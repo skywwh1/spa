@@ -218,7 +218,7 @@ class StreamController extends Controller
         $cache = Yii::$app->cache;
         $test = $cache->get($model->ch_id);
         if ($test !== false) {
-            $cache->set($model->ch_id, $model, 30);
+            $cache->set($model->ch_id, $model, 300);
         }
         //2.ip 限制
         $target = $campaign->target_geo;

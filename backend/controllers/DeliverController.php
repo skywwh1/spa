@@ -233,7 +233,7 @@ class DeliverController extends Controller
                 ]);
             }
             $cache = Yii::$app->cache;
-            $cache->set($channel->id . '', 'test', 0);
+            $cache->set($channel->id . '', 'test', 300);
             $curl = new Curl();
             $curl->setOptions(array(
                 CURLOPT_FOLLOWLOCATION => 1,
@@ -252,7 +252,7 @@ class DeliverController extends Controller
             if ($data !== false && $data !== 'test') {
                 $stream = $data;
             }
-            $cache->delete($channel->id . "");
+//            $cache->delete($channel->id . "");
 
 //            $stream = Stream::getLatestClick($channel->id);
             if ($stream == null) {
