@@ -200,17 +200,24 @@ class StreamController extends Controller
     private function restrictionTrack(&$model)
     {
         //1.参数 click id，ch_id
-        $code = 200;
+//        $code = 200;
         if (!$model->validate() && $model->hasErrors()) {
-            $code = 404;
+            return 404;
         }
         $campaign = Campaign::findByUuid($model->cp_uid);
         if ($campaign === null) {
-            $code = 500;
+            return 500;
         }
         $deliver = Deliver::findIdentity($campaign->id, $model->ch_id);
         if ($deliver === null) {
-            $code = 500;
+            return 500;
+        }
+        //3.单子状态
+        if ($deliver->status !== 1) {
+            return 403;
+        }
+        if ($campaign->status !== 1) {
+            return 403;
         }
         /**
          * test link
@@ -229,17 +236,10 @@ class StreamController extends Controller
             ]);
             $geo = $Info->getCountryCode();   // US
             if (strpos($target, $geo) === false) {
-                $code = 501;
+                return 501;
             }
         }
 
-        //3.单子状态
-        if ($deliver->status !== 1) {
-            $code = 403;
-        }
-        if ($campaign->status !== 1) {
-            $code = 403;
-        }
         //正常0
         $model->pay_out = $deliver->pay_out;
         $model->daily_cap = $deliver->daily_cap;
@@ -247,7 +247,7 @@ class StreamController extends Controller
         $link = $this->genAdvLink($campaign, $model);
         $model->redirect = $link;
         $model->save();
-        return $code;
+        return 200;
     }
 
     /**
