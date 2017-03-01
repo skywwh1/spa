@@ -13,4 +13,9 @@ $(function () {
         // do something…
         $.pjax.reload({container:"#countries"});  //Reload GridView
     })
+
+
+});
+$(document).ready(function () {
+    $('.dropdown-toggle').dropdown();
 });

@@ -83,9 +83,9 @@ class MyReportSearch extends Deliver
             // $query->where('0=1');
             return $dataProvider;
         }
-        $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d"	) time';
+        $time = 'FROM_UNIXTIME(	fc.click_time,	"%Y-%m-%d"	) time';
         if ($type === 'hourly') {
-            $time = 'FROM_UNIXTIME(	fc.create_time,	"%Y-%m-%d %H:00"	) time';
+            $time = 'FROM_UNIXTIME(	fc.click_time,	"%Y-%m-%d %H:00"	) time';
         }
         $query->select([
             'COUNT(fc.id) clicks',
@@ -101,18 +101,18 @@ class MyReportSearch extends Deliver
 
         $query->from('campaign_channel_log de');
         $query->leftJoin('campaign cp', 'de.campaign_id = cp.id');
-        $query->leftJoin('feedback_channel_click_log fc', 'de.campaign_uuid = fc.cp_uid and de.channel_id = fc.ch_id');
-        $query->leftJoin('feedback_advertiser_feed_log ff', 'fc.click_uuid = ff.click_id');
+        $query->leftJoin('log_click fc', 'de.campaign_id = fc.campaign_id and de.channel_id = fc.channel_id');
+        $query->leftJoin('log_feed ff', 'fc.click_uuid = ff.click_uuid');
         $query->andFilterWhere(['de.channel_id' => Yii::$app->user->getId()]);
         if (isset($this->start_time)) {
             $this->start_time = strtotime($this->start_time);
-            $query->andFilterWhere(['>=', 'fc.create_time', $this->start_time]);
+            $query->andFilterWhere(['>=', 'fc.click_time', $this->start_time]);
         } else {
             $this->start_time = time();
         }
         if (isset($this->end_time)) {
             $this->end_time = strtotime($this->end_time . '+1 day');
-            $query->andFilterWhere(['<', 'fc.create_time', $this->end_time]);
+            $query->andFilterWhere(['<', 'fc.click_time', $this->end_time]);
             $this->end_time = strtotime(date('Y-m-d', $this->end_time) . '-1 day');
         } else {
             $this->end_time = time();

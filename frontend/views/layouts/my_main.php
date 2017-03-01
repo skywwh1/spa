@@ -93,13 +93,13 @@ SbAppAsset::register($this);
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Reports<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                             <li>
-                                <?php // Html::a('Hourly Report', ['my-report/hourly'],['data-menu'=>"hourly"]) ?>
+                                <?=  Html::a('Hourly Report', ['my-report/hourly'],['data-menu'=>"hourly"]) ?>
                             </li>
                             <li>
-                                <?php // Html::a('Daily Report', ['my-report/daily'],['data-menu'=>"daily"]) ?>
+                                <?=  Html::a('Daily Report', ['my-report/daily'],['data-menu'=>"daily"]) ?>
                             </li>
                             <li>
-                                <?php // Html::a('Offers Report', ['my-report/offers'],['data-menu'=>"offers"]) ?>
+                                <?=  Html::a('Offers Report', ['my-report/offers'],['data-menu'=>"offers"]) ?>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

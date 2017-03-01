@@ -26,7 +26,7 @@ class SbAppAsset extends AssetBundle
         'vendor/raphael/raphael.min.js',
 //        'vendor/morrisjs/morris.min.js',
 //        'data/morris-data.js',
-//        'dist/js/dropdown.js',
+        'dist/js/dropdown.js',
         'dist/js/sb-admin-2.js',
         'dist/js/main.js',
     ];
