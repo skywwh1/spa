@@ -20,6 +20,8 @@ use Yii;
  * @property integer $feed_time
  * @property integer $is_post
  * @property integer $create_time
+ * @property Campaign $campaign
+ * @property Channel $channel
  */
 class LogFeed extends \yii\db\ActiveRecord
 {
@@ -67,5 +69,21 @@ class LogFeed extends \yii\db\ActiveRecord
             'is_post' => 'Is Post',
             'create_time' => 'Create Time',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
 }

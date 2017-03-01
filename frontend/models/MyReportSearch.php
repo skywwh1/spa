@@ -102,7 +102,7 @@ class MyReportSearch extends Deliver
         $query->from('campaign_channel_log de');
         $query->leftJoin('campaign cp', 'de.campaign_id = cp.id');
         $query->leftJoin('log_click fc', 'de.campaign_id = fc.campaign_id and de.channel_id = fc.channel_id');
-        $query->leftJoin('log_feed ff', 'fc.click_uuid = ff.click_uuid');
+        $query->leftJoin('log_post ff', 'fc.click_uuid = ff.click_uuid');
         $query->andFilterWhere(['de.channel_id' => Yii::$app->user->getId()]);
         if (isset($this->start_time)) {
             $this->start_time = strtotime($this->start_time);
@@ -120,7 +120,9 @@ class MyReportSearch extends Deliver
         $query->andFilterWhere(['de.campaign_id' => $this->campaign_id]);
         $query->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_name]);
         if ($type === 'offers') {
-            $query->groupBy('campaign_id');
+            $query->groupBy(['de.campaign_id',
+                'cp.campaign_name campaign_name',
+                'fc.pay_out']);
 
         } else {
             $query->groupBy('time');

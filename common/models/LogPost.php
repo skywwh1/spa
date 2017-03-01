@@ -19,6 +19,8 @@ use Yii;
  * @property integer $post_time
  * @property integer $post_status
  * @property integer $create_time
+ * @property Campaign $campaign
+ * @property Channel $channel
  */
 class LogPost extends \yii\db\ActiveRecord
 {
@@ -72,5 +74,21 @@ class LogPost extends \yii\db\ActiveRecord
     public static function findPost()
     {
         return static::find()->where(['post_status' => 0])->indexBy('id')->limit(10000)->all();
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
 }
