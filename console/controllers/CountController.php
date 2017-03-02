@@ -16,6 +16,7 @@ use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
+use console\models\StaticsUtil;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 
@@ -227,5 +228,14 @@ class CountController extends Controller
     private function echoHead($str)
     {
         echo "#######  $str \n\n";
+    }
+
+    public function actionStatics()
+    {
+        $statics = new StaticsUtil();
+        $statics->staticClickHourly();
+        $statics->staticMatchInstallHourly();
+        $statics->staticPostHourly();
+        $statics->staticUniqueClickHourly();
     }
 }

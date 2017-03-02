@@ -70,6 +70,6 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
      */
     public static function findIdentity($campaign_id, $channel_id, $time)
     {
-        return static::findOne(['campaign_id' => $campaign_id, '$channel_id' => $channel_id, 'time' => $time]);
+        return static::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'time' => $time]);
     }
 }

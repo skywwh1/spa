@@ -21,6 +21,7 @@ use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
 use common\utility\ApiUtil;
+use console\models\StaticsUtil;
 use linslin\yii2\curl\Curl;
 use Yii;
 use yii\console\Controller;
@@ -230,84 +231,10 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        //            set time_zone='Asia/ShangHai';
-        //SELECT
-        //	fc.campaign_id,
-        //	fc.campaign_uuid,
-        //	FROM_UNIXTIME(
-        //        fc.click_time,
-        //        "%Y-%m-%d %H:00"
-        //    ) time,
-        //count(*) clicks
-        //FROM
-        //	log_click fc
-        //where fc.click_time>1488441600
-        //GROUP BY
-        //fc.campaign_id,fc.campaign_uuid,time
-        //ORDER BY time
-        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
-        $query = new Query();
-        $query->select(['fc.campaign_id',
-            'fc.channel_id',
-            'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.click_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
-            'count(DISTINCT(fc.ip)) clicks']);
-        $query->from('log_click fc');
-        $query->groupBy(['fc.campaign_id',
-            'fc.channel_id',
-            'time', 'timestamp']);
-        $query->orderBy('timestamp');
+        $sss = new StaticsUtil();
 
-        $command = $query->createCommand();
-        $rows = $command->queryAll();
-//        var_dump($rows);
-
-        foreach ($rows as $item) {
-            var_dump($item);
-//            var_dump($item["campaign_id"][]);
-            $channel_id='';
-            $campaign_id='';
-            $timestamp='';
-            $time='';
-            $clicks='';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-
-            }
-//            $hourly = CampaignLogHourly::findIdentity($campaign_id,$channel_id,$timestamp);
-//            if(empty($hourly)){
-//                $hourly = new CampaignLogHourly();
-//                $hourly->channel_id =$channel_id;
-//                $hourly->campaign_id = $campaign_id;
-//                $hourly->time = $timestamp;
-//                $hourly->time_format = $time;
-//                $hourly->unique_clicks = $clicks;
-//            } else {
-//                $hourly->unique_clicks = $clicks;
-//            }
-//
-//            $hourly->save();
-//            var_dump($hourly->getErrors());
-        }
-
+        //$sss->staticMatchInstallHourly();
+        $sss->staticPostHourly();
 
     }
 }
