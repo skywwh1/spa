@@ -15,6 +15,7 @@ class LogFeedSearch extends LogFeed
     public $campaign_name;
     public $channel_name;
     public $campaign_uuid;
+
     /**
      * @inheritdoc
      */
@@ -22,7 +23,7 @@ class LogFeedSearch extends LogFeed
     {
         return [
             [['id', 'channel_id', 'campaign_id', 'feed_time', 'is_post', 'create_time'], 'safe'],
-            [['auth_token', 'click_uuid', 'click_id', 'ch_subid', 'all_parameters', 'ip','campaign_uuid'], 'safe'],
+            [['auth_token', 'click_uuid', 'click_id', 'ch_subid', 'all_parameters', 'ip', 'campaign_uuid', 'advertiser_name'], 'safe'],
             [['adv_price'], 'number'],
         ];
     }
@@ -61,8 +62,10 @@ class LogFeedSearch extends LogFeed
             // $query->where('0=1');
             return $dataProvider;
         }
+        $query->select(['feed.*', 'adv.username advertiser_name']);
         $query->joinWith('channel ch');
         $query->joinWith('campaign ca');
+        $query->leftJoin('advertiser adv', 'ca.advertiser = adv.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'feed.id' => $this->id,
@@ -82,8 +85,11 @@ class LogFeedSearch extends LogFeed
             ->andFilterWhere(['like', 'ca.campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'ch.username', $this->channel_id])
             ->andFilterWhere(['like', 'feed.all_parameters', $this->all_parameters])
+            ->andFilterWhere(['like', 'adv.username', $this->advertiser_name])
             ->andFilterWhere(['like', 'feed.ip', $this->ip]);
-
+        $query->orderBy('feed.feed_time desc');
+//                var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 }

@@ -27,6 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             // '{export}',
                         ],
                         'columns' => [
+                            [
+                                'attribute' => 'advertiser_name',
+//                                'value' => function($model){
+//                                  return $model->advertiser_name;
+//                                },
+                                'label' => 'Advertiser',
+//                                'pageSummary' => true,
+                            ],
                             'click_uuid',
 
                             [

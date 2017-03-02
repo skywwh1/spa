@@ -89,7 +89,7 @@ class DeliverSearch extends Deliver
             'is_send_create' => $this->is_send_create,
         ]);
 
-        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
+        $query->andFilterWhere(['like', 'de.campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'de.pricing_mode', $this->pricing_mode])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
             ->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_id])

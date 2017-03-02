@@ -24,6 +24,7 @@ use Yii;
  */
 class LogPost extends \yii\db\ActiveRecord
 {
+    public $advertiser_name;
     /**
      * @inheritdoc
      */
@@ -41,7 +42,7 @@ class LogPost extends \yii\db\ActiveRecord
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
             [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'create_time'], 'integer'],
             [['pay_out', 'discount'], 'number'],
-            [['post_link'], 'string'],
+            [['post_link','advertiser_name'], 'safe'],
             [['click_uuid', 'click_id'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
         ];

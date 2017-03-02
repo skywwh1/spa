@@ -40,6 +40,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
 //            'click_id',
                             [
+                                'attribute' => 'advertiser_name',
+//                                'value' => function($model){
+//                                  return $model->advertiser_name;
+//                                },
+                                'label' => 'Advertiser',
+//                                'pageSummary' => true,
+                            ],
+                            [
                                 'attribute' => 'campaign_id',
                                 'value' => 'campaign.name',
                                 'label' => 'Campaign',

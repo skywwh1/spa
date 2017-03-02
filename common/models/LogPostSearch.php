@@ -23,7 +23,7 @@ class LogPostSearch extends LogPost
     {
         return [
             [['id', 'channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'create_time'], 'safe'],
-            [['click_uuid', 'click_id', 'post_link','campaign_uuid'], 'safe'],
+            [['click_uuid', 'click_id', 'post_link','campaign_uuid','advertiser_name'], 'safe'],
             [['pay_out', 'discount'], 'number'],
         ];
     }
@@ -62,9 +62,10 @@ class LogPostSearch extends LogPost
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->select(['post.*','adv.username advertiser_name']);
         $query->joinWith('channel ch');
         $query->joinWith('campaign ca');
+        $query->leftJoin('advertiser adv','ca.advertiser = adv.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -83,8 +84,11 @@ class LogPostSearch extends LogPost
             ->andFilterWhere(['like', 'ca.campaign_name', $this->campaign_id])
             ->andFilterWhere(['like', 'ca.campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'ch.username', $this->channel_id])
+            ->andFilterWhere(['like', 'adv.username', $this->advertiser_name])
             ->andFilterWhere(['like', 'post_link', $this->post_link]);
-
+        $query->orderBy('post.create_time desc');
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 }

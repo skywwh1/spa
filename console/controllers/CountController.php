@@ -162,7 +162,7 @@ class CountController extends Controller
         $numerator = $sts->discount_numerator + 1;//分子
         $denominator = $sts->discount_denominator + 1;//扣量基数
         $percent = ($numerator / $denominator) * 100;
-        if ($percent < $standard) {
+        if ($percent < $standard || $sts->install < 5) {
             $needPost = true;
             $sts->discount_numerator = $numerator;
             $sts->install += 1;
