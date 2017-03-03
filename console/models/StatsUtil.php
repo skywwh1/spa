@@ -62,7 +62,7 @@ class StatsUtil
     {
         date_default_timezone_set("Asia/Shanghai");
         $end_time = strtotime(date("Y-m-d", time()));
-        $start_time = Config::findLastStatsHourly($type);
+        $start_time = Config::findLastStatsDaily($type);
         $sum = 'SUM(clh.clicks) clicks';
         switch ($type) {
             case 1:

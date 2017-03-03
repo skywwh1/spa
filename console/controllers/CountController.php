@@ -234,17 +234,18 @@ class CountController extends Controller
     {
         $stats = new StatsUtil();
         $stats->statsClickHourly();
-        $stats->statsMatchInstallHourly();
-        $stats->statsPostHourly();
         $stats->statsUniqueClickHourly();
+        $stats->statsInstallHourly();
+        $stats->statsMatchInstallHourly();
     }
 
     public function actionStatsDaily()
     {
         $stats = new StatsUtil();
+        $stats->statsMatchInstallDaily();
         $stats->statsClickDaily();
-//        $stats->statsMatchInstallHourly();
-//        $stats->statsPostHourly();
-//        $stats->statsUniqueClickHourly();
+        $stats->statsUniqueClickDaily();
+        $stats->statsInstallDaily();
     }
+
 }
