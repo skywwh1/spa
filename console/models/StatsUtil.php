@@ -11,6 +11,7 @@ namespace console\models;
 
 use common\models\CampaignLogDaily;
 use common\models\CampaignLogHourly;
+use common\models\Config;
 use Yii;
 use yii\db\Query;
 
@@ -24,203 +25,19 @@ class StatsUtil
 
     public function statsUniqueClickHourly()
     {
-        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
-        $query = new Query();
-        $query->select(['fc.campaign_id',
-            'fc.channel_id',
-            'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.click_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
-            'count(distinct(fc.ip)) clicks']);
-        $query->from('log_click fc');
-        $query->groupBy(['fc.campaign_id',
-            'fc.channel_id',
-            'time', 'timestamp']);
-        $query->orderBy('timestamp');
-
-        $command = $query->createCommand();
-        var_dump($command->sql);
-        die();
-        $rows = $command->queryAll();
-
-        foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-            }
-            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
-            if (empty($hourly)) {
-                $hourly = new CampaignLogHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->unique_clicks = $clicks;
-            } else {
-                $hourly->unique_clicks = $clicks;
-            }
-
-            $hourly->save();
-            var_dump($hourly->getErrors());
-        }
+        $this->statsHourly(2);
     }
 
     public function statsMatchInstallHourly()
     {
-        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
-        $query = new Query();
-        $query->select(['fc.campaign_id',
-            'fc.channel_id',
-            'FROM_UNIXTIME(fc.feed_time,"%Y-%m-%d %H:00") time',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.feed_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
-            'count(*) clicks']);
-        $query->from('log_feed fc');
-        $query->groupBy(['fc.campaign_id',
-            'fc.channel_id',
-            'time', 'timestamp']);
-        $query->orderBy('timestamp');
-
-        $command = $query->createCommand();
-        $rows = $command->queryAll();
-
-        foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-            }
-            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
-            if (empty($hourly)) {
-                $hourly = new CampaignLogHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->match_installs = $clicks;
-            } else {
-                $hourly->match_installs = $clicks;
-            }
-
-            $hourly->save();
-            var_dump($hourly->getErrors());
-        }
+        $this->statsHourly(4);
     }
 
-    public function statsPostHourly()
+    public function statsInstallHourly()
     {
-        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
-        $query = new Query();
-        $query->select(['fc.campaign_id',
-            'fc.channel_id',
-            'FROM_UNIXTIME(fc.post_time,"%Y-%m-%d %H:00") time',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.post_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
-            'count(*) clicks']);
-        $query->from('log_post fc');
-        $query->groupBy(['fc.campaign_id',
-            'fc.channel_id',
-            'time', 'timestamp']);
-        $query->orderBy('timestamp');
-
-        $command = $query->createCommand();
-        $rows = $command->queryAll();
-
-        foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-            }
-            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
-            if (empty($hourly)) {
-                $hourly = new CampaignLogHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->installs = $clicks;
-            } else {
-                $hourly->installs = $clicks;
-            }
-
-            $hourly->save();
-            var_dump($hourly->getErrors());
-        }
+        $this->statsHourly(3);
     }
 
-//SELECT
-//clh.campaign_id,
-//clh.channel_id,
-//FROM_UNIXTIME(clh.time, "%Y-%m-%d") timeformat,
-//SUM(clh.clicks) clicks
-//FROM
-//campaign_log_hourly clh
-//GROUP BY
-//clh.campaign_id,
-//clh.channel_id,
-//timeformat
     public function statsClickDaily()
     {
         $this->statsDaily(1);
@@ -243,6 +60,9 @@ class StatsUtil
 
     public function statsDaily($type)
     {
+        date_default_timezone_set("Asia/Shanghai");
+        $end_time = strtotime(date("Y-m-d", time()));
+        $start_time = Config::findLastStatsHourly($type);
         $sum = 'SUM(clh.clicks) clicks';
         switch ($type) {
             case 1:
@@ -257,11 +77,9 @@ class StatsUtil
             case 4:
                 $sum = 'SUM(clh.match_installs) clicks';
                 break;
-
         }
 
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
         $query = new Query();
         $query->select(['clh.campaign_id',
             'clh.channel_id',
@@ -272,6 +90,9 @@ class StatsUtil
             )) timestamp',
             $sum]);
         $query->from('campaign_log_hourly clh');
+        $query->where(['>=', 'time', $start_time]);
+        $query->andWhere(['<', 'time', $end_time]);
+
         $query->groupBy(['clh.campaign_id',
             'clh.channel_id',
             'timeformat', 'timestamp']);
@@ -327,59 +148,61 @@ class StatsUtil
                     break;
 
             }
-            $hourly->save();
-            var_dump($hourly->getErrors());
+            if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
+            }
         }
+        Config::updateStatsTimeDaily($type, $end_time);
     }
 
     public function statsHourly($type)
     {
+        date_default_timezone_set("Asia/Shanghai");
         $from = 'log_click fc';
-        $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
         $clicks_select = 'count(*) clicks';
+        $timestamp_select = 'fc.click_time';
+        $end_time = strtotime(date("Y-m-d H", time()));
+        $start_time = Config::findLastStatsHourly($type);
         switch ($type) {
             case 1:
                 $from = 'log_click fc';
-                $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
                 $clicks_select = 'count(*) clicks';
                 break;
             case 2:
                 $from = 'log_click fc';
-                $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
                 $clicks_select = 'count(distinct(fc.ip)) clicks';
                 break;
             case 3:
                 $from = 'log_post fc';
-                $time = 'FROM_UNIXTIME(fc.post_time,"%Y-%m-%d %H:00") time';
+                $timestamp_select = 'fc.post_time';
                 $clicks_select = 'count(*) clicks';
                 break;
             case 4:
                 $from = 'log_feed fc';
-                $time = 'FROM_UNIXTIME(fc.feed_time,"%Y-%m-%d %H:00") time';
+                $timestamp_select = 'fc.feed_time';
                 $clicks_select = 'count(*) clicks';
                 break;
         }
 
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
         $query = new Query();
         $query->select(['fc.campaign_id',
-            'fc.channel_id', $time
-            ,
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.click_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
+            'fc.channel_id',
+            'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
             $clicks_select]);
         $query->from($from);
+        $query->where(['>=', $timestamp_select, $start_time]);
+        $query->andWhere(['<', $timestamp_select, $end_time]);
+
         $query->groupBy(['fc.campaign_id',
             'fc.channel_id',
             'time', 'timestamp']);
         $query->orderBy('timestamp');
 
         $command = $query->createCommand();
-        var_dump($command->sql);
-        die();
+//        var_dump($command->sql);
+//        die();
         $rows = $command->queryAll();
 
         foreach ($rows as $item) {
@@ -427,10 +250,10 @@ class StatsUtil
                     $hourly->match_installs = $clicks;
                     break;
             }
-
-
-            $hourly->save();
+            if (!$hourly->save()) {
+            }
             var_dump($hourly->getErrors());
         }
+        Config::updateStatsTimeHourly($type, $end_time);
     }
 }

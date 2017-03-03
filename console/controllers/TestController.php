@@ -225,10 +225,15 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
+        $stats->statsClickHourly();
         $stats->statsUniqueClickHourly();
-        $stats->statsHourly(3);
+        $stats->statsInstallHourly();
+        $stats->statsMatchInstallHourly();
+//        var_dump(time());
+//        $stats->statsHourly(3);
 //        $stats->statsClickDaily();
 //$stats->statsMatchInstallDaily();
-
+//        date_default_timezone_set("Asia/Shanghai");
+//        print (date("Y-m-d H", time()));
     }
 }

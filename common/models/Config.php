@@ -44,18 +44,99 @@ class Config extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function findLastStaticsClick()
+
+    public static function findLastStatsHourly($type)
     {
-        static::findOne(['name'=>'last_statics_click']);
+        $name = 'last_statics_click_hourly';
+        switch ($type) {
+            case 1:
+                $name = 'last_statics_click_hourly';
+                break;
+            case 2:
+                $name = 'last_statics_unique_click_hourly';
+                break;
+            case 3:
+                $name = 'last_statics_post_hourly';
+                break;
+            case 4:
+                $name = 'last_statics_feed_hourly';
+                break;
+        }
+        $config = static::findOne(['name' => $name]);
+        return isset($config) ? $config->value : 0;
     }
 
-    public static function findLastStaticsFeed()
+    public static function updateStatsTimeHourly($type, $time)
     {
-        static::findOne(['name'=>'last_statics_feed']);
+        $name = 'last_statics_click_hourly';
+        switch ($type) {
+            case 1:
+                $name = 'last_statics_click_hourly';
+                break;
+            case 2:
+                $name = 'last_statics_unique_click_hourly';
+                break;
+            case 3:
+                $name = 'last_statics_post_hourly';
+                break;
+            case 4:
+                $name = 'last_statics_feed_hourly';
+                break;
+        }
+        $config = static::findOne(['name' => $name]);
+        if ($config == null) {
+            $config = new Config();
+            $config->name = $name;
+        }
+        $config->value = $time;
+        return $config->save();
     }
 
-    public static function findLastStaticsPost()
+
+    public static function findLastStatsDaily($type)
     {
-        static::findOne(['name'=>'last_statics_Post']);
+        $name = 'last_statics_click_daily';
+        switch ($type) {
+            case 1:
+                $name = 'last_statics_click_daily';
+                break;
+            case 2:
+                $name = 'last_statics_unique_click_daily';
+                break;
+            case 3:
+                $name = 'last_statics_post_daily';
+                break;
+            case 4:
+                $name = 'last_statics_feed_daily';
+                break;
+        }
+        $config = static::findOne(['name' => $name]);
+        return isset($config) ? $config->value : 0;
+    }
+
+    public static function updateStatsTimeDaily($type, $time)
+    {
+        $name = 'last_statics_click_daily';
+        switch ($type) {
+            case 1:
+                $name = 'last_statics_click_daily';
+                break;
+            case 2:
+                $name = 'last_statics_unique_click_daily';
+                break;
+            case 3:
+                $name = 'last_statics_post_daily';
+                break;
+            case 4:
+                $name = 'last_statics_feed_daily';
+                break;
+        }
+        $config = static::findOne(['name' => $name]);
+        if ($config == null) {
+            $config = new Config();
+            $config->name = $name;
+        }
+        $config->value = $time;
+        return $config->save();
     }
 }
