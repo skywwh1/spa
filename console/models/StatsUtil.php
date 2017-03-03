@@ -19,65 +19,7 @@ class StatsUtil
 
     public function statsClickHourly()
     {
-        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
-        date_default_timezone_set("Asia/Shanghai");
-        $query = new Query();
-        $query->select(['fc.campaign_id',
-            'fc.channel_id',
-            'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(
-                fc.click_time,
-                "%Y-%m-%d %H:00"
-            )) timestamp',
-            'count(fc.id) clicks']);
-        $query->from('log_click fc');
-        $query->groupBy(['fc.campaign_id',
-            'fc.channel_id',
-            'time', 'timestamp']);
-        $query->orderBy('timestamp');
-
-        $command = $query->createCommand();
-        $rows = $command->queryAll();
-
-        foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-
-            }
-            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
-            if (empty($hourly)) {
-                $hourly = new CampaignLogHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->clicks = $clicks;
-            } else {
-                $hourly->clicks = $clicks;
-            }
-
-            $hourly->save();
-            var_dump($hourly->getErrors());
-        }
+        $this->statsHourly(1);
     }
 
     public function statsUniqueClickHourly()
@@ -100,6 +42,8 @@ class StatsUtil
         $query->orderBy('timestamp');
 
         $command = $query->createCommand();
+        var_dump($command->sql);
+        die();
         $rows = $command->queryAll();
 
         foreach ($rows as $item) {
@@ -383,6 +327,108 @@ class StatsUtil
                     break;
 
             }
+            $hourly->save();
+            var_dump($hourly->getErrors());
+        }
+    }
+
+    public function statsHourly($type)
+    {
+        $from = 'log_click fc';
+        $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
+        $clicks_select = 'count(*) clicks';
+        switch ($type) {
+            case 1:
+                $from = 'log_click fc';
+                $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
+                $clicks_select = 'count(*) clicks';
+                break;
+            case 2:
+                $from = 'log_click fc';
+                $time = 'FROM_UNIXTIME(fc.click_time,"%Y-%m-%d %H:00") time';
+                $clicks_select = 'count(distinct(fc.ip)) clicks';
+                break;
+            case 3:
+                $from = 'log_post fc';
+                $time = 'FROM_UNIXTIME(fc.post_time,"%Y-%m-%d %H:00") time';
+                $clicks_select = 'count(*) clicks';
+                break;
+            case 4:
+                $from = 'log_feed fc';
+                $time = 'FROM_UNIXTIME(fc.feed_time,"%Y-%m-%d %H:00") time';
+                $clicks_select = 'count(*) clicks';
+                break;
+        }
+
+        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
+        date_default_timezone_set("Asia/Shanghai");
+        $query = new Query();
+        $query->select(['fc.campaign_id',
+            'fc.channel_id', $time
+            ,
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(
+                fc.click_time,
+                "%Y-%m-%d %H:00"
+            )) timestamp',
+            $clicks_select]);
+        $query->from($from);
+        $query->groupBy(['fc.campaign_id',
+            'fc.channel_id',
+            'time', 'timestamp']);
+        $query->orderBy('timestamp');
+
+        $command = $query->createCommand();
+        var_dump($command->sql);
+        die();
+        $rows = $command->queryAll();
+
+        foreach ($rows as $item) {
+            $channel_id = '';
+            $campaign_id = '';
+            $timestamp = '';
+            $time = '';
+            $clicks = '';
+            foreach ($item as $k => $v) {
+                if ($k == 'channel_id') {
+                    $channel_id = $v;
+                }
+                if ($k == 'campaign_id') {
+                    $campaign_id = $v;
+                }
+                if ($k == 'timestamp') {
+                    $timestamp = $v;
+                }
+                if ($k == 'time') {
+                    $time = $v;
+                }
+                if ($k == 'clicks') {
+                    $clicks = $v;
+                }
+            }
+            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
+            if (empty($hourly)) {
+                $hourly = new CampaignLogHourly();
+                $hourly->channel_id = $channel_id;
+                $hourly->campaign_id = $campaign_id;
+                $hourly->time = $timestamp;
+                $hourly->time_format = $time;
+            }
+            switch ($type) {
+                case 1:
+                    $hourly->clicks = $clicks;
+                    break;
+                case 2:
+                    $hourly->unique_clicks = $clicks;
+                    break;
+                case 3:
+                    $hourly->installs = $clicks;
+                    break;
+                case 4:
+                    $hourly->match_installs = $clicks;
+                    break;
+            }
+
+
             $hourly->save();
             var_dump($hourly->getErrors());
         }

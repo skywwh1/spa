@@ -225,8 +225,10 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
-        $stats->statsClickDaily();
-$stats->statsMatchInstallDaily();
+        $stats->statsUniqueClickHourly();
+        $stats->statsHourly(3);
+//        $stats->statsClickDaily();
+//$stats->statsMatchInstallDaily();
 
     }
 }
