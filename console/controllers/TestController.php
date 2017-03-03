@@ -9,24 +9,17 @@
 namespace console\controllers;
 
 
-use common\models\Advertiser;
-use common\models\AdvertiserApi;
-use common\models\ApiCampaign;
 use common\models\Campaign;
-use common\models\CampaignLogHourly;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
-use common\utility\ApiUtil;
 use console\models\StaticsUtil;
+use console\models\StatsUtil;
 use linslin\yii2\curl\Curl;
-use Yii;
 use yii\console\Controller;
-use yii\db\Query;
-use yii\helpers\ArrayHelper;
 
 /**
  * Class TestController
@@ -231,10 +224,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $sss = new StaticsUtil();
-
-        //$sss->staticMatchInstallHourly();
-        $sss->staticPostHourly();
+        $stats = new StatsUtil();
+        $stats->statsClickDaily();
+$stats->statsMatchInstallDaily();
 
     }
 }

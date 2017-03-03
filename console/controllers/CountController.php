@@ -16,7 +16,7 @@ use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
-use console\models\StaticsUtil;
+use console\models\StatsUtil;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 
@@ -140,7 +140,7 @@ class CountController extends Controller
                         }
                     }
                 } else {
-                    $this->echoMessage('cannot found the click log-channel_click_id-' . $item->click_id);
+                    $this->echoMessage('cannot found the click log from feed click_uuid ' . $item->click_id);
                 }
 
                 $item->is_count = 1;
@@ -230,12 +230,21 @@ class CountController extends Controller
         echo "#######  $str \n\n";
     }
 
-    public function actionStatics()
+    public function actionStatsHourly()
     {
-        $statics = new StaticsUtil();
-        $statics->staticClickHourly();
-        $statics->staticMatchInstallHourly();
-        $statics->staticPostHourly();
-        $statics->staticUniqueClickHourly();
+        $stats = new StatsUtil();
+        $stats->statsClickHourly();
+        $stats->statsMatchInstallHourly();
+        $stats->statsPostHourly();
+        $stats->statsUniqueClickHourly();
+    }
+
+    public function actionStatsDaily()
+    {
+        $stats = new StatsUtil();
+        $stats->statsClickDaily();
+//        $stats->statsMatchInstallHourly();
+//        $stats->statsPostHourly();
+//        $stats->statsUniqueClickHourly();
     }
 }
