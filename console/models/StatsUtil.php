@@ -161,7 +161,7 @@ class StatsUtil
         $from = 'log_click fc';
         $clicks_select = 'count(*) clicks';
         $timestamp_select = 'fc.click_time';
-        $end_time = strtotime(date("Y-m-d H", time()));
+        $end_time = strtotime(date("Y-m-d H:00", time()));
         $start_time = Config::findLastStatsHourly($type);
         switch ($type) {
             case 1:
@@ -183,7 +183,6 @@ class StatsUtil
                 $clicks_select = 'count(*) clicks';
                 break;
         }
-
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
         $query = new Query();
         $query->select(['fc.campaign_id',
@@ -201,10 +200,8 @@ class StatsUtil
         $query->orderBy('timestamp');
 
         $command = $query->createCommand();
-//        var_dump($command->sql);
-//        die();
+        var_dump($command->sql);
         $rows = $command->queryAll();
-
         foreach ($rows as $item) {
             $channel_id = '';
             $campaign_id = '';
@@ -251,8 +248,8 @@ class StatsUtil
                     break;
             }
             if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
             }
-            var_dump($hourly->getErrors());
         }
         Config::updateStatsTimeHourly($type, $end_time);
     }

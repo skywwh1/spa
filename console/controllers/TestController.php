@@ -235,5 +235,6 @@ class TestController extends Controller
 //$stats->statsMatchInstallDaily();
 //        date_default_timezone_set("Asia/Shanghai");
 //        print (date("Y-m-d H", time()));
+//        var_dump( strtotime(date("Y-m-d H:00", time())));
     }
 }
