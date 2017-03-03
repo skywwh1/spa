@@ -27,7 +27,7 @@ class Config extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['value'], 'string'],
+            [['value'], 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
     }

@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use common\models\Campaign;
+use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
@@ -229,6 +230,12 @@ class TestController extends Controller
         $stats->statsUniqueClickHourly();
         $stats->statsInstallHourly();
         $stats->statsMatchInstallHourly();
+
+        $stats->statsMatchInstallDaily();
+        $stats->statsClickDaily();
+        $stats->statsUniqueClickDaily();
+        $stats->statsInstallDaily();
+
 //        var_dump(time());
 //        $stats->statsHourly(3);
 //        $stats->statsClickDaily();
@@ -236,5 +243,6 @@ class TestController extends Controller
 //        date_default_timezone_set("Asia/Shanghai");
 //        print (date("Y-m-d H", time()));
 //        var_dump( strtotime(date("Y-m-d H:00", time())));
+//        var_dump(Config::updateStatsTimeHourly(1, time()));
     }
 }
