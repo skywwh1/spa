@@ -80,6 +80,7 @@ class ReportChannelSearch extends ReportChannelHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start)])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
         $query->andWhere(['>', 'clicks', 0]);
@@ -141,6 +142,7 @@ class ReportChannelSearch extends ReportChannelHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start . '-1 day')])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
         $query->andWhere(['>', 'clicks', 0]);

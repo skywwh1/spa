@@ -90,4 +90,13 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
+
+    /**
+     * @return array|CampaignLogHourly[]
+     */
+    public static function findNullPrice()
+    {
+        var_dump(static::find()->where('pay_out=0')->orWhere('adv_price=0')->createCommand()->sql);
+        return static::find()->where('pay_out=0')->orWhere('adv_price=0')->all();
+    }
 }

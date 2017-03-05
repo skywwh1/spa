@@ -241,6 +241,7 @@ class CountController extends Controller
         $stats->statsInstallHourly();
 //        $stats->statsUniqueClickHourly();
         $stats->statsClickHourly();
+        $stats->updateNullPrice();
     }
 
     public function actionStatsDaily()

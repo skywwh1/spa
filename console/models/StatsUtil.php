@@ -268,4 +268,21 @@ class StatsUtil
         }
         Config::updateStatsTimeHourly($type, $end_time);
     }
+
+    public function updateNullPrice()
+    {
+        $log = CampaignLogHourly::findNullPrice();
+        if (!empty($log)) {
+            foreach ($log as $item) {
+                $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if ($item->pay_out == 0) {
+                    $item->pay_out = $sts->pay_out;
+                }
+                if ($item->adv_price == 0) {
+                    $item->adv_price = $sts->campaign->adv_price;
+                }
+                $item->save();
+            }
+        }
+    }
 }

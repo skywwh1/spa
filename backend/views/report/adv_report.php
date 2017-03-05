@@ -23,7 +23,12 @@ if (!empty($dataProvider)) {
 
                         <?php echo GridView::widget([
                             'dataProvider' => $dataProvider,
+                            'filterModel' => $searchModel,
                             'showPageSummary' => true,
+                            'layout' => '{toolbar}{summary} {items} {pager}',
+                            'toolbar' => [
+                                '{toggleData}',
+                            ],
                             'columns' => [
 //                            [
 //                                'label' => 'Time Stamp',
@@ -43,6 +48,7 @@ if (!empty($dataProvider)) {
                                     'label' => 'ADV',
                                     'attribute' => 'adv_name',
                                     'value' => 'adv_name',
+                                    'filter' => false,
                                 ],
                                 [
                                     // 'label' => 'campaign_id',

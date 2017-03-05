@@ -227,13 +227,13 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
-        $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
-        var_dump(empty($hourly->pay_out));
+      //  $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
+//        $stats->updatePrice();
 //        $stats->statsDaily();
 //var_dump(empty(null));
 //var_dump(strtotime(date("Y-m-d", time())));
 //        var_dump(time());
-        $stats->statsHourly(1);
+//        $stats->statsHourly(1);
 //        $stats->statsClickDaily();
 //$stats->statsMatchInstallDaily();
 //        date_default_timezone_set("Asia/Shanghai");
