@@ -150,6 +150,7 @@ class StatsUtil
                 $from = 'log_click fc';
                 $clicks_select = 'count(*) clicks';
                 $pay_out_select = 'AVG(fc.pay_out) payout';
+                $adv_price_select = 'AVG(adv_price) adv_price';
                 break;
             case 2:
                 $from = 'log_click fc';
@@ -164,7 +165,6 @@ class StatsUtil
                 $from = 'log_feed fc';
                 $timestamp_select = 'fc.feed_time';
                 $clicks_select = 'count(*) clicks';
-                $adv_price_select = 'AVG(adv_price) adv_price';
                 break;
         }
         $select = ['fc.campaign_id',
@@ -238,6 +238,7 @@ class StatsUtil
                 case 1:
                     $hourly->clicks = $clicks;
                     $hourly->pay_out = $payout;
+                    $hourly->adv_price = $adv_price;
                     break;
                 case 2:
                     $hourly->unique_clicks = $clicks;
@@ -247,7 +248,6 @@ class StatsUtil
                     break;
                 case 4:
                     $hourly->match_installs = $clicks;
-                    $hourly->adv_price = $adv_price;
                     break;
             }
             if (!$hourly->save()) {
