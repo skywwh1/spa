@@ -60,6 +60,7 @@ class CountController extends Controller
                 $click->daily_cap = $item->daily_cap;
                 $click->all_parameters = $item->all_parameters;
                 $click->ip = $item->ip;
+                $click->ip_long = $item->ip_long;
                 $click->redirect = $item->redirect;
                 $click->browser = $item->browser;
                 $click->browser_type = $item->browser_type;
@@ -117,6 +118,7 @@ class CountController extends Controller
                     $logFeed->ch_subid = $logClick->ch_subid;
                     $logFeed->all_parameters = $item->all_parameters;
                     $logFeed->ip = $item->ip;
+                    $logFeed->ip_long = $item->ip_long;
                     $logFeed->adv_price = $camp->adv_price;
                     $logFeed->feed_time = $item->create_time;
                     if ($logFeed->save() == false) {

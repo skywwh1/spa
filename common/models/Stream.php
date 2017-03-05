@@ -24,6 +24,7 @@ use Yii;
  * @property string $discount
  * @property string $all_parameters
  * @property string $ip
+ * @property integer $ip_long
  * @property string $redirect
  * @property string $browser
  * @property string $browser_type
@@ -53,7 +54,7 @@ class Stream extends \yii\db\ActiveRecord
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
             [['adv_price', 'pay_out', 'discount'], 'number'],
-            [['post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
+            [['ip_long', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
             [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'daily_cap', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
             [['click_uuid'], 'unique'],
         ];
@@ -82,6 +83,7 @@ class Stream extends \yii\db\ActiveRecord
             'discount' => 'Discount',
             'all_parameters' => 'All Parameters',
             'ip' => 'Ip',
+            'ip_long' => 'Ip Long',
             'redirect' => 'Redirect',
             'browser' => 'Browser',
             'browser_type' => 'Browser Type',

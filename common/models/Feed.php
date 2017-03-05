@@ -14,6 +14,7 @@ use Yii;
  * @property integer $is_count
  * @property string $all_parameters
  * @property string $ip
+ * @property integer $ip_long
  * @property string $host_name
  * @property integer $create_time
  * @property integer $update_time
@@ -34,7 +35,7 @@ class Feed extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['is_count', 'create_time', 'update_time'], 'integer'],
+            [['is_count', 'ip_long', 'create_time', 'update_time'], 'integer'],
             [['auth_token'], 'safe'],
             [['click_id', 'ch_id', 'all_parameters', 'ip', 'host_name'], 'string', 'max' => 255],
         ];
@@ -53,6 +54,7 @@ class Feed extends \yii\db\ActiveRecord
             'is_count' => 'Is Count',
             'all_parameters' => 'All Parameters',
             'ip' => 'IP',
+            'ip_long' => 'Ip Long',
             'host_name' => 'Host Name',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',

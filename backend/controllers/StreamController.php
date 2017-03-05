@@ -117,7 +117,7 @@ class StreamController extends Controller
         $model->idfa = isset($data['idfa']) ? $data['idfa'] : null;
         $model->site = isset($data['site']) ? $data['site'] : null;
         $model->ip = Yii::$app->request->getUserIP();
-
+        $model->ip_long = ip2long($model->ip);
         $code = $this->restrictionTrack($model);
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
@@ -140,6 +140,7 @@ class StreamController extends Controller
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : null;
         $model->ip = Yii::$app->request->getUserIP();
+        $model->ip_long = ip2long($model->ip);
         $model->all_parameters = $allParameters;
         $code = $this->restrictionFeed($model);
         if ($code !== 200) {
