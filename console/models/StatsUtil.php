@@ -245,7 +245,7 @@ class StatsUtil
                                 $hourly->pay_out = $sts->pay_out;
                             }
                             if (empty($hourly->adv_price)) {
-                                $hourly->adv_price = $sts->pay_out;
+                                $hourly->adv_price = $sts->campaign->adv_price;
                             }
                         }
                     }
