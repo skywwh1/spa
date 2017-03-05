@@ -83,8 +83,7 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start)])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
-        $query->andWhere(['>', 'clicks', 0]);
-//        $query->andWhere(['<>', 'clh.channel_id', '']);
+//        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
@@ -145,8 +144,7 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start . '-1 day')])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
-        $query->andWhere(['>', 'clicks', 0]);
-//        $query->andWhere(['<>', 'clh.channel_id', '']);
+//        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));

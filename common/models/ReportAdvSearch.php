@@ -77,7 +77,6 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start)])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
-        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
@@ -136,7 +135,6 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>', 'time', strtotime($this->start . '-1 day')])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
-        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         return $dataProvider;
     }

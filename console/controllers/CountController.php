@@ -239,7 +239,7 @@ class CountController extends Controller
          */
         $stats->statsMatchInstallHourly();
         $stats->statsInstallHourly();
-//        $stats->statsUniqueClickHourly();
+        $stats->statsUniqueClickHourly();
         $stats->statsClickHourly();
         $stats->updateNullPrice();
     }
