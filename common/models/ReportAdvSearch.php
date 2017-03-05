@@ -5,7 +5,7 @@ namespace common\models;
 use yii\data\ActiveDataProvider;
 
 
-class ReportChannelSearch extends ReportChannelHourly
+class ReportAdvSearch extends ReportAdvHourly
 {
 
     /**
@@ -15,7 +15,7 @@ class ReportChannelSearch extends ReportChannelHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_format', 'daily_cap', 'type', 'start', 'end'], 'safe'],
+            [['time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -30,7 +30,7 @@ class ReportChannelSearch extends ReportChannelHourly
     public function hourlySearch($params)
     {
 
-        $query = ReportChannelHourly::find();
+        $query = ReportAdvHourly::find();
         $query->alias('clh');
         // add conditions that should always apply here
 
@@ -39,11 +39,7 @@ class ReportChannelSearch extends ReportChannelHourly
         ]);
 
         $this->load($params);
-//        var_dump($this->start);
-//        die();
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
         $query->select([
@@ -60,22 +56,20 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.pay_out',
             'clh.adv_price',
             'clh.daily_cap',
-//            'campaign_name',
+            'ad.username adv_name',
 
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-//            'clicks' => $this->clicks,
-//            'unique_clicks' => $this->unique_clicks,
-//            'installs' => $this->installs,
-//            'match_installs' => $this->match_installs,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
+            'ad.username' => $this->adv_name,
         ]);
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
@@ -83,8 +77,7 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['>', 'time', strtotime($this->start)])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
         $query->andWhere(['>', 'clicks', 0]);
-//        $query->andWhere(['<>', 'clh.channel_id', '']);
-        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
 //        var_dump($query->createCommand()->sql);
@@ -95,7 +88,7 @@ class ReportChannelSearch extends ReportChannelHourly
     public function dailySearch($params)
     {
 
-        $query = ReportChannelDaily::find();
+        $query = ReportAdvDaily::find();
         $query->alias('clh');
         // add conditions that should always apply here
 
@@ -121,22 +114,20 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.pay_out',
             'clh.adv_price',
             'clh.daily_cap',
-//            'campaign_name',
+            'ad.username adv_name',
 
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-//            'clicks' => $this->clicks,
-//            'unique_clicks' => $this->unique_clicks,
-//            'installs' => $this->installs,
-//            'match_installs' => $this->match_installs,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
+            'ad.username' => $this->adv_name,
         ]);
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
@@ -144,12 +135,7 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['>', 'time', strtotime($this->start . '-1 day')])
             ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
         $query->andWhere(['>', 'clicks', 0]);
-//        $query->andWhere(['<>', 'clh.channel_id', '']);
-        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
-//        var_dump(strtotime($this->start));
-//        var_dump(strtotime($this->end));
-//        var_dump($query->createCommand()->sql);
-//        die();
+        $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         return $dataProvider;
     }
 }

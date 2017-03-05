@@ -156,6 +156,7 @@ AdminAsset::register($this);
                     </span>
                     </a>
                     <ul class="treeview-menu">
+                        <li><a href="/report/adv-report" data-menu="report-adv"><i class="fa fa-circle-o"></i> ADV Reports</a></li>
                         <li><a href="/report/channel-report" data-menu="report-channel"><i class="fa fa-circle-o"></i> Channel Reports</a></li>
                         <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign Reports</a></li>
                         <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match Installs</a></li>

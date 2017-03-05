@@ -1,5 +1,6 @@
 <?php
 
+use common\models\PriceModel;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;
 
@@ -17,8 +18,13 @@ $this->params['breadcrumbs'][] = 'Update';
 ]); ?>
 <?= $form->field($model, 'campaign_uuid')->textInput(['readonly' => true]) ?>
 <?= $form->field($model, 'channel0')->textInput(['readonly' => true, 'value' => $model->channel->username]) ?>
-<?= $form->field($model, 'pricing_mode')->dropDownList(ModelsUtil::pricing_mode) ?>
-
+<?= $form->field($model, 'pricing_mode')->dropDownList(
+    PriceModel::find()
+        ->select(['name', 'value'])
+        ->orderBy('id')
+        ->indexBy('value')
+        ->column()
+) ?>
 <?= $form->field($model, 'channel_id')->hiddenInput()->label(false) ?>
 <?= $form->field($model, 'campaign_id')->hiddenInput()->label(false) ?>
     <div class="col-lg-12">

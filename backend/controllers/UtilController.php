@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Advertiser;
 use common\models\Category;
 use common\models\Channel;
 use common\models\RegionsDomain;
@@ -89,4 +90,13 @@ class UtilController extends Controller
         return $out;
     }
 
+    public function actionGetAdv($name)
+    {
+        $data = Advertiser::getAdvNameListByName($name);
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = ['value' => $d];
+        }
+        return $out;
+    }
 }

@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use common\models\ChannelReportSearch;
 use common\models\Deliver;
+use common\models\ReportAdvSearch;
 use common\models\ReportChannelSearch;
 use common\models\ReportSearch;
 use Yii;
@@ -36,6 +37,7 @@ class ReportController extends Controller
                         'actions' => [
                             'index',
                             'channel-report',
+                            'adv-report',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -93,7 +95,6 @@ class ReportController extends Controller
 
     public function actionChannelReport()
     {
-
         $searchModel = new ReportChannelSearch();
         $dataProvider = array();
         if (!empty(Yii::$app->request->queryParams)) {
@@ -107,6 +108,26 @@ class ReportController extends Controller
         }
 
         return $this->render('channel_report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionAdvReport()
+    {
+        $searchModel = new ReportAdvSearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $searchModel->load(Yii::$app->request->queryParams);
+            $type = $searchModel->type;
+            if ($type == 1) {
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+            } else if ($type == 2) {
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }
+        }
+
+        return $this->render('adv_report', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

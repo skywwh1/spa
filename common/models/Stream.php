@@ -18,6 +18,7 @@ use Yii;
  * @property string $gaid
  * @property string $idfa
  * @property string $site
+ * @property string $adv_price
  * @property string $pay_out
  * @property string $daily_cap
  * @property string $discount
@@ -51,7 +52,7 @@ class Stream extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
-            [['pay_out', 'discount'], 'number'],
+            [['adv_price', 'pay_out', 'discount'], 'number'],
             [['post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
             [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'daily_cap', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
             [['click_uuid'], 'unique'],
@@ -75,6 +76,7 @@ class Stream extends \yii\db\ActiveRecord
             'gaid' => 'Gaid',
             'idfa' => 'Idfa',
             'site' => 'Site',
+            'adv_price' => 'Adv Price',
             'pay_out' => 'Pay Out',
             'daily_cap' => 'Daily Cap',
             'discount' => 'Discount',

@@ -54,6 +54,7 @@ class CountController extends Controller
                 $click->gaid = $item->gaid;
                 $click->idfa = $item->idfa;
                 $click->site = $item->site;
+                $click->adv_price = $item->adv_price;
                 $click->pay_out = $item->pay_out;
                 $click->discount = $item->discount;
                 $click->daily_cap = $item->daily_cap;

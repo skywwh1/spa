@@ -92,4 +92,13 @@ class LogPost extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
+    }
+
 }

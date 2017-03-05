@@ -19,6 +19,7 @@ use Yii;
  * @property string $gaid
  * @property string $idfa
  * @property string $site
+ * @property string $adv_price
  * @property string $pay_out
  * @property string $discount
  * @property string $daily_cap
@@ -48,7 +49,7 @@ class LogClick extends \yii\db\ActiveRecord
         return [
             [['tx_id', 'click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid'], 'required'],
             [['tx_id', 'channel_id', 'campaign_id', 'click_time', 'create_time'], 'integer'],
-            [['pay_out', 'discount'], 'number'],
+            [['adv_price', 'pay_out', 'discount'], 'number'],
             [['click_uuid', 'click_id', 'campaign_uuid', 'daily_cap', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
         ];
@@ -72,6 +73,7 @@ class LogClick extends \yii\db\ActiveRecord
             'gaid' => 'Gaid',
             'idfa' => 'Idfa',
             'site' => 'Site',
+            'adv_price' => 'Adv Price',
             'pay_out' => 'Pay Out',
             'discount' => 'Discount',
             'daily_cap' => 'Daily Cap',
@@ -127,5 +129,13 @@ class LogClick extends \yii\db\ActiveRecord
             return true;
         }
         return false;
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
     }
 }

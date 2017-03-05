@@ -241,6 +241,7 @@ class StreamController extends Controller
         }
 
         //正常0
+        $model->adv_price = $campaign->adv_price;
         $model->pay_out = $deliver->pay_out;
         $model->daily_cap = $deliver->daily_cap;
         $model->discount = $deliver->discount;

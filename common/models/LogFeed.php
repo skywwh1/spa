@@ -26,6 +26,7 @@ use Yii;
 class LogFeed extends \yii\db\ActiveRecord
 {
     public $advertiser_name;
+
     /**
      * @inheritdoc
      */
@@ -86,5 +87,13 @@ class LogFeed extends \yii\db\ActiveRecord
     public function getChannel()
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
     }
 }
