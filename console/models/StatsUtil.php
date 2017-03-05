@@ -153,7 +153,7 @@ class StatsUtil
                 break;
             case 2:
                 $from = 'log_click fc';
-                $clicks_select = 'count(distinct(fc.ip)) clicks';
+                $clicks_select = 'count(distinct(fc.ip_long)) clicks';
                 break;
             case 3:
                 $from = 'log_post fc';
