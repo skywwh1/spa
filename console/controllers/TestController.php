@@ -226,7 +226,7 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
-//        $stats->statsClickHourly();
+        $stats->statsDaily();
 
 var_dump(strtotime(date("Y-m-d", time())));
 //        var_dump(time());

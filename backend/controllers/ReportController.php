@@ -2,13 +2,15 @@
 
 namespace backend\controllers;
 
-use Yii;
+use common\models\ChannelReportSearch;
 use common\models\Deliver;
+use common\models\ReportChannelSearch;
 use common\models\ReportSearch;
+use Yii;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 
 /**
  * ReportController implements the CRUD actions for Deliver model.
@@ -31,7 +33,10 @@ class ReportController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index'],
+                        'actions' => [
+                            'index',
+                            'channel-report',
+                        ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -84,5 +89,26 @@ class ReportController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionChannelReport()
+    {
+
+        $searchModel = new ReportChannelSearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $searchModel->load(Yii::$app->request->queryParams);
+            $type = $searchModel->type;
+            if ($type == 1) {
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+            } else if ($type == 2) {
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }
+        }
+
+        return $this->render('channel_report', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

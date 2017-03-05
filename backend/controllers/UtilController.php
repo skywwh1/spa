@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Category;
+use common\models\Channel;
 use common\models\RegionsDomain;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -75,6 +76,16 @@ class UtilController extends Controller
 
         $out['results'] = array_values($data);
 
+        return $out;
+    }
+
+    public function actionGetChannel($name)
+    {
+        $data = Channel::getChannelNameListByName($name);
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = ['value' => $d];
+        }
         return $out;
     }
 

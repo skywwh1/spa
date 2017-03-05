@@ -242,10 +242,7 @@ class CountController extends Controller
     public function actionStatsDaily()
     {
         $stats = new StatsUtil();
-        $stats->statsMatchInstallDaily();
-        $stats->statsClickDaily();
-        $stats->statsUniqueClickDaily();
-        $stats->statsInstallDaily();
+        $stats->statsDaily();
     }
 
 }

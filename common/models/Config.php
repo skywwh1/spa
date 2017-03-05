@@ -93,44 +93,16 @@ class Config extends \yii\db\ActiveRecord
     }
 
 
-    public static function findLastStatsDaily($type)
+    public static function findLastStatsDaily()
     {
-        $name = 'last_statics_click_daily';
-        switch ($type) {
-            case 1:
-                $name = 'last_statics_click_daily';
-                break;
-            case 2:
-                $name = 'last_statics_unique_click_daily';
-                break;
-            case 3:
-                $name = 'last_statics_post_daily';
-                break;
-            case 4:
-                $name = 'last_statics_feed_daily';
-                break;
-        }
+        $name = 'last_statics_daily';
         $config = static::findOne(['name' => $name]);
         return isset($config) ? $config->value : 0;
     }
 
-    public static function updateStatsTimeDaily($type, $time)
+    public static function updateStatsTimeDaily($time)
     {
-        $name = 'last_statics_click_daily';
-        switch ($type) {
-            case 1:
-                $name = 'last_statics_click_daily';
-                break;
-            case 2:
-                $name = 'last_statics_unique_click_daily';
-                break;
-            case 3:
-                $name = 'last_statics_post_daily';
-                break;
-            case 4:
-                $name = 'last_statics_feed_daily';
-                break;
-        }
+        $name = 'last_statics_daily';
         $config = static::findOne(['name' => $name]);
         if ($config == null) {
             $config = new Config();

@@ -1,79 +1,78 @@
 <?php
 
+use kartik\date\DatePicker;
+use kartik\typeahead\Typeahead;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ReportSearch */
+/* @var $model common\models\ReportChannelSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<div class="row">
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+            <?php $form = ActiveForm::begin([
+                'action' => ['channel-report'],
+                'method' => 'get',
+            ]); ?>
+            <div class="box-body">
+                <div class="col-lg-4">
+                    <?php
+                    echo '<label class="control-label">Date</label>';
+                    echo DatePicker::widget([
+                        'name' => 'ReportChannelSearch[start]',
+                        'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'type' => DatePicker::TYPE_RANGE,
+                        'name2' => 'ReportChannelSearch[end]',
+                        'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'pluginOptions' => [
+                            'autoclose' => true,
+                            'format' => 'yyyy-mm-dd'
+                        ]
+                    ]);
+                    ?>
+                </div>
+                <div class="col-lg-3">
+                    <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                        'pluginOptions' => ['highlight' => true],
+//                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                        'dataset' => [
+                            [
+                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                'display' => 'value',
+                                'remote' => [
+                                    'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
+                                    'wildcard' => '%QUERY'
+                                ]
+                            ]],
+                    ]) ?>
 
-<div class="deliver-search">
+                </div>
+                <div class="col-lg-2">
+                    <?= $form->field($model, 'type')->dropDownList([
+                        1 => 'Hourly',
+                        2 => 'Daily',
+                    ]) ?>
+                </div>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+            </div>
+            <!-- /.box-body -->
 
-    <?= $form->field($model, 'campaign_id') ?>
+            <div class="box-footer">
+                <?= Html::submitButton('Report', ['class' => 'btn btn-primary']) ?>
+                <?php // Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+            </div>
+        </div>
+        <!-- /.box -->
+        <?php ActiveForm::end(); ?>
 
-    <?= $form->field($model, 'channel_id') ?>
-
-    <?= $form->field($model, 'campaign_uuid') ?>
-
-    <?= $form->field($model, 'adv_price') ?>
-
-    <?= $form->field($model, 'pricing_mode') ?>
-
-    <?php // echo $form->field($model, 'pay_out') ?>
-
-    <?php // echo $form->field($model, 'daily_cap') ?>
-
-    <?php // echo $form->field($model, 'actual_discount') ?>
-
-    <?php // echo $form->field($model, 'discount') ?>
-
-    <?php // echo $form->field($model, 'is_run') ?>
-
-    <?php // echo $form->field($model, 'creator') ?>
-
-    <?php // echo $form->field($model, 'create_time') ?>
-
-    <?php // echo $form->field($model, 'update_time') ?>
-
-    <?php // echo $form->field($model, 'track_url') ?>
-
-    <?php // echo $form->field($model, 'click') ?>
-
-    <?php // echo $form->field($model, 'unique_click') ?>
-
-    <?php // echo $form->field($model, 'install') ?>
-
-    <?php // echo $form->field($model, 'cvr') ?>
-
-    <?php // echo $form->field($model, 'cost') ?>
-
-    <?php // echo $form->field($model, 'match_install') ?>
-
-    <?php // echo $form->field($model, 'match_cvr') ?>
-
-    <?php // echo $form->field($model, 'revenue') ?>
-
-    <?php // echo $form->field($model, 'def') ?>
-
-    <?php // echo $form->field($model, 'deduction_percent') ?>
-
-    <?php // echo $form->field($model, 'profit') ?>
-
-    <?php // echo $form->field($model, 'margin') ?>
-
-    <?php // echo $form->field($model, 'note') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>
+
+
+
+
+

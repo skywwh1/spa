@@ -49,7 +49,10 @@ $this->params['breadcrumbs'][] = $this->title;
         if (($tableSchema = $generator->getTableSchema()) === false) {
             foreach ($generator->getColumnNames() as $name) {
                 if (++$count < 6) {
-                    echo "            '" . $name . "',\n";
+                    echo "           [ \n";
+                    echo "            'attribute' => '" . $name . "',\n";
+                    echo "            'value' => '" . $name . "',\n";
+                    echo "           ],\n";
                 } else {
                     echo "            // '" . $name . "',\n";
                 }
@@ -58,9 +61,17 @@ $this->params['breadcrumbs'][] = $this->title;
             foreach ($tableSchema->columns as $column) {
                 $format = $generator->generateColumnFormat($column);
                 if (++$count < 6) {
-                    echo "            '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
+                    echo "            [ \n";
+                    echo "                // 'label' => '" . $column->name ."',\n";
+                    echo "                 'attribute' => '" . $column->name ."',\n";
+                    echo "                 'value' => '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
+                    echo "            ],\n";
                 } else {
-                    echo "            // '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
+                    echo "            //[ \n";
+                    echo "                // 'label' => '" . $column->name ."',\n";
+                    echo "                // 'attribute' => '" . $column->name ."',\n";
+                    echo "                // 'value' => '" . $column->name . ($format === 'text' ? "" : ":" . $format) . "',\n";
+                    echo "           // ],\n";
                 }
             }
         }

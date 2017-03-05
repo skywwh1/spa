@@ -18,6 +18,8 @@ use Yii;
  * @property string $pay_out
  * @property string $adv_price
  * @property string $daily_cap
+ * @property Campaign $campaign
+ * @property Channel $channel
  */
 class CampaignLogDaily extends \yii\db\ActiveRecord
 {
@@ -71,5 +73,21 @@ class CampaignLogDaily extends \yii\db\ActiveRecord
     public static function findIdentity($campaign_id, $channel_id, $time)
     {
         return static::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'time' => $time]);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
 }
