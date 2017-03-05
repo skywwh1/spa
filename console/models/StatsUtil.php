@@ -12,6 +12,7 @@ namespace console\models;
 use common\models\CampaignLogDaily;
 use common\models\CampaignLogHourly;
 use common\models\Config;
+use common\models\Deliver;
 use Yii;
 use yii\db\Query;
 
@@ -149,8 +150,6 @@ class StatsUtil
             case 1:
                 $from = 'log_click fc';
                 $clicks_select = 'count(*) clicks';
-                $pay_out_select = 'AVG(fc.pay_out) payout';
-                $adv_price_select = 'AVG(adv_price) adv_price';
                 break;
             case 2:
                 $from = 'log_click fc';
@@ -160,11 +159,13 @@ class StatsUtil
                 $from = 'log_post fc';
                 $timestamp_select = 'fc.post_time';
                 $clicks_select = 'count(*) clicks';
+                $pay_out_select = 'AVG(fc.pay_out) payout';
                 break;
             case 4:
                 $from = 'log_feed fc';
                 $timestamp_select = 'fc.feed_time';
                 $clicks_select = 'count(*) clicks';
+                $adv_price_select = 'AVG(fc.adv_price) adv_price';
                 break;
         }
         $select = ['fc.campaign_id',
@@ -237,17 +238,28 @@ class StatsUtil
             switch ($type) {
                 case 1:
                     $hourly->clicks = $clicks;
-                    $hourly->pay_out = $payout;
-                    $hourly->adv_price = $adv_price;
+                    if (empty($hourly->pay_out) || empty($hourly->adv_price)) {
+                        $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
+                        if (!empty($sts)) {
+                            if (empty($hourly->pay_out)) {
+                                $hourly->pay_out = $sts->pay_out;
+                            }
+                            if (empty($hourly->adv_price)) {
+                                $hourly->adv_price = $sts->pay_out;
+                            }
+                        }
+                    }
                     break;
                 case 2:
                     $hourly->unique_clicks = $clicks;
                     break;
                 case 3:
                     $hourly->installs = $clicks;
+                    $hourly->pay_out = $payout;
                     break;
                 case 4:
                     $hourly->match_installs = $clicks;
+                    $hourly->adv_price = $adv_price;
                     break;
             }
             if (!$hourly->save()) {

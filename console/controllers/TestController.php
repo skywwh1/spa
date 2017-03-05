@@ -226,11 +226,11 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
-        $stats->statsDaily();
-
-var_dump(strtotime(date("Y-m-d", time())));
+//        $stats->statsDaily();
+//var_dump(empty(null));
+//var_dump(strtotime(date("Y-m-d", time())));
 //        var_dump(time());
-//        $stats->statsHourly(3);
+        $stats->statsHourly(1);
 //        $stats->statsClickDaily();
 //$stats->statsMatchInstallDaily();
 //        date_default_timezone_set("Asia/Shanghai");
