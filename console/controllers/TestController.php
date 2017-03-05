@@ -227,6 +227,8 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
+        echo ip2long('177.66.48.90');
+
       //  $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
 //        $stats->updatePrice();
 //        $stats->statsDaily();

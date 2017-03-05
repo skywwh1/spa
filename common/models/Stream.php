@@ -100,6 +100,7 @@ class Stream extends \yii\db\ActiveRecord
         if (parent::beforeSave($insert)) {
             if ($insert) {
                 $this->create_time = time();
+                $this->ip_long = ip2long($this->ip);
             }
             return true;
         } else {
