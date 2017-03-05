@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use common\models\Campaign;
+use common\models\CampaignLogHourly;
 use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
@@ -226,6 +227,8 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
+        $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
+        var_dump(empty($hourly->pay_out));
 //        $stats->statsDaily();
 //var_dump(empty(null));
 //var_dump(strtotime(date("Y-m-d", time())));

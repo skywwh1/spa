@@ -238,13 +238,13 @@ class StatsUtil
             switch ($type) {
                 case 1:
                     $hourly->clicks = $clicks;
-                    if (empty($hourly->pay_out) || empty($hourly->adv_price)) {
+                    if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
                         $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
                         if (!empty($sts)) {
-                            if (empty($hourly->pay_out)) {
+                            if ($hourly->pay_out == 0) {
                                 $hourly->pay_out = $sts->pay_out;
                             }
-                            if (empty($hourly->adv_price)) {
+                            if ($hourly->adv_price == 0) {
                                 $hourly->adv_price = $sts->campaign->adv_price;
                             }
                         }
