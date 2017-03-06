@@ -137,6 +137,8 @@ class DeliverController extends Controller
         $data = array();
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             $model->is_send_create = 0;
+            $model->status = 1;
+            $model->end_time = null;
             if ($model->save()) {
                 $campaign = Campaign::findOne($model->campaign_id);
                 $channel = Channel::findOne($model->channel_id);
