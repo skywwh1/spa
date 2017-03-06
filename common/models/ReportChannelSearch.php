@@ -2,11 +2,15 @@
 
 namespace common\models;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use yii\data\ActiveDataProvider;
 
 
 class ReportChannelSearch extends ReportChannelHourly
 {
+    public $time_zone;
 
     /**
      * @inheritdoc
@@ -15,7 +19,7 @@ class ReportChannelSearch extends ReportChannelHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_format', 'daily_cap', 'type', 'start', 'end'], 'safe'],
+            [['time_format', 'daily_cap', 'type', 'start', 'end', 'time_zone'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -46,6 +50,19 @@ class ReportChannelSearch extends ReportChannelHourly
             // $query->where('0=1');
             return $dataProvider;
         }
+//        $a = strtotime($this->start);
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+//        var_dump($start->format('Y-m-d H:i:sP'));
+//        var_dump($start->getTimestamp());
+//        var_dump($end->format('Y-m-d H:i:sP'));
+//        var_dump($end->getTimestamp());
+//        die();
+//        $b = strtotime($this->end . '+1 day');
+//        $date->modify('+1 day');
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
@@ -81,8 +98,8 @@ class ReportChannelSearch extends ReportChannelHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['>', 'time', strtotime($this->start)])
-            ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
+            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
 //        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));

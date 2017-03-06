@@ -2,11 +2,15 @@
 
 namespace common\models;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
 use yii\data\ActiveDataProvider;
 
 
 class ReportAdvSearch extends ReportAdvHourly
 {
+    public $time_zone;
 
     /**
      * @inheritdoc
@@ -15,7 +19,7 @@ class ReportAdvSearch extends ReportAdvHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name'], 'safe'],
+            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -42,6 +46,11 @@ class ReportAdvSearch extends ReportAdvHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
@@ -75,13 +84,9 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['>', 'time', strtotime($this->start)])
-            ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
+            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
         $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
-//        var_dump(strtotime($this->start));
-//        var_dump(strtotime($this->end));
-//        var_dump($query->createCommand()->sql);
-//        die();
         return $dataProvider;
     }
 

@@ -30,20 +30,21 @@ if (!empty($dataProvider)) {
                                 '{toggleData}',
                             ],
                             'columns' => [
-//                            [
-//                                'label' => 'Time Stamp',
-//                                'attribute' => 'time',
-////                                 'value' => 'time:datetime',
-//                                'format' => 'datetime',
-//                                'filter' => false,
-//                            ],
                                 [
-                                    'label' => 'Time(UTC+8)',
-                                    'attribute' => 'time_format',
-                                    // 'value' => 'time_format',
+                                    'label' => 'Time(UTC)',
+                                    'attribute' => 'time',
+//                                 'value' => 'time:datetime',
+                                    'format'=>['DateTime','php:Y-m-d H:i'],
                                     'filter' => false,
                                     'pageSummary' => 'Page Total',
                                 ],
+//                                [
+//                                    'label' => 'Time(UTC+8)',
+//                                    'attribute' => 'time_format',
+//                                    // 'value' => 'time_format',
+//                                    'filter' => false,
+//                                    'pageSummary' => 'Page Total',
+//                                ],
                                 [
                                     'label' => 'Channel',
                                     'attribute' => 'channel_name',
@@ -77,29 +78,6 @@ if (!empty($dataProvider)) {
                                     'pageSummary' => true,
                                 ],
                                 [
-                                    'attribute' => 'match_installs',
-                                    'value' => 'match_installs',
-                                    'filter' => false,
-                                    'pageSummary' => true,
-                                ],
-                                [
-                                    'label' => 'Payout(avg)',
-                                    'attribute' => 'pay_out',
-                                    'value' => 'pay_out',
-                                    'filter' => false,
-                                ],
-                                [
-                                    'label' => 'ADV Price(avg)',
-                                    'attribute' => 'adv_price',
-                                    'value' => 'adv_price',
-                                    'filter' => false,
-                                ],
-                                //[
-                                // 'label' => 'daily_cap',
-                                //     'attribute' => 'daily_cap',
-                                // 'value' => 'daily_cap',
-                                // ],
-                                [
                                     'attribute' => 'cvr',
                                     'value' => function ($model) {
                                         if ($model->clicks > 0) {
@@ -112,6 +90,12 @@ if (!empty($dataProvider)) {
                                 ],
 
                                 [
+                                    'label' => 'Payout(avg)',
+                                    'attribute' => 'pay_out',
+                                    'value' => 'pay_out',
+                                    'filter' => false,
+                                ],
+                                [
                                     'attribute' => 'cost',
                                     'value' => function ($model) {
                                         return $model->installs * $model->pay_out;
@@ -119,7 +103,12 @@ if (!empty($dataProvider)) {
                                     'filter' => false,
                                     'pageSummary' => true,
                                 ],
-
+                                [
+                                    'attribute' => 'match_installs',
+                                    'value' => 'match_installs',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
                                 [
                                     'attribute' => 'match_cvr',
                                     'value' => function ($model) {
@@ -130,6 +119,12 @@ if (!empty($dataProvider)) {
                                         }
                                         return 0;
                                     },
+                                    'filter' => false,
+                                ],
+                                [
+                                    'label' => 'ADV Price(avg)',
+                                    'attribute' => 'adv_price',
+                                    'value' => 'adv_price',
                                     'filter' => false,
                                 ],
 

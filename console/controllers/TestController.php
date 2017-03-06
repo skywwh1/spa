@@ -20,6 +20,8 @@ use common\models\LogPost;
 use common\models\Stream;
 use console\models\StaticsUtil;
 use console\models\StatsUtil;
+use DateTime;
+use DateTimeZone;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 
@@ -227,7 +229,7 @@ class TestController extends Controller
     public function actionTmd()
     {
         $stats = new StatsUtil();
-        echo ip2long('177.66.48.90');
+        //echo ip2long('177.66.48.90');
 
       //  $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
 //        $stats->updatePrice();
@@ -242,5 +244,18 @@ class TestController extends Controller
 //        print (date("Y-m-d H", time()));
 //        var_dump( strtotime(date("Y-m-d H:00", time())));
 //        var_dump(Config::updateStatsTimeHourly(1, time()));
+        date_default_timezone_set("Asia/Shanghai");
+        $start = strtotime('2017-03-06 11:00');
+        echo $start . "\n";
+
+        $start = new DateTime('2017-03-06 11:00',new DateTimeZone('Asia/Shanghai'));
+        var_dump($start->format('Y-m-d H:i:sP'));
+//        $stats->
+        $date = new DateTime('2017-03-06 11:00', new DateTimeZone('Etc/GMT-11'));
+        echo $date->format('Y-m-d H:i:sP') . "\n";
+        echo $date->getTimestamp() . "\n";
+
+        $date->setTimezone(new DateTimeZone('Etc/GMT+7'));
+        echo $date->format('Y-m-d H:i:sP') . "\n";
     }
 }
