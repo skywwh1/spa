@@ -71,8 +71,7 @@ class CampaignController extends Controller
 
     }
 
-    public
-    function actionSendUpdate()
+    public function actionSendUpdate()
     {
         $pause = array();
         $cap = array();
@@ -178,8 +177,7 @@ class CampaignController extends Controller
         }
     }
 
-    private
-    function echoMessage($str)
+    private function echoMessage($str)
     {
         echo " \t $str \n";
     }
