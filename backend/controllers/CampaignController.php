@@ -47,6 +47,7 @@ class CampaignController extends Controller
                             'get_geo',
                             'get_category',
                             'get_campaign_uuid_multiple',
+                            'restart',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -131,6 +132,37 @@ class CampaignController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Updates an existing Campaign model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionRestart($id)
+    {
+        $this->layout = false;
+        $model = $this->findModel($id);
+        $model->promote_end = null;
+        if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
+            $model->status = 1;
+            if ($model->promote_end != 0) {
+                $model->promote_end = strtotime($model->promote_end);
+                var_dump($model);
+            } else {
+                $model->promote_end = null;
+            }
+            return 'success';
+            if ($model->save()) {
+            } else {
+                return 'fail';
+            }
+        } else {
+            return $this->renderAjax('restart', [
+                'model' => $model,
+            ]);
+        }
     }
 
     /**

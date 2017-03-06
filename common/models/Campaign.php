@@ -93,10 +93,10 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
-            [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
-            [['target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap'], 'safe'],
+            [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap'], 'safe'],
             [['campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'traffic_source', 'package_name', 'app_name', 'app_size', 'version', 'app_rate', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
             [['campaign_name', 'preview_link', 'icon', 'category', 'description', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
             [['campaign_uuid'], 'unique'],
@@ -322,7 +322,8 @@ class Campaign extends \yii\db\ActiveRecord
         return mb_substr($str, 0, 20, 'utf-8') . (($len > 20) ? '...' : '');
     }
 
-    public function getGeo(){
+    public function getGeo()
+    {
         $str = strip_tags($this->target_geo);
         $len = mb_strlen($str);
         return mb_substr($str, 0, 20, 'utf-8') . (($len > 10) ? '...' : '');

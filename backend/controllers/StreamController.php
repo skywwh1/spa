@@ -222,7 +222,7 @@ class StreamController extends Controller
          * test link
          */
         $cache = Yii::$app->cache;
-        $test = $cache->get($model->ch_id);
+        $test = $cache->get($model->ch_id.'');
         if ($test !== false) {
             $cache->set($model->ch_id, $model, 300);
         }

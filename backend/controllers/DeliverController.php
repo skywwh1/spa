@@ -250,7 +250,7 @@ class DeliverController extends Controller
             }
             $model->result[] = 'Click response: ' . $clicks;
             $data = $cache->get($channel->id . "");
-            $stream = null;
+            $stream =Stream::getLatestClick($channel->id);
             if ($data !== false && $data !== 'test') {
                 $stream = $data;
             }

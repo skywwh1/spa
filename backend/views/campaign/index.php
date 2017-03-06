@@ -107,6 +107,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => 'Action',
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
+                                    $restart = '';
+                                    if ($model->status != 1) {
+                                      //  $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
+                                    }
                                     return '<div class="dropdown">
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                       <span class="caret"></span></button>
@@ -114,8 +118,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                       <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
                                       <li><a href="/campaign/update?id=' . $model->id . '" >Update</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
-                                      </ul>
+                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>' .
+                                        $restart
+                                        . '</ul>
                                     </div>';
                                 },
                             ],
