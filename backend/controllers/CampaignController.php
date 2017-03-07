@@ -149,12 +149,11 @@ class CampaignController extends Controller
             $model->status = 1;
             if ($model->promote_end != 0) {
                 $model->promote_end = strtotime($model->promote_end);
-                var_dump($model);
             } else {
                 $model->promote_end = null;
             }
-            return 'success';
             if ($model->save()) {
+                return 'success';
             } else {
                 return 'fail';
             }

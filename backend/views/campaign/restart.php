@@ -24,12 +24,12 @@ AdminAsset::register($this);
 ]);
 ?>
     <div class="form-group">
-        <?= Html::button('Restart', ['class' => 'btn btn-success', 'id' => 'aaa']) ?>
+        <?= Html::button('Restart', ['class' => 'btn btn-success', 'id' => 'restart-button']) ?>
     </div>
 <?php ActiveForm::end(); ?>
 <?php
 $js = <<< JS
-    $('#aaa').click(function(){
+$(document).on("click", "#restart-button", function (e) {
         var form = $('#restart-form')
         var url = form.attr('action');
         $.ajax({
@@ -39,8 +39,11 @@ $js = <<< JS
                success: function(data)
                {
                    if(data == 'success'){
+                        $('#campaign-update-modal').modal('hide');
+                         location.reload();
+                   }else{
+                     alert(data);
                    }
-                        $('#campaign-modal').modal('hide');
                }
              });
         e.preventDefault(); // a

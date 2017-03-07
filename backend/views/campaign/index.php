@@ -216,4 +216,3 @@ Modal::end(); ?>
 echo '<div id="campaign-update-content"></div>';
 
 Modal::end(); ?>
-
