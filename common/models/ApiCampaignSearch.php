@@ -12,6 +12,9 @@ use common\models\ApiCampaign;
  */
 class ApiCampaignSearch extends ApiCampaign
 {
+
+    public $adv_name;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +22,7 @@ class ApiCampaignSearch extends ApiCampaign
     {
         return [
             [['adv_id', 'create_time', 'update_time'], 'integer'],
-            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'payout_currency', 'daily_budget', 'target_geo', 'adv_link', 'traffic_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status'], 'safe'],
+            [['adv_update_time', 'effective_time', 'campaign_id', 'campaign_uuid', 'campaign_name', 'pricing_mode', 'promote_start', 'end_time', 'platform', 'daily_cap', 'adv_price', 'payout_currency', 'daily_budget', 'target_geo', 'adv_link', 'traffic_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'status', 'adv_name'], 'safe'],
         ];
     }
 
@@ -56,7 +59,7 @@ class ApiCampaignSearch extends ApiCampaign
             // $query->where('0=1');
             return $dataProvider;
         }
-
+        $query->leftJoin('advertiser adv', 'adv.id=adv_id');
         // grid filtering conditions
         $query->andFilterWhere([
             'adv_id' => $this->adv_id,
@@ -95,6 +98,7 @@ class ApiCampaignSearch extends ApiCampaign
             ->andFilterWhere(['like', 'creative_description', $this->creative_description])
             ->andFilterWhere(['like', 'carriers', $this->carriers])
             ->andFilterWhere(['like', 'conversion_flow', $this->conversion_flow])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name])
             ->andFilterWhere(['like', 'status', $this->status]);
 
         $query->orderBy('create_time desc');

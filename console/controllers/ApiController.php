@@ -16,6 +16,15 @@ use yii\console\Controller;
 class ApiController extends Controller
 {
 
+    public function actionGetCampaigns()
+    {
+        $headWay = new HeadWay();
+        $headWay->getApiCampaign();
+
+        $vista = new Movista();
+        $vista->getApiCampaign();
+    }
+
     public function actionGetHeadway()
     {
         $headWay = new HeadWay();

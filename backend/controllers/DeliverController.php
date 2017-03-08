@@ -234,6 +234,10 @@ class DeliverController extends Controller
                     'model' => $model,
                 ]);
             }
+            $url = $model->tracking_link;
+            $aa = explode('?',$url);
+            $all_parameters = $aa[1];
+            /**
             $cache = Yii::$app->cache;
             $cache->set($channel->id . '', 'test', 300);
             $curl = new Curl();
@@ -262,8 +266,8 @@ class DeliverController extends Controller
                 return $this->render('test_link', [
                     'model' => $model,
                 ]);
-            }
-            $link = Channel::genPostBack($channel->post_back, $stream->all_parameters);
+            } **/
+            $link = Channel::genPostBack($channel->post_back,$all_parameters);
             $model->result[] = 'post back link: ' . $link;
             $curl = new Curl();
             if ($curl->get($link) !== false) {
