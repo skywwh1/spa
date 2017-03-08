@@ -105,7 +105,7 @@ class Movista
                     foreach ($apiCams as $apiCampaign) {
                         $uuid = $api->adv_id . '_' . $apiCampaign->campaign_id;
                         $campaign = Campaign::findByUuid($uuid);
-                        if(empty($campaign)){
+                        if (empty($campaign)) {
                             $campaign = new Campaign();
                         }
                         $campaign->advertiser = $api->adv_id;
@@ -134,7 +134,7 @@ class Movista
                         $campaign->version = $apiCampaign->version;
                         $campaign->app_rate = $apiCampaign->app_rate;
                         $campaign->description = $apiCampaign->description;
-                        $campaign->creative_link = $apiCampaign->creative_link;
+//                        $campaign->creative_link = $apiCampaign->creative_link;
                         $campaign->creative_description = $apiCampaign->creative_description;
                         $campaign->carriers = $apiCampaign->carriers;
                         $campaign->conversion_flow = $apiCampaign->conversion_flow;
@@ -143,6 +143,7 @@ class Movista
                         $adv = Advertiser::findOne(['id' => $api->adv_id]);
                         $campaign->creator = $adv->bd;
                         $campaign->update_time = $apiCampaign->update_time;
+                        $campaign->open_type = 1;
                         $campaign->save();
                         var_dump($campaign->getErrors());
                     }
