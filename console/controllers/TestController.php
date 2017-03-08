@@ -228,6 +228,8 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        var_dump(md5('boster'));
+        die();
         $stats = new StatsUtil();
         //echo ip2long('177.66.48.90');
 

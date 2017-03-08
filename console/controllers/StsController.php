@@ -88,7 +88,8 @@ class StsController extends Controller
         }
         $aa = rtrim($aa, '&');
         $url .= '?' . $aa;
-        //echo $url;
+        echo $url;
+        die();
         $curl = new Curl();
         $response = $curl->get($url);
         if (json_decode($response)) {

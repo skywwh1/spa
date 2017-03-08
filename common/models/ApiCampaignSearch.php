@@ -97,6 +97,8 @@ class ApiCampaignSearch extends ApiCampaign
             ->andFilterWhere(['like', 'conversion_flow', $this->conversion_flow])
             ->andFilterWhere(['like', 'status', $this->status]);
 
+        $query->orderBy('create_time desc');
+
         return $dataProvider;
     }
 }
