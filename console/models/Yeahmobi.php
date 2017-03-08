@@ -51,6 +51,9 @@ class Yeahmobi
             }
             $camp->campaign_uuid = $uuid;
             $camp->campaign_name = $model->campaign_name;
+            $camp->campaign_name = str_replace('App Download- ', '', $camp->campaign_name);
+            $camp->campaign_name = str_replace('App Download - ', '', $camp->campaign_name);
+            $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
             $camp->platform = $model->platform;
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;

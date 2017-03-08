@@ -24,6 +24,9 @@ class ApiController extends Controller
 
         $vista = new Movista();
         $vista->getApiCampaign();
+
+        $yeah = new Yeahmobi();
+        $yeah->getApiCampaign();
     }
 
     public function actionGetHeadway()
