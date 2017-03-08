@@ -11,6 +11,7 @@ namespace console\controllers;
 
 use console\models\HeadWay;
 use console\models\Movista;
+use console\models\Yeahmobi;
 use yii\console\Controller;
 
 class ApiController extends Controller
@@ -36,5 +37,11 @@ class ApiController extends Controller
     {
         $vista = new Movista();
         $vista->getApiCampaign();
+    }
+
+    public function actionGetYeah()
+    {
+        $yeah = new Yeahmobi();
+        $yeah->getApiCampaign();
     }
 }

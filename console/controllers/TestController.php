@@ -20,6 +20,7 @@ use common\models\LogPost;
 use common\models\Stream;
 use console\models\StaticsUtil;
 use console\models\StatsUtil;
+use console\models\Yeahmobi;
 use DateTime;
 use DateTimeZone;
 use linslin\yii2\curl\Curl;
@@ -228,7 +229,15 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        var_dump(md5('boster'));
+        $aa = new Yeahmobi();
+        $aa->getApiCampaign();
+//        $a = 'dsf';
+//        $records = array();
+//        for($i = 1;$i<10;$i++){
+//
+//            $records[$i.$a]=$i;
+//        }
+//        var_dump($records);
         die();
         $stats = new StatsUtil();
         //echo ip2long('177.66.48.90');
