@@ -29,7 +29,6 @@ class Movista
         $apis->getAttribute('key');
         $param = $apis->param;
         $param = $this->replaceValue($param, $apis); // 替换key
-//        echo $param;
         $paras = explode('&', $param);
         $aa = '';
         foreach ($paras as $item) {
@@ -38,22 +37,13 @@ class Movista
         }
         $aa = rtrim($aa, '&');
         $url .= '?' . $aa;
-//        echo $url;
-//        die();
         $curl = new Curl();
         $response = $curl->get($url);
-//        var_dump($response);
-//        die();
         $response = json_decode($response);
         $data = $response->$data_key;
         if (isset($data)) {
-//            $apiCampaigns = ApiUtil::genApiCampaigns($apis, $data);
-//            var_dump($apiCampaigns);
             $this->genCampaign($apis, $data);
         }
-//        var_dump($response);
-//        die();
-//        var_dump(json_decode($response));
     }
 
     public function replaceUrl($str)
@@ -101,50 +91,63 @@ class Movista
         if (!empty($data)) {
             $apiCampaigns = ApiUtil::genApiCampaigns($api, $data);
             if (!empty($apiCampaigns)) {
+                $apiCams = array();
+                ApiCampaign::deleteAll(['adv_id' => $api->adv_id]);
                 foreach ($apiCampaigns as $apiCampaign) {
-                    $campaign = new Campaign();
-//                    $campaign->advertiser = $api->adv_id;
-//                    $campaign->campaign_name = $apiCampaign->campaign_name;
-//                    $campaign->campaign_uuid = $api->adv_id.'_'.$api->campaign_id;
-//                    $campaign->pricing_mode = $apiCampaign->pricing_mode;
-//                    $campaign->payout_currency = $apiCampaign->payout_currency;
-//                    $campaign->promote_start = $apiCampaign->promote_start;
-//                    $campaign->promote_end = $apiCampaign->end_time;
-//                    $campaign->effective_time = $apiCampaign->effective_time;
-//                    $campaign->adv_update_time = $apiCampaign->adv_update_time;
-//                    $campaign->platform = $apiCampaign->platform;
-//                    $campaign->daily_cap = $apiCampaign->daily_cap;
-//                    $campaign->daily_budget = $apiCampaign->daily_budget;
-//                    $campaign->adv_price = $apiCampaign->adv_price;
-//                    $campaign->now_payout = $apiCampaign->adv_price > 1 ? $apiCampaign->adv_price * 0.9 : $apiCampaign->adv_price;
-//                    $campaign->target_geo = $apiCampaign->target_geo;
-//                    $campaign->traffic_source = $apiCampaign->traffic_source;
-//                    $campaign->note = $apiCampaign->note;
-//                    $campaign->preview_link = $apiCampaign->preview_link;
-//                    $campaign->icon = $apiCampaign->icon;
-//                    $campaign->package_name = $apiCampaign->package_name;
-//                    $campaign->app_name = $apiCampaign->app_name;
-//                    $campaign->app_size = $apiCampaign->app_size;
-//                    $campaign->category = $apiCampaign->category;
-//                    $campaign->version = $apiCampaign->version;
-//                    $campaign->app_rate = $apiCampaign->app_rate;
-//                    $campaign->description = $apiCampaign->description;
-//                    $campaign->creative_link = $apiCampaign->creative_link;
-//                    $campaign->creative_type = $apiCampaign->creative_type;
-//                    $campaign->creative_description = $apiCampaign->creative_description;
-//                    $campaign->carriers = $apiCampaign->carriers;
-//                    $campaign->conversion_flow = $apiCampaign->conversion_flow;
-//                    $campaign->status = $apiCampaign->status;
-//                    $campaign->adv_link = $apiCampaign->adv_link;
-//                    $adv = Advertiser::findOne(['id' => $api->adv_id]);
-//                    $campaign->creator = $adv->bd;
-//                    $campaign->update_time = $apiCampaign->update_time;
                     $apiCampaign->adv_id = $api->adv_id;
-
-                    $apiCampaign->save();
-//                    var_dump($apiCampaign->getErrors());
-//                    die();
+                    if ($apiCampaign->save()) {
+                        $apiCams[] = $apiCampaign;
+                    }
                 }
+//                var_dump($apiCams);
+//                die();
+                if (!empty($apiCams)) {
+                    foreach ($apiCams as $apiCampaign) {
+                        $uuid = $api->adv_id . '_' . $apiCampaign->campaign_id;
+                        $campaign = Campaign::findByUuid($uuid);
+                        if(empty($campaign)){
+                            $campaign = new Campaign();
+                        }
+                        $campaign->advertiser = $api->adv_id;
+                        $campaign->campaign_name = $apiCampaign->campaign_name;
+                        $campaign->campaign_uuid = $api->adv_id . '_' . $apiCampaign->campaign_id;
+                        $campaign->pricing_mode = $apiCampaign->pricing_mode;
+                        $campaign->payout_currency = $apiCampaign->payout_currency;
+                        $campaign->promote_start = $apiCampaign->promote_start;
+                        $campaign->promote_end = $apiCampaign->end_time;
+                        $campaign->effective_time = $apiCampaign->effective_time;
+                        $campaign->adv_update_time = $apiCampaign->adv_update_time;
+                        $campaign->platform = $apiCampaign->platform;
+                        $campaign->daily_cap = $apiCampaign->daily_cap;
+                        $campaign->daily_budget = $apiCampaign->daily_budget;
+                        $campaign->adv_price = $apiCampaign->adv_price;
+                        $campaign->now_payout = $apiCampaign->adv_price > 1 ? $apiCampaign->adv_price * 0.9 : $apiCampaign->adv_price;
+                        $campaign->target_geo = $apiCampaign->target_geo;
+                        $campaign->traffic_source = $apiCampaign->traffic_source;
+                        $campaign->note = $apiCampaign->note;
+                        $campaign->preview_link = $apiCampaign->preview_link;
+                        $campaign->icon = $apiCampaign->icon;
+                        $campaign->package_name = $apiCampaign->package_name;
+                        $campaign->app_name = $apiCampaign->app_name;
+                        $campaign->app_size = $apiCampaign->app_size;
+                        $campaign->category = $apiCampaign->category;
+                        $campaign->version = $apiCampaign->version;
+                        $campaign->app_rate = $apiCampaign->app_rate;
+                        $campaign->description = $apiCampaign->description;
+                        $campaign->creative_link = $apiCampaign->creative_link;
+                        $campaign->creative_description = $apiCampaign->creative_description;
+                        $campaign->carriers = $apiCampaign->carriers;
+                        $campaign->conversion_flow = $apiCampaign->conversion_flow;
+                        $campaign->status = $apiCampaign->status == 'running' ? 1 : 2;
+                        $campaign->adv_link = $apiCampaign->adv_link;
+                        $adv = Advertiser::findOne(['id' => $api->adv_id]);
+                        $campaign->creator = $adv->bd;
+                        $campaign->update_time = $apiCampaign->update_time;
+                        $campaign->save();
+                        var_dump($campaign->getErrors());
+                    }
+                }
+
             }
         }
     }
