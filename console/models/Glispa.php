@@ -26,7 +26,7 @@ class Glispa
         $curl = new Curl();
 
         $response = $curl->get($url);
-        var_dump($response);
+//        var_dump($response);
         if (isset($response)) {
             $response = json_decode($response);
             $data = $response->$data_key;
@@ -36,6 +36,7 @@ class Glispa
             foreach ($apiCams as $model) {
                 $model->adv_id = $apiModel->adv_id;
                 $model->save();
+                var_dump($model->getErrors());
             }
         }
 
