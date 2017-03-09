@@ -27,38 +27,16 @@ class Glispa
 
         $response = $curl->get($url);
         var_dump($response);
-//        set_time_limit(0);
-//        $curl = curl_init();
-//
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => "http://feed.platform.glispa.com/native-feed/ecbaab5d-e649-4c95-86fa-762c3d595b4a/app?country=DE",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 30,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "GET",
-//            CURLOPT_HTTPHEADER => array(
-//                "cache-control: no-cache",
-//                "postman-token: d751b9f3-a474-38a3-2a78-3ae69131f683"
-//            ),
-//        ));
-//
-//        $response = curl_exec($curl);
-//        $err = curl_error($curl);
-//
-//        curl_close($curl);
-//
-//        if ($err) {
-//            echo "cURL Error #:" . $err;
-//        } else {
-//            echo $response;
-//        }
-        die();
-        if(isset($response)){
+        if (isset($response)) {
             $response = json_decode($response);
-            var_dump($response->$data_key);
+            $data = $response->$data_key;
+          //  var_dump($data);
+            $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);
 
+            foreach ($apiCams as $model) {
+                $model->adv_id = $apiModel->adv_id;
+                $model->save();
+            }
         }
 
     }
