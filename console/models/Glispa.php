@@ -35,8 +35,8 @@ class Glispa
 
             foreach ($apiCams as $model) {
                 $model->adv_id = $apiModel->adv_id;
-                $model->save();
-                var_dump($model->getErrors());
+//                $model->save();
+                var_dump($model);
             }
         }
 
