@@ -63,7 +63,7 @@ use yii\helpers\Url;
         $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
         $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
         $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
-        $pay_out .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';
+        $pay_out .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
         $new .= '<td style="background-color:yellow">' . Html::encode($deliver->newValue) . '</td>';
         $effect .= '<td style="background-color:yellow">' . Html::encode(date('Y-m-d H:i', $deliver->effect_time)) . '</td>';
 

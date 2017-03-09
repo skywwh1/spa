@@ -11,6 +11,7 @@ namespace console\controllers;
 
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
+use common\models\CampaignStsUpdate;
 use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
@@ -230,6 +231,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $aa = CampaignStsUpdate::getStsUpdatePay();
+        var_dump($aa);
+        die();
         $aa = new Glispa();
         $aa->getApiCampaign();
 //        $a = 'dsf';
