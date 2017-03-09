@@ -231,9 +231,6 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $aa = CampaignStsUpdate::getStsUpdatePay();
-        var_dump($aa);
-        die();
         $aa = new Glispa();
         $aa->getApiCampaign();
 //        $a = 'dsf';
