@@ -231,8 +231,10 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $aa = new Glispa();
-        $aa->getApiCampaign();
+//        $aa = new Glispa();
+//        $aa->getApiCampaign();
+//        echo $bb;
+
 //        $a = 'dsf';
 //        $records = array();
 //        for($i = 1;$i<10;$i++){
