@@ -81,7 +81,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public static function getStsUpdateCap()
     {
         return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'cap'])
-            ->andWhere(['<', ['effect_time' => time()]])
+            ->andWhere(['<', 'effect_time', time()])
             ->all();
     }
 
@@ -105,7 +105,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public static function getStsUpdatePay()
     {
         return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'payout'])
-            ->andWhere(['<', ['effect_time' => time()]])
+            ->andWhere(['<', 'effect_time', time()])
             ->all();
     }
 }
