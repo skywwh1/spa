@@ -15,6 +15,7 @@ use common\models\ApiCampaigns;
 use common\models\Campaign;
 use linslin\yii2\curl\Curl;
 use yii\db\BaseActiveRecord;
+use yii\helpers\ArrayHelper;
 
 class ApiUtil
 {
@@ -122,7 +123,7 @@ class ApiUtil
     {
         $camps = array();
         foreach ($data as $item) { //循环json里面的offers
-            $item = (array)$item;
+            $item = ArrayHelper::toArray($item);
             $camp = new ApiCampaign();
             $camp_attrs = $camp->getAttributes();
             $apis_attrs = $apis->getAttributes();
