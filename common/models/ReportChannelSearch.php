@@ -43,7 +43,7 @@ class ReportChannelSearch extends ReportChannelHourly
         ]);
 
         $this->load($params);
-//        var_dump($this->start);
+//        var_dump($this->type);
 //        die();
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
