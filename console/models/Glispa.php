@@ -16,25 +16,51 @@ use yii\helpers\ArrayHelper;
  * Date: 2017-02-27
  * Time: 10:19
  */
-class Yeahmobi
+class Glispa
 {
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 6]);
+        $apiModel = AdvertiserApi::findOne(['id' => 7]);
         $data_key = $apiModel->json_offers_param;
-        $ios_url = $apiModel->url . '&filters[type][$eq]=ios';
-        $android_url = $apiModel->url . '&filters[type][$eq]=android';
-        $ios = array();
-        $android = array();
-        $ios = $this->genCampaigns($ios_url, $apiModel);
-        $android = $this->genCampaigns($android_url, $apiModel);
+        $url = $apiModel->url;
+//        $curl = new Curl();
+//
+//        $response = $curl->get($url);
+//        var_dump($response);
+        set_time_limit(0);
+        $curl = curl_init();
 
-        $all = array_merge($ios, $android);
-        if (!empty($all)) {
-            $this->transferApiModel($apiModel, $all);
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "http://feed.platform.glispa.com/native-feed/ecbaab5d-e649-4c95-86fa-762c3d595b4a/app?country=DE",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "postman-token: d751b9f3-a474-38a3-2a78-3ae69131f683"
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($err) {
+            echo "cURL Error #:" . $err;
+        } else {
+            echo $response;
         }
-        var_dump(count($all));
         die();
+        if(isset($response)){
+            $response = json_decode($response);
+            var_dump($response->$data_key);
+
+        }
+
     }
 
     private function transferApiModel($apiModel, $apiCampaigns)

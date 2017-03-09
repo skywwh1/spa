@@ -100,6 +100,7 @@ class ReportController extends Controller
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;
+
             if ($type == 1) {
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {

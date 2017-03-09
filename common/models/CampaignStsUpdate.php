@@ -98,4 +98,14 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     {
 
     }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdatePay()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'payout'])
+            ->andWhere(['<', ['effect_time' => time()]])
+            ->all();
+    }
 }

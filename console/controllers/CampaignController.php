@@ -55,19 +55,32 @@ class CampaignController extends Controller
         }
 
 
-//        // 更新sts daily cap
-//        $updateCaps = CampaignStsUpdate::getStsUpdateCap();
-//        if (isset($updateCaps)) {
-//            foreach ($updateCaps as $item) {
-//                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
-//                if (isset($deliver)) {
-//                    $deliver->daily_cap = (int)$item->value;
-//                    $deliver->save();
-//                }
-//                $item->is_effected = 1;
-//                $item->save();
-//            }
-//        }
+        // 更新sts daily cap
+        $updateCaps = CampaignStsUpdate::getStsUpdateCap();
+        if (isset($updateCaps)) {
+            foreach ($updateCaps as $item) {
+                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (isset($deliver)) {
+                    $deliver->daily_cap = (int)$item->value;
+                    $deliver->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
+
+        $updatePayout = CampaignStsUpdate::getStsUpdatePay();
+        if (isset($updatePayout)) {
+            foreach ($updatePayout as $item) {
+                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (isset($deliver)) {
+                    $deliver->pay_out = $item->value;
+                    $deliver->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
 
     }
 

@@ -105,6 +105,12 @@ class ReportAdvSearch extends ReportAdvHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $start = $start->sub(new DateInterval('P1D'));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
@@ -138,8 +144,8 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['>', 'time', strtotime($this->start . '-1 day')])
-            ->andFilterWhere(['<', 'time', strtotime($this->end . '+1 day')]);
+            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
         $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         return $dataProvider;
     }

@@ -18,6 +18,7 @@ use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
+use console\models\Glispa;
 use console\models\StaticsUtil;
 use console\models\StatsUtil;
 use console\models\Yeahmobi;
@@ -229,7 +230,7 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $aa = new Yeahmobi();
+        $aa = new Glispa();
         $aa->getApiCampaign();
 //        $a = 'dsf';
 //        $records = array();

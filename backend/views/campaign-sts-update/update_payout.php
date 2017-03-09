@@ -25,14 +25,14 @@ use yii\widgets\ActiveForm;
     </div>
     <?= $form->field($model, 'old_value')->hiddenInput()->label(false) ?>
 </div>
-<?= $form->field($model, 'value')->textInput(['type' => 'number', 'required' => "required", 'min' => '0'])->label('New Payout') ?>
+<?= $form->field($model, 'value')->textInput(['type' => 'number', 'required' => "required", 'min' => '0','step'=>'any'])->label('New Payout') ?>
 <?= $form->field($model, 'effect_time')->widget(DateTimePicker::classname(), [
     'type' => DateTimePicker::TYPE_INPUT,
     'value' => '',
     'pluginOptions' => [
         'autoclose' => true,
         'format' => 'yyyy-mm-dd hh:ii',
-        'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
+       // 'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
     ],
     'readonly' => true,
     'options' => ['required' => "required",],
