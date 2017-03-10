@@ -31,12 +31,7 @@ class Glispa
             $response = json_decode($response);
             $data = $response->$data_key;
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);
-
-            foreach ($apiCams as $model) {
-                $model->adv_id = $apiModel->adv_id;
-                $model->save();
-                var_dump($model->getErrors());
-            }
+            $this->transferApiModel($apiModel, $apiCams);
         }
 
     }
@@ -93,7 +88,6 @@ class Glispa
                 $item->save();
             }
         }
-
     }
 
 }
