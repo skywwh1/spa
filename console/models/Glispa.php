@@ -64,7 +64,14 @@ class Glispa
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
             $camp->note = $model->description . PHP_EOL . $model->note;
-            $camp->preview_link = $model->preview_link;
+            if(!empty($model->preview_link)){
+                $links = explode(',',$model->preview_link);
+                foreach ($links as $item){
+                    if(strpos($item,'glispa') === false){
+                        $camp->preview_link = $item;
+                    }
+                }
+            }
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->advertiser = $apiModel->adv_id;
