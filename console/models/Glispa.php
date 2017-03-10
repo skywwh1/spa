@@ -74,7 +74,7 @@ class Glispa
                 }
             }
             $camp->status = 1;
-            $camp->open_type = 2;
+            $camp->open_type = 0;
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
