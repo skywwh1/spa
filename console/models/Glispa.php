@@ -65,10 +65,10 @@ class Glispa
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
             $camp->note = $model->description . PHP_EOL . $model->note;
-            if(!empty($model->preview_link)){
-                $links = explode(',',$model->preview_link);
-                foreach ($links as $item){
-                    if(strpos($item,'glispa') === false){
+            if (!empty($model->preview_link) && empty($camp->preview_link)) {
+                $links = explode(',', $model->preview_link);
+                foreach ($links as $item) {
+                    if (strpos($item, 'glispa') === false) {
                         $camp->preview_link = $item;
                     }
                 }
@@ -88,14 +88,14 @@ class Glispa
 
     private function updateCampaignStatus($campaigns, $all)
     {
-        var_dump($campaigns);
-        var_dump($all);
-//        foreach ($all as $item) {
-//            if (!in_array($item->campaign_uuid, $campaigns)) {
-//                $item->status = 2;
-//                $item->save();
-//            }
-//        }
+//        var_dump($campaigns);
+//        var_dump($all);
+        foreach ($all as $item) {
+            if (!in_array($item->campaign_uuid, $campaigns)) {
+                $item->status = 2;
+                $item->save();
+            }
+        }
         var_dump('glispa');
     }
 
