@@ -80,7 +80,7 @@ class Glispa
             $camp->creator = $ad->bd;
             $camp->save();
             var_dump($camp->getErrors());
-            $liveCamps[] = $camp;
+            $liveCamps[] = $camp->campaign_uuid;
         }
         $this->updateCampaignStatus($liveCamps, $all);
 
@@ -89,7 +89,7 @@ class Glispa
     private function updateCampaignStatus($campaigns, $all)
     {
         foreach ($all as $item) {
-            if (!in_array($item, $campaigns)) {
+            if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
                 $item->save();
             }
