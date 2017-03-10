@@ -82,7 +82,9 @@ class Glispa
             var_dump($camp->getErrors());
             $liveCamps[] = $camp->campaign_uuid;
         }
-        $this->updateCampaignStatus($liveCamps, $all);
+        if(!empty($liveCamps)){
+            $this->updateCampaignStatus($liveCamps, $all);
+        }
 
     }
 
