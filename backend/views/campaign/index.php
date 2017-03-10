@@ -136,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'campaign_name',
                             'value' => function ($data) {
-                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
+                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name,'data-delay'=>'{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
                             },
                             'width' => '60px',
                             'format' => 'raw',
@@ -145,7 +145,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         'pricing_mode',
 //                        'indirect',
                         'category',
-                        'target_geo',
+                        //'target_geo',
+                        [
+                            'class' => '\kartik\grid\DataColumn',
+                            'attribute' => 'target_geo',
+                            'value' => function ($data) {
+                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->geo,'data-delay'=>'{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
+                        ],
 //                    'device',
                         'platform',
 //                        'adv_price',

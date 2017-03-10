@@ -45,11 +45,6 @@ $columns = [
         'filter' => false,
     ],
     [
-        'label' => 'OM',
-        'attribute' => 'om',
-        'value' => 'om',
-    ],
-    [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'campaign_name',
         'value' => function ($data) {
@@ -181,6 +176,11 @@ $columns = [
             return $margin;
         },
         'filter' => false,
+    ],
+    [
+        'label' => 'OM',
+        'attribute' => 'om',
+        'value' => 'om',
     ],
 ];
 if (!empty($dataProvider)) {
