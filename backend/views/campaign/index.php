@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'target_geo',
                             'value' => function ($data) {
-                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo,'data-delay'=>'{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo,'data-delay'=>'{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
                             },
                             'width' => '60px',
                             'format' => 'raw',
