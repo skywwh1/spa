@@ -39,6 +39,7 @@ class Glispa
     private function transferApiModel($apiModel, $apiCampaigns)
     {
         ApiCampaign::deleteAll(['adv_id' => $apiModel->adv_id]);
+        $all = Campaign::findAllByAdv($apiModel->adv_id);
         $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
@@ -81,14 +82,12 @@ class Glispa
             var_dump($camp->getErrors());
             $liveCamps[] = $camp;
         }
-        $this->updateCampaignStatus($liveCamps, $apiModel);
+        $this->updateCampaignStatus($liveCamps, $all);
 
     }
 
-    private function updateCampaignStatus($campaigns, AdvertiserApi $apis)
+    private function updateCampaignStatus($campaigns, $all)
     {
-        $adv_id = $apis->adv_id;
-        $all = Campaign::findAllByAdv($adv_id);
         foreach ($all as $item) {
             if (!in_array($item, $campaigns)) {
                 $item->status = 2;
