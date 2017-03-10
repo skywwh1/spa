@@ -28,6 +28,9 @@ class ApiController extends Controller
 
         $yeah = new Yeahmobi();
         $yeah->getApiCampaign();
+
+        $yeah = new Glispa();
+        $yeah->getApiCampaign();
     }
 
     public function actionGetHeadway()
