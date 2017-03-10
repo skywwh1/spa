@@ -88,12 +88,15 @@ class Glispa
 
     private function updateCampaignStatus($campaigns, $all)
     {
-        foreach ($all as $item) {
-            if (!in_array($item->campaign_uuid, $campaigns)) {
-                $item->status = 2;
-                $item->save();
-            }
-        }
+        var_dump($campaigns);
+        var_dump($all);
+//        foreach ($all as $item) {
+//            if (!in_array($item->campaign_uuid, $campaigns)) {
+//                $item->status = 2;
+//                $item->save();
+//            }
+//        }
+        var_dump('glispa');
     }
 
 }
