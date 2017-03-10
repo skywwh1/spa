@@ -231,8 +231,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $aa = new Yeahmobi();
-        $aa->getApiCampaign();
+        $week_number = date("W");
+        var_dump($week_number);
+        var_dump(date("Y"));
         die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();

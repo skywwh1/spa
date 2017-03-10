@@ -30,7 +30,8 @@ class Glispa
         if (isset($response)) {
             $response = json_decode($response);
             $data = $response->$data_key;
-          //  var_dump($data);
+            var_dump($data);
+            die();
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);
 
             foreach ($apiCams as $model) {
