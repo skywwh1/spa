@@ -30,8 +30,6 @@ class Glispa
         if (isset($response)) {
             $response = json_decode($response);
             $data = $response->$data_key;
-            var_dump($data);
-            die();
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);
 
             foreach ($apiCams as $model) {
@@ -46,6 +44,7 @@ class Glispa
     private function transferApiModel($apiModel, $apiCampaigns)
     {
         ApiCampaign::deleteAll(['adv_id' => $apiModel->adv_id]);
+        $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
             $model->save();
@@ -57,17 +56,12 @@ class Glispa
             }
             $camp->campaign_uuid = $uuid;
             $camp->campaign_name = $model->campaign_name;
-            $camp->campaign_name = str_replace('App Download- ', '', $camp->campaign_name);
-            $camp->campaign_name = str_replace('App Download - ', '', $camp->campaign_name);
-            $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
             $camp->platform = $model->platform;
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
-            if ($daily_cap == -1) {
-                $daily_cap = 'open';
-            }
+
             if (empty($camp->promote_start)) {
                 $camp->promote_start = time();
             }
@@ -83,28 +77,23 @@ class Glispa
             $camp->creator = $ad->bd;
             $camp->save();
             var_dump($camp->getErrors());
+            $liveCamps[] = $camp;
         }
+        $this->updateCampaignStatus($liveCamps, $apiModel);
+
     }
 
-    private function genCampaigns($url, AdvertiserApi $apis)
+    private function updateCampaignStatus($campaigns, AdvertiserApi $apis)
     {
-        $curl = new Curl();
-        $curl->get($url);
-        $response = $curl->response;
-        if ($response == false) {
-            echo "cannot get the url";
-            return null;
+        $adv_id = $apis->adv_id;
+        $all = Campaign::findAllByAdv($adv_id);
+        foreach ($all as $item) {
+            if (!in_array($item, $campaigns)) {
+                $item->status = 2;
+                $item->save();
+            }
         }
-        $response = json_decode($response);
-        $data = $response->data;
-        $records = $data->data;
-        $camps = array();
-        foreach ($records as $id => $cam) {
-            $cam->id = $id;
-            $camps[] = $cam;
-        }
-        $apiCamps = ApiUtil::genApiCampaigns($apis, $camps);
-        return $apiCamps;
+
     }
 
 }

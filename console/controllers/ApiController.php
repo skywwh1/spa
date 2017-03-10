@@ -49,7 +49,7 @@ class ApiController extends Controller
         $yeah->getApiCampaign();
     }
 
-    public function actionGlispa()
+    public function actionGetGlispa()
     {
         $yeah = new Glispa();
         $yeah->getApiCampaign();

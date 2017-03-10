@@ -328,4 +328,13 @@ class Campaign extends \yii\db\ActiveRecord
         $len = mb_strlen($str);
         return mb_substr($str, 0, 20, 'utf-8') . (($len > 10) ? '...' : '');
     }
+
+    /**
+     * @param $adv_id
+     * @return array|Campaign[]
+     */
+    public static function findAllByAdv($adv_id)
+    {
+        return static::find()->where(['advertiser' => $adv_id])->all();
+    }
 }
