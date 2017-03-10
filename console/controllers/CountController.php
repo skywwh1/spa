@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use common\models\Campaign;
+use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
@@ -239,17 +240,26 @@ class CountController extends Controller
         /**
          * 按顺序来；
          */
-        $stats->statsMatchInstallHourly();
-        $stats->statsInstallHourly();
-        $stats->statsUniqueClickHourly();
-        $stats->statsClickHourly();
+        $start_time = Config::findLastStatsHourly();
+        $stats->statsMatchInstallHourly($start_time);
+        $stats->statsInstallHourly($start_time);
+        $stats->statsUniqueClickHourly($start_time);
+        $stats->statsClickHourly($start_time);
         $stats->updateNullPrice();
     }
 
     public function actionStatsDaily()
     {
         $stats = new StatsUtil();
-        $stats->statsDaily();
+        $start_time = Config::findLastStatsDaily();
+
+        $stats->statsMatchInstallHourly($start_time);
+        $stats->statsInstallHourly($start_time);
+        $stats->statsUniqueClickHourly($start_time);
+        $stats->statsClickHourly($start_time);
+        $stats->updateNullPrice();
+
+        $stats->statsDaily($start_time);
     }
 
 }

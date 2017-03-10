@@ -3,6 +3,7 @@
 
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $searchModel common\models\ReportAdvSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -40,9 +41,22 @@ $columns = [
         'filter' => false,
     ],
     [
-        // 'label' => 'campaign_id',
+        'label' => 'BD',
+        'attribute' => 'bd',
+        'value' => 'bd',
+    ],
+    [
+        'class' => '\kartik\grid\DataColumn',
         'attribute' => 'campaign_name',
-        'value' => 'campaign.name',
+        'value' => function ($data) {
+            if (isset($data->campaign_name)) {
+                return Html::tag('div', $data->campaign->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
+            } else {
+                return '';
+            }
+        },
+        'width' => '60px',
+        'format' => 'raw',
     ],
     [
         'label' => 'Channel',

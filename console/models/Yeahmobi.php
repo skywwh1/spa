@@ -54,9 +54,9 @@ class Yeahmobi
             $camp->campaign_name = str_replace('App Download- ', '', $camp->campaign_name);
             $camp->campaign_name = str_replace('App Download - ', '', $camp->campaign_name);
             $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
-            $len =  strpos($camp->campaign_name,'Private');
-            if(!empty($aa)){
-                $camp->campaign_name = substr($camp->campaign_name,0,$len);
+            $len = strpos($camp->campaign_name, 'Private');
+            if (!empty($aa)) {
+                $camp->campaign_name = substr($camp->campaign_name, 0, $len);
             }
             $camp->platform = $model->platform;
             $camp->pricing_mode = 'cpi';
@@ -73,6 +73,7 @@ class Yeahmobi
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
             $camp->note = $model->description . PHP_EOL . $model->note;
+            $camp->note = strip_tags($camp->note);
             $camp->preview_link = $model->preview_link;
             $camp->status = 1;
             $camp->open_type = 1;

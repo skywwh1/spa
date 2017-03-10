@@ -69,8 +69,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         'paid',
                         // 'strong_geo',
                         // 'strong_catagory',
-
-                        ['class' => 'yii\grid\ActionColumn'],
+                        ['class' => 'yii\grid\ActionColumn',
+                            'template' => '{view}{update}'
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

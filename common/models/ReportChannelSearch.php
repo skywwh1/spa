@@ -19,7 +19,7 @@ class ReportChannelSearch extends ReportChannelHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_format', 'daily_cap', 'type', 'start', 'end', 'time_zone'], 'safe'],
+            [['time_format', 'daily_cap', 'type', 'start', 'end', 'time_zone', 'om'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -77,19 +77,17 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.pay_out',
             'clh.adv_price',
             'clh.daily_cap',
+            'u.username om',
 //            'campaign_name',
 
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
+        $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-//            'clicks' => $this->clicks,
-//            'unique_clicks' => $this->unique_clicks,
-//            'installs' => $this->installs,
-//            'match_installs' => $this->match_installs,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
@@ -98,6 +96,7 @@ class ReportChannelSearch extends ReportChannelHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 //        $query->andWhere(['>', 'clicks', 0]);
@@ -146,19 +145,17 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.pay_out',
             'clh.adv_price',
             'clh.daily_cap',
+            'u.username om',
 //            'campaign_name',
 
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
+        $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-//            'clicks' => $this->clicks,
-//            'unique_clicks' => $this->unique_clicks,
-//            'installs' => $this->installs,
-//            'match_installs' => $this->match_installs,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
@@ -167,9 +164,9 @@ class ReportChannelSearch extends ReportChannelHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-//        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));

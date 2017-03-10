@@ -3,6 +3,7 @@
 
 /* @var $this yii\web\View */
 use kartik\grid\GridView;
+use yii\helpers\Html;
 
 /* @var $searchModel common\models\ReportChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -14,7 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php echo $this->render('_search', ['model' => $searchModel]);
 $format = 'php:Y-m-d H:i';
 
-if($searchModel->type == 2){
+if ($searchModel->type == 2) {
     $format = 'php:Y-m-d';
 }
 $columns = [
@@ -44,12 +45,23 @@ $columns = [
         'filter' => false,
     ],
     [
-        // 'label' => 'campaign_id',
-        'attribute' => 'campaign_name',
-        'value' => 'campaign.name',
+        'label' => 'OM',
+        'attribute' => 'om',
+        'value' => 'om',
     ],
-
-
+    [
+        'class' => '\kartik\grid\DataColumn',
+        'attribute' => 'campaign_name',
+        'value' => function ($data) {
+            if (isset($data->campaign_name)) {
+                return Html::tag('div', $data->campaign->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
+            } else {
+                return '';
+            }
+        },
+        'width' => '60px',
+        'format' => 'raw',
+    ],
     [
         // 'label' => 'clicks',
         'attribute' => 'clicks',

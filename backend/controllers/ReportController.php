@@ -133,4 +133,9 @@ class ReportController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+
+    public function actionSummaryReport()
+    {
+
+    }
 }

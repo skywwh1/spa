@@ -45,44 +45,17 @@ class Config extends \yii\db\ActiveRecord
     }
 
 
-    public static function findLastStatsHourly($type)
+    public static function findLastStatsHourly()
     {
-        $name = 'last_statics_click_hourly';
-        switch ($type) {
-            case 1:
-                $name = 'last_statics_click_hourly';
-                break;
-            case 2:
-                $name = 'last_statics_unique_click_hourly';
-                break;
-            case 3:
-                $name = 'last_statics_post_hourly';
-                break;
-            case 4:
-                $name = 'last_statics_feed_hourly';
-                break;
-        }
+        $name = 'last_statics_hourly';
         $config = static::findOne(['name' => $name]);
         return isset($config) ? $config->value : 0;
     }
 
     public static function updateStatsTimeHourly($type, $time)
     {
-        $name = 'last_statics_click_hourly';
-        switch ($type) {
-            case 1:
-                $name = 'last_statics_click_hourly';
-                break;
-            case 2:
-                $name = 'last_statics_unique_click_hourly';
-                break;
-            case 3:
-                $name = 'last_statics_post_hourly';
-                break;
-            case 4:
-                $name = 'last_statics_feed_hourly';
-                break;
-        }
+        $name = 'last_statics_hourly';
+
         $config = static::findOne(['name' => $name]);
         if ($config == null) {
             $config = new Config();

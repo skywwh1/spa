@@ -231,6 +231,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $aa = new Yeahmobi();
+        $aa->getApiCampaign();
+        die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();
 //        echo $bb;
@@ -242,8 +245,9 @@ class TestController extends Controller
 //            $records[$i.$a]=$i;
 //        }
 //        var_dump($records);
-        die();
         $stats = new StatsUtil();
+        $stats->statsMatchInstallHourly();
+        die();
         //echo ip2long('177.66.48.90');
 
       //  $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);

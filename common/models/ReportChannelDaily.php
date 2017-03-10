@@ -8,6 +8,7 @@ class ReportChannelDaily extends CampaignLogDaily
 
     public $campaign_name;
     public $channel_name;
+    public $om;
 
     public $cvr;
     public $cost;

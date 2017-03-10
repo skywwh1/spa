@@ -19,31 +19,30 @@ use yii\db\Query;
 class StatsUtil
 {
 
-    public function statsClickHourly()
+    public function statsClickHourly($start_time)
     {
-        $this->statsHourly(1);
+        $this->statsHourly(1, $start_time);
     }
 
-    public function statsUniqueClickHourly()
+    public function statsUniqueClickHourly($start_time)
     {
-        $this->statsHourly(2);
+        $this->statsHourly(2, $start_time);
     }
 
-    public function statsMatchInstallHourly()
+    public function statsMatchInstallHourly($start_time)
     {
-        $this->statsHourly(4);
+        $this->statsHourly(4, $start_time);
     }
 
-    public function statsInstallHourly()
+    public function statsInstallHourly($start_time)
     {
-        $this->statsHourly(3);
+        $this->statsHourly(3, $start_time);
     }
 
-    public function statsDaily()
+    public function statsDaily($start_time)
     {
         date_default_timezone_set("Asia/Shanghai");
         $end_time = strtotime(date("Y-m-d", time()));
-        $start_time = Config::findLastStatsDaily();
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
         $query = new Query();
         $query->select(['clh.campaign_id',
@@ -136,14 +135,13 @@ class StatsUtil
         Config::updateStatsTimeDaily($end_time);
     }
 
-    public function statsHourly($type)
+    public function statsHourly($type, $start_time)
     {
         date_default_timezone_set("Asia/Shanghai");
         $from = 'log_click fc';
         $clicks_select = 'count(*) clicks';
         $timestamp_select = 'fc.click_time';
         $end_time = strtotime(date("Y-m-d H:00", time()));
-        $start_time = Config::findLastStatsHourly($type);
         $pay_out_select = '';
         $adv_price_select = '';
         switch ($type) {

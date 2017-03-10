@@ -3,6 +3,7 @@
 use kartik\export\ExportMenu;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CampaignSearch */
@@ -109,7 +110,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'all' => function ($url, $model, $key) {
                                     $restart = '';
                                     if ($model->status != 1) {
-                                      //  $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
+                                        $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
                                     }
                                     return '<div class="dropdown">
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
@@ -131,12 +132,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'advertiser0.username',
 //                                'pageSummary' => 'Total'
                         ],
-
-//                        'campaign_name',
                         [
+                            'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'campaign_name',
-                            'value' => 'name',
-//                            'contentOptions'=>['style'=>'max-width: 100px;'] // <-- right here
+                            'value' => function ($data) {
+                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
                         ],
                         'campaign_uuid',
                         'pricing_mode',

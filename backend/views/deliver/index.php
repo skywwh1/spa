@@ -2,6 +2,7 @@
 
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
+use yii\helpers\Html;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DeliverSearch */
@@ -48,8 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         //  ['class' => 'yii\grid\SerialColumn'],
                         [
+                            'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'campaign_id',
-                            'value' => 'campaign.name',
+                            'value' => function ($data) {
+                                if(isset($data->campaign)){
+                                    return Html::tag('div', $data->campaign->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign->campaign_name, 'style' => 'cursor:default;']);
+                                }
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
                             'label' => 'Campaign',
                         ],
                         'campaign_uuid',
@@ -77,8 +85,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'update_time:datetime',
                         // 'track_url:url',
                         // 'note',
-
-
                     ],
                 ]); ?>
             </div>
