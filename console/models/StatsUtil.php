@@ -19,30 +19,29 @@ use yii\db\Query;
 class StatsUtil
 {
 
-    public function statsClickHourly($start_time)
+    public function statsClickHourly($start_time, $end_time)
     {
-        $this->statsHourly(1, $start_time);
+        $this->statsHourly(1, $start_time, $end_time);
     }
 
-    public function statsUniqueClickHourly($start_time)
+    public function statsUniqueClickHourly($start_time, $end_time)
     {
-        $this->statsHourly(2, $start_time);
+        $this->statsHourly(2, $start_time, $end_time);
     }
 
-    public function statsMatchInstallHourly($start_time)
+    public function statsMatchInstallHourly($start_time, $end_time)
     {
-        $this->statsHourly(4, $start_time);
+        $this->statsHourly(4, $start_time, $end_time);
     }
 
-    public function statsInstallHourly($start_time)
+    public function statsInstallHourly($start_time, $end_time)
     {
-        $this->statsHourly(3, $start_time);
+        $this->statsHourly(3, $start_time, $end_time);
     }
 
-    public function statsDaily($start_time)
+    public function statsDaily($start_time,$end_time)
     {
         date_default_timezone_set("Asia/Shanghai");
-        $end_time = strtotime(date("Y-m-d", time()));
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
         $query = new Query();
         $query->select(['clh.campaign_id',
@@ -132,16 +131,14 @@ class StatsUtil
                 var_dump($hourly->getErrors());
             }
         }
-        Config::updateStatsTimeDaily($end_time);
     }
 
-    public function statsHourly($type, $start_time)
+    public function statsHourly($type, $start_time, $end_time)
     {
         date_default_timezone_set("Asia/Shanghai");
         $from = 'log_click fc';
         $clicks_select = 'count(*) clicks';
         $timestamp_select = 'fc.click_time';
-        $end_time = strtotime(date("Y-m-d H:00", time()));
         $pay_out_select = '';
         $adv_price_select = '';
         switch ($type) {
@@ -264,7 +261,6 @@ class StatsUtil
                 var_dump($hourly->getErrors());
             }
         }
-        Config::updateStatsTimeHourly($type, $end_time);
     }
 
     public function updateNullPrice()

@@ -52,7 +52,7 @@ class Config extends \yii\db\ActiveRecord
         return isset($config) ? $config->value : 0;
     }
 
-    public static function updateStatsTimeHourly($type, $time)
+    public static function updateStatsTimeHourly($time)
     {
         $name = 'last_statics_hourly';
 

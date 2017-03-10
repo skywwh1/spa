@@ -241,25 +241,31 @@ class CountController extends Controller
          * 按顺序来；
          */
         $start_time = Config::findLastStatsHourly();
-        $stats->statsMatchInstallHourly($start_time);
-        $stats->statsInstallHourly($start_time);
-        $stats->statsUniqueClickHourly($start_time);
-        $stats->statsClickHourly($start_time);
+        $end_time = strtotime(date("Y-m-d H:00", time()));
+        $stats->statsMatchInstallHourly($start_time, $end_time);
+        $stats->statsInstallHourly($start_time, $end_time);
+        $stats->statsUniqueClickHourly($start_time, $end_time);
+        $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
+        Config::updateStatsTimeHourly($end_time);
+
     }
 
     public function actionStatsDaily()
     {
         $stats = new StatsUtil();
         $start_time = Config::findLastStatsDaily();
+        $end_time = strtotime(date("Y-m-d", time()));
 
-        $stats->statsMatchInstallHourly($start_time);
-        $stats->statsInstallHourly($start_time);
-        $stats->statsUniqueClickHourly($start_time);
-        $stats->statsClickHourly($start_time);
+        $stats->statsMatchInstallHourly($start_time, $end_time);
+        $stats->statsInstallHourly($start_time, $end_time);
+        $stats->statsUniqueClickHourly($start_time, $end_time);
+        $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
 
-        $stats->statsDaily($start_time);
+        $stats->statsDaily($start_time, $end_time);
+        Config::updateStatsTimeDaily($end_time);
+
     }
 
 }
