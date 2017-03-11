@@ -19,7 +19,12 @@ class CampaignSearch extends Campaign
     {
         return [
             [['id', 'promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['advertiser', 'campaign_name', 'campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffic_source', 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_type', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'safe'],
+            [['advertiser', 'campaign_name', 'campaign_uuid', 'pricing_mode', 'platform',
+                'min_version', 'max_version', 'daily_cap', 'target_geo', 'traffic_source',
+                'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category',
+                'version', 'app_rate', 'description', 'creative_link', 'creative_type',
+                'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way',
+                'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist', 'tag'], 'safe'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
         ];
     }
@@ -54,9 +59,10 @@ class CampaignSearch extends Campaign
         $this->load($params);
 //        var_dump($this->traffic_source);
 //        die();
+        if (!isset($this->status)) {
+            $this->status = 1;
+        }
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
         $query->joinWith('advertiser0 a');
@@ -83,6 +89,7 @@ class CampaignSearch extends Campaign
             'creator' => $this->creator,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
+            'tag' => $this->tag,
         ]);
 
         $query->andFilterWhere(['like', 'campaign_name', $this->campaign_name])

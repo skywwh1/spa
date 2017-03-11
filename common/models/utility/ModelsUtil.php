@@ -153,9 +153,9 @@ class ModelsUtil
     );
 
     const campaign_tag = array(
-        3 => 'Good-Private',
-        2 => 'Good-Test',
         1 => 'Normal',
+        2 => 'Good-Test',
+        3 => 'Good-Private',
     );
 
     const apply_status = array(

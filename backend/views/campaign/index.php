@@ -200,7 +200,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return ModelsUtil::getCampaignStatus($model->status);
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'status',
-                                ModelsUtil::campaign_status, ['class' => 'form-control', 'options' => array(1 => array('selected' => 'selected'))]),
+                                ModelsUtil::campaign_status, ['class' => 'form-control']),
+                        ],
+                        [
+                            'attribute' => 'tag',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignTag($model->status);
+                            },
+                            'filter' => ModelsUtil::campaign_tag,
                         ],
                     ],
                 ]); ?>

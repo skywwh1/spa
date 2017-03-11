@@ -15,7 +15,7 @@ use yii\helpers\Json;
  * @property integer $id
  * @property integer $advertiser
  * @property string $campaign_name
- * @property string $tag
+ * @property integer $tag
  * @property string $campaign_uuid
  * @property string $pricing_mode
  * @property string $payout_currency
@@ -93,7 +93,7 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
-            [['recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['recommended', 'indirect', 'cap', 'cvr', 'tag', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
             [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap', 'app_name', 'app_size', 'version', 'app_rate', 'description'], 'safe'],
@@ -154,6 +154,7 @@ class Campaign extends \yii\db\ActiveRecord
             'cvr' => 'Cvr',
             'epc' => 'Epc',
             'avg_price' => 'Avg Price',
+            'tag' => 'Tag',
             'status' => 'Status',
             'open_type' => 'Open Type',
             'subid_status' => 'Subid Status',
