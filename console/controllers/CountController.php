@@ -262,7 +262,9 @@ class CountController extends Controller
         $start_time = Config::findLastStatsDaily();
         $start_time = $start_time - 3600 * 24; //统计两天的。
         $end_time = strtotime(date("Y-m-d", time()));
-        $end_time = $start_time + 3600 * 24; //统计两天的。
+        $end_time = $end_time + 3600 * 24; //统计两天的。
+        echo 'start time' . $start_time . "\n";
+        echo 'end time' . $end_time . "\n";
         $stats->statsMatchInstallHourly($start_time, $end_time);
         $stats->statsInstallHourly($start_time, $end_time);
         $stats->statsUniqueClickHourly($start_time, $end_time);
