@@ -44,8 +44,8 @@ class LogFeed extends \yii\db\ActiveRecord
         return [
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
             [['channel_id', 'campaign_id', 'ip_long', 'feed_time', 'is_post', 'create_time'], 'integer'],
-            [['all_parameters'], 'string'],
-            [['adv_price'], 'number'],
+            [['all_parameters'], 'safe'],
+            [['adv_price'], 'safe'],
             [['auth_token'], 'string', 'max' => 32],
             [['click_uuid', 'click_id', 'ch_subid', 'ip'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],

@@ -14,7 +14,7 @@ use Yii;
  * @property integer $campaign_id
  * @property string $pay_out
  * @property string $discount
- * @property integer $daily_cap
+ * @property string $daily_cap
  * @property string $post_link
  * @property integer $post_time
  * @property integer $post_status

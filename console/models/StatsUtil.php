@@ -68,6 +68,7 @@ class StatsUtil
         $query->orderBy('timestamp');
 
         $command = $query->createCommand();
+        var_dump($command->sql);
         $rows = $command->queryAll();
 
         foreach ($rows as $item) {
