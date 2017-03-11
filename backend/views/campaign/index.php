@@ -173,7 +173,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ->indexBy('value')
                                 ->column(),
                         ],
-                       // 'traffic_source',
+                        // 'traffic_source',
                         // 'note',
 //                        'preview_link',
                         // 'icon',
@@ -199,7 +199,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model) {
                                 return ModelsUtil::getCampaignStatus($model->status);
                             },
-                            'filter' => ModelsUtil::campaign_status,
+                            'filter' => Html::activeDropDownList($searchModel, 'status',
+                                ModelsUtil::campaign_status, ['class' => 'form-control', 'options' => array(1 => array('selected' => 'selected'))]),
                         ],
                     ],
                 ]); ?>

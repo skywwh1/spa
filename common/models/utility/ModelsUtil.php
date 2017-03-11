@@ -153,8 +153,9 @@ class ModelsUtil
     );
 
     const campaign_tag = array(
-        '0' => 'private',
-        '1' => 'public',
+        3 => 'Good-Private',
+        2 => 'Good-Test',
+        1 => 'Normal',
     );
 
     const apply_status = array(
@@ -164,6 +165,7 @@ class ModelsUtil
     );
 
     const campaign_status = array(
+        '' => 'All',
         '1' => 'Running',
         '2' => 'Paused',
 //        '3' => 'Rejected',
