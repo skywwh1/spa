@@ -71,6 +71,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'avg_price',
 //                        'status',
             [
+                'attribute' => 'tag',
+                'value' => ModelsUtil::getCampaignTag($model->tag),
+            ],
+            [
                 'attribute' => 'status',
                 'value' => ModelsUtil::getCampaignStatus($model->status),
             ],

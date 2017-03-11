@@ -205,7 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'tag',
                             'value' => function ($model) {
-                                return ModelsUtil::getCampaignTag($model->status);
+                                return ModelsUtil::getCampaignTag($model->tag);
                             },
                             'filter' => ModelsUtil::campaign_tag,
                         ],
