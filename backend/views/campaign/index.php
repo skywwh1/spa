@@ -1,5 +1,6 @@
 <?php
 
+use common\models\TrafficSource;
 use kartik\export\ExportMenu;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
@@ -136,7 +137,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'campaign_name',
                             'value' => function ($data) {
-                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name,'data-delay'=>'{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
                             },
                             'width' => '60px',
                             'format' => 'raw',
@@ -150,7 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'target_geo',
                             'value' => function ($data) {
-                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo,'data-delay'=>'{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
+                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
                             },
                             'width' => '60px',
                             'format' => 'raw',
@@ -163,7 +164,16 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                'pageSummary' => true
                         ],
                         'now_payout',
-                        'traffic_source',
+                        [
+                            'attribute' => 'traffic_source',
+                            'value' => 'traffic_source',
+                            'filter' => TrafficSource::find()
+                                ->select(['name', 'value'])
+                                ->orderBy('id')
+                                ->indexBy('value')
+                                ->column(),
+                        ],
+                       // 'traffic_source',
                         // 'note',
 //                        'preview_link',
                         // 'icon',

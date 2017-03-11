@@ -52,7 +52,8 @@ class CampaignSearch extends Campaign
         ]);
 
         $this->load($params);
-
+//        var_dump($this->traffic_source);
+//        die();
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
@@ -74,6 +75,7 @@ class CampaignSearch extends Campaign
             'cvr' => $this->cvr,
             'avg_price' => $this->avg_price,
             'c.status' => $this->status,
+            'traffic_source' => $this->traffic_source,
             'open_type' => $this->open_type,
             'subid_status' => $this->subid_status,
             'third_party' => $this->third_party,
@@ -91,7 +93,6 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'max_version', $this->max_version])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
             ->andFilterWhere(['like', 'target_geo', $this->target_geo])
-            ->andFilterWhere(['like', 'traffic_source', $this->traffic_source])
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'preview_link', $this->preview_link])
             ->andFilterWhere(['like', 'icon', $this->icon])
