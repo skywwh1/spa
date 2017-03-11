@@ -13,21 +13,21 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-channel"></div>
 <?php echo $this->render('_search', ['model' => $searchModel]);
-$format = 'php:Y-m-d H:i';
 
-if ($searchModel->type == 2) {
-    $format = 'php:Y-m-d';
-}
 $columns = [
     [
         'label' => 'Time(UTC)',
         'attribute' => 'time',
-//        'value' => function ($model, $key, $index, $column) {
-////                                     'time:datetime'
-//            var_dump($model);
-//            return $index;
-//        },
-        'format' => ['DateTime', $format],
+        'value' => function ($model) use ($searchModel) {
+            $format = 'Y-m-d H:i';
+            if ($searchModel->type == 2) {
+                $format = 'Y-m-d';
+            }
+            $date = new DateTime();
+            $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+            $date->setTimestamp($model->time);
+            return $date->format($format);
+        },
         'filter' => false,
         'pageSummary' => 'Page Total',
     ],

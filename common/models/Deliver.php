@@ -230,4 +230,10 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return static::find()->where(['campaign_id' => $campaignId])->andWhere(['status' => 1])->all();
     }
+
+    public static function updateStsStatusByCampaignUid($campaign_uuid, $status)
+    {
+        static::updateAll(['status' => $status, 'end_time' => null], ['campaign_uuid' => $campaign_uuid]);
+    }
+
 }

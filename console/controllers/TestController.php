@@ -231,9 +231,7 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $week_number = date("W");
-        var_dump($week_number);
-        var_dump(date("Y"));
+        Deliver::updateStsStatusByCampaign('88801',2);
         die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();

@@ -6,6 +6,7 @@ use common\models\Advertiser;
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\Campaign;
+use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use yii\helpers\ArrayHelper;
@@ -73,16 +74,19 @@ class Glispa
                     }
                 }
             }
+            $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 0;
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
-            $camp->save();
+            if ($camp->save()) {
+                Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, 1);
+            }
             var_dump($camp->getErrors());
             $liveCamps[] = $camp->campaign_uuid;
         }
-        if(!empty($liveCamps)){
+        if (!empty($liveCamps)) {
             $this->updateCampaignStatus($liveCamps, $all);
         }
 
@@ -95,7 +99,9 @@ class Glispa
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
-                $item->save();
+                if($item->save()){
+                    Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
+                }
             }
         }
         var_dump('glispa');
