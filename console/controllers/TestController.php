@@ -231,7 +231,7 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        Deliver::updateStsStatusByCampaign('88801',2);
+        var_dump(Deliver::updateStsStatusByCampaignUid('ucnews_in_and',1));
         die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();

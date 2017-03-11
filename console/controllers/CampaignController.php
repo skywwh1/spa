@@ -27,6 +27,7 @@ class CampaignController extends Controller
         if (isset($delivers)) {
             foreach ($delivers as $item) {
                 $item->status = 2;
+                $item->is_manual = 1; //手动停单
                 $this->echoMessage('sts paused ' . $item->campaign_uuid . '-' . $item->channel_id);
                 $item->save();
                 var_dump($item->getErrors());

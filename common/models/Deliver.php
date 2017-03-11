@@ -41,6 +41,7 @@ use Yii;
  * @property string $margin
  * @property string $note
  * @property integer $is_send_create
+ * @property integer $is_manual
  *
  * @property Campaign $campaign
  * @property Channel $channel
@@ -69,7 +70,7 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create'], 'integer'],
+            [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create', 'is_manual'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             ['discount', 'number', 'max' => 99, 'min' => 0],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
@@ -120,6 +121,7 @@ class Deliver extends \yii\db\ActiveRecord
             'margin' => 'Margin',
             'note' => 'Note',
             'is_send_create' => 'Is Send Create',
+            'is_manual' => 'Is Manual',
             'channel0' => 'Channel',
         ];
     }
@@ -231,9 +233,14 @@ class Deliver extends \yii\db\ActiveRecord
         return static::find()->where(['campaign_id' => $campaignId])->andWhere(['status' => 1])->all();
     }
 
+    /**
+     * API 自动更新。除手动停止那些单，is_manual =1.
+     * @param $campaign_uuid
+     * @param $status
+     */
     public static function updateStsStatusByCampaignUid($campaign_uuid, $status)
     {
-        static::updateAll(['status' => $status, 'end_time' => null], ['campaign_uuid' => $campaign_uuid]);
+        static::updateAll(['status' => $status, 'end_time' => null], ['campaign_uuid' => $campaign_uuid, 'is_manual' => 0]);
     }
 
 }

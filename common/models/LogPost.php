@@ -40,8 +40,8 @@ class LogPost extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
-            [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'create_time'], 'integer'],
-            [['pay_out', 'discount'], 'number'],
+            [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'create_time'], 'safe'],
+            [['pay_out', 'discount'], 'safe'],
             [['post_link','advertiser_name'], 'safe'],
             [['click_uuid', 'click_id'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],

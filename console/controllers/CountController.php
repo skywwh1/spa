@@ -123,6 +123,7 @@ class CountController extends Controller
                     $logFeed->adv_price = $camp->adv_price;
                     $logFeed->feed_time = $item->create_time;
                     if ($logFeed->save() == false) {
+                        $this->echoMessage('save log feed error');
                         var_dump($logFeed->getErrors());
                     } else {
                         //更新post 扣量
@@ -139,7 +140,8 @@ class CountController extends Controller
                             //* 0:need to post, 1.posted
                             $post->post_status = 0;
                             if ($post->save() == false) {
-                                var_dump($logFeed->getErrors());
+                                $this->echoMessage('save log post error');
+                                var_dump($post->getErrors());
                             }
                         }
                     }
@@ -248,6 +250,8 @@ class CountController extends Controller
         $stats->statsUniqueClickHourly($start_time, $end_time);
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
+
+        $stats->statsDaily($start_time, $end_time);
         Config::updateStatsTimeHourly($end_time);
 
     }
