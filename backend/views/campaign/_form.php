@@ -146,7 +146,7 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'open_type')->dropDownList(ModelsUtil::open_type) ?>
 
-            <?= $form->field($model, 'open_type')->dropDownList(ModelsUtil::campaign_tag) ?>
+            <?= $form->field($model, 'tag')->dropDownList(ModelsUtil::campaign_tag) ?>
         </div>
     </div>
 
