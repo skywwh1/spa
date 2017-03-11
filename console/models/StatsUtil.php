@@ -60,7 +60,7 @@ class StatsUtil
         ]);
         $query->from('campaign_log_hourly clh');
         $query->where(['>=', 'time', $start_time]);
-        $query->andWhere(['<', 'time', $end_time]);
+        $query->andWhere(['<=', 'time', $end_time]);
 
         $query->groupBy(['clh.campaign_id',
             'clh.channel_id',
@@ -180,7 +180,7 @@ class StatsUtil
         $query->select($select);
         $query->from($from);
         $query->where(['>=', $timestamp_select, $start_time]);
-        $query->andWhere(['<', $timestamp_select, $end_time]);
+        $query->andWhere(['<=', $timestamp_select, $end_time]);
 
         $query->groupBy(['fc.campaign_id',
             'fc.channel_id',
