@@ -231,6 +231,12 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+       $aa = Deliver::findAll(['status'=>1]);
+       foreach ($aa as $item){
+           $item->note = strip_tags($item->note);
+           $item->save();
+       }
+        die();
         var_dump(md5('ch58bfa49c7eed458bfa49c7ef7b'));
         die();
 //        $aa = new Glispa();
