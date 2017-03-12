@@ -75,6 +75,7 @@ class Yeahmobi
             $camp->note = $model->description . PHP_EOL . $model->note;
             $camp->note = strip_tags($camp->note);
             $camp->preview_link = $model->preview_link;
+            $camp->package_name = $model->package_name;
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->advertiser = $apiModel->adv_id;

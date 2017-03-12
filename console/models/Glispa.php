@@ -53,7 +53,7 @@ class Glispa
             }
             $camp->campaign_uuid = $uuid;
             $camp->campaign_name = $model->campaign_name;
-            $camp->platform = $model->platform;
+            //$camp->platform = $model->platform;
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
@@ -77,6 +77,7 @@ class Glispa
             $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 0;
+            $camp->package_name = $model->package_name;
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
@@ -99,7 +100,7 @@ class Glispa
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
-                if($item->save()){
+                if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
