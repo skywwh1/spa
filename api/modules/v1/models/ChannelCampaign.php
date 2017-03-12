@@ -54,6 +54,9 @@ class ChannelCampaign extends Deliver
             },
 
             'Notes' => 'note',
+            'Package Name' => function ($model){
+                return $model->campaign->package_name
+            },
         ];
     }
 }
