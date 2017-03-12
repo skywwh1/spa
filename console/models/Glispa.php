@@ -77,7 +77,10 @@ class Glispa
             $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 0;
-            $camp->package_name = $model->package_name;
+            if (!empty($model->package_name)) {
+
+                $camp->package_name = 'id' . $model->package_name;
+            }
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
