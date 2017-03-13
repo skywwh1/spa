@@ -208,6 +208,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return ModelsUtil::getCampaignTag($model->tag);
                             },
                             'filter' => ModelsUtil::campaign_tag,
+                            'contentOptions' => function ($model) {
+                                if ($model->status == 3) {
+                                    return ['class' => 'bg-danger'];
+                                } else if ($model->status == 2) {
+                                    return ['class' => 'bg-danger'];
+                                } else {
+                                    return ['class' => 'bg-danger'];
+                                }
+                            }
                         ],
                     ],
                 ]); ?>
