@@ -53,7 +53,7 @@ class Glispa
             }
             $camp->campaign_uuid = $uuid;
             $camp->campaign_name = $model->campaign_name;
-            //$camp->platform = $model->platform;
+
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
@@ -77,10 +77,20 @@ class Glispa
             $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 0;
-            if (!empty($model->package_name)) {
-
-                $camp->package_name = 'id' . $model->package_name;
+            if (strpos($camp->preview_link, 'itms-apps')) {
+                if (!empty($model->package_name)) {
+                    $camp->package_name = 'id' . $model->package_name;
+                }
+                $camp->platform = 'ios';
             }
+            if (strpos($camp->preview_link, 'market')) {
+                if (!empty($model->package_name)) {
+                    $camp->package_name = $model->package_name;
+                }
+                $camp->platform = 'android';
+            }
+            $camp->preview_link = str_replace('market://', 'https://play.google.com/store/apps/', $camp->preview_link);
+            $camp->preview_link = str_replace('itms-apps', 'https', $camp->preview_link);
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
