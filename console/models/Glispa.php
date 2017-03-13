@@ -80,7 +80,7 @@ class Glispa
             if (strpos($camp->preview_link, 'itms-apps')) {
                // if (!empty($model->package_name)) {
                     $camp->package_name = 'id' . $model->package_name;
-                }//
+//                }//
                 $camp->platform = 'ios';
             }
             if (strpos($camp->preview_link, 'market')) {
