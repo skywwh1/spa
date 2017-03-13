@@ -78,15 +78,15 @@ class Glispa
             $camp->status = 1;
             $camp->open_type = 0;
             if (strpos($camp->preview_link, 'itms-apps')) {
-                if (!empty($model->package_name)) {
+               // if (!empty($model->package_name)) {
                     $camp->package_name = 'id' . $model->package_name;
-                }
+                }//
                 $camp->platform = 'ios';
             }
             if (strpos($camp->preview_link, 'market')) {
-                if (!empty($model->package_name)) {
+//                if (!empty($model->package_name)) {
                     $camp->package_name = $model->package_name;
-                }
+//                }
                 $camp->platform = 'android';
             }
             $camp->preview_link = str_replace('market://', 'https://play.google.com/store/apps/', $camp->preview_link);
