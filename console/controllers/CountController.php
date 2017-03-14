@@ -242,9 +242,10 @@ class CountController extends Controller
         /**
          * 按顺序来；
          */
-        $start_time = Config::findLastStatsHourly();
-        $start_time = $start_time - 3600; //统计两个小时，防止出错
-        $end_time = strtotime(date("Y-m-d H:00", time())) + 3600;
+        $start = Config::findLastStatsHourly();
+        $end = time();
+        $start_time = strtotime(date("Y-m-d H:00", $start - 3600));//统计两个小时，防止出错
+        $end_time = strtotime(date("Y-m-d H:00", $end + 3600));
         echo 'start time hourly' . $start_time . "\n";
         echo 'end time hourly' . $end_time . "\n";
         $stats->statsMatchInstallHourly($start_time, $end_time);
@@ -253,33 +254,36 @@ class CountController extends Controller
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
 
-        $start_time = $start_time - 3600 * 24; //统计两天的。
-        $end_time = strtotime(date("Y-m-d", time()));
-        $end_time = $end_time + 3600 * 24; //统计两天的。
+        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
+        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
         echo 'start time daily' . $start_time . "\n";
         echo 'end time daily' . $end_time . "\n";
         $stats->statsDaily($start_time, $end_time);
-        Config::updateStatsTimeHourly($end_time);
+        Config::updateStatsTimeHourly($end);
 
     }
 
     public function actionStatsDaily()
     {
         $stats = new StatsUtil();
-        $start_time = Config::findLastStatsDaily();
-        $start_time = $start_time - 3600 * 24; //统计两天的。
-        $end_time = strtotime(date("Y-m-d", time()));
-        $end_time = $end_time + 3600 * 24; //统计两天的。
-        echo 'start time daily' . $start_time . "\n";
-        echo 'end time daily' . $end_time . "\n";
+        $start = Config::findLastStatsDaily();
+        $end = time();
+        $start_time = strtotime(date("Y-m-d H:00", $start - 3600));//统计两个小时，防止出错
+        $end_time = strtotime(date("Y-m-d H:00", $end + 3600));
+        echo 'start time hourly' . $start_time . "\n";
+        echo 'end time hourly' . $end_time . "\n";
         $stats->statsMatchInstallHourly($start_time, $end_time);
         $stats->statsInstallHourly($start_time, $end_time);
         $stats->statsUniqueClickHourly($start_time, $end_time);
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
 
+        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
+        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
+        echo 'start time daily' . $start_time . "\n";
+        echo 'end time daily' . $end_time . "\n";
         $stats->statsDaily($start_time, $end_time);
-        Config::updateStatsTimeDaily($end_time);
+        Config::updateStatsTimeDaily($end);
 
     }
 

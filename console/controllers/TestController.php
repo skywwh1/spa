@@ -231,14 +231,6 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-       $aa = Deliver::findAll(['status'=>1]);
-       foreach ($aa as $item){
-           $item->note = strip_tags($item->note);
-           $item->save();
-       }
-        die();
-        var_dump(md5('ch58bfa49c7eed458bfa49c7ef7b'));
-        die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();
 //        echo $bb;
@@ -250,9 +242,9 @@ class TestController extends Controller
 //            $records[$i.$a]=$i;
 //        }
 //        var_dump($records);
-        $stats = new StatsUtil();
-        $stats->statsMatchInstallHourly();
-        die();
+//        $stats = new StatsUtil();
+//        $stats->statsMatchInstallHourly();
+//        die();
         //echo ip2long('177.66.48.90');
 
       //  $hourly = CampaignLogHourly::findIdentity(89053, 44, 1488585600);
@@ -269,9 +261,11 @@ class TestController extends Controller
 //        var_dump( strtotime(date("Y-m-d H:00", time())));
 //        var_dump(Config::updateStatsTimeHourly(1, time()));
         date_default_timezone_set("Asia/Shanghai");
-        $start = strtotime('2017-03-06 11:00');
+        $start = strtotime(date('Y-m-d H:00',time()-3600*24));
         echo $start . "\n";
-
+        echo date('Y-m-d H:00',$start) . "\n";
+//        echo $start . "\n";
+die();
         $start = new DateTime('2017-03-06 11:00',new DateTimeZone('Asia/Shanghai'));
         var_dump($start->format('Y-m-d H:i:sP'));
 //        $stats->
