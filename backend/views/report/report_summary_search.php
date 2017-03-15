@@ -4,6 +4,7 @@ use common\models\Category;
 use common\models\Device;
 use common\models\Platform;
 use common\models\PriceModel;
+use common\models\RegionsDomain;
 use common\models\TrafficSource;
 use kartik\date\DatePicker;
 use kartik\typeahead\Typeahead;
@@ -80,7 +81,7 @@ use yii\widgets\ActiveForm;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'pm')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
-                            'options' => ['value' => isset($model->om0) ? $model->om0->username : '',],
+                            'options' => ['value' => isset($model->pm) ? $model->pm : '',],
                             'dataset' => [
                                 [
                                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -96,7 +97,7 @@ use yii\widgets\ActiveForm;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'om')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
-                            'options' => ['value' => isset($model->om0) ? $model->om0->username : '',],
+                            'options' => ['value' => isset($model->om) ? $model->om : '',],
                             'dataset' => [
                                 [
                                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -113,7 +114,7 @@ use yii\widgets\ActiveForm;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
-                            'options' => ['value' => isset($model->om0) ? $model->om0->username : '',],
+                            'options' => ['value' => isset($model->bd) ? $model->bd : '',],
                             'dataset' => [
                                 [
                                     'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
@@ -124,6 +125,16 @@ use yii\widgets\ActiveForm;
                                     ]
                                 ]],
                         ]) ?>
+                    </div>
+
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'geo')->dropDownList(
+                            RegionsDomain::find()
+                                ->select(['domain', 'domain'])
+                                ->orderBy('id')
+                                ->indexBy('domain')
+                                ->column(),
+                            ['prompt' => '-- select --']) ?>
                     </div>
 
                 </div>

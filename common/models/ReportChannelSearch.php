@@ -46,8 +46,6 @@ class ReportChannelSearch extends ReportChannelHourly
 //        var_dump($this->type);
 //        die();
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 //        $a = strtotime($this->start);
@@ -56,13 +54,6 @@ class ReportChannelSearch extends ReportChannelHourly
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
-//        var_dump($start->format('Y-m-d H:i:sP'));
-//        var_dump($start->getTimestamp());
-//        var_dump($end->format('Y-m-d H:i:sP'));
-//        var_dump($end->getTimestamp());
-//        die();
-//        $b = strtotime($this->end . '+1 day');
-//        $date->modify('+1 day');
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
@@ -101,14 +92,6 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['<', 'time', $end]);
 //        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
-//        var_dump(strtotime($this->start));
-//        var_dump(strtotime($this->end));
-//        var_dump($query->createCommand()->sql);
-//        die();
-//        var_dump($start);
-//        var_dump($end);
-//        var_dump($query->createCommand()->sql);
-//        die();
         return $dataProvider;
     }
 

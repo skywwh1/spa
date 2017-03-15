@@ -121,7 +121,7 @@ class MyReportSearch extends Deliver
         $query->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_name]);
         if ($type === 'offers') {
             $query->groupBy(['de.campaign_id',
-                'cp.campaign_name campaign_name',
+
                 'fc.pay_out']);
 
         } else {

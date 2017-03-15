@@ -49,6 +49,12 @@ $columns = [
         'filter' => false,
     ],
     [
+        'label' => 'Campaign ID',
+        'attribute' => 'campaign_id',
+        'value' => 'campaign_id',
+//        'filter' => false,
+    ],
+    [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'campaign_name',
         'value' => function ($data) {

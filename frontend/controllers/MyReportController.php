@@ -2,6 +2,9 @@
 
 namespace frontend\controllers;
 
+use frontend\models\MyCampaignLogDailySearch;
+use frontend\models\MyCampaignLogHourlySearch;
+use frontend\models\MyCampaignLogSearch;
 use Yii;
 use common\models\Deliver;
 use frontend\models\MyReportSearch;
@@ -63,8 +66,18 @@ class MyReportController extends Controller
      */
     public function actionHourly()
     {
-        $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+//        $searchModel = new MyReportSearch();
+//        $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+//
+//        return $this->render('hourly', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+        $searchModel = new MyCampaignLogHourlySearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('hourly', [
             'searchModel' => $searchModel,
@@ -78,8 +91,11 @@ class MyReportController extends Controller
      */
     public function actionDaily()
     {
-        $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+        $searchModel = new MyCampaignLogDailySearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('daily', [
             'searchModel' => $searchModel,
@@ -89,13 +105,25 @@ class MyReportController extends Controller
 
     public function actionOffers()
     {
-        $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->offersSearch(Yii::$app->request->queryParams);
+//        $searchModel = new MyReportSearch();
+//        $dataProvider = $searchModel->offersSearch(Yii::$app->request->queryParams);
+//
+//        return $this->render('offers', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+
+        $searchModel = new MyCampaignLogSearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        }
 
         return $this->render('offers', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+
     }
 
     /**
