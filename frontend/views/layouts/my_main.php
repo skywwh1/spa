@@ -99,7 +99,7 @@ SbAppAsset::register($this);
                                 <?php //  Html::a('Daily Report', ['my-report/daily'],['data-menu'=>"daily"]) ?>
                             </li>
                             <li>
-                                <?php //  Html::a('Offers Report', ['my-report/offers'],['data-menu'=>"offers"]) ?>
+                                <?=  Html::a('Offers Report', ['my-report/offers'],['data-menu'=>"offers"]) ?>
                             </li>
                         </ul>
                         <!-- /.nav-second-level -->

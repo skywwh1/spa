@@ -98,6 +98,10 @@ if (!empty($dataProvider)) {
                                 'responsive' => true,
                                 'hover' => true,
                                 'showPageSummary' => true,
+                                'layout' => '{toolbar}{summary} {items} {pager}',
+                                'toolbar' => [
+                                    '{toggleData}',
+                                ],
                                 'columns' => [
                                     'campaign_id',
 //                                  'campaign_name',
@@ -142,13 +146,13 @@ if (!empty($dataProvider)) {
                                         'attribute' => 'pay_out',
                                         'label' => 'pay_out(AVG)',
                                         'value'=> function($model){
-                                            return round($model->pay_out, 4);
+                                            return round($model->pay_out, 2);
                                         }
                                     ],
                                     [
                                         'attribute' => 'revenue',
                                         'value' => function ($model) {
-                                            return $model->installs * $model->pay_out;
+                                            return $model->installs * round($model->pay_out, 2);
                                         },
                                         'filter' => false,
                                         'pageSummary' => true,

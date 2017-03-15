@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                'pageSummary' => true,
                             ],
                             'click_uuid',
-
+                            'click_id',
                             [
                                 'attribute' => 'campaign_id',
                                 'value' => 'campaign.name',
@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'channel.username',
                                 'label' => 'Channel'
                             ],
-                             'post_time:datetime',
+                            'post_time:datetime',
 
                         ],
                     ]); ?>

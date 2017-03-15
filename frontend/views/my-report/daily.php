@@ -96,6 +96,10 @@ if (!empty($dataProvider)) {
                                 'responsive' => true,
                                 'hover' => true,
                                 'showPageSummary' => true,
+                                'layout' => '{toolbar}{summary} {items} {pager}',
+                                'toolbar' => [
+                                    '{toggleData}',
+                                ],
                                 'columns' => [
                                     [
                                         'label' => 'Time(UTC)',
