@@ -119,6 +119,10 @@ class StreamController extends Controller
 //        $clientIpAddress = Yii::$app->request->getUserIP();
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $ips = explode(', ', $clientIpAddress);
+            if (count($ips) > 1) {
+                $clientIpAddress = $ips[1];
+            }
         } else {
             $clientIpAddress = $_SERVER['REMOTE_ADDR'];
         }
