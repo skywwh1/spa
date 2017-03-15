@@ -116,7 +116,13 @@ class StreamController extends Controller
         $model->gaid = isset($data['gaid']) ? $data['gaid'] : null;
         $model->idfa = isset($data['idfa']) ? $data['idfa'] : null;
         $model->site = isset($data['site']) ? $data['site'] : null;
-        $model->ip = Yii::$app->request->getUserIP();
+//        $clientIpAddress = Yii::$app->request->getUserIP();
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $clientIpAddress = $_SERVER['REMOTE_ADDR'];
+        }
+        $model->ip = $clientIpAddress;
         $code = $this->restrictionTrack($model);
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
@@ -222,22 +228,22 @@ class StreamController extends Controller
          * test link
          */
         $cache = Yii::$app->cache;
-        $test = $cache->get($model->ch_id.'');
+        $test = $cache->get($model->ch_id . '');
         if ($test !== false) {
             $cache->set($model->ch_id, $model, 300);
         }
         //2.ip 限制
-        $target = $campaign->target_geo;
-        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
-            $Info = \Yii::createObject([
-                'class' => '\rmrevin\yii\geoip\HostInfo',
-                'host' => $model->ip, // some host or ip
-            ]);
-            $geo = $Info->getCountryCode();   // US
-            if (strpos($target, $geo) === false) {
-                return 501;
-            }
-        }
+        /*        $target = $campaign->target_geo;
+                if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+                    $Info = \Yii::createObject([
+                        'class' => '\rmrevin\yii\geoip\HostInfo',
+                        'host' => $model->ip, // some host or ip
+                    ]);
+                    $geo = $Info->getCountryCode();   // US
+                    if (strpos($target, $geo) === false) {
+                        return 501;
+                    }
+                }*/
 
         //正常0
         $model->adv_price = $campaign->adv_price;

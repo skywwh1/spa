@@ -12,7 +12,7 @@ $this->title = 'Channel Report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-channel"></div>
-<?php echo $this->render('_search', ['model' => $searchModel]);
+<?php echo $this->render('report_channel_search', ['model' => $searchModel]);
 
 $columns = [
     [

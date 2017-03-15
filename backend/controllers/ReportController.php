@@ -7,6 +7,8 @@ use common\models\Deliver;
 use common\models\ReportAdvSearch;
 use common\models\ReportChannelSearch;
 use common\models\ReportSearch;
+use common\models\ReportSummaryHourlySearch;
+use common\models\ReportSummarySearch;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -36,8 +38,9 @@ class ReportController extends Controller
                     [
                         'actions' => [
                             'index',
-                            'channel-report',
-                            'adv-report',
+                            'report-channel',
+                            'report-adv',
+                            'report-summary',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -93,7 +96,7 @@ class ReportController extends Controller
         }
     }
 
-    public function actionChannelReport()
+    public function actionReportChannel()
     {
         $searchModel = new ReportChannelSearch();
         $dataProvider = array();
@@ -108,13 +111,13 @@ class ReportController extends Controller
             }
         }
 
-        return $this->render('channel_report', [
+        return $this->render('report_channel', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function actionAdvReport()
+    public function actionReportAdv()
     {
         $searchModel = new ReportAdvSearch();
         $dataProvider = array();
@@ -128,15 +131,32 @@ class ReportController extends Controller
             }
         }
 
-        return $this->render('adv_report', [
+        return $this->render('report_adv', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
 
-    public function actionSummaryReport()
+    public function actionReportSummary()
     {
+        $searchModel = new ReportSummarySearch();
+        $dataProvider = array();
+        if (!empty(Yii::$app->request->queryParams)) {
+            $searchModel->load(Yii::$app->request->queryParams);
+            $type = $searchModel->type;
+            if ($type == 1) {
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+//                var_dump($dataProvider);
+//                die();
+            } else if ($type == 2) {
+//                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }
+        }
 
+        return $this->render('report_summary', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionCampaign()

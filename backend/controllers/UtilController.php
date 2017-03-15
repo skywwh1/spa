@@ -6,6 +6,7 @@ use common\models\Advertiser;
 use common\models\Category;
 use common\models\Channel;
 use common\models\RegionsDomain;
+use common\models\User;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -94,6 +95,27 @@ class UtilController extends Controller
     {
         $data = Advertiser::getAdvNameListByName($name);
         $out = [];
+        foreach ($data as $d) {
+            $out[] = ['value' => $d];
+        }
+        return $out;
+    }
+
+    public function actionGetUser($u, $t)
+    {
+        $out = [];
+        $data = null;
+        switch ($t) {
+            case 7:
+                $data = User::getPMList($u);
+                break;
+            case  8:
+                $data = User::getBDList($u);
+                break;
+            case 9:
+                $data = User::getOMList($u);
+                break;
+        }
         foreach ($data as $d) {
             $out[] = ['value' => $d];
         }

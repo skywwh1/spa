@@ -97,12 +97,16 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->om])
-            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 //        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
+//        var_dump($query->createCommand()->sql);
+//        die();
+//        var_dump($start);
+//        var_dump($end);
 //        var_dump($query->createCommand()->sql);
 //        die();
         return $dataProvider;

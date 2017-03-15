@@ -323,4 +323,10 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         //->andWhere(["type"=>9])
         return static::find()->select("username")->where(["like", "username", $username])->column();
     }
+
+    public static function getPMList($username)
+    {
+        //->andWhere(["type"=>7])
+        return static::find()->select("username")->where(["like", "username", $username])->column();
+    }
 }

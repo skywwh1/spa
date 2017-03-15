@@ -12,7 +12,7 @@ $this->title = 'Advertiser Report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-adv"></div>
-<?php echo $this->render('adv_search', ['model' => $searchModel]);
+<?php echo $this->render('report_adv_search', ['model' => $searchModel]);
 $format = 'php:Y-m-d H:i';
 
 if ($searchModel->type == 2) {
