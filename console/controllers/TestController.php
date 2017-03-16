@@ -232,7 +232,7 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-echo time()."\n";
+echo time() . mt_rand(1,1000000)."\n";
 die();
         $aa = new Movista();
         $aa->getApiCampaign();
