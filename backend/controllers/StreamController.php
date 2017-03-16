@@ -107,7 +107,7 @@ class StreamController extends Controller
         if (!empty($allParameters)) {
             $model->all_parameters = $allParameters;
         }
-        $model->click_uuid = uniqid() . uniqid();
+        $model->click_uuid = uniqid() . uniqid() . time();
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->pl = isset($data['pl']) ? $data['pl'] : null;

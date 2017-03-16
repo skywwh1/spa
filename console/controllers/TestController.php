@@ -232,7 +232,8 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-
+echo time()."\n";
+die();
         $aa = new Movista();
         $aa->getApiCampaign();
         $str = '179.82.170.187';
