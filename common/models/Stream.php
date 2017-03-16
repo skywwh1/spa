@@ -122,7 +122,7 @@ class Stream extends \yii\db\ActiveRecord
      */
     public static function getCountClicks()
     {
-        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(100000)->all();
+        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(1000000)->all();
     }
 
     public static function getDistinctIpClick($cp_uid, $ch_id)
