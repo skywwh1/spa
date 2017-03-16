@@ -30,8 +30,8 @@ class CountController extends Controller
 
     public function actionUpdateClickAndFeed()
     {
-       $this->actionUpdateClicks();
-       $this->actionUpdateFeeds();
+        $this->actionUpdateClicks();
+        $this->actionUpdateFeeds();
     }
 
     public function actionUpdateClicks()
@@ -86,7 +86,10 @@ class CountController extends Controller
 
                 }
                 $item->is_count = 1;
-                $item->save();
+                if ($item->save() == false) {
+                    $this->echoMessage('update click table to count error ' . $item->id);
+                    var_dump($item->getErrors());
+                }
             }
 
 //            $this->echoMessage('Update clicks start :');
