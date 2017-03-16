@@ -258,7 +258,7 @@ class StreamController extends Controller
         $link = $this->genAdvLink($campaign, $model);
         $model->redirect = $link;
         $model->is_count = 1;
-        $model->save();
+//        $model->save();
 
         $click = new LogClick();
         $click->tx_id = $model->id;
