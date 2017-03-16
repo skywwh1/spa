@@ -83,9 +83,10 @@ class CountController extends Controller
 //                        $clicks[$click->campaign_id . '-' . $click->channel_id] = 1;
 //                    }
 //                    $newIpClicks[$click->campaign_id . '-' . $click->channel_id][] = $click->ip;
-                    $item->is_count = 1;
-                    $item->save();
+
                 }
+                $item->is_count = 1;
+                $item->save();
             }
 
 //            $this->echoMessage('Update clicks start :');
