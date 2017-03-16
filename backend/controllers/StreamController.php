@@ -10,6 +10,7 @@ use common\models\Campaign;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
+use common\models\LogClick;
 use common\models\Stream;
 use common\models\StreamSearch;
 use Yii;
@@ -107,7 +108,7 @@ class StreamController extends Controller
         if (!empty($allParameters)) {
             $model->all_parameters = $allParameters;
         }
-        $model->click_uuid = uniqid() . uniqid() . mt_rand(1,1000000).time();
+        $model->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000) . time();
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->pl = isset($data['pl']) ? $data['pl'] : null;
@@ -256,7 +257,33 @@ class StreamController extends Controller
         $model->discount = $deliver->discount;
         $link = $this->genAdvLink($campaign, $model);
         $model->redirect = $link;
+        $model->is_count = 1;
         $model->save();
+
+        $click = new LogClick();
+//        $click->tx_id = $item->id;
+        $click->click_uuid = $model->click_uuid;
+        $click->click_id = $model->click_id;
+        $click->channel_id = $model->ch_id;
+        $click->campaign_id = $campaign->id;
+        $click->campaign_uuid = $model->cp_uid;
+        $click->pl = $model->pl;
+        $click->ch_subid = $model->ch_subid;
+        $click->gaid = $model->gaid;
+        $click->idfa = $model->idfa;
+        $click->site = $model->site;
+        $click->adv_price = $model->adv_price;
+        $click->pay_out = $model->pay_out;
+        $click->discount = $model->discount;
+        $click->daily_cap = $model->daily_cap;
+        $click->all_parameters = $model->all_parameters;
+        $click->ip = $model->ip;
+        $click->ip_long = ip2long($click->ip);
+        $click->redirect = $model->redirect;
+        $click->browser = $model->browser;
+        $click->browser_type = $model->browser_type;
+        $click->click_time = time();
+        $click->save();
         return 200;
     }
 
