@@ -28,6 +28,12 @@ use yii\console\Controller;
 class CountController extends Controller
 {
 
+    public function actionUpdateClickAndFeed()
+    {
+       $this->actionUpdateClicks();
+       $this->actionUpdateFeeds();
+    }
+
     public function actionUpdateClicks()
     {
         //1. 更新点击
@@ -68,29 +74,30 @@ class CountController extends Controller
                 $click->click_time = $item->create_time;
 //                $click->
                 if ($click->save() == false) {
+                    $this->echoMessage('save click error click table id ' . $item->id);
                     var_dump($click->getErrors());
                 } else {
-                    if (isset($clicks[$click->campaign_id . '-' . $click->channel_id])) {
-                        $clicks[$click->campaign_id . '-' . $click->channel_id] += 1;
-                    } else {
-                        $clicks[$click->campaign_id . '-' . $click->channel_id] = 1;
-                    }
-                    $newIpClicks[$click->campaign_id . '-' . $click->channel_id][] = $click->ip;
+//                    if (isset($clicks[$click->campaign_id . '-' . $click->channel_id])) {
+//                        $clicks[$click->campaign_id . '-' . $click->channel_id] += 1;
+//                    } else {
+//                        $clicks[$click->campaign_id . '-' . $click->channel_id] = 1;
+//                    }
+//                    $newIpClicks[$click->campaign_id . '-' . $click->channel_id][] = $click->ip;
+                    $item->is_count = 1;
+                    $item->save();
                 }
-                $item->is_count = 1;
-                $item->save();
             }
 
-            $this->echoMessage('Update clicks start :');
-            if (!empty($clicks)) { //sts更新点击量
-                foreach ($clicks as $k => $v) {
-                    $de = explode('-', $k);
-                    $sts = Deliver::findIdentity($de[0], $de[1]);
-                    $sts->click += $v;
-                    $this->echoMessage($de[0] . '-' . $de[1] . ' update click to ' . $sts->click);
-                    $sts->save();
-                }
-            }
+//            $this->echoMessage('Update clicks start :');
+//            if (!empty($clicks)) { //sts更新点击量
+//                foreach ($clicks as $k => $v) {
+//                    $de = explode('-', $k);
+//                    $sts = Deliver::findIdentity($de[0], $de[1]);
+//                    $sts->click += $v;
+//                    $this->echoMessage($de[0] . '-' . $de[1] . ' update click to ' . $sts->click);
+//                    $sts->save();
+//                }
+//            }
         }
         $this->echoMessage('Update clicks end ############');
     }
@@ -144,18 +151,14 @@ class CountController extends Controller
                                 var_dump($post->getErrors());
                             }
                         }
+                        $item->is_count = 1;
+                        $item->save();
                     }
                 } else {
                     $this->echoMessage('cannot found the click log from feed click_uuid ' . $item->click_id);
                 }
-
-                $item->is_count = 1;
-                $item->save();
             }
         }
-
-        // post back
-        $this->postBack();
     }
 
     /**
@@ -205,7 +208,7 @@ class CountController extends Controller
         echo " \t $str \n";
     }
 
-    public function postBack()
+    public function actionPostBack()
     {
         $needPost = LogPost::findPost();
         if (!empty($needPost)) {
