@@ -232,7 +232,8 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-echo time() . mt_rand(1,1000000)."\n";
+
+echo date('Y-m-d\TH:i:s\Z',time())."\n";
 die();
         $aa = new Movista();
         $aa->getApiCampaign();

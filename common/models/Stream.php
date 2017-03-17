@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "feedback_channel_click_log".
@@ -122,7 +123,26 @@ class Stream extends \yii\db\ActiveRecord
      */
     public static function getCountClicks()
     {
-        return static::find()->where(['is_count' => 0])->orderBy('id Desc')->indexBy('id')->limit(1000000)->all();
+        return static::find()->where(['is_count' => 0])->orderBy('id Asc')->indexBy('id')->limit(1000000)->all();
+    }
+
+    public static function getUpdateClicks()
+    {
+        $query = static::find();
+        $query->alias('fc');
+        $query->leftJoin('log_click lc', 'fc.click_uuid=lc.click_uuid');
+        $query->where(['fc.is_count' => 0]);
+        $query->orderBy('id Desc');
+        $query->limit(10000);
+        return $query->all();
+    }
+
+    public static function insertClicks()
+    {
+
+        $sql = 'INSERT INTO log_click (tx_id,click_uuid,click_id,channel_id,campaign_id,campaign_uuid,pl,ch_subid,gaid,idfa,site,adv_price,pay_out,discount,daily_cap,all_parameters,ip,ip_long,redirect,browser,browser_type,click_time,create_time) SELECT fc.id,fc.click_uuid,fc.click_id,fc.ch_id,ca.id camid,fc.cp_uid,fc.pl,fc.ch_subid,fc.gaid,fc.idfa,fc.site,fc.adv_price,fc.pay_out,fc.discount,fc.daily_cap,fc.all_parameters,fc.ip,fc.ip_long,fc.redirect,fc.browser,fc.browser_type,fc.create_time,fc.create_time FROM feedback_channel_click_log fc LEFT JOIN campaign ca ON fc.cp_uid = ca.campaign_uuid where fc.is_count=0 order by fc.create_time desc limit 10000';
+        Yii::$app->db->createCommand($sql)->execute();
+
     }
 
     public static function getDistinctIpClick($cp_uid, $ch_id)

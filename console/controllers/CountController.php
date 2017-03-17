@@ -40,54 +40,52 @@ class CountController extends Controller
         $clicks = array(); // 用来
         $posts = array();
         $newIpClicks = array(); //weiyi ip
-        $streams = Stream::getCountClicks();
+        echo date('Y-m-d\TH:i:s\Z',time())."\n";
+        Stream::insertClicks();
+        echo date('Y-m-d\TH:i:s\Z',time())."\n";
+        $streams = Stream::getUpdateClicks();
         $this->echoMessage('count click ' . count($streams));
         if (isset($streams)) {
             foreach ($streams as $item) {
-                $camp = Campaign::findByUuid($item->cp_uid);
-                if ($camp == null) {
-                    $this->echoMessage('Count not found campaign ' . $item->cp_uid);
-                    continue;
-                }
-                $click = new LogClick();
-                $click->tx_id = $item->id;
-                $click->click_uuid = $item->click_uuid;
-                $click->click_id = $item->click_id;
-                $click->channel_id = $item->ch_id;
-                $click->campaign_id = $camp->id;
-                $click->campaign_uuid = $item->cp_uid;
-                $click->pl = $item->pl;
-                $click->ch_subid = $item->ch_subid;
-                $click->gaid = $item->gaid;
-                $click->idfa = $item->idfa;
-                $click->site = $item->site;
-                $click->adv_price = $item->adv_price;
-                $click->pay_out = $item->pay_out;
-                $click->discount = $item->discount;
-                $click->daily_cap = $item->daily_cap;
-                $click->all_parameters = $item->all_parameters;
-                $click->ip = $item->ip;
-                $click->ip_long = $item->ip_long;
-                $click->redirect = $item->redirect;
-                $click->browser = $item->browser;
-                $click->browser_type = $item->browser_type;
-                $click->click_time = $item->create_time;
-//                $click->
-                if ($click->save() == false) {
-                    $this->echoMessage('save click error click table id ' . $item->id);
-                    var_dump($click->getErrors());
-                } else {
-//                    if (isset($clicks[$click->campaign_id . '-' . $click->channel_id])) {
-//                        $clicks[$click->campaign_id . '-' . $click->channel_id] += 1;
-//                    } else {
-//                        $clicks[$click->campaign_id . '-' . $click->channel_id] = 1;
-//                    }
-//                    $newIpClicks[$click->campaign_id . '-' . $click->channel_id][] = $click->ip;
-                }
+//                $camp = Campaign::findByUuid($item->cp_uid);
+//                if ($camp == null) {
+//                    $this->echoMessage('Count not found campaign ' . $item->cp_uid);
+//                    continue;
+//                }
+//                $click = new LogClick();
+//                $click->tx_id = $item->id;
+//                $click->click_uuid = $item->click_uuid;
+//                $click->click_id = $item->click_id;
+//                $click->channel_id = $item->ch_id;
+//                $click->campaign_id = $camp->id;
+//                $click->campaign_uuid = $item->cp_uid;
+//                $click->pl = $item->pl;
+//                $click->ch_subid = $item->ch_subid;
+//                $click->gaid = $item->gaid;
+//                $click->idfa = $item->idfa;
+//                $click->site = $item->site;
+//                $click->adv_price = $item->adv_price;
+//                $click->pay_out = $item->pay_out;
+//                $click->discount = $item->discount;
+//                $click->daily_cap = $item->daily_cap;
+//                $click->all_parameters = $item->all_parameters;
+//                $click->ip = $item->ip;
+//                $click->ip_long = $item->ip_long;
+//                $click->redirect = $item->redirect;
+//                $click->browser = $item->browser;
+//                $click->browser_type = $item->browser_type;
+//                $click->click_time = $item->create_time;
+////                $click->
+//                if ($click->save() == false) {
+//                    $this->echoMessage('save click error click table id ' . $item->id);
+//                    var_dump($click->getErrors());
+//                }
                 $item->is_count = 1;
                 if ($item->save() == false) {
                     $this->echoMessage('update click table to count error ' . $item->id);
                     var_dump($item->getErrors());
+                }else{
+                    echo 'update success'."\n";
                 }
 
             }
@@ -103,7 +101,7 @@ class CountController extends Controller
 //                }
 //            }
         }
-        $this->echoMessage('Update clicks end ############');
+        $this->echoMessage('Update clicks end ############'.date('Y-m-d\TH:i:s\Z',time()));
     }
 
     public function actionUpdateFeeds()
