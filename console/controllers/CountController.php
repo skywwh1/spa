@@ -40,9 +40,9 @@ class CountController extends Controller
         $clicks = array(); // 用来
         $posts = array();
         $newIpClicks = array(); //weiyi ip
-        echo date('Y-m-d\TH:i:s\Z',time())."\n";
+        echo date('Y-m-d\TH:i:s\Z', time()) . "\n";
         Stream::insertClicks();
-        echo date('Y-m-d\TH:i:s\Z',time())."\n";
+        echo date('Y-m-d\TH:i:s\Z', time()) . "\n";
         $streams = Stream::getUpdateClicks();
         $this->echoMessage('count click ' . count($streams));
         if (isset($streams)) {
@@ -84,8 +84,8 @@ class CountController extends Controller
                 if ($item->save() == false) {
                     $this->echoMessage('update click table to count error ' . $item->id);
                     var_dump($item->getErrors());
-                }else{
-                    echo 'update success'."\n";
+                } else {
+                    echo 'update success' . time() . "\n";
                 }
 
             }
@@ -101,7 +101,7 @@ class CountController extends Controller
 //                }
 //            }
         }
-        $this->echoMessage('Update clicks end ############'.date('Y-m-d\TH:i:s\Z',time()));
+        $this->echoMessage('Update clicks end ############' . date('Y-m-d\TH:i:s\Z', time()));
     }
 
     public function actionUpdateFeeds()
