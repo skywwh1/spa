@@ -27,7 +27,9 @@ use Yii;
 class LogFeed extends \yii\db\ActiveRecord
 {
     public $advertiser_name;
-
+    public $campaign_name;
+    public $channel_name;
+    public $campaign_uuid;
     /**
      * @inheritdoc
      */

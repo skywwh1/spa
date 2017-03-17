@@ -38,9 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             'click_uuid',
                             'click_id',
                             [
-                                'attribute' => 'campaign_id',
-                                'value' => 'campaign.name',
+                                'attribute' => 'campaign_name',
+                                'value' => 'campaign_name',
                                 'label' => 'Campaign',
+//                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'campaign_id',
+                                'value' => 'campaign_id',
+                                'label' => 'campaign_id',
 //                                'pageSummary' => true,
                             ],
                             [

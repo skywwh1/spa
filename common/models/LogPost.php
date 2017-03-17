@@ -25,6 +25,9 @@ use Yii;
 class LogPost extends \yii\db\ActiveRecord
 {
     public $advertiser_name;
+    public $campaign_name;
+    public $channel_name;
+    public $campaign_uuid;
     /**
      * @inheritdoc
      */

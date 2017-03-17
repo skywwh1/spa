@@ -12,9 +12,7 @@ use common\models\LogFeed;
  */
 class LogFeedSearch extends LogFeed
 {
-    public $campaign_name;
-    public $channel_name;
-    public $campaign_uuid;
+
 
     /**
      * @inheritdoc
@@ -23,7 +21,7 @@ class LogFeedSearch extends LogFeed
     {
         return [
             [['id', 'channel_id', 'campaign_id', 'feed_time', 'is_post', 'create_time'], 'safe'],
-            [['auth_token', 'click_uuid', 'click_id', 'ch_subid', 'all_parameters', 'ip', 'campaign_uuid', 'advertiser_name'], 'safe'],
+            [['auth_token', 'click_uuid', 'click_id', 'ch_subid', 'all_parameters', 'ip', 'campaign_uuid', 'advertiser_name','campaign_name'], 'safe'],
             [['adv_price'], 'number'],
         ];
     }
@@ -62,7 +60,7 @@ class LogFeedSearch extends LogFeed
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->select(['feed.*', 'adv.username advertiser_name']);
+        $query->select(['feed.*', 'adv.username advertiser_name','ca.campaign_name campaign_name']);
         $query->joinWith('channel ch');
         $query->joinWith('campaign ca');
         $query->leftJoin('advertiser adv', 'ca.advertiser = adv.id');
@@ -70,7 +68,7 @@ class LogFeedSearch extends LogFeed
         $query->andFilterWhere([
             'feed.id' => $this->id,
 //            'feed.channel_id' => $this->channel_id,
-//            'feed.campaign_id' => $this->campaign_id,
+            'feed.campaign_id' => $this->campaign_id,
             'feed.adv_price' => $this->adv_price,
             'feed.feed_time' => $this->feed_time,
             'feed.is_post' => $this->is_post,
@@ -81,7 +79,7 @@ class LogFeedSearch extends LogFeed
             ->andFilterWhere(['like', 'feed.click_uuid', $this->click_uuid])
             ->andFilterWhere(['like', 'feed.click_id', $this->click_id])
             ->andFilterWhere(['like', 'feed.ch_subid', $this->ch_subid])
-            ->andFilterWhere(['like', 'ca.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'ca.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ca.campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'ch.username', $this->channel_id])
             ->andFilterWhere(['like', 'feed.all_parameters', $this->all_parameters])

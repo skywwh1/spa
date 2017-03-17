@@ -56,8 +56,8 @@ use yii\widgets\ActiveForm;
                 </div>
                 <div class="col-lg-2">
                     <?= $form->field($model, 'type')->dropDownList([
-                        1 => 'Hourly',
                         2 => 'Daily',
+                        1 => 'Hourly',
                     ]) ?>
                 </div>
 

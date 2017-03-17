@@ -54,6 +54,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $newValue;
     public $effect_time;
     public $time;
+    public $campaign_name;
 
     /**
      * @inheritdoc

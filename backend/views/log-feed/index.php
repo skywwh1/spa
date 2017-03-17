@@ -48,9 +48,15 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                'pageSummary' => true,
                             ],
                             [
-                                'attribute' => 'campaign_id',
-                                'value' => 'campaign.name',
+                                'attribute' => 'campaign_name',
+                                'value' => 'campaign_name',
                                 'label' => 'Campaign',
+//                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'campaign_id',
+                                'value' => 'campaign_id',
+                                'label' => 'campaign_id',
 //                                'pageSummary' => true,
                             ],
                             [

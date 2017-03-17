@@ -50,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         //  ['class' => 'yii\grid\SerialColumn'],
                         [
                             'class' => '\kartik\grid\DataColumn',
-                            'attribute' => 'campaign_id',
+                            'attribute' => 'campaign_name',
                             'value' => function ($data) {
-                                if(isset($data->campaign)){
+                                if (isset($data->campaign)) {
                                     return Html::tag('div', $data->campaign->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign->campaign_name, 'style' => 'cursor:default;']);
                                 }
                             },
@@ -60,6 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                             'label' => 'Campaign',
                         ],
+                        'campaign_id',
                         'campaign_uuid',
                         [
                             'attribute' => 'channel_id',

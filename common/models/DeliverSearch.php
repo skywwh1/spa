@@ -19,7 +19,7 @@ class DeliverSearch extends Deliver
     {
         return [
             [['daily_cap', 'status', 'creator', 'end_time', 'create_time', 'is_run', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
-            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note'], 'safe'],
+            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note', 'campaign_name'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -61,7 +61,7 @@ class DeliverSearch extends Deliver
         $query->joinWith('channel ch');
         // grid filtering conditions
         $query->andFilterWhere([
-//            'campaign_id' => $this->campaign_id,
+            'campaign_id' => $this->campaign_id,
 //            'channel_id' => $this->channel_id,
             'adv_price' => $this->adv_price,
             'pay_out' => $this->pay_out,
@@ -92,7 +92,7 @@ class DeliverSearch extends Deliver
         $query->andFilterWhere(['like', 'de.campaign_uuid', $this->campaign_uuid])
             ->andFilterWhere(['like', 'de.pricing_mode', $this->pricing_mode])
             ->andFilterWhere(['like', 'track_url', $this->track_url])
-            ->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_id])
+            ->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_id])
             ->andFilterWhere(['like', 'note', $this->note]);
         $query->orderBy('create_time desc');
