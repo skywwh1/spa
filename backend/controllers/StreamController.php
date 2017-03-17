@@ -177,6 +177,7 @@ class StreamController extends Controller
             'idfa' => $model->idfa,
             'gaid' => $model->gaid,
             'site' => $model->site,
+            'ch_subid' => $model->ch_subid
         );
 
         $link = $camp->adv_link;
@@ -188,6 +189,7 @@ class StreamController extends Controller
         $post_param = $camp->advertiser0->post_parameter;
         if (!empty($post_param)) {
             $post_param = str_replace('{click_id}', $paras['click_id'], $post_param);
+            $post_param = str_replace('{ch_subid}', $paras['ch_subid'], $post_param);
             $post_param = str_replace('{ch_id}', $paras['ch_id'], $post_param);
             $post_param = str_replace('{idfa}', $paras['idfa'], $post_param);
             $post_param = str_replace('{gaid}', $paras['gaid'], $post_param);
