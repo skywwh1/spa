@@ -24,7 +24,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
-                            ['class' => 'yii\grid\SerialColumn'],
+                            [
+                                'class' => 'yii\grid\ActionColumn',
+                                'header' => 'Action',
+                                'template' => '{view}',
+                            ],
                             [
                                 'attribute' => 'adv_name',
                                 'value' => 'adv.username',
@@ -34,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'effective_time',
                             'campaign_id',
                             'campaign_uuid',
-                            // 'campaign_name',
+                             'campaign_name',
                             // 'pricing_mode',
                             // 'promote_start',
                             // 'end_time',
@@ -64,11 +68,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'create_time:datetime',
                             // 'update_time:datetime',
 
-                            [
-                                'class' => 'yii\grid\ActionColumn',
-                                'header' => 'Action',
-                                'template' => '{view}',
-                            ],
                         ],
                     ]); ?>
                     <?php Pjax::end(); ?></div>
