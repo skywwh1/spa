@@ -150,6 +150,17 @@ class StreamController extends Controller
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : null;
         $model->ip = Yii::$app->request->getUserIP();
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $ips = explode(', ', $clientIpAddress);
+            if (count($ips) > 1) {
+                $clientIpAddress = $ips[1];
+            }
+        } else {
+            $clientIpAddress = $_SERVER['REMOTE_ADDR'];
+        }
+//        $model->ip = Yii::$app->request->getUserIP();
+        $model->ip = $clientIpAddress;
         $model->all_parameters = $allParameters;
         $code = $this->restrictionFeed($model);
         if ($code !== 200) {

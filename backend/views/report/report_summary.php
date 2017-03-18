@@ -13,13 +13,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-summary"></div>
 <?php echo $this->render('report_summary_search', ['model' => $searchModel]);
-$format = 'php:Y-m-d H:i';
 
-if ($searchModel->type == 2) {
-    $format = 'php:Y-m-d';
-}
-$columns = [
-    [
+$time_row = [];
+//var_dump($searchModel->type);
+//die();
+if (!empty($searchModel->type)) {
+    $format = 'php:Y-m-d H:i';
+    if ($searchModel->type == 2) {
+        $format = 'php:Y-m-d';
+    }
+    $time_row = [
         'label' => 'Time(UTC)',
         'attribute' => 'time',
         'value' => function ($model) use ($searchModel) {
@@ -33,20 +36,16 @@ $columns = [
             return $date->format($format);
         },
         'filter' => false,
-        'pageSummary' => 'Page Total',
-    ],
-//                                [
-//                                    'label' => 'Time(UTC+8)',
-//                                    'attribute' => 'time_format',
-//                                    // 'value' => 'time_format',
-//                                    'filter' => false,
-//                                    'pageSummary' => 'Page Total',
-//                                ],
+
+    ];
+}
+$columns = [
     [
         'label' => 'Campaign ID',
         'attribute' => 'campaign_id',
         'value' => 'campaign_id',
         'filter' => false,
+        'pageSummary' => 'Page Total',
     ],
     [
         'label' => 'Campaign UUID',
@@ -215,8 +214,10 @@ $columns = [
         },
         'filter' => false,
     ],
-
 ];
+if (!empty($searchModel->type)) {
+    array_unshift($columns, $time_row);
+}
 if (!empty($dataProvider)) {
     ?>
     <div class="row">
@@ -234,7 +235,7 @@ if (!empty($dataProvider)) {
                                 '{toggleData}',
                             ],
                             'columns' => $columns,
-                            'showFooter' =>true,
+                            'showFooter' => true,
                         ]); ?>
                     </div>
                 </div>

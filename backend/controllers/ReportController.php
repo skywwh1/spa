@@ -150,6 +150,8 @@ class ReportController extends Controller
 //                die();
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            } else {
+                $dataProvider = $searchModel->summarySearch(Yii::$app->request->queryParams);
             }
         }
 

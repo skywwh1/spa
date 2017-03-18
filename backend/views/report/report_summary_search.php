@@ -214,9 +214,9 @@ use yii\widgets\ActiveForm;
 
                     <div class="col-lg-2">
                         <?= $form->field($model, 'type')->dropDownList([
-                            1 => 'Hourly',
                             2 => 'Daily',
-                        ]) ?>
+                            1 => 'Hourly',
+                        ],['prompt' => '-- select --']) ?>
                     </div>
                 </div>
 
