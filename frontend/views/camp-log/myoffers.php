@@ -47,6 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'daily_cap',
                 'filter' => false,
             ],
+            'campaign.geo',
+            'campaign.platform',
 //             'actual_discount',
 //             'discount',
             //'is_run',
@@ -63,20 +65,20 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'update_time:datetime',
 //             'track_url:url',
 //            'click',
-            [
-                'attribute' => 'click',
-                'filter' => false,
-            ],
-//            'unique_click',
-            [
-                'attribute' => 'unique_click',
-                'filter' => false,
-            ],
-//            'install',
-            [
-                'attribute' => 'install',
-                'filter' => false,
-            ],
+//            [
+//                'attribute' => 'click',
+//                'filter' => false,
+//            ],
+////            'unique_click',
+//            [
+//                'attribute' => 'unique_click',
+//                'filter' => false,
+//            ],
+////            'install',
+//            [
+//                'attribute' => 'install',
+//                'filter' => false,
+//            ],
 //             'cvr',
 //             'cost',
 //             'match_install',

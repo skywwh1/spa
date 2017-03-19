@@ -58,10 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     'value' => $model->campaign->creative_link,
                     'format' => 'url'
                 ],
-                'click',
-                'unique_click',
-                'install',
-                'cvr',
+                'campaign.geo',
+                'campaign.platform',
+//                'click',
+//                'unique_click',
+//                'install',
+//                'cvr',
                 'note',
             ],
         ]) ?>

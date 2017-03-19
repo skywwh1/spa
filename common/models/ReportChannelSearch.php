@@ -166,7 +166,7 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.channel_id',
             'timestamp',
         ]);
-        $query->orderBy(['time' => SORT_DESC, 'ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC]);
+        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
 //        var_dump($query->createCommand()->sql);
