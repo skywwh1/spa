@@ -2,6 +2,7 @@
 
 
 /* @var $this yii\web\View */
+use common\models\Campaign;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 
@@ -13,23 +14,20 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-adv"></div>
 <?php echo $this->render('report_adv_search', ['model' => $searchModel]);
-$format = 'php:Y-m-d H:i';
 
-if ($searchModel->type == 2) {
-    $format = 'php:Y-m-d';
-}
 $columns = [
     [
         'label' => 'Time(UTC)',
-        'attribute' => 'time',
+        'attribute' => 'timestamp',
         'value' => function ($model) use ($searchModel) {
+            $model = (object)$model;
             $format = 'Y-m-d H:i';
             if ($searchModel->type == 2) {
                 $format = 'Y-m-d';
             }
             $date = new DateTime();
             $date->setTimezone(new DateTimeZone($searchModel->time_zone));
-            $date->setTimestamp($model->time);
+            $date->setTimestamp($model->timestamp);
             return $date->format($format);
         },
         'filter' => false,
@@ -58,8 +56,9 @@ $columns = [
         'class' => '\kartik\grid\DataColumn',
         'attribute' => 'campaign_name',
         'value' => function ($data) {
+            $data = (object)$data;
             if (isset($data->campaign_name)) {
-                return Html::tag('div', $data->campaign->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
+                return Html::tag('div', Campaign::findById($data->campaign_id)->getName(), ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'style' => 'cursor:default;']);
             } else {
                 return '';
             }
@@ -96,9 +95,10 @@ $columns = [
     [
         'attribute' => 'cvr',
         'value' => function ($model) {
+            $model = (object)$model;
             if ($model->clicks > 0) {
 
-                return round($model->installs / $model->clicks, 4);
+                return round(($model->installs / $model->clicks) * 100, 2).'%';
             }
             return 0;
         },
@@ -108,12 +108,16 @@ $columns = [
     [
         'label' => 'Payout(avg)',
         'attribute' => 'pay_out',
-        'value' => 'pay_out',
+        'value' => function($model){
+            $model = (object)$model;
+            return round($model->pay_out,2);
+        },
         'filter' => false,
     ],
     [
         'attribute' => 'cost',
         'value' => function ($model) {
+            $model = (object)$model;
             return $model->installs * $model->pay_out;
         },
         'filter' => false,
@@ -128,9 +132,9 @@ $columns = [
     [
         'attribute' => 'match_cvr',
         'value' => function ($model) {
+            $model = (object)$model;
             if ($model->clicks > 0) {
-
-                return round($model->match_installs / $model->clicks, 4);
+                return round(($model->match_installs / $model->clicks) * 100, 2).'%';
 
             }
             return 0;
@@ -140,12 +144,16 @@ $columns = [
     [
         'label' => 'ADV Price(avg)',
         'attribute' => 'adv_price',
-        'value' => 'adv_price',
+        'value' => function($model){
+            $model = (object)$model;
+            return round($model->adv_price,2);
+        },
         'filter' => false,
     ],
     [
         'attribute' => 'revenue',
         'value' => function ($model) {
+            $model = (object)$model;
             return $model->match_installs * $model->adv_price;
         },
         'filter' => false,
@@ -155,6 +163,7 @@ $columns = [
     [
         'attribute' => 'def',
         'value' => function ($model) {
+            $model = (object)$model;
             return $model->match_installs - $model->installs;
         },
         'filter' => false,
@@ -164,8 +173,9 @@ $columns = [
     [
         'attribute' => 'deduction_percent',
         'value' => function ($model) {
+            $model = (object)$model;
             if ($model->match_installs > 0) {
-                return round((($model->match_installs - $model->installs) / $model->match_installs), 4);
+                return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2).'%';
             }
             return 0;
         },
@@ -175,6 +185,7 @@ $columns = [
     [
         'attribute' => 'profit',
         'value' => function ($model) {
+            $model = (object)$model;
             $revenue = $model->match_installs * $model->adv_price;
             $cost = $model->installs * $model->pay_out;
             return $revenue - $cost;
@@ -185,6 +196,7 @@ $columns = [
     [
         'attribute' => 'margin',
         'value' => function ($model) {
+            $model = (object)$model;
             $revenue = $model->match_installs * $model->adv_price;
             $cost = $model->installs * $model->pay_out;
             $profit = $revenue - $cost;

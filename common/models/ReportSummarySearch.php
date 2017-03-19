@@ -6,6 +6,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 
 
 class ReportSummarySearch extends ReportSummaryHourly
@@ -65,7 +66,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
             'clh.campaign_id',
             'clh.channel_id',
-            'clh.time',
+            'clh.time timestamp',
             'clh.time_format',
             'clh.clicks',
             'clh.unique_clicks',
@@ -119,11 +120,18 @@ class ReportSummarySearch extends ReportSummaryHourly
         return $dataProvider;
     }
 
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     * @return ActiveDataProvider
+     */
     public function dailySearch($params)
     {
 
-        $query = ReportSummaryDaily::find();
-        $query->alias('clh');
+//        $query = ReportSummaryDaily::find();
+        $query = new Query();
+//        $query->alias('clh');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -136,7 +144,7 @@ class ReportSummarySearch extends ReportSummaryHourly
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
-        $start = $start->sub(new DateInterval('P1D'));
+//        $start = $start->sub(new DateInterval('P1D'));
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
@@ -152,22 +160,22 @@ class ReportSummarySearch extends ReportSummaryHourly
 
             'clh.campaign_id',
             'clh.channel_id',
-            'clh.time',
-            'clh.time_format',
-            'clh.clicks',
-            'clh.unique_clicks',
-            'clh.installs',
-            'clh.match_installs',
-            'clh.pay_out',
-            'clh.adv_price',
-            'clh.daily_cap',
+//            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
             'ad.username adv_name',
             'u.username bd',
             'o.username om',
 
         ]);
-        $query->joinWith('channel ch');
-        $query->joinWith('campaign cam');
+        $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         $query->leftJoin('user o', 'ch.om = o.id');
@@ -190,15 +198,18 @@ class ReportSummarySearch extends ReportSummaryHourly
             'cam.traffic_source' => $this->traffic_source,
         ]);
 
-
-        $query->andFilterWhere(['like', 'time_format', $this->time_format])
-            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'cam.target_geo', $this->geo])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'o.username', $this->om])
-            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'timestamp',
+        ]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         return $dataProvider;
     }

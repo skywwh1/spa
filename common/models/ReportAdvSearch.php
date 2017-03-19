@@ -6,6 +6,7 @@ use DateInterval;
 use DateTime;
 use DateTimeZone;
 use yii\data\ActiveDataProvider;
+use yii\db\Query;
 
 
 class ReportAdvSearch extends ReportAdvHourly
@@ -56,7 +57,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
-            'clh.time',
+            'clh.time timestamp',
             'clh.time_format',
             'clh.clicks',
             'clh.unique_clicks',
@@ -97,8 +98,9 @@ class ReportAdvSearch extends ReportAdvHourly
     public function dailySearch($params)
     {
 
-        $query = ReportAdvDaily::find();
-        $query->alias('clh');
+        //$query = ReportAdvDaily::find();
+        $query = new Query();
+        //$query->alias('clh');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -111,7 +113,7 @@ class ReportAdvSearch extends ReportAdvHourly
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
-        $start = $start->sub(new DateInterval('P1D'));
+//        $start = $start->sub(new DateInterval('P1D'));
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
@@ -121,20 +123,20 @@ class ReportAdvSearch extends ReportAdvHourly
             'clh.campaign_id',
             'clh.channel_id',
             'clh.time',
-            'clh.time_format',
-            'clh.clicks',
-            'clh.unique_clicks',
-            'clh.installs',
-            'clh.match_installs',
-            'clh.pay_out',
-            'clh.adv_price',
-            'clh.daily_cap',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
             'ad.username adv_name',
             'u.username bd',
 
         ]);
-        $query->joinWith('channel ch');
-        $query->joinWith('campaign cam');
+        $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         // grid filtering conditions
@@ -147,12 +149,16 @@ class ReportAdvSearch extends ReportAdvHourly
             'ad.username' => $this->adv_name,
         ]);
 
-        $query->andFilterWhere(['like', 'time_format', $this->time_format])
-            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
-            ->andFilterWhere(['>', 'time', $start])
+            ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'timestamp',
+        ]);
         $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         return $dataProvider;
     }
