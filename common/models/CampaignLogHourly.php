@@ -2,8 +2,6 @@
 
 namespace common\models;
 
-use Yii;
-
 /**
  * This is the model class for table "campaign_log_hourly".
  *
@@ -18,6 +16,8 @@ use Yii;
  * @property string $pay_out
  * @property string $adv_price
  * @property string $daily_cap
+ * @property string $cap
+ * @property integer $create_time
  * @property Campaign $campaign
  * @property Channel $channel
  */
@@ -38,9 +38,9 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'time'], 'required'],
-            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs'], 'integer'],
+            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'create_time'], 'integer'],
             [['pay_out', 'adv_price'], 'number'],
-            [['time_format', 'daily_cap'], 'string', 'max' => 100],
+            [['time_format', 'daily_cap', 'cap'], 'string', 'max' => 100],
         ];
     }
 
@@ -91,6 +91,15 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
 
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
+    }
+
+
     /**
      * @return array|CampaignLogHourly[]
      */
@@ -98,5 +107,56 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
     {
         var_dump(static::find()->where('pay_out=0')->orWhere('adv_price=0')->createCommand()->sql);
         return static::find()->where('pay_out=0')->orWhere('adv_price=0')->all();
+    }
+
+    public static function findNullCap()
+    {
+        return static::find()->where(['cap' => null])->orWhere(['daily_cap' => null])->all();
+    }
+
+    /**
+     * @param $start
+     * @param $end
+     * @param $campaign_id
+     * @param $channel_id
+     * @return array|null|CampaignLogHourly
+     */
+    public static function findDateReport($start, $end, $campaign_id, $channel_id)
+    {
+        $query = ReportChannelHourly::find();
+        $query->alias('clh');
+//        $a = strtotime($this->start);
+        $query->select([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.time timestamp',
+            'clh.time_format',
+            'clh.daily_cap',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $campaign_id,
+            'channel_id' => $channel_id,
+
+        ]);
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+        ]);
+
+        $query->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+//        var_dump($start);
+//        var_dump($end);
+//        var_dump($query->createCommand()->sql);
+//        die();
+        return $query->one();
     }
 }

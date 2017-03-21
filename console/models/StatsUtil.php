@@ -39,7 +39,7 @@ class StatsUtil
         $this->statsHourly(3, $start_time, $end_time);
     }
 
-    public function statsDaily($start_time,$end_time)
+    public function statsDaily($start_time, $end_time)
     {
         date_default_timezone_set("Asia/Shanghai");
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
@@ -275,6 +275,23 @@ class StatsUtil
                 }
                 if ($item->adv_price == 0) {
                     $item->adv_price = $sts->campaign->adv_price;
+                }
+                $item->save();
+            }
+        }
+    }
+
+    public function updateCaps()
+    {
+        $log = CampaignLogHourly::findNullCap();
+        if (!empty($log)) {
+            foreach ($log as $item) {
+                $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (empty($item->daily_cap)) {
+                    $item->daily_cap = $sts->daily_cap;
+                }
+                if (empty($item->cap)) {
+                    $item->cap = $sts->campaign->daily_cap;
                 }
                 $item->save();
             }

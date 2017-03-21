@@ -173,7 +173,7 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="#"><i class="fa fa-circle-o"></i> Test</a>
+                        <li><a href="/finance-pending/index" data-menu="finance-pending-index"><i class="fa fa-circle-o"></i> Pending List</a></li>
                         </li>
                     </ul>
                 </li>

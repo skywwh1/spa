@@ -233,6 +233,9 @@ class TestController extends Controller
     public function actionTmd()
     {
 
+        $aa = new StatsUtil();
+        $aa->updateCaps();
+        die();
 echo date('Y-m-d\TH:i:s\Z',time())."\n";
 die();
         $aa = new Movista();

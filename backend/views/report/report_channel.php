@@ -90,7 +90,7 @@ $columns = [
         'value' => function ($model) {
             $model = (object)$model;
             if ($model->clicks > 0) {
-                return round(($model->installs / $model->clicks) * 100, 2).'%';
+                return round(($model->installs / $model->clicks) * 100, 2) . '%';
             }
             return 0;
         },
@@ -100,9 +100,9 @@ $columns = [
     [
         'label' => 'Payout(avg)',
         'attribute' => 'pay_out',
-        'value' => function($model){
+        'value' => function ($model) {
             $model = (object)$model;
-            return round($model->pay_out,2);
+            return round($model->pay_out, 2);
         },
         'filter' => false,
     ],
@@ -126,7 +126,7 @@ $columns = [
         'value' => function ($model) {
             $model = (object)$model;
             if ($model->clicks > 0) {
-                return round(($model->match_installs / $model->clicks) * 100, 2).'%';
+                return round(($model->match_installs / $model->clicks) * 100, 2) . '%';
 
             }
             return 0;
@@ -136,9 +136,9 @@ $columns = [
     [
         'label' => 'ADV Price(avg)',
         'attribute' => 'adv_price',
-        'value' => function($model){
+        'value' => function ($model) {
             $model = (object)$model;
-            return round($model->adv_price,2);
+            return round($model->adv_price, 2);
         },
         'filter' => false,
     ],
@@ -168,7 +168,7 @@ $columns = [
         'value' => function ($model) {
             $model = (object)$model;
             if ($model->match_installs > 0) {
-                return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2).'%';
+                return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2) . '%';
             }
             return 0;
         },
@@ -186,14 +186,14 @@ $columns = [
         'filter' => false,
         'pageSummary' => true,
     ],
-    [
+    [ //低于30%
         'attribute' => 'margin',
         'value' => function ($model) {
             $model = (object)$model;
             $revenue = $model->match_installs * $model->adv_price;
             $cost = $model->installs * $model->pay_out;
             $profit = $revenue - $cost;
-            $margin = $revenue > 0 ? round(($profit / $revenue), 4) : 0;
+            $margin = $revenue > 0 ? round(($profit / $revenue) * 100, 2) . '%' : 0;
             return $margin;
         },
         'filter' => false,

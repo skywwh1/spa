@@ -171,6 +171,17 @@ class ModelsUtil
 //        '3' => 'Rejected',
     );
 
+    const pending_status = array(
+        '0' => 'Pending',
+        '1' => 'Confirmed',
+//        '3' => 'Rejected',
+    );
+
+    public static function getPendingStatus($k)
+    {
+        return static::getValue(static::pending_status, $k);
+    }
+
     public static function getCampaignStatus($k)
     {
         return static::getValue(static::campaign_status, $k);

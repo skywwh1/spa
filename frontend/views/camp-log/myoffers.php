@@ -1,5 +1,6 @@
 <?php
 
+use common\models\Platform;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -22,11 +23,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
 //        'showHeader'=>false,
         'columns' => [
-            'campaign.id',
+            'campaign_id',
 //            'campaign.campaign_name',
             [
                 'label' => 'Campaign Name',
-                'attribute' => 'campaign.campaign_name',
+                'attribute' => 'campaign_name',
+                'value' => 'campaign.campaign_name',
                 'filter' => true,
             ],
 //            'adv_price',
@@ -40,15 +42,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'pay_out',
-                'filter' => false,
+//                'filter' => false,
             ],
 //            'daily_cap',
             [
                 'attribute' => 'daily_cap',
-                'filter' => false,
+//                'filter' => false,
             ],
-            'campaign.geo',
-            'campaign.platform',
+            [
+                'label' => 'GEO',
+                'attribute' => 'geo',
+                'value' => 'campaign.geo',
+                'filter' => true,
+            ],
+            [
+                'label' => 'Platform',
+                'attribute' => 'platform',
+                'value' => 'campaign.platform',
+//                'filter' =>,
+            ],
+
 //             'actual_discount',
 //             'discount',
             //'is_run',

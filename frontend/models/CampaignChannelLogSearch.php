@@ -11,6 +11,10 @@ use yii\data\ActiveDataProvider;
  */
 class CampaignChannelLogSearch extends CampaignChannelLog
 {
+    public $campaign_name;
+    public $geo;
+    public $platform;
+
     /**
      * @inheritdoc
      */
@@ -18,7 +22,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['campaign_uuid', 'track_url', 'note'], 'safe'],
+            [['campaign_uuid', 'track_url', 'note', 'campaign_name', 'geo', 'platform'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -65,11 +69,12 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             'cl.adv_price' => $this->adv_price,
             'cl.pricing_mode' => $this->pricing_mode,
             'pay_out' => $this->pay_out,
-            'daily_cap' => $this->daily_cap,
+            'cl.daily_cap' => $this->daily_cap,
             'actual_discount' => $this->actual_discount,
             'discount' => $this->discount,
             'cl.status' => 1,
             'c.status' => 1,
+            'c.platform' => $this->platform,
             'is_run' => $this->is_run,
             'creator' => $this->creator,
             'create_time' => $this->create_time,
@@ -88,11 +93,11 @@ class CampaignChannelLogSearch extends CampaignChannelLog
             'margin' => $this->margin,
         ]);
 
-        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid]);
-//            ->andFilterWhere(['like', 'track_url', $this->track_url])
+        $query->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
+            ->andFilterWhere(['like', 'c.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'c.target_geo', $this->geo]);
 //            ->andFilterWhere(['like', 'note', $this->note]);
         $query->orderBy('create_time Desc');
-
         return $dataProvider;
     }
 
