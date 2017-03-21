@@ -1,6 +1,7 @@
 <?php
 
 use backend\assets\AdminAsset;
+use kartik\date\DatePicker;
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -12,17 +13,20 @@ AdminAsset::register($this);
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'restart-form',]); ?>
-<?= $form->field($model, 'promote_end')->widget(DateTimePicker::classname(), [
-    'type' => DateTimePicker::TYPE_INPUT,
-    'value' => isset($model->promote_end) ? date("Y-m-d h:i", $model->promote_start) : '',
-    'pluginOptions' => [
-        'autoclose' => true,
-        'format' => 'yyyy-mm-dd hh:ii',
-//        'startDate' => date('Y-m-d h:i', strtotime("+1 day"))
-    ],
-    'readonly' => true,
-]);
-?>
+    <div class="form-group">
+        <?php
+        echo '<label class="control-label">Promote Start</label>';
+        echo DatePicker::widget([
+            'name' => 'Campaign[promote_start]',
+            'type' => DatePicker::TYPE_INPUT,
+            'value' => isset($model->promote_start) ? date("Y-m-d", $model->promote_start) : '',
+            'pluginOptions' => [
+                'autoclose' => true,
+                'format' => 'yyyy-mm-dd'
+            ]
+        ]);
+        ?>
+    </div>
     <div class="form-group">
         <?= Html::button('Restart', ['class' => 'btn btn-success', 'id' => 'restart-button']) ?>
     </div>
