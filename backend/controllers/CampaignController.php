@@ -147,11 +147,11 @@ class CampaignController extends Controller
         $model->promote_end = null;
         if ($model->load(Yii::$app->request->post()) && Yii::$app->request->isAjax) {
             $model->status = 1;
-            if ($model->promote_end != 0) {
-                $model->promote_end = strtotime($model->promote_end);
-            } else {
-                $model->promote_end = null;
-            }
+//            if ($model->promote_end != 0) {
+//                $model->promote_end = strtotime($model->promote_end);
+//            } else {
+//            }
+            $model->promote_end = null;
             if ($model->save()) {
                 return 'success';
             } else {
