@@ -259,6 +259,7 @@ class CountController extends Controller
         $stats->statsUniqueClickHourly($start_time, $end_time);
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
+        $stats->updateCaps();
 
         $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
         $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));

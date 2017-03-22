@@ -309,6 +309,8 @@ class StatsUtil
         if (!empty($log)) {
             foreach ($log as $item) {
                 $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (empty($sts))
+                    continue;
                 if (empty($item->daily_cap)) {
                     $item->daily_cap = $sts->daily_cap;
                 }
