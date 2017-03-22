@@ -19,7 +19,19 @@ use yii\widgets\ActiveForm;
                     <?php $form = ActiveForm::begin(); ?>
                     <div class="row">
                         <div class="col-lg-6">
-                            <?= $form->field($model, 'campaign_id')->textInput() ?>
+                            <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
+                                'pluginOptions' => ['highlight' => true],
+                                'options' => ['value' => $model->adv_name,],
+                                'dataset' => [
+                                    [
+                                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                        'display' => 'value',
+                                        'remote' => [
+                                            'url' => Url::to(['campaign/get_adv_list']) . '?name=%QUERY',
+                                            'wildcard' => '%QUERY'
+                                        ]
+                                    ]],
+                            ]) ?>
                         </div>
                     </div>
                     <div class="row">

@@ -233,6 +233,10 @@ class TestController extends Controller
     public function actionTmd()
     {
 
+        $aa = new Campaign();
+        $aa->getGeo();
+        Campaign::findAllByAdv('aa');
+
         $aa = new StatsUtil();
         $aa->updateCaps();
         die();

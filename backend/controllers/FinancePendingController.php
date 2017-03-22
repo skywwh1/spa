@@ -5,6 +5,7 @@ namespace backend\controllers;
 use api\modules\v1\models\Channel;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
+use common\models\Deliver;
 use common\models\User;
 use DateInterval;
 use DateTime;
@@ -91,17 +92,23 @@ class FinancePendingController extends Controller
         $model = new FinancePending();
 
         if ($model->load(Yii::$app->request->post())) {
-            if (isset($model->is_all) && $model->is_all == 1) {
 
+            if (isset($model->is_all) && $model->is_all == 1) {
+                $this->createMultipleByCam($model);
+                return $this->redirect(['index']);
             } else {
-                $this->beforeSave($model);
-                $model->save();
-                var_dump($model->getErrors());
-                die();
+                //加载channel_id;
+                $channel = Channel::findOne(['username' => $model->channel_name]);
+                if (!empty($model->channel_name)) {
+                    if (!empty($channel)) {
+                        $model->channel_id = $channel->id;
+                    }
+                }
+                $this->savePending($model);
+                return $this->redirect(['index']);
             }
-            return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->render('campaign_pending_add', [
                 'model' => $model,
             ]);
         }
@@ -119,7 +126,7 @@ class FinancePendingController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
-            return $this->render('create', [
+            return $this->render('adv_pending_add', [
                 'model' => $model,
             ]);
         }
@@ -176,15 +183,10 @@ class FinancePendingController extends Controller
     /**
      * @param FinancePending $model
      */
-    private function beforeSave(&$model)
+    private function savePending(&$model)
     {
         //加载channel_id;
-        $channel = Channel::findOne(['username' => $model->channel_name]);
-        if (!empty($model->channel_name)) {
-            if (!empty($channel)) {
-                $model->channel_id = $channel->id;
-            }
-        }
+        $channel = Channel::findIdentity($model->channel_id);
         $cam = Campaign::findById($model->campaign_id);
         //加载report 数据；
         $start = new DateTime($model->start_date, new DateTimeZone('Etc/GMT-8'));
@@ -194,16 +196,46 @@ class FinancePendingController extends Controller
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
+//        var_dump($start);
+//        var_dump($end);
+//        var_dump($model->campaign_id);
+//        var_dump($model->channel_name);
+//        die();
         $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
-        $model->installs = $records->installs;
-        $model->match_installs = $records->match_installs;
-        $model->cost = $records->pay_out * $records->installs;
-        $model->revenue = $records->match_installs * $records->adv_price;
-        $model->margin = ($model->revenue - $model->cost) / $model->revenue;
-        $model->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
-        $model->om = User::findIdentity($channel->om)->username;
-        $model->bd = User::findIdentity($cam->advertiser0->bd)->username;
-        $model->adv = $cam->advertiser0->username;
+        if (isset($records)) {
+            $model->installs = $records->installs;
+            $model->match_installs = $records->match_installs;
+            $model->cost = $records->pay_out * $records->installs;
+            $model->revenue = $records->match_installs * $records->adv_price;
+            $model->margin = $model->revenue == 0 ? 0 : ($model->revenue - $model->cost) / $model->revenue;
+            $model->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
+            $model->om = User::findIdentity($channel->om)->username;
+            $model->bd = User::findIdentity($cam->advertiser0->bd)->username;
+            $model->adv = $cam->advertiser0->username;
+            $model->save();
+        } else {
+            $model = null;
+        }
+    }
+
+    private function createMultipleByCam($model)
+    {
+        $delivers = Deliver::findAllRunChannel($model->campaign_id);
+//        var_dump($delivers);
+//        die();
+        foreach ($delivers as $item) {
+            $pending = new FinancePending();
+            $pending->campaign_id = $item->campaign_id;
+            $pending->channel_id = $item->channel_id;
+            $pending->start_date = $model->start_date;
+            $pending->end_date = $model->end_date;
+            $pending->note = $model->note;
+            $this->savePending($pending);
+        }
+    }
+
+    private function createMultipleByAdv($model)
+    {
 
     }
 }

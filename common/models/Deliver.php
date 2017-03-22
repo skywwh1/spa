@@ -5,6 +5,7 @@ namespace common\models;
 use common\utility\MailUtil;
 use phpDocumentor\Reflection\Types\Integer;
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "campaign_channel_log".
@@ -242,6 +243,15 @@ class Deliver extends \yii\db\ActiveRecord
     public static function updateStsStatusByCampaignUid($campaign_uuid, $status)
     {
         static::updateAll(['status' => $status, 'end_time' => null], ['campaign_uuid' => $campaign_uuid, 'is_manual' => 0]);
+    }
+
+    /**
+     * @param $campaign_id
+     * @return array|Deliver[]
+     */
+    public static function findAllRunChannel($campaign_id)
+    {
+        return static::find()->where(['campaign_id' => $campaign_id])->all();
     }
 
 }

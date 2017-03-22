@@ -17,6 +17,8 @@ namespace common\models;
  * @property string $adv_price
  * @property string $daily_cap
  * @property string $cap
+ * @property string $cost
+ * @property string $revenue
  * @property integer $create_time
  * @property Campaign $campaign
  * @property Channel $channel
@@ -39,7 +41,7 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'channel_id', 'time'], 'required'],
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'revenue'], 'number'],
             [['time_format', 'daily_cap', 'cap'], 'string', 'max' => 100],
         ];
     }
@@ -61,6 +63,10 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
             'pay_out' => 'Pay Out',
             'adv_price' => 'Adv Price',
             'daily_cap' => 'Daily Cap',
+            'cap' => 'Cap',
+            'cost' => 'Cost',
+            'revenue' => 'Revenue',
+            'create_time' => 'Create Time',
         ];
     }
 

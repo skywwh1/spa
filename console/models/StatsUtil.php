@@ -142,6 +142,8 @@ class StatsUtil
         $timestamp_select = 'fc.click_time';
         $pay_out_select = '';
         $adv_price_select = '';
+        $cost_select = '';
+        $revenue_select = '';
         switch ($type) {
             case 1:
                 $from = 'log_click fc';
@@ -156,12 +158,14 @@ class StatsUtil
                 $timestamp_select = 'fc.post_time';
                 $clicks_select = 'count(*) clicks';
                 $pay_out_select = 'AVG(fc.pay_out) payout';
+                $cost_select = 'SUM(fc.pay_out) cost';
                 break;
             case 4:
                 $from = 'log_feed fc';
                 $timestamp_select = 'fc.feed_time';
                 $clicks_select = 'count(*) clicks';
                 $adv_price_select = 'AVG(fc.adv_price) adv_price';
+                $revenue_select = 'SUM(fc.adv_price) revenue';
                 break;
         }
         $select = ['fc.campaign_id',
@@ -175,6 +179,12 @@ class StatsUtil
         }
         if (!empty($adv_price_select)) {
             array_push($select, $adv_price_select);
+        }
+        if (!empty($cost_select)) {
+            array_push($select, $cost_select);
+        }
+        if (!empty($revenue_select)) {
+            array_push($select, $revenue_select);
         }
         Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
         $query = new Query();
@@ -200,6 +210,8 @@ class StatsUtil
             $clicks = '';
             $payout = '';
             $adv_price = '';
+            $cost = '';
+            $revenue = '';
             foreach ($item as $k => $v) {
                 if ($k == 'channel_id') {
                     $channel_id = $v;
@@ -221,6 +233,12 @@ class StatsUtil
                 }
                 if ($k == 'adv_price') {
                     $adv_price = $v;
+                }
+                if ($k == 'cost') {
+                    $cost = $v;
+                }
+                if ($k == 'revenue') {
+                    $revenue = $v;
                 }
             }
             $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
@@ -252,10 +270,12 @@ class StatsUtil
                 case 3:
                     $hourly->installs = $clicks;
                     $hourly->pay_out = $payout;
+                    $hourly->cost = $cost;
                     break;
                 case 4:
                     $hourly->match_installs = $clicks;
                     $hourly->adv_price = $adv_price;
+                    $hourly->revenue = $revenue;
                     break;
             }
             if (!$hourly->save()) {
@@ -270,6 +290,8 @@ class StatsUtil
         if (!empty($log)) {
             foreach ($log as $item) {
                 $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (empty($sts))
+                    continue;
                 if ($item->pay_out == 0) {
                     $item->pay_out = $sts->pay_out;
                 }

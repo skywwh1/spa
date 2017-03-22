@@ -9,6 +9,8 @@ use common\models\ReportChannelSearch;
 use common\models\ReportSearch;
 use common\models\ReportSummaryHourlySearch;
 use common\models\ReportSummarySearch;
+use DateTime;
+use DateTimeZone;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -99,7 +101,16 @@ class ReportController extends Controller
     public function actionReportChannel()
     {
         $searchModel = new ReportChannelSearch();
-        $dataProvider = array();
+
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        $searchModel->type = 2;
+        $dataProvider = $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;

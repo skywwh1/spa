@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-channel"></div>
 <?php echo $this->render('report_channel_search', ['model' => $searchModel]);
-
+if ($searchModel->type == 2) {
+    $layout = '{summary} {items} {pager}';
+} else {
+    $layout = '{toolbar}{summary} {items} {pager}';
+}
 $columns = [
     [
         'label' => 'Time(UTC)',
@@ -33,13 +37,6 @@ $columns = [
         'filter' => false,
         'pageSummary' => 'Page Total',
     ],
-//                                [
-//                                    'label' => 'Time(UTC+8)',
-//                                    'attribute' => 'time_format',
-//                                    // 'value' => 'time_format',
-//                                    'filter' => false,
-//                                    'pageSummary' => 'Page Total',
-//                                ],
     [
         'label' => 'Channel',
         'attribute' => 'channel_name',
@@ -212,12 +209,11 @@ if (!empty($dataProvider)) {
                 <div class="box-body">
                     <div class="campaign-log-hourly-index">
 
-
                         <?php echo GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'showPageSummary' => true,
-                            'layout' => '{toolbar}{summary} {items} {pager}',
+                            'layout' => $layout,
                             'toolbar' => [
                                 '{toggleData}',
                             ],

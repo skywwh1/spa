@@ -51,16 +51,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 // 'label' => 'start_date',
                                 'attribute' => 'start_date',
-                                'value' => 'start_date',
-                                'format'=>'date',
+                                'value' => function ($model){
+                                    $format = 'Y-m-d';
+                                    $date = new DateTime();
+                                    $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                    $date->setTimestamp($model->start_date);
+                                    return $date->format($format);
+                                },
                             ],
                             [
                                 // 'label' => 'end_date',
                                 'attribute' => 'end_date',
-                                'value' => 'end_date',
-                                'format'=>'date',
+                                'value' => function ($model){
+                                    $format = 'Y-m-d';
+                                    $date = new DateTime();
+                                    $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                    $date->setTimestamp($model->end_date);
+                                    return $date->format($format);
+                                },
 
                             ],
+
                             [
                                 'label' => 'installs',
                                 'attribute' => 'installs',

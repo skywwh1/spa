@@ -112,6 +112,7 @@ class ReportChannelSearch extends ReportChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -172,5 +173,16 @@ class ReportChannelSearch extends ReportChannelHourly
 //        var_dump($query->createCommand()->sql);
 //        die();
         return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     * @return ActiveDataProvider
+     */
+    public function summarySearch($params)
+    {
+
     }
 }
