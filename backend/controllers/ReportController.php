@@ -121,10 +121,11 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
             }
         }
-
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         return $this->render('report_channel', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 

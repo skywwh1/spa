@@ -11,9 +11,7 @@ class ReportChannelHourly extends CampaignLogHourly
     public $om;
 
     public $cvr;
-    public $cost;
     public $match_cvr;
-    public $revenue;
     public $def;
     public $deduction_percent;
     public $profit;
