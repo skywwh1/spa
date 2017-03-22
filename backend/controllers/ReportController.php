@@ -132,7 +132,15 @@ class ReportController extends Controller
     public function actionReportAdv()
     {
         $searchModel = new ReportAdvSearch();
-        $dataProvider = array();
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        $searchModel->type = 2;
+        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;
@@ -142,10 +150,11 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
             }
         }
-
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         return $this->render('report_adv', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 

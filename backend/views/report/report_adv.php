@@ -14,7 +14,11 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-adv"></div>
 <?php echo $this->render('report_adv_search', ['model' => $searchModel]);
-
+if ($searchModel->type == 2) {
+    $layout = '{summary} {items} {pager}';
+} else {
+    $layout = '{toolbar}{summary} {items} {pager}';
+}
 $columns = [
     [
         'label' => 'Time(UTC)',
@@ -98,28 +102,23 @@ $columns = [
             $model = (object)$model;
             if ($model->clicks > 0) {
 
-                return round(($model->installs / $model->clicks) * 100, 2).'%';
+                return round(($model->installs / $model->clicks) * 100, 2) . '%';
             }
             return 0;
         },
         'filter' => false,
     ],
-
     [
         'label' => 'Payout(avg)',
         'attribute' => 'pay_out',
-        'value' => function($model){
+        'value' => function ($model) {
             $model = (object)$model;
-            return round($model->pay_out,2);
+            return round($model->pay_out, 2);
         },
         'filter' => false,
     ],
     [
         'attribute' => 'cost',
-        'value' => function ($model) {
-            $model = (object)$model;
-            return $model->installs * $model->pay_out;
-        },
         'filter' => false,
         'pageSummary' => true,
     ],
@@ -134,7 +133,7 @@ $columns = [
         'value' => function ($model) {
             $model = (object)$model;
             if ($model->clicks > 0) {
-                return round(($model->match_installs / $model->clicks) * 100, 2).'%';
+                return round(($model->match_installs / $model->clicks) * 100, 2) . '%';
 
             }
             return 0;
@@ -144,18 +143,15 @@ $columns = [
     [
         'label' => 'ADV Price(avg)',
         'attribute' => 'adv_price',
-        'value' => function($model){
+        'value' => function ($model) {
             $model = (object)$model;
-            return round($model->adv_price,2);
+            return round($model->adv_price, 2);
         },
         'filter' => false,
     ],
     [
         'attribute' => 'revenue',
-        'value' => function ($model) {
-            $model = (object)$model;
-            return $model->match_installs * $model->adv_price;
-        },
+//        'value' => 'revenue',
         'filter' => false,
         'pageSummary' => true,
     ],
@@ -175,7 +171,7 @@ $columns = [
         'value' => function ($model) {
             $model = (object)$model;
             if ($model->match_installs > 0) {
-                return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2).'%';
+                return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2) . '%';
             }
             return 0;
         },
@@ -186,24 +182,28 @@ $columns = [
         'attribute' => 'profit',
         'value' => function ($model) {
             $model = (object)$model;
-            $revenue = $model->match_installs * $model->adv_price;
-            $cost = $model->installs * $model->pay_out;
-            return $revenue - $cost;
+            return $model->revenue - $model->cost;
         },
         'filter' => false,
         'pageSummary' => true,
     ],
-    [
+    [ //低于30%
         'attribute' => 'margin',
         'value' => function ($model) {
             $model = (object)$model;
-            $revenue = $model->match_installs * $model->adv_price;
-            $cost = $model->installs * $model->pay_out;
-            $profit = $revenue - $cost;
-            $margin = $revenue > 0 ? round(($profit / $revenue), 4) : 0;
+            $profit = $model->revenue - $model->cost;
+            $margin = $model->revenue > 0 ? round(($profit / $model->revenue) * 100, 2) . '%' : 0;
             return $margin;
         },
         'filter' => false,
+        'contentOptions' => function ($model) {
+            $model = (object)$model;
+            $profit = $model->revenue - $model->cost;
+            $margin = $model->revenue > 0 ? round(($profit / $model->revenue), 2) : 0;
+            if ($margin < 0.3) {
+                return ['class' => 'bg-danger'];
+            }
+        }
     ],
     [
         'label' => 'BD',
@@ -219,12 +219,125 @@ if (!empty($dataProvider)) {
                 <div class="box-body">
                     <div class="campaign-log-hourly-index">
 
+                        <?php echo GridView::widget([
+                            'dataProvider' => $summary,
+                            'layout' => '{items}',
+                            'columns' => [
+                                [
+                                    // 'label' => 'clicks',
+                                    'attribute' => 'clicks',
+                                    // 'value' => 'clicks',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'unique_clicks',
+                                    'value' => 'unique_clicks',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'installs',
+                                    'value' => 'installs',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'cvr',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        if ($model->clicks > 0) {
+                                            return round(($model->installs / $model->clicks) * 100, 2) . '%';
+                                        }
+                                        return 0;
+                                    },
+                                    'filter' => false,
+                                ],
+                                [
+                                    'attribute' => 'cost',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'match_installs',
+                                    'value' => 'match_installs',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'match_cvr',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        if ($model->clicks > 0) {
+                                            return round(($model->match_installs / $model->clicks) * 100, 2) . '%';
+                                        }
+                                        return 0;
+                                    },
+                                    'filter' => false,
+                                ],
+                                [
+                                    'attribute' => 'revenue',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
 
+                                [
+                                    'attribute' => 'def',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        return $model->match_installs - $model->installs;
+                                    },
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+
+                                [
+                                    'attribute' => 'deduction_percent',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        if ($model->match_installs > 0) {
+                                            return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2) . '%';
+                                        }
+                                        return 0;
+                                    },
+                                    'filter' => false,
+                                ],
+
+                                [
+                                    'attribute' => 'profit',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+
+                                        return $model->revenue - $model->cost;
+                                    },
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [ //低于30%
+                                    'attribute' => 'margin',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        $profit = $model->revenue - $model->cost;
+                                        $margin = $model->revenue > 0 ? round(($profit / $model->revenue) * 100, 2) . '%' : 0;
+                                        return $margin;
+                                    },
+                                    'filter' => false,
+                                    'contentOptions' => function ($model) {
+                                        $model = (object)$model;
+                                        $profit = $model->revenue - $model->cost;
+                                        $margin = $model->revenue > 0 ? round(($profit / $model->revenue), 2) : 0;
+                                        if ($margin < 0.3) {
+                                            return ['class' => 'bg-danger'];
+                                        }
+                                    }
+                                ],
+                            ],
+                        ]); ?>
                         <?php echo GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'showPageSummary' => true,
-                            'layout' => '{toolbar}{summary} {items} {pager}',
+                            'layout' => $layout,
                             'toolbar' => [
                                 '{toggleData}',
                             ],

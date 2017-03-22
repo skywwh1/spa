@@ -233,8 +233,8 @@ class ReportChannelSearch extends ReportChannelHourly
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
-//        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-//        $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -245,8 +245,8 @@ class ReportChannelSearch extends ReportChannelHourly
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
-//            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-//            ->andFilterWhere(['like', 'u.username', $this->om])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 //        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);

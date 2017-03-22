@@ -169,7 +169,6 @@ $columns = [
         'attribute' => 'profit',
         'value' => function ($model) {
             $model = (object)$model;
-
             return $model->revenue - $model->cost;
         },
         'filter' => false,
