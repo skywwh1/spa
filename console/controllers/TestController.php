@@ -233,21 +233,9 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-        $aa = new Campaign();
-        $aa->getGeo();
-        Campaign::findAllByAdv('aa');
-
-        $aa = new StatsUtil();
-        $aa->updateCaps();
-        die();
-echo date('Y-m-d\TH:i:s\Z',time())."\n";
-die();
         $aa = new Movista();
         $aa->getApiCampaign();
-        $str = '179.82.170.187';
-        $aa = explode(', ',$str);
-        var_dump($aa);
-        echo count($aa)."\n";
+
         die();
 //        $aa = new Glispa();
 //        $aa->getApiCampaign();

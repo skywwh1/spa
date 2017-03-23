@@ -146,6 +146,8 @@ class CampaignController extends Controller
                         } else {
                             $this->echoMessage($item->channel_id . ' send fail');
                         }
+                        $this->echoMessage("waiting 1s");
+                        sleep(1);
                     }
                 }
             }
@@ -162,6 +164,8 @@ class CampaignController extends Controller
                         } else {
                             $this->echoMessage($item->channel_id . ' send fail');
                         }
+                        $this->echoMessage("waiting 1s");
+                        sleep(1);
                     }
                 }
             }
@@ -178,6 +182,8 @@ class CampaignController extends Controller
                         } else {
                             $this->echoMessage($item->channel_id . ' send fail');
                         }
+                        $this->echoMessage("waiting 1s");
+                        sleep(1);
                     }
                 }
             }
