@@ -90,8 +90,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
      */
     public static function getStsSendMail()
     {
-        return static::find()->where(['is_send' => 1, 'is_effected' => 0])
-            ->all();
+        return static::find()->where(['is_send' => 1, 'is_effected' => 0])->limit(10)->all();
     }
 
     public static function getSendEmail()
