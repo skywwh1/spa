@@ -136,7 +136,7 @@ class DeliverController extends Controller
         }
         $data = array();
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-            $model->is_send_create = 0;
+           // $model->is_send_create = 0;
             $model->status = 1;
             $model->end_time = null;
             if ($model->save()) {
@@ -235,39 +235,39 @@ class DeliverController extends Controller
                 ]);
             }
             $url = $model->tracking_link;
-            $aa = explode('?',$url);
+            $aa = explode('?', $url);
             $all_parameters = $aa[1];
             /**
-            $cache = Yii::$app->cache;
-            $cache->set($channel->id . '', 'test', 300);
-            $curl = new Curl();
-            $curl->setOptions(array(
-                CURLOPT_FOLLOWLOCATION => 1,
-            ));
-            $curl->get($model->tracking_link);
-            $headers = $curl->responseHeaders;
-            $clicks = '';
-            if (!empty($headers) && is_array($headers)) {
-                foreach ($headers as $k => $v) {
-                    $clicks .= $v;
-                }
-            }
-            $model->result[] = 'Click response: ' . $clicks;
-            $data = $cache->get($channel->id . "");
-            $stream =Stream::getLatestClick($channel->id);
-            if ($data !== false && $data !== 'test') {
-                $stream = $data;
-            }
-//            $cache->delete($channel->id . "");
-
-//            $stream = Stream::getLatestClick($channel->id);
-            if ($stream == null) {
-                $model->result[] = 'Please run tracking link on browser';
-                return $this->render('test_link', [
-                    'model' => $model,
-                ]);
-            } **/
-            $link = Channel::genPostBack($channel->post_back,$all_parameters);
+             * $cache = Yii::$app->cache;
+             * $cache->set($channel->id . '', 'test', 300);
+             * $curl = new Curl();
+             * $curl->setOptions(array(
+             * CURLOPT_FOLLOWLOCATION => 1,
+             * ));
+             * $curl->get($model->tracking_link);
+             * $headers = $curl->responseHeaders;
+             * $clicks = '';
+             * if (!empty($headers) && is_array($headers)) {
+             * foreach ($headers as $k => $v) {
+             * $clicks .= $v;
+             * }
+             * }
+             * $model->result[] = 'Click response: ' . $clicks;
+             * $data = $cache->get($channel->id . "");
+             * $stream =Stream::getLatestClick($channel->id);
+             * if ($data !== false && $data !== 'test') {
+             * $stream = $data;
+             * }
+             * //            $cache->delete($channel->id . "");
+             *
+             * //            $stream = Stream::getLatestClick($channel->id);
+             * if ($stream == null) {
+             * $model->result[] = 'Please run tracking link on browser';
+             * return $this->render('test_link', [
+             * 'model' => $model,
+             * ]);
+             * } **/
+            $link = Channel::genPostBack($channel->post_back, $all_parameters);
             $model->result[] = 'post back link: ' . $link;
             $curl = new Curl();
             if ($curl->get($link) !== false) {

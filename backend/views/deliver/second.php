@@ -54,6 +54,10 @@ if (!is_null($delivers)) {
                     <?= $form->field($deliver, 'pay_out')->textInput() ?>
                     <?= $form->field($deliver, 'daily_cap')->textInput() ?>
                     <?= $form->field($deliver, 'discount')->textInput() ?>
+                    <?= $form->field($deliver, 'is_send_create')->dropDownList([
+                        '0' => 'Yes',
+                        '1' => 'No',
+                    ]) ?>
                     <?= $form->field($deliver, 'note')->textarea(['rows' => 6]) ?>
 
                     <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>

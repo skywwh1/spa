@@ -122,7 +122,7 @@ class Deliver extends \yii\db\ActiveRecord
             'profit' => 'Profit',
             'margin' => 'Margin',
             'note' => 'Note',
-            'is_send_create' => 'Is Send Create',
+            'is_send_create' => 'If Notify',
             'is_manual' => 'Is Manual',
             'channel0' => 'Channel',
         ];
