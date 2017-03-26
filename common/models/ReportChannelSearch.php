@@ -149,6 +149,8 @@ class ReportChannelSearch extends ReportChannelHourly
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
             'u.username om',
+            'clh.cap cap',
+            'clh.daily_cap',
 //            'campaign_name',
 
         ]);

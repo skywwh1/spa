@@ -43,6 +43,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -136,6 +137,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -230,6 +232,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -310,4 +313,83 @@ class ReportSummarySearch extends ReportSummaryHourly
         return $dataProvider;
     }
 
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     * @return ActiveDataProvider
+     */
+    public function summary($params)
+    {
+        $query = new Query();
+//        $query->alias('clh');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+//        var_dump(strtotime($this->start . '-1 day'));
+//        var_dump(strtotime($this->end . '+1 day'));
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+//        $start = $start->sub(new DateInterval('P1D'));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+        $query->select([
+//            'ch.username channel_name',
+//            'cam.campaign_name campaign_name',
+//            'clh.campaign_id',
+//            'clh.channel_id',
+////            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
+//            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+//            'AVG(clh.pay_out) pay_out',
+//            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+//            'u.username om',
+//            'campaign_name',
+
+        ]);
+        $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'pay_out' => $this->pay_out,
+            'adv_price' => $this->adv_price,
+            'ch.username' => $this->channel_name,
+            'ad.username' => $this->adv_name,
+            'u.username' => $this->bd,
+            'o.username' => $this->om,
+            'cam.campaign_uuid' => $this->campaign_uuid,
+            'cam.category' => $this->category,
+            'cam.pricing_mode' => $this->price_model,
+            'cam.platform' => $this->platform,
+            'cam.device' => $this->device,
+            'cam.traffic_source' => $this->traffic_source,
+        ]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'cam.target_geo', $this->geo])
+            ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'o.username', $this->om])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+        return $dataProvider;
+    }
 }

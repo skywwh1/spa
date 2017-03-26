@@ -162,6 +162,7 @@ class ReportController extends Controller
     {
         $searchModel = new ReportSummarySearch();
         $dataProvider = array();
+        $summary = array();
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;
@@ -174,11 +175,13 @@ class ReportController extends Controller
             } else {
                 $dataProvider = $searchModel->summarySearch(Yii::$app->request->queryParams);
             }
+            $summary = $searchModel->summary(Yii::$app->request->queryParams);
         }
 
         return $this->render('report_summary', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 

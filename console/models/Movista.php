@@ -6,6 +6,7 @@ use common\models\Advertiser;
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\Campaign;
+use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use stdClass;
@@ -90,6 +91,7 @@ class Movista
 
         if (!empty($data)) {
             $apiCampaigns = ApiUtil::genApiCampaigns($api, $data);
+            $liveCamps = array();
             if (!empty($apiCampaigns)) {
                 $apiCams = array();
                 ApiCampaign::deleteAll(['adv_id' => $api->adv_id]);
@@ -148,11 +150,29 @@ class Movista
                         $campaign->open_type = 1;
                         $campaign->save();
                         var_dump($campaign->getErrors());
+                        $liveCamps[] = $campaign->campaign_uuid;
                     }
                 }
-
+                $all = Campaign::findAll(['advertiser' => $api->adv_id]);
+                if (!empty($liveCamps)) {
+                    $this->updateCampaignStatus($liveCamps, $all);
+                }
             }
         }
     }
 
+    private function updateCampaignStatus($campaigns, $all)
+    {
+//        var_dump($campaigns);
+//        var_dump($all);
+        foreach ($all as $item) {
+            if (!in_array($item->campaign_uuid, $campaigns)) {
+                $item->status = 2;
+                if ($item->save()) {
+                    Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
+                }
+            }
+        }
+        var_dump('Movista');
+    }
 }

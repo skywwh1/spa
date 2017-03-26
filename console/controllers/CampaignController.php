@@ -172,9 +172,8 @@ class CampaignController extends Controller
         }
 
         if (!empty($pause)) {
-            $this->echoMessage('Paused');
+            $this->echoMessage('Paused start');
             foreach ($pause as $campaign_id => $delivers) {
-                $this->echoMessage('Paused');
                 if (isset($delivers)) {
                     foreach ($delivers as $item) {
                         if (MailUtil::paused($item)) {

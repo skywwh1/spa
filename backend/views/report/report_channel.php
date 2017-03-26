@@ -77,10 +77,35 @@ $columns = [
         'pageSummary' => true,
     ],
     [
+        'label' => 'Installs/Cap',
         'attribute' => 'installs',
-        'value' => 'installs',
+        'value' => function ($model) {
+            $model = (object)$model;
+            return $model->installs . '/' . $model->cap;
+        },
         'filter' => false,
         'pageSummary' => true,
+    ],
+    [
+        'label' => 'Remaining Cap',
+        'attribute' => 'daily_cap',
+        'value' => function ($model) {
+            $model = (object)$model;
+            if ($model->daily_cap == 'open') {
+                return $model->daily_cap;
+            } else {
+                return $model->daily_cap - $model->installs;
+            }
+        },
+        'filter' => false,
+        'contentOptions' => function ($model) {
+            $model = (object)$model;
+            if ($model->daily_cap != 'open') {
+                if ($model->daily_cap - $model->installs < 10) {
+                    return ['class' => 'bg-danger'];
+                }
+            }
+        }
     ],
     [
         'attribute' => 'cvr',
@@ -89,9 +114,19 @@ $columns = [
             if ($model->clicks > 0) {
                 return round(($model->installs / $model->clicks) * 100, 2) . '%';
             }
-            return 0;
+            return "0%";
         },
         'filter' => false,
+        'contentOptions' => function ($model) {
+            $model = (object)$model;
+            $cvr = 0;
+            if ($model->clicks > 0) {
+                $cvr = round(($model->installs / $model->clicks) * 100, 2);
+            }
+            if ($cvr > 2) {
+                return ['class' => 'bg-danger'];
+            }
+        }
     ],
 
     [
