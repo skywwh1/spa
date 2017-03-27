@@ -1,121 +1,58 @@
 <?php
 
-use common\models\RegionsDomain;
+/* @var $this yii\web\View */
+
 use yii\captcha\Captcha;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-/* @var $this yii\web\View */
-/* @var $model frontend\models\ChannelSignupForm */
-/* @var $form ActiveForm */
-$this->title = 'Signup';
+$this->title = 'About';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-signup">
-    <h1>Channel Signup</h1>
-
-    <div class="row">
-        <?php $form = ActiveForm::begin(); ?>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Basic Info</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'username') ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'company') ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'timezone')->dropDownList(ModelsUtil::timezone,['prompt'=>'Select time zone']) ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'email') ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'phone1') ?>
-                            </div>
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'skype') ?>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'country')->dropDownList(RegionsDomain::getAllToArray(),['prompt'=>'Select region']) ?>
-                            </div>
-                            <div class="col-lg-6">
-                                <?= $form->field($model, 'address') ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="tact-con">
+        <img src="<?= Yii::getAlias('@web/new/img/signup-bg.png') ?>" alt=""/>
+        <div class="sign-left">
+            <h1><strong>S</strong>ign<strong>U</strong>p</h1>
+            <div class="p">
+                <p>Please select your role in the following options.</p>
+            </div>
+            <div class="choose">
+                <ul>
+                    <li>
+                        <img src="<?= Yii::getAlias('@web/new/img/choose.png') ?>"/>
+                        <p>Publisher</p>
+                    </li>
+                </ul>
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-9">
-                <div class="panel panel-default">
-                    <div class="panel-heading">Traffic Info</div>
-                    <div class="panel-body">
-                        <?= $form->field($model, 'vertical') ?>
-                        <?= $form->field($model, 'offer_type')->checkboxList(ModelsUtil::offerType) ?>
-                        <?= $form->field($model, 'other_network') ?>
-                        <?= $form->field($model, 'vertical_interested') ?>
-                        <?= $form->field($model, 'special_offer') ?>
-                        <?= $form->field($model, 'regions') ?>
-                        <?= $form->field($model, 'traffic_type')->checkboxList(ModelsUtil::trafficType) ?>
-                    </div>
+        <div class="sign-right">
+            <div class="sign-table">
+                <?php $form = ActiveForm::begin(); ?>
+                <?= $form->field($model, 'company')->textInput(['placeholder'=>'Company'])->label(false) ?>
+                <?= $form->field($model, 'username')->textInput(['placeholder'=>'Username'])->label(false) ?>
+                <?= $form->field($model, 'email')->textInput(['placeholder'=>'Email'])->label(false) ?>
+                <?= $form->field($model, 'password_hash')->passwordInput(['placeholder'=>'Password'])->label(false) ?>
+                <?= $form->field($model, 'confirmPassword')->passwordInput(['placeholder'=>'Confirm Password'])->label(false) ?>
+                <div class="col-lg-6">
+                    <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
+                        'template' => '<div class="row"><div class="col-lg-6">{image}</div><div class="col-lg-6">{input}</div></div>',
+                    ])->label(false)?>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Contact Preferences</div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-lg-7">
-                                <?= $form->field($model, 'best_time')->input('text', ['placeholder' => "Preferred hours? eg: 9:00 am-12:00 am"]) ?>
-                            </div>
-                            <div class="col-lg-5">
-                                <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone,['prompt'=>'Select time zone']) ?>
-                            </div>
-                        </div>
-                        <?= $form->field($model, 'suggested_am') ?>
-                        <?= $form->field($model, 'additional_notes') ?>
-                    </div>
+                <div class="form-group">
+                    <?= Html::submitButton('Submit', ['class' => 'submit-button', 'name' => 'contact-button']) ?>
                 </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Final Comments</div>
-                    <div class="panel-body">
-                        <?= $form->field($model, 'another_info') ?>
-                        <div class="row">
-
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'password_hash')->passwordInput() ?>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-lg-3">
-                                <?= $form->field($model, 'confirmPassword')->passwordInput() ?>
-                            </div>
-                        </div>
-                        <div class="row">
-
-                            <div class="col-lg-6">
-                                <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
-                                    'template' => '<div class="row"><div class="col-lg-6">{input}</div><div class="col-lg-6">{image}</div></div>',
-                                ]) ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <?php ActiveForm::end(); ?>
             </div>
         </div>
-        <div class="form-group">
-            <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
-        </div>
-        <?php ActiveForm::end(); ?>
     </div>
-</div><!-- aa -->
-
+    <div class="con-footer">
+        <p>Localtion:ROOM 1502(A) EASY COMMERCIAL BUILDING,253-261 HENNESSY ROAD,WANCHAI,HONGKONG</p>
+        <p>Eamin: <strong>service@superads.cn</strong></p>
+        <p>Phone:00052-30697751</p>
+    </div>
+<?php
+$this->registerJsFile(
+    '@web/new/js/signup.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>

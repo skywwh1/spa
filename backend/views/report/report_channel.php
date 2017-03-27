@@ -81,20 +81,20 @@ $columns = [
         'attribute' => 'installs',
         'value' => function ($model) {
             $model = (object)$model;
-            return $model->installs . '/' . $model->cap;
+            return $model->installs . '/' . $model->daily_cap;
         },
         'filter' => false,
         'pageSummary' => true,
     ],
     [
         'label' => 'Remaining Cap',
-        'attribute' => 'daily_cap',
+        'attribute' => 'cap',
         'value' => function ($model) {
             $model = (object)$model;
-            if ($model->daily_cap == 'open') {
-                return $model->daily_cap;
+            if ($model->cap == 'open') {
+                return $model->cap;
             } else {
-                return $model->daily_cap - $model->installs;
+                return $model->cap - $model->match_installs;
             }
         },
         'filter' => false,

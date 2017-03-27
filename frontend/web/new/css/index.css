@@ -1,0 +1,727 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+i {
+    font-style: normal;
+}
+
+ul, li, dl, ol {
+    list-style: none;
+}
+
+/*#LoutiNav span{color: #FFFFFF;}*/
+html, body {
+    width: 100%;
+    height: 100%;
+}
+
+html, body {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.nav {
+    width: 100%;
+    height: 67px;
+    background: #383838;
+}
+
+.nav img {
+    height: 80%;
+    margin-left: 35px;
+    margin-top: 0.5%;
+}
+
+#LoutiNav i {
+    display: none;
+    color: #FFFFFF;
+}
+
+#LoutiNav .active {
+    color: #e42c2e;
+}
+
+#LoutiNav li:hover span {
+    display: block;
+    font-size: 20px;
+    color: #e42c2e;
+}
+
+#LoutiNav li:hover i {
+    display: none;
+}
+
+#goTop {
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    background: gray;
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    cursor: pointer;
+    border-radius: 5px;
+    display: none;
+}
+
+#goTop:hover {
+    background: #e42c2e;
+    color: white;
+}
+
+#goTop:hover span {
+    display: block;
+}
+
+#header {
+    height: 200px;
+    background: palegoldenrod;
+    text-align: center;
+    line-height: 200px;
+    font-size: 72px;
+    margin: 0 auto;
+}
+
+.louceng {
+    text-align: center;
+    height: 100%;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#erweima {
+    width: 130px;
+    height: 130px;
+    background: palegreen;
+    display: none;
+    position: absolute;
+    right: 46px;
+    bottom: 5px;
+    line-height: 130px;
+    text-align: center;
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+.nav {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+}
+
+.nav ul {
+    float: right;
+    list-style: none;
+    height: 100%;
+
+}
+
+.nav .inright {
+    margin-right: 20px;
+}
+
+.nav ul li {
+    float: left;
+    height: 100%;
+    width: 120px;
+    line-height: 67px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+.nav ul li a {
+    text-decoration: none;
+    color: #FFFFFF;
+    font-size: 20px;
+}
+
+.nav ul li span {
+    text-decoration: none;
+    font-size: 20px;
+    /*color: #FFFFFF;*/
+}
+
+.clearfix:after, .clearfix:before {
+    content: '';
+    height: 0;
+    line-height: 0;
+    clear: both;
+    display: block;
+    visibility: hidden;
+}
+
+/*轮播图*/
+#main, #main > div {
+    width: 100%;
+    height: 100%;
+}
+
+.slider {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.slider ul {
+    width: 400%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.slider ul li {
+    width: 25%;
+    height: 100%;
+    float: left;
+}
+
+.slider ul li img {
+    width: 100%;
+    height: 100%;
+}
+
+.arror {
+    position: absolute;
+    bottom: 3%;
+    left: 46%;
+}
+
+.arror span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin: 0 10px;
+    border-radius: 5px;
+    border: 1px solid #FFFFFF;
+}
+
+.arror span.active {
+    background: #e42c2e;
+}
+
+/*第一个页面*/
+.Tingkou {
+    position: relative;
+}
+
+.Tingkou img {
+    width: 100%;
+    height: 100%;
+}
+
+.T-left {
+    width: 38%;
+    position: absolute;
+    top: 30%;
+    left: 1%;
+}
+
+.T-left img {
+    width: 100%;
+}
+
+.T-right {
+    width: 60%;
+    position: absolute;
+    top: 10%;
+    right: 5%;
+}
+
+.T-right h1 {
+    float: right;
+    margin: 10% 30% 0 0;
+    font-size: 40px;
+}
+
+.T-right h1 strong {
+    color: #e42c2e;
+}
+
+.T-right p {
+    float: left;
+    margin-top: 5%;
+    padding: 5% 5% 10% 10%;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 24px;
+    color: #666;
+}
+
+.T-right input {
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    background: #e42c2e;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    float: right;
+    margin: 15% 25% 10% 0;
+    font-size: 24px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/*第二个页面*/
+.Housebn {
+    position: relative;
+}
+
+.H-right {
+    width: 50%;
+    height: 65%;
+    position: absolute;
+    bottom: 0%;
+    right: 1%;
+}
+
+.H-right img {
+    width: 100%;
+    height: 100%;
+}
+
+.H-left {
+    width: 60%;
+    position: absolute;
+    top: 10%;
+    left: 2%;
+}
+
+.H-left h1 {
+    float: left;
+    margin-top: 10%;
+    margin-left: 20%;
+    font-size: 40px;
+}
+
+.H-left h1 strong {
+    color: #e42c2e;
+}
+
+.H-left p {
+    float: left;
+    margin-top: 3%;
+    padding: 5% 10% 10% 10%;
+    text-align: left;
+    font-size: 20px;
+    font-weight: 200;
+    line-height: 24px;
+    color: #666;
+}
+
+.H-left input {
+    width: 150px;
+    height: 50px;
+    line-height: 50px;
+    background: #e42c2e;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    float: left;
+    margin: 15% 0 5% 25%;
+    font-size: 24px;
+    color: #FFFFFF;
+    cursor: pointer;
+}
+
+/*第三个页面*/
+.Crousel {
+    position: relative;
+    /*border: 1px solid transparent;*/
+    overflow: hidden;
+}
+
+.Crousel h1 {
+    text-align: center;
+    font-size: 50px;
+    line-height: 100px;
+    margin-top: 110px;
+}
+
+.Crousel h1 strong {
+    color: #e42c2e;
+}
+
+.C-con {
+    width: 100%;
+    margin-top: 8%;
+}
+
+.C-con div {
+    width: 33.33333%;
+    float: left;
+}
+
+.C-con div p {
+    color: #e42c2e;
+    font-size: 40px;
+    line-height: 100px;
+    font-weight: bold;
+}
+
+.C-con div h2 {
+    color: #808080;
+}
+
+/*页脚*/
+#main .footer {
+    width: 100%;
+    height: 80px;
+    background: #383838;
+}
+
+.footer h3 {
+    float: left;
+    line-height: 80px;
+    margin-left: 8%;
+    font-size: 20px;
+    color: #D6D6D6;
+    font-weight: 100;
+}
+
+.footer p {
+    float: right;
+    line-height: 80px;
+    margin-right: 4%;
+    font-size: 20px;
+    color: #D6D6D6;
+}
+
+.footer p strong {
+    color: #e42c2e;
+}
+
+/*contact页面*/
+.tact-con {
+    width: 100%;
+    height: 650px;
+    position: absolute;
+    top: 67px;
+    left: 0;
+}
+
+.tact-con > img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.tact-left {
+    width: 55%;
+    float: left;
+}
+
+.tact-right {
+    width: 40%;
+    float: right;
+    margin-top: 5%;
+}
+
+.tact-right .tact-table {
+    width: 350px;
+    float: left;
+    background: #F1E8E9;;
+}
+
+.sign-right .spe {
+    margin-top: 10%;
+}
+
+.tact-right .tact-table form {
+    width: 100%;
+    padding: 6px 10px;
+    position: relative;
+}
+
+.tact-right .tact-table form i {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 16px;
+    left: 20px;
+}
+
+.tact-right .tact-table form i img {
+    width: 100%;
+}
+
+.tact-right .tact-table form input {
+    width: 280px;
+    padding-left: 40px;
+    height: 45px;
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+}
+
+.tact-right .tact-table form textarea {
+    width: 280px;
+    padding-left: 40px;
+    height: 135px;
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+}
+
+.tact-right .tact-table span {
+    display: inline-block;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #e42c2e;
+    color: #FFFFFF;
+}
+
+.tact-table span {
+    font-size: 23px;
+}
+
+.tact-left h1 {
+    font-size: 55px;
+    text-align: center;
+    margin-top: 15%;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.tact-left h1 strong {
+    color: #e42c2e;
+}
+
+.tact-left .p {
+    width: 80%;
+    margin-top: 5%;
+    padding-left: 13%;
+}
+
+.tact-left p {
+    font-size: 26px;
+    color: #FFFFFF;
+    text-indent: 2em;
+}
+
+.con-footer {
+    width: 100%;
+    position: absolute;
+    top: 800px;
+    background: #383838;
+}
+
+.con-footer p {
+    text-align: center;
+    color: #797979;
+    line-height: 30px;
+    font-size: 16px;
+}
+
+.con-footer p strong {
+    color: #e42c2e;
+}
+
+/*sign页面*/
+.tact-con {
+    width: 100%;
+    #height: 650px;
+    position: absolute;
+    top: 67px;
+    left: 0;
+}
+
+.tact-con > img {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.sign-left {
+    width: 55%;
+    float: left;
+}
+
+.sign-right {
+    width: 35%;
+    float: right;
+    margin-top: 1%;
+}
+
+.sign-right .sign-table {
+    width: 350px;
+    float: left;
+    background: #F1E8E9;;
+}
+
+.sign-right .sign-table form {
+    width: 100%;
+    padding: 4px 10px;
+    position: relative;
+}
+
+.sign-right .sign-table form i {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 16px;
+    left: 20px;
+}
+
+.sign-right .sign-table form i img {
+    width: 100%;
+}
+
+.sign-right .sign-table form input {
+    width: 280px;
+    padding-left: 40px;
+    height: 45px;
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+}
+
+.sign-right .sign-table span {
+    display: inline-block;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #e42c2e;
+    color: #FFFFFF;
+}
+
+.sign-table span {
+    font-size: 23px;
+}
+
+.sign-left h1 {
+    font-size: 50px;
+    text-align: center;
+    margin-top: 10%;
+    color: #000000;
+}
+
+.sign-left h1 strong {
+    color: #e42c2e;
+}
+
+.sign-left .p {
+    margin-top: 5%;
+    padding-left: 8%;
+}
+
+.sign-left p {
+    font-size: 24px;
+    color: #000000;
+    text-indent: 2em;
+}
+
+.con-footer {
+    width: 100%;
+    #position: absolute;
+    #top: 650px;
+    background: #383838;
+}
+
+.con-footer p {
+    text-align: center;
+    color: #797979;
+    line-height: 30px;
+    font-size: 16px;
+}
+
+.con-footer p strong {
+    color: #e42c2e;
+    font-weight: 200;
+}
+
+.choose {
+    width: 100%;
+}
+
+.choose ul {
+    list-style: none;
+}
+
+.choose ul li {
+    width: 47%;
+    float: left;
+    text-align: center;
+    margin-top: 10%;
+}
+
+.choose ul li img {
+    width: 40%;
+    cursor: pointer;
+}
+
+.sign-left .choose ul li p {
+    text-indent: 0em;
+    color: #808080;
+}
+
+.form-group {
+    #padding: 4px;
+}
+
+.submit-button{
+    width: 90%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #e42c2e;
+    color: #FFFFFF;
+}
+
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #a94442;
+}
+
+.sign-middle {
+    width: 35%;
+    margin: 8% auto;
+    line-height: 20px;
+    /*text-align: center;*/
+}
+
+.sign-middle .sign-table {
+    margin-top: 20px;
+    width: 350px;
+    float: left;
+    background: #F1E8E9;;
+}
+
+.sign-middle .sign-table form {
+    width: 100%;
+    padding: 4px 10px;
+    position: relative;
+}
+
+.sign-middle .sign-table form input {
+    width: 280px;
+    padding-left: 45px;
+    height: 45px;
+    border: 1px solid #E1E1E1;
+    border-radius: 5px;
+}
+
+.sign-middle .sign-table span {
+    display: inline-block;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    background: #e42c2e;
+    color: #FFFFFF;
+}

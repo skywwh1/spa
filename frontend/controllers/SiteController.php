@@ -1,8 +1,10 @@
 <?php
+
 namespace frontend\controllers;
 
 use frontend\models\ChannelSignupForm;
 use frontend\models\LoginForm;
+use frontend\models\SignupForm;
 use Yii;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
@@ -80,7 +82,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $this->layout='testmain';
+//        $this->layout = 'testmain';
+//        return $this->render('index');
+        $this->layout = 'new_main';
         return $this->render('index');
     }
 
@@ -91,13 +95,26 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
+       /* if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(['camp-log/index']);
+        } else {
+            return $this->render('login', [
+                'model' => $model,
+            ]);
+        }*/
+        $this->layout = 'new_main';
         if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return  $this->redirect(['camp-log/index']);
+            return $this->redirect(['camp-log/index']);
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -124,6 +141,21 @@ class SiteController extends Controller
      */
     public function actionContact()
     {
+//        $model = new ContactForm();
+//        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+//            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+//                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+//            } else {
+//                Yii::$app->session->setFlash('error', 'There was an error sending email.');
+//            }
+//
+//            return $this->refresh();
+//        } else {
+//            return $this->render('contact', [
+//                'model' => $model,
+//            ]);
+//        }
+        $this->layout = 'new_main';
         $model = new ContactForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
@@ -157,7 +189,18 @@ class SiteController extends Controller
      */
     public function actionSignup()
     {
-        $model = new ChannelSignupForm();
+      /*  $model = new ChannelSignupForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                return $this->render('sigup-finish');
+            }
+        }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);*/
+        $this->layout = 'new_main';
+        $model = new SignupForm();
         if ($model->load(Yii::$app->request->post())) {
             if ($user = $model->signup()) {
                 return $this->render('sigup-finish');
@@ -216,5 +259,63 @@ class SiteController extends Controller
         return $this->render('resetPassword', [
             'model' => $model,
         ]);
+    }
+
+    public function actionTest()
+    {
+        $this->layout = 'new_main';
+        return $this->render('test');
+    }
+
+    public function actionTest2()
+    {
+        $this->layout = 'new_main';
+        $model = new ContactForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
+                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
+            } else {
+                Yii::$app->session->setFlash('error', 'There was an error sending email.');
+            }
+
+            return $this->refresh();
+        } else {
+            return $this->render('test2', [
+                'model' => $model,
+            ]);
+        }
+//        return $this->render('test2');
+    }
+
+    public function actionTest3()
+    {
+        $this->layout = 'new_main';
+        $model = new SignupForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($user = $model->signup()) {
+                return $this->render('sigup-finish');
+            }
+        }
+
+        return $this->render('test3', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionTest4()
+    {
+        $this->layout = 'new_main';
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
+        $model = new LoginForm();
+        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            return $this->redirect(['camp-log/index']);
+        } else {
+            return $this->render('test4', [
+                'model' => $model,
+            ]);
+        }
     }
 }

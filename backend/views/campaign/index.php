@@ -143,9 +143,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'format' => 'raw',
                         ],
                         'campaign_uuid',
-                        'pricing_mode',
-//                        'indirect',
-                        'category',
                         //'target_geo',
                         [
                             'class' => '\kartik\grid\DataColumn',
@@ -218,6 +215,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             }
                         ],
+                        'pricing_mode',
+                        'category',
                     ],
                 ]); ?>
             </div>
