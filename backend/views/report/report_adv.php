@@ -95,32 +95,32 @@ $columns = [
         'attribute' => 'installs',
         'value' => function ($model) {
             $model = (object)$model;
-            return $model->installs . '/' . $model->cap;
+            return $model->installs . '/' . $model->daily_cap;
         },
         'filter' => false,
         'pageSummary' => true,
     ],
-    [
-        'label' => 'Remaining Cap',
-        'attribute' => 'daily_cap',
-        'value' => function ($model) {
-            $model = (object)$model;
-            if ($model->daily_cap == 'open') {
-                return $model->daily_cap;
-            } else {
-                return $model->daily_cap - $model->installs;
-            }
-        },
-        'filter' => false,
-        'contentOptions' => function ($model) {
-            $model = (object)$model;
-            if ($model->daily_cap != 'open') {
-                if ($model->daily_cap - $model->installs < 10) {
-                    return ['class' => 'bg-danger'];
-                }
-            }
-        }
-    ],
+//    [
+//        'label' => 'Remaining Cap',
+//        'attribute' => 'daily_cap',
+//        'value' => function ($model) {
+//            $model = (object)$model;
+//            if ($model->daily_cap == 'open') {
+//                return $model->daily_cap;
+//            } else {
+//                return $model->daily_cap - $model->installs;
+//            }
+//        },
+//        'filter' => false,
+//        'contentOptions' => function ($model) {
+//            $model = (object)$model;
+//            if ($model->daily_cap != 'open') {
+//                if ($model->daily_cap - $model->installs < 10) {
+//                    return ['class' => 'bg-danger'];
+//                }
+//            }
+//        }
+//    ],
     [
         'attribute' => 'cvr',
         'value' => function ($model) {
@@ -164,16 +164,14 @@ $columns = [
         'pageSummary' => true,
     ],
     [
-        'attribute' => 'match_cvr',
+        'label' => 'Match Installs/Cap',
+        'attribute' => 'match_installs',
         'value' => function ($model) {
             $model = (object)$model;
-            if ($model->clicks > 0) {
-                return round(($model->match_installs / $model->clicks) * 100, 2) . '%';
-
-            }
-            return 0;
+            return $model->match_installs . '/' . $model->cap;
         },
         'filter' => false,
+        'pageSummary' => true,
     ],
     [
         'label' => 'ADV Price(avg)',

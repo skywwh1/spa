@@ -77,12 +77,6 @@ $columns = [
         'pageSummary' => true,
     ],
     [
-        'attribute' => 'total_installs',
-        'value' => 'total_installs',
-        'filter' => false,
-        'pageSummary' => false,
-    ],
-    [
         'label' => 'Installs/Cap',
         'attribute' => 'installs',
         'value' => function ($model) {
@@ -92,33 +86,27 @@ $columns = [
         'filter' => false,
         'pageSummary' => true,
     ],
-    [
-        'attribute' => 'Cap',
-        'value' => 'cap',
-        'filter' => false,
-        'pageSummary' => false,
-    ],
-    [
-        'label' => 'Remaining Cap',
-        'attribute' => 'cap',
-        'value' => function ($model) {
-            $model = (object)$model;
-            if ($model->cap == 'open') {
-                return $model->cap;
-            } else {
-                return $model->cap - $model->match_installs;
-            }
-        },
-        'filter' => false,
-        'contentOptions' => function ($model) {
-            $model = (object)$model;
-            if ($model->daily_cap != 'open') {
-                if ($model->daily_cap - $model->installs < 10) {
-                    return ['class' => 'bg-danger'];
-                }
-            }
-        }
-    ],
+//    [
+//        'label' => 'Remaining Cap',
+//        'attribute' => 'cap',
+//        'value' => function ($model) {
+//            $model = (object)$model;
+//            if ($model->cap == 'open') {
+//                return $model->cap;
+//            } else {
+//                return $model->cap - $model->match_installs;
+//            }
+//        },
+//        'filter' => false,
+//        'contentOptions' => function ($model) {
+//            $model = (object)$model;
+//            if ($model->daily_cap != 'open') {
+//                if ($model->daily_cap - $model->installs < 10) {
+//                    return ['class' => 'bg-danger'];
+//                }
+//            }
+//        }
+//    ],
     [
         'attribute' => 'cvr',
         'value' => function ($model) {
@@ -156,8 +144,12 @@ $columns = [
         'pageSummary' => true,
     ],
     [
+        'label' => 'Match Installs/Cap',
         'attribute' => 'match_installs',
-        'value' => 'match_installs',
+        'value' => function ($model) {
+            $model = (object)$model;
+            return $model->match_installs . '/' . $model->cap;
+        },
         'filter' => false,
         'pageSummary' => true,
     ],

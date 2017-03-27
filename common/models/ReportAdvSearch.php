@@ -68,6 +68,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'clh.cost',
             'clh.revenue',
             'clh.daily_cap',
+            'cam.daily_cap cap',
             'ad.username adv_name',
             'u.username bd',
 
@@ -137,8 +138,8 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.revenue) revenue',
             'ad.username adv_name',
             'u.username bd',
-            'clh.cap cap',
-            'clh.daily_cap',
+            'cam.daily_cap cap',
+            'clh.daily_cap daily_cap',
 
         ]);
         $query->from('campaign_log_hourly clh');

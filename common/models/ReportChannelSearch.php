@@ -70,6 +70,7 @@ class ReportChannelSearch extends ReportChannelHourly
             'clh.adv_price',
             'clh.cost',
             'clh.revenue',
+            'cam.daily_cap cap',
             'clh.daily_cap',
             'u.username om',
 //            'campaign_name',
@@ -93,7 +94,6 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-//        $query->andWhere(['>', 'clicks', 0]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //                var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
@@ -149,22 +149,20 @@ class ReportChannelSearch extends ReportChannelHourly
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
             'u.username om',
-            'clh.cap cap',
+            'cam.daily_cap cap',
             'clh.daily_cap',
-            'count(clh.campaign_id) total_installs',
 
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
-        //$query->leftJoin('log_feed lf', 'lf.campaign_id = clh.campaign_id');
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
-            'pay_out' => $this->pay_out,
-            'adv_price' => $this->adv_price,
+            'clh.campaign_id' => $this->campaign_id,
+            'clh.channel_id' => $this->channel_id,
+            'clh.pay_out' => $this->pay_out,
+            'clh.adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
         ]);
 
@@ -173,8 +171,6 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-           // ->andFilterWhere(['>=', 'lf.feed_time', $start])
-           // ->andFilterWhere(['<', 'lf.feed_time', $end]);
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
