@@ -151,13 +151,14 @@ class ReportChannelSearch extends ReportChannelHourly
             'u.username om',
             'clh.cap cap',
             'clh.daily_cap',
-//            'campaign_name',
+            'count(clh.campaign_id) total_installs',
 
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        //$query->leftJoin('log_feed lf', 'lf.campaign_id = clh.campaign_id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -172,6 +173,8 @@ class ReportChannelSearch extends ReportChannelHourly
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+           // ->andFilterWhere(['>=', 'lf.feed_time', $start])
+           // ->andFilterWhere(['<', 'lf.feed_time', $end]);
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',

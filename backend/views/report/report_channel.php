@@ -77,6 +77,12 @@ $columns = [
         'pageSummary' => true,
     ],
     [
+        'attribute' => 'total_installs',
+        'value' => 'total_installs',
+        'filter' => false,
+        'pageSummary' => false,
+    ],
+    [
         'label' => 'Installs/Cap',
         'attribute' => 'installs',
         'value' => function ($model) {
