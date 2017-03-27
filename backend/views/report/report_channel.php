@@ -93,6 +93,12 @@ $columns = [
         'pageSummary' => true,
     ],
     [
+        'attribute' => 'Cap',
+        'value' => 'cap',
+        'filter' => false,
+        'pageSummary' => false,
+    ],
+    [
         'label' => 'Remaining Cap',
         'attribute' => 'cap',
         'value' => function ($model) {
