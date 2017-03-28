@@ -127,6 +127,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                             ],
                         ],
+                        [
+                            'attribute' => 'tag',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignTag($model->tag);
+                            },
+                            'filter' => ModelsUtil::campaign_tag,
+                            'contentOptions' => function ($model) {
+                                if ($model->tag == 3) {
+                                    return ['class' => 'bg-danger'];
+                                } else if ($model->tag == 2) {
+                                    return ['class' => 'bg-warning'];
+                                } else {
+                                    return ['class' => 'bg-success'];
+                                }
+                            }
+                        ],
                         'id',
                         [
                             'attribute' => 'advertiser',
@@ -198,22 +214,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => Html::activeDropDownList($searchModel, 'status',
                                 ModelsUtil::campaign_status, ['class' => 'form-control']),
-                        ],
-                        [
-                            'attribute' => 'tag',
-                            'value' => function ($model) {
-                                return ModelsUtil::getCampaignTag($model->tag);
-                            },
-                            'filter' => ModelsUtil::campaign_tag,
-                            'contentOptions' => function ($model) {
-                                if ($model->tag == 3) {
-                                    return ['class' => 'bg-danger'];
-                                } else if ($model->tag == 2) {
-                                    return ['class' => 'bg-warning'];
-                                } else {
-                                    return ['class' => 'bg-success'];
-                                }
-                            }
                         ],
                         'pricing_mode',
                         'category',
