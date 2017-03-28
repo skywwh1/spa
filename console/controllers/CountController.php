@@ -16,6 +16,7 @@ use common\models\Feed;
 use common\models\LogClick;
 use common\models\LogFeed;
 use common\models\LogPost;
+use common\models\RedirectLog;
 use common\models\Stream;
 use console\models\StatsUtil;
 use linslin\yii2\curl\Curl;
@@ -131,6 +132,7 @@ class CountController extends Controller
                     $logFeed->ip_long = $item->ip_long;
                     $logFeed->adv_price = $camp->adv_price;
                     $logFeed->feed_time = $item->create_time;
+                    $logFeed->is_redirect = $sts->is_redirect;
                     if ($logFeed->save() == false) {
                         $this->echoMessage('save log feed error');
                         var_dump($logFeed->getErrors());
@@ -171,22 +173,42 @@ class CountController extends Controller
     private function isNeedPost(&$sts)
     {
         $needPost = false;
-        $standard = 100 - $sts->discount;
-        $numerator = $sts->discount_numerator + 1;//分子
-        $denominator = $sts->discount_denominator + 1;//扣量基数
-        $percent = ($numerator / $denominator) * 100;
-        if ($percent < $standard || $sts->install < 5) {
-            $needPost = true;
-            $sts->discount_numerator = $numerator;
-            $sts->install += 1;
+        if ($sts->is_redirect) {
+            $redirect = RedirectLog::findIsActive($sts->campaign_id, $sts->channel_id);
+            $standard = 100 - $redirect->discount;
+            $numerator = $redirect->discount_numerator + 1;//分子
+            $denominator = $redirect->discount_denominator + 1;//扣量基数
+            $percent = ($numerator / $denominator) * 100;
+            if ($percent < $standard) {
+                $needPost = true;
+                $redirect->discount_numerator = $numerator;
+            }
+            $redirect->discount_denominator = $denominator;
+            if ($redirect->discount_denominator >= 10) {
+                $redirect->discount_denominator = 0;
+                $redirect->discount_numerator = 0;
+            }
+            $redirect->save();
+
+        } else {
+            $standard = 100 - $sts->discount;
+            $numerator = $sts->discount_numerator + 1;//分子
+            $denominator = $sts->discount_denominator + 1;//扣量基数
+            $percent = ($numerator / $denominator) * 100;
+            if ($percent < $standard || $sts->install < 5) {
+                $needPost = true;
+                $sts->discount_numerator = $numerator;
+                $sts->install += 1;
+            }
+            $sts->match_install += 1;
+            $sts->discount_denominator = $denominator;
+            if ($sts->discount_denominator >= 10) {
+                $sts->discount_denominator = 0;
+                $sts->discount_numerator = 0;
+            }
+            $sts->save();
         }
-        $sts->match_install += 1;
-        $sts->discount_denominator = $denominator;
-        if ($sts->discount_denominator >= 10) {
-            $sts->discount_denominator = 0;
-            $sts->discount_numerator = 0;
-        }
-        $sts->save();
+
         return $needPost;
     }
 

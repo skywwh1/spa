@@ -21,6 +21,7 @@ use yii\db\Query;
  * @property string $discount
  * @property integer $discount_numerator
  * @property integer $discount_denominator
+ * @property integer $is_redirect
  * @property integer $is_run
  * @property integer $status
  * @property integer $end_time
@@ -72,7 +73,7 @@ class Deliver extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'pricing_mode', 'campaign_uuid', 'pay_out', 'discount', 'daily_cap'], 'required'],
-            [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create', 'is_manual'], 'integer'],
+            [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'is_redirect', 'is_run', 'status', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'step', 'is_send_create', 'is_manual'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             ['discount', 'number', 'max' => 99, 'min' => 0],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
@@ -100,6 +101,7 @@ class Deliver extends \yii\db\ActiveRecord
             'daily_cap' => 'Daily Cap',
             'actual_discount' => 'Actual Discount',
             'discount' => 'Discount',
+            'is_redirect' => 'Is Redirect',
             'is_run' => 'Is Run',
             'discount_numerator' => 'Discount Numerator',
             'discount_denominator' => 'Discount Denominator',

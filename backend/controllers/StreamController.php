@@ -11,6 +11,7 @@ use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
+use common\models\RedirectLog;
 use common\models\Stream;
 use common\models\StreamSearch;
 use Yii;
@@ -108,7 +109,7 @@ class StreamController extends Controller
         if (!empty($allParameters)) {
             $model->all_parameters = $allParameters;
         }
-        $model->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000) . time();
+        $model->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000);
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
         $model->pl = isset($data['pl']) ? $data['pl'] : null;
@@ -297,6 +298,17 @@ class StreamController extends Controller
         $click->browser_type = $model->browser_type;
         $click->click_time = time();
         $click->save();
+
+        //是否导量
+        if ($deliver->is_redirect) {
+            $redirect = RedirectLog::findIsActive($campaign->id, $model->ch_id);
+            if (isset($redirect)) {
+                $redirectCam = $redirect->campaign;
+                $redirectLink = $this->genAdvLink($redirectCam, $model);
+                $model->redirect = $redirectLink;
+            }
+        }
+
 
         return 200;
     }

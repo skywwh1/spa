@@ -20,6 +20,9 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('channel_created', ['channel' => $channel]);
         $mail->setTo($channel->email);
+        if(isset( $channel->om0)){
+            $mail->setCc($channel->om0->email);
+        }
         $mail->setSubject('SuperADS account create success');
         $isSend = 0;
         if ($mail->send()) {

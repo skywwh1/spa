@@ -45,6 +45,8 @@ class Yeahmobi
             $model->save();
             var_dump($model->getErrors());
             $uuid = $model->adv_id . '_' . $model->campaign_id;
+            if ($uuid == '24_5162769')
+                continue;
             $camp = Campaign::findByUuid($uuid);
             if (empty($camp)) {
                 $camp = new Campaign();
