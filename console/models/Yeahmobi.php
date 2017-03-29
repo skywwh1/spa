@@ -74,8 +74,10 @@ class Yeahmobi
             $camp->daily_cap = $daily_cap;
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
-            $camp->note = $model->description . PHP_EOL . $model->note;
-            $camp->note = strip_tags($camp->note);
+            if(empty($camp->note)){
+                $camp->note = $model->description . PHP_EOL . $model->note;
+                $camp->note = strip_tags($camp->note);
+            }
             $camp->preview_link = $model->preview_link;
             $camp->package_name = $model->package_name;
             $camp->status = 1;
