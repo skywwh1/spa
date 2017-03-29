@@ -37,6 +37,7 @@ class RedirectLogController extends Controller
                         'actions' => [
                             'index',
                             'create',
+                            'validate',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
