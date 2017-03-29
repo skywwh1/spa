@@ -59,7 +59,7 @@ class RedirectLogSearch extends RedirectLog
         }
 
         // grid filtering conditions
-        $query->andFilterWhere([
+        $filters = [
             'id' => $this->id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
@@ -68,14 +68,19 @@ class RedirectLogSearch extends RedirectLog
             'discount' => $this->discount,
             'discount_numerator' => $this->discount_numerator,
             'discount_denominator' => $this->discount_denominator,
-            'status' => $this->status,
             'end_time' => $this->end_time,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
             'creator' => $this->creator,
-        ]);
-
+        ];
+        if (isset($this->status)) {
+            $filters['status'] = $this->status;
+        } else {
+            $filters['status'] = 1;
+        }
+        $query->andFilterWhere($filters);
         $query->andFilterWhere(['like', 'daily_cap', $this->daily_cap]);
+        $query->orderBy('create_time desc');
 
         return $dataProvider;
     }

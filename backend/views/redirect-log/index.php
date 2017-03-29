@@ -15,93 +15,101 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-<div class="redirect-log-index">
+                <div class="redirect-log-index">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
-                <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-                    [
-                // 'label' => 'id',
-                 'attribute' => 'id',
-                 'value' => 'id',
-            ],
-            [ 
-                // 'label' => 'campaign_id',
-                 'attribute' => 'campaign_id',
-                 'value' => 'campaign_id',
-            ],
-            [ 
-                // 'label' => 'channel_id',
-                 'attribute' => 'channel_id',
-                 'value' => 'channel_id',
-            ],
-            [ 
-                // 'label' => 'campaign_id_new',
-                 'attribute' => 'campaign_id_new',
-                 'value' => 'campaign_id_new',
-            ],
+                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+
+                    <?= GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
+                        'columns' => [
+                            [
+                                // 'label' => 'id',
+                                'attribute' => 'id',
+                                'value' => 'id',
+                            ],
+                            [
+                                // 'label' => 'campaign_id',
+                                'attribute' => 'campaign_id',
+                                'value' => 'campaign_id',
+                            ],
+                            [
+                                // 'label' => 'channel_id',
+                                'attribute' => 'channel_id',
+                                'value' => 'channel_id',
+                            ],
+                            [
+                                // 'label' => 'campaign_id_new',
+                                'attribute' => 'campaign_id_new',
+                                'value' => 'campaign_id_new',
+                            ],
 //            [
 //                // 'label' => 'daily_cap',
 //                 'attribute' => 'daily_cap',
 //                 'value' => 'daily_cap',
 //            ],
-            //[ 
-                // 'label' => 'actual_discount',
-                // 'attribute' => 'actual_discount',
-                // 'value' => 'actual_discount',
-           // ],
-            [
-                 'label' => 'discount',
-                 'attribute' => 'discount',
-                 'value' => 'discount',
-            ],
-            //[ 
-                // 'label' => 'discount_numerator',
-                // 'attribute' => 'discount_numerator',
-                // 'value' => 'discount_numerator',
-           // ],
-            //[ 
-                // 'label' => 'discount_denominator',
-                // 'attribute' => 'discount_denominator',
-                // 'value' => 'discount_denominator',
-           // ],
-            [
-                 'label' => 'status',
-                 'attribute' => 'status',
-                 'value' => 'status',
-            ],
-            //[ 
-                // 'label' => 'end_time',
-                // 'attribute' => 'end_time',
-                // 'value' => 'end_time:datetime',
-           // ],
-            //[ 
-                // 'label' => 'create_time',
-                // 'attribute' => 'create_time',
-                // 'value' => 'create_time:datetime',
-           // ],
-            //[ 
-                // 'label' => 'update_time',
-                // 'attribute' => 'update_time',
-                // 'value' => 'update_time:datetime',
-           // ],
-            //[ 
-                // 'label' => 'creator',
-                // 'attribute' => 'creator',
-                // 'value' => 'creator',
-           // ],
+                            //[
+                            // 'label' => 'actual_discount',
+                            // 'attribute' => 'actual_discount',
+                            // 'value' => 'actual_discount',
+                            // ],
+                            [
+                                'label' => 'discount',
+                                'attribute' => 'discount',
+                                'value' => 'discount',
+                                'filter' => false
+                            ],
+                            //[
+                            // 'label' => 'discount_numerator',
+                            // 'attribute' => 'discount_numerator',
+                            // 'value' => 'discount_numerator',
+                            // ],
+                            //[
+                            // 'label' => 'discount_denominator',
+                            // 'attribute' => 'discount_denominator',
+                            // 'value' => 'discount_denominator',
+                            // ],
+                            [
+                                'label' => 'status',
+                                'attribute' => 'status',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getRedirectStatus($model->status);
+                                },
+                                'filter' => ModelsUtil::redirect_status
+                            ],
+                            [
+                                'label' => 'create_time',
+                                'attribute' => 'create_time',
+                                'value' => 'create_time',
+                                'format' => 'datetime',
+                                'filter' => false
+                            ],
+                            [
+                                'label' => 'end_time',
+                                'attribute' => 'end_time',
+                                'value' => 'end_time',
+                                'format' => 'datetime',
+                                'filter' => false
+                            ],
+                            //[
+                            // 'label' => 'update_time',
+                            // 'attribute' => 'update_time',
+                            // 'value' => 'update_time:datetime',
+                            // ],
+                            //[
+                            // 'label' => 'creator',
+                            // 'attribute' => 'creator',
+                            // 'value' => 'creator',
+                            // ],
 
 //        [
 //        'class' => 'yii\grid\ActionColumn',
 //        'header' => 'Action',
 //        'template' => '{view}{update}',
 //        ],
-        ],
-        ]); ?>
+                        ],
+                    ]); ?>
+                </div>
+            </div>
         </div>
-</div>
-</div>
-</div>
+    </div>

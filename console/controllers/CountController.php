@@ -147,6 +147,7 @@ class CountController extends Controller
                             $post->pay_out = $logClick->pay_out;
                             $post->discount = $logClick->discount;
                             $post->daily_cap = $logClick->daily_cap;
+                            $post->is_redirect = $sts->is_redirect;
                             $post->post_link = $this->genPostLink($sts->channel->post_back, $logClick->all_parameters);
                             //* 0:need to post, 1.posted
                             $post->post_status = 0;

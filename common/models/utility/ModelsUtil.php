@@ -177,6 +177,16 @@ class ModelsUtil
 //        '3' => 'Rejected',
     );
 
+    const redirect_status = array(
+        '0' => 'closed',
+        '1' => 'active',
+    );
+
+    public static function getRedirectStatus($k)
+    {
+        return static::getValue(static::redirect_status, $k);
+    }
+
     public static function getPendingStatus($k)
     {
         return static::getValue(static::pending_status, $k);

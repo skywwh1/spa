@@ -18,6 +18,7 @@ use Yii;
  * @property string $post_link
  * @property integer $post_time
  * @property integer $post_status
+ * @property integer $is_redirect
  * @property integer $create_time
  * @property Campaign $campaign
  * @property Channel $channel
@@ -28,6 +29,7 @@ class LogPost extends \yii\db\ActiveRecord
     public $campaign_name;
     public $channel_name;
     public $campaign_uuid;
+
     /**
      * @inheritdoc
      */
@@ -43,9 +45,9 @@ class LogPost extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
-            [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'create_time'], 'safe'],
+            [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'is_redirect', 'create_time'], 'safe'],
             [['pay_out', 'discount'], 'safe'],
-            [['post_link','advertiser_name'], 'safe'],
+            [['post_link', 'advertiser_name'], 'safe'],
             [['click_uuid', 'click_id'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
         ];
@@ -68,6 +70,7 @@ class LogPost extends \yii\db\ActiveRecord
             'post_link' => 'Post Link',
             'post_time' => 'Post Time',
             'post_status' => 'Post Status',
+            'is_redirect' => 'Is Redirect',
             'create_time' => 'Create Time',
         ];
     }

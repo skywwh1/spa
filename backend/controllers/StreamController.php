@@ -303,7 +303,7 @@ class StreamController extends Controller
         if ($deliver->is_redirect) {
             $redirect = RedirectLog::findIsActive($campaign->id, $model->ch_id);
             if (isset($redirect)) {
-                $redirectCam = $redirect->campaign;
+                $redirectCam = $redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $model);
                 $model->redirect = $redirectLink;
             }
