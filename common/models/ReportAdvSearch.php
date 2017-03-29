@@ -62,10 +62,14 @@ class ReportAdvSearch extends ReportAdvHourly
             'clh.clicks',
             'clh.unique_clicks',
             'clh.installs',
+            'clh.redirect_installs',
             'clh.match_installs',
+            'clh.redirect_match_installs',
             'clh.pay_out',
             'clh.adv_price',
             'clh.cost',
+            'clh.redirect_cost',
+            'clh.redirect_revenue',
             'clh.revenue',
             'clh.daily_cap',
             'cam.daily_cap cap',
@@ -132,12 +136,15 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
             'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
             'AVG(clh.pay_out) pay_out',
             'AVG(clh.adv_price) adv_price',
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
-            'ad.username adv_name',
-            'u.username bd',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'u.username om',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
 
@@ -194,27 +201,20 @@ class ReportAdvSearch extends ReportAdvHourly
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
-//        $start = $start->sub(new DateInterval('P1D'));
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
         $query->select([
-//            'ch.username channel_name',
-//            'cam.campaign_name campaign_name',
-//            'clh.campaign_id',
-//            'clh.channel_id',
-////            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
-//            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
             'SUM(clh.match_installs) match_installs',
-//            'AVG(clh.pay_out) pay_out',
-//            'AVG(clh.adv_price) adv_price',
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
-//            'u.username om',
-//            'campaign_name',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
 
         ]);
         $query->from('campaign_log_hourly clh');
@@ -237,11 +237,6 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-//        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
-//        var_dump(strtotime($this->start));
-//        var_dump(strtotime($this->end));
-//        var_dump($query->createCommand()->sql);
-//        die();
         return $dataProvider;
     }
 }
