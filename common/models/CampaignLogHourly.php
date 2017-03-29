@@ -13,12 +13,16 @@ namespace common\models;
  * @property integer $unique_clicks
  * @property integer $installs
  * @property integer $match_installs
+ * @property integer $redirect_installs
+ * @property integer $redirect_match_installs
  * @property string $pay_out
  * @property string $adv_price
  * @property string $daily_cap
  * @property string $cap
  * @property string $cost
+ * @property string $redirect_cost
  * @property string $revenue
+ * @property string $redirect_revenue
  * @property integer $create_time
  * @property Campaign $campaign
  * @property Channel $channel
@@ -40,8 +44,8 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id', 'time'], 'required'],
-            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'revenue'], 'number'],
+            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time'], 'integer'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
             [['time_format', 'daily_cap', 'cap'], 'string', 'max' => 100],
         ];
     }
@@ -60,12 +64,16 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
             'unique_clicks' => 'Unique Clicks',
             'installs' => 'Installs',
             'match_installs' => 'Match Installs',
+            'redirect_post' => 'Redirect Installs',
+            'redirect_match_installs' => 'Redirect Match Installs',
             'pay_out' => 'Pay Out',
             'adv_price' => 'Adv Price',
             'daily_cap' => 'Daily Cap',
             'cap' => 'Cap',
             'cost' => 'Cost',
+            'redirect_cost' => 'Redirect Cost',
             'revenue' => 'Revenue',
+            'redirect_revenue' => 'Redirect Revenue',
             'create_time' => 'Create Time',
         ];
     }

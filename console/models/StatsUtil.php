@@ -39,6 +39,16 @@ class StatsUtil
         $this->statsHourly(3, $start_time, $end_time);
     }
 
+    public function statsRedirectInstallHourly($start_time, $end_time)
+    {
+        $this->statsHourly(6, $start_time, $end_time);
+    }
+
+    public function statsRedirectMatchInstallHourly($start_time, $end_time)
+    {
+        $this->statsHourly(5, $start_time, $end_time);
+    }
+
     public function statsDaily($start_time, $end_time)
     {
         date_default_timezone_set("Asia/Shanghai");
@@ -167,6 +177,18 @@ class StatsUtil
                 $adv_price_select = 'AVG(fc.adv_price) adv_price';
                 $revenue_select = 'SUM(fc.adv_price) revenue';
                 break;
+            case 5:                    //统计redirect match installs
+                $from = 'log_feed fc';
+                $timestamp_select = 'fc.feed_time';
+                $clicks_select = 'count(*) clicks';
+                $revenue_select = 'SUM(fc.adv_price) revenue';
+                break;
+            case 6:                    //统计redirect post
+                $from = 'log_post fc';
+                $timestamp_select = 'fc.post_time';
+                $clicks_select = 'count(*) clicks';
+                $cost_select = 'SUM(fc.pay_out) cost';
+                break;
         }
         $select = ['fc.campaign_id',
             'fc.channel_id',
@@ -192,6 +214,10 @@ class StatsUtil
         $query->from($from);
         $query->where(['>=', $timestamp_select, $start_time]);
         $query->andWhere(['<=', $timestamp_select, $end_time]);
+
+        if ($type == 5 || $type == 6) {
+            $query->andWhere(['is_redirect' => 1]);
+        }
 
         $query->groupBy(['fc.campaign_id',
             'fc.channel_id',
@@ -276,6 +302,14 @@ class StatsUtil
                     $hourly->match_installs = $clicks;
                     $hourly->adv_price = $adv_price;
                     $hourly->revenue = $revenue;
+                    break;
+                case 5:
+                    $hourly->redirect_match_installs = $clicks;
+                    $hourly->redirect_revenue = $revenue;
+                    break;
+                case 6:
+                    $hourly->redirect_post = $clicks;
+                    $hourly->redirect_cost = $cost;
                     break;
             }
             if (!$hourly->save()) {

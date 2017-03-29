@@ -278,7 +278,11 @@ class CountController extends Controller
         echo 'start time hourly' . $start_time . "\n";
         echo 'end time hourly' . $end_time . "\n";
         $stats->statsMatchInstallHourly($start_time, $end_time);
+        $stats->statsRedirectMatchInstallHourly($start_time, $end_time);
+
         $stats->statsInstallHourly($start_time, $end_time);
+        $stats->statsRedirectInstallHourly($start_time, $end_time);
+
         $stats->statsUniqueClickHourly($start_time, $end_time);
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();

@@ -86,6 +86,11 @@ $columns = [
         'filter' => false,
         'pageSummary' => true,
     ],
+    [
+        'attribute' => 'redirect_installs',
+        'filter' => false,
+        'pageSummary' => true,
+    ],
 //    [
 //        'label' => 'Remaining Cap',
 //        'attribute' => 'cap',
@@ -144,12 +149,22 @@ $columns = [
         'pageSummary' => true,
     ],
     [
+        'attribute' => 'redirect_cost',
+        'filter' => false,
+        'pageSummary' => true,
+    ],
+    [
         'label' => 'Match Installs/Cap',
         'attribute' => 'match_installs',
         'value' => function ($model) {
             $model = (object)$model;
             return $model->match_installs . '/' . $model->cap;
         },
+        'filter' => false,
+        'pageSummary' => true,
+    ],
+    [
+        'attribute' => 'redirect_match_installs',
         'filter' => false,
         'pageSummary' => true,
     ],
@@ -182,6 +197,12 @@ $columns = [
         'pageSummary' => true,
     ],
 
+    [
+        'attribute' => 'redirect_revenue',
+//        'value' => 'revenue',
+        'filter' => false,
+        'pageSummary' => true,
+    ],
     [
         'attribute' => 'def',
         'value' => function ($model) {
@@ -268,6 +289,11 @@ if (!empty($dataProvider)) {
                                     'pageSummary' => true,
                                 ],
                                 [
+                                    'attribute' => 'redirect_installs',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
                                     'attribute' => 'cvr',
                                     'value' => function ($model) {
                                         $model = (object)$model;
@@ -284,8 +310,18 @@ if (!empty($dataProvider)) {
                                     'pageSummary' => true,
                                 ],
                                 [
+                                    'attribute' => 'redirect_cost',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
                                     'attribute' => 'match_installs',
                                     'value' => 'match_installs',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
+                                [
+                                    'attribute' => 'redirect_match_installs',
                                     'filter' => false,
                                     'pageSummary' => true,
                                 ],
@@ -305,7 +341,11 @@ if (!empty($dataProvider)) {
                                     'filter' => false,
                                     'pageSummary' => true,
                                 ],
-
+                                [
+                                    'attribute' => 'redirect_revenue',
+                                    'filter' => false,
+                                    'pageSummary' => true,
+                                ],
                                 [
                                     'attribute' => 'def',
                                     'value' => function ($model) {
