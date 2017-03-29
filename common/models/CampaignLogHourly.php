@@ -150,6 +150,8 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
             'SUM(clh.match_installs) match_installs',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
             'AVG(clh.pay_out) pay_out',
             'AVG(clh.adv_price) adv_price',
         ]);

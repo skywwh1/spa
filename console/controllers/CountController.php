@@ -131,6 +131,12 @@ class CountController extends Controller
                     $logFeed->ip = $item->ip;
                     $logFeed->ip_long = $item->ip_long;
                     $logFeed->adv_price = $camp->adv_price;
+                    if ($sts->is_redirect) {
+                        $redirect = RedirectLog::findIsActive($logClick->campaign_id, $logClick->channel_id);
+                        if (isset($redirect)) {
+                            $logFeed->adv_price = $redirect->campaignIdNew->adv_price;
+                        }
+                    }
                     $logFeed->feed_time = $item->create_time;
                     $logFeed->is_redirect = $sts->is_redirect;
                     if ($logFeed->save() == false) {

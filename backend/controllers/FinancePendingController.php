@@ -13,6 +13,7 @@ use DateTimeZone;
 use Yii;
 use backend\models\FinancePending;
 use backend\models\FinancePendingSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,6 +33,22 @@ class FinancePendingController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => [
+                            'index',
+                            'report-channel',
+                            'report-adv',
+                            'view',
+                            'add-campaign',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -205,8 +222,8 @@ class FinancePendingController extends Controller
         if (isset($records)) {
             $model->installs = $records->installs;
             $model->match_installs = $records->match_installs;
-            $model->cost = $records->pay_out * $records->installs;
-            $model->revenue = $records->match_installs * $records->adv_price;
+            $model->cost = $records->cost;
+            $model->revenue = $records->revenue;
             $model->margin = $model->revenue == 0 ? 0 : ($model->revenue - $model->cost) / $model->revenue;
             $model->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
             $model->om = User::findIdentity($channel->om)->username;

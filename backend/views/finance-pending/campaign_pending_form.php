@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
                         <div class="col-lg-6">
                             <div class="form-group  required">
                                 <label class="control-label" for="financepending-channel_id">All Channel</label>
-                                <?= Html::dropDownList('FinancePending[is_all]', '0', ModelsUtil::user_status, ['class' => 'form-control']) ?>
+                                <?= Html::dropDownList('FinancePending[is_all]', '0', ModelsUtil::user_status, ['class' => 'form-control','id'=>'campaign-pending-all']) ?>
                             </div>
                         </div>
                     </div>
@@ -75,3 +75,9 @@ use yii\widgets\ActiveForm;
         </div>
     </div>
 </div>
+<?php
+$this->registerJsFile(
+    '@web/js/finance-pending-campaign.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>
