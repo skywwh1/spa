@@ -308,7 +308,7 @@ class StatsUtil
                     $hourly->redirect_revenue = $revenue;
                     break;
                 case 6:
-                    $hourly->redirect_post = $clicks;
+                    $hourly->redirect_installs = $clicks;
                     $hourly->redirect_cost = $cost;
                     break;
             }
