@@ -2,9 +2,10 @@
 
 namespace backend\controllers;
 
-use api\modules\v1\models\Channel;
+use common\models\Advertiser;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
+use common\models\Channel;
 use common\models\Deliver;
 use common\models\User;
 use DateInterval;
@@ -41,8 +42,8 @@ class FinancePendingController extends Controller
                     [
                         'actions' => [
                             'index',
-                            'report-channel',
-                            'report-adv',
+                            'update',
+                            'add-adv',
                             'view',
                             'add-campaign',
                         ],
@@ -140,8 +141,16 @@ class FinancePendingController extends Controller
     {
         $model = new FinancePending();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+
+            if (isset($model->is_all) && $model->is_all == 1) {
+
+                $this->createAdvToManyChannel($model);
+                return $this->redirect(['index']);
+            } else {
+                $this->createAdvToOneChannel($model);
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('adv_pending_add', [
                 'model' => $model,
@@ -230,6 +239,8 @@ class FinancePendingController extends Controller
             $model->bd = User::findIdentity($cam->advertiser0->bd)->username;
             $model->adv = $cam->advertiser0->username;
             $model->save();
+//            var_dump($model->getErrors());
+//            die();
         } else {
             $model = null;
         }
@@ -251,8 +262,42 @@ class FinancePendingController extends Controller
         }
     }
 
-    private function createMultipleByAdv($model)
+    /**
+     * @param FinancePending $model
+     */
+    private function createAdvToOneChannel($model)
     {
+        $advertiser = Advertiser::getOneByUsername($model->adv_name);
+        $channel = Channel::findByUsername($model->channel_name);
+        if (isset($advertiser) && isset($channel)) {
+            $cams = $advertiser->campaigns;
+            foreach ($cams as $item) {
+                $pending = new FinancePending();
+                $pending->campaign_id = $item->id;
+                $pending->channel_id = $channel->id;
+                $pending->start_date = $model->start_date;
+                $pending->end_date = $model->end_date;
+                $pending->note = $model->note;
+                $this->savePending($pending);
+            }
+        }
+    }
 
+    /**
+     * @param FinancePending $model
+     */
+    private function createAdvToManyChannel($model)
+    {
+//        var_dump($model->adv_name);
+//        die();
+        $advertiser = Advertiser::getOneByUsername($model->adv_name);
+        if (isset($advertiser)) {
+
+            $cams = $advertiser->campaigns;
+            foreach ($cams as $item) {
+                $model->campaign_id = $item->id;
+                $this->createMultipleByCam($model);
+            }
+        }
     }
 }

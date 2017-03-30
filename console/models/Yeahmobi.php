@@ -6,6 +6,7 @@ use common\models\Advertiser;
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\Campaign;
+use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 use yii\helpers\ArrayHelper;
@@ -40,6 +41,7 @@ class Yeahmobi
     private function transferApiModel($apiModel, $apiCampaigns)
     {
         ApiCampaign::deleteAll(['adv_id' => $apiModel->adv_id]);
+        $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
             $model->save();
@@ -74,7 +76,7 @@ class Yeahmobi
             $camp->daily_cap = $daily_cap;
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
-            if(empty($camp->note)){
+            if (empty($camp->note)) {
                 $camp->note = $model->description . PHP_EOL . $model->note;
                 $camp->note = strip_tags($camp->note);
             }
@@ -85,9 +87,14 @@ class Yeahmobi
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
-            $camp->save();
+            if ($camp->save()) {
+                Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, 1); //自动开启非手动停止的sts
+            }
+            $liveCamps[] = $camp->campaign_uuid;
             var_dump($camp->getErrors());
         }
+        $allCams = Campaign::findAllByAdv($apiModel->adv_id);
+        ApiUtil::pauseCampaignAndSts($liveCamps, $allCams);
     }
 
     private function genCampaigns($url, AdvertiserApi $apis)

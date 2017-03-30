@@ -17,42 +17,42 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-info">
             <div class="box-body">
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+                <p>
+                    <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'campaign_id',
-            'channel_id',
-            'start_date',
-            'end_date',
-            'installs',
-            'match_installs',
-            'adv_price',
-            'pay_out',
-            'cost',
-            'revenue',
-            'margin',
-            'adv',
-            'pm',
-            'bd',
-            'om',
-            'status',
-            'note:ntext',
-            'create_time:datetime',
-            'update_time:datetime',
-        ],
-    ]) ?>
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'campaign_id',
+                        'campaign.campaign_name',
+                        'channel_id',
+                        'channel.username',
+                        'start_date:datetime',
+                        'end_date:datetime',
+                        'installs',
+                        'match_installs',
+//            'adv_price',
+//            'pay_out',
+                        'cost',
+                        'revenue',
+                        'margin',
+                        'adv',
+                        'pm',
+                        'bd',
+                        'om',
+                        [
+                            'label' => 'status',
+                            'attribute' => 'status',
+                            'value' => function ($model) {
+                                return ModelsUtil::getPendingStatus($model->status);
+                            },
+                        ],
+                        'note:text',
+                        'create_time:datetime',
+                    ],
+                ]) ?>
 
             </div>
         </div>

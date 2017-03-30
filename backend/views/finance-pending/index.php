@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'id',
                             ],
                             [
-                                 'label' => 'Channel',
+                                'label' => 'Channel',
                                 'attribute' => 'channel_name',
                                 'value' => 'channel.username',
                             ],
@@ -44,14 +44,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'campaign_id',
                             ],
                             [
-                                 'label' => 'Campaign',
+                                'label' => 'Campaign',
                                 'attribute' => 'campaign_name',
                                 'value' => 'campaign.name',
                             ],
                             [
                                 // 'label' => 'start_date',
                                 'attribute' => 'start_date',
-                                'value' => function ($model){
+                                'value' => function ($model) {
                                     $format = 'Y-m-d';
                                     $date = new DateTime();
                                     $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 // 'label' => 'end_date',
                                 'attribute' => 'end_date',
-                                'value' => function ($model){
+                                'value' => function ($model) {
                                     $format = 'Y-m-d';
                                     $date = new DateTime();
                                     $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
@@ -117,7 +117,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'status',
                                 'value' => function ($model) {
                                     return ModelsUtil::getPendingStatus($model->status);
-                                }
+                                },
+                                'filter' => ModelsUtil::pending_status,
                             ],
                             //[
                             // 'label' => 'note',

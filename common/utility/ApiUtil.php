@@ -13,6 +13,7 @@ use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\ApiCampaigns;
 use common\models\Campaign;
+use common\models\Deliver;
 use linslin\yii2\curl\Curl;
 use yii\db\BaseActiveRecord;
 use yii\helpers\ArrayHelper;
@@ -160,12 +161,28 @@ class ApiUtil
                 }
                 if (is_object($v)) {
                     $aa = (array)$v;
-                    foreach($aa as $i=>$j){
-                        $string.=$i.':'.$j.';';
+                    foreach ($aa as $i => $j) {
+                        $string .= $i . ':' . $j . ';';
                     }
                 }
             }
         }
         return $string;
+    }
+
+    /**停止那些除了手动停止的sts和单子。
+     * @param string[] $liveCampaignUuids
+     * @param Campaign[] $allAdvCampaigns
+     */
+    public static function pauseCampaignAndSts($liveCampaignUuids, $allAdvCampaigns)
+    {
+        foreach ($allAdvCampaigns as $item) {
+            if (!in_array($item->campaign_uuid, $liveCampaignUuids)) {
+                $item->status = 2;
+                if ($item->save()) {
+                    Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
+                }
+            }
+        }
     }
 }

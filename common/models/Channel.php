@@ -345,4 +345,9 @@ class Channel extends ActiveRecord implements IdentityInterface
         $out['results'] = array_values($data);
         return Json::encode($out);
     }
+
+    public static function findByUsername($username)
+    {
+        return static::findOne(['username' => $username]);
+    }
 }

@@ -35,6 +35,45 @@ class CountController extends Controller
         $this->actionUpdateFeeds();
     }
 
+    public function actionInsertClicks()
+    {
+        $now = time();
+        echo date('Y-m-d\TH:i:s\Z', $now) . "\n";
+        $logs = Stream::find()->orderBy('id desc')->limit(20000)->all();
+        foreach ($logs as $model) {
+            $campaign = Campaign::findByUuid($model->cp_uid);
+            $click = new LogClick();
+            $click->tx_id = $model->id;
+            $click->click_uuid = $model->click_uuid;
+            $click->click_id = $model->click_id;
+            $click->channel_id = $model->ch_id;
+            $click->campaign_id = $campaign->id;
+            $click->campaign_uuid = $model->cp_uid;
+            $click->pl = $model->pl;
+            $click->ch_subid = $model->ch_subid;
+            $click->gaid = $model->gaid;
+            $click->idfa = $model->idfa;
+            $click->site = $model->site;
+            $click->adv_price = $model->adv_price;
+            $click->pay_out = $model->pay_out;
+            $click->discount = $model->discount;
+            $click->daily_cap = $model->daily_cap;
+            $click->all_parameters = $model->all_parameters;
+            $click->ip = $model->ip;
+            $click->ip_long = ip2long($click->ip);
+            $click->redirect = $model->redirect;
+            $click->browser = $model->browser;
+            $click->browser_type = $model->browser_type;
+            $click->click_time = $model->create_time;
+            $click->create_time = $model->create_time;
+            if (!$click->save()) {
+                var_dump($click->getErrors());
+            }
+            $model->delete();
+        }
+        echo date('Y-m-d\TH:i:s\Z', (time()-$now)) . "\n";
+    }
+
     public function actionUpdateClicks()
     {
         //1. 更新点击
@@ -294,11 +333,11 @@ class CountController extends Controller
         $stats->updateNullPrice();
         $stats->updateCaps();
 
-        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
-        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
-        echo 'start time daily' . $start_time . "\n";
-        echo 'end time daily' . $end_time . "\n";
-        $stats->statsDaily($start_time, $end_time);
+//        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
+//        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
+//        echo 'start time daily' . $start_time . "\n";
+//        echo 'end time daily' . $end_time . "\n";
+//        $stats->statsDaily($start_time, $end_time);
         Config::updateStatsTimeHourly($end);
 
     }
@@ -313,17 +352,21 @@ class CountController extends Controller
         echo 'start time hourly' . $start_time . "\n";
         echo 'end time hourly' . $end_time . "\n";
         $stats->statsMatchInstallHourly($start_time, $end_time);
+        $stats->statsRedirectMatchInstallHourly($start_time, $end_time);
+
         $stats->statsInstallHourly($start_time, $end_time);
+        $stats->statsRedirectInstallHourly($start_time, $end_time);
+
         $stats->statsUniqueClickHourly($start_time, $end_time);
         $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
         $stats->updateCaps();
 
-        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
-        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
-        echo 'start time daily' . $start_time . "\n";
-        echo 'end time daily' . $end_time . "\n";
-        $stats->statsDaily($start_time, $end_time);
+//        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
+//        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
+//        echo 'start time daily' . $start_time . "\n";
+//        echo 'end time daily' . $end_time . "\n";
+//        $stats->statsDaily($start_time, $end_time);
         Config::updateStatsTimeDaily($end);
 
     }

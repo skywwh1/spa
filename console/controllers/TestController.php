@@ -38,6 +38,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        echo 'Next Week: '. date('Y-m-d', strtotime('-3 month')) ."\n";
+        echo 'Next Week: '. strtotime('-3 month')."\n";
+        die();
         $stats = new StatsUtil();
         $start = Config::findLastStatsHourly();
         $end = time();
