@@ -131,8 +131,10 @@ class FinanceDeductionController extends Controller
     {
         $model = new FinanceDeduction();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($this->saveDeduction($model)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('add_install', [
                 'model' => $model,
@@ -149,8 +151,10 @@ class FinanceDeductionController extends Controller
     {
         $model = new FinanceDeduction();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            if ($this->saveDeduction($model)) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('add_fine', [
                 'model' => $model,

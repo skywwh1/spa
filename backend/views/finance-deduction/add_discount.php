@@ -16,8 +16,6 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="nav-menu" data-menu="finance-deduction-index"></div>
 <div class="finance-deduction-create">
-
-
     <div class="row">
         <div class="col-lg-6">
             <div class="box box-info">

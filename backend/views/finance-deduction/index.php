@@ -82,6 +82,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'deduction_value',
                             ],
                             [
+//                                'label' => 'type',
+                                'attribute' => 'type',
+                                'value' => function($model){
+                                    return ModelsUtil::getDeductionType($model->type);
+                                },
+                                'filter' => ModelsUtil::deduction_type,
+                            ],
+                            [
 //                                'label' => 'deduction_cost',
                                 'attribute' => 'deduction_cost',
                                 'value' => 'deduction_cost',
@@ -129,11 +137,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'attribute' => 'note',
                             // 'value' => 'note:ntext',
                             // ],
-                            [
-//                                'label' => 'type',
-                                'attribute' => 'type',
-                                'value' => 'type',
-                            ],
                             [
 //                                'label' => 'create_time',
                                 'attribute' => 'create_time',

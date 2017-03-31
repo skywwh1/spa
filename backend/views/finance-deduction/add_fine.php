@@ -16,15 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="nav-menu" data-menu="finance-deduction-index"></div>
 <div class="finance-deduction-create">
-
-
     <div class="row">
         <div class="col-lg-6">
             <div class="box box-info">
                 <div class="box-body">
-                    <div class="finance-pending-form">
+                    <div class="finance-deduction-form">
 
-                        <?php $form = ActiveForm::begin(); ?>
+                        <?php $form = ActiveForm::begin([
+                            'enableAjaxValidation' => true,
+                            'validationUrl' => '/finance-deduction/validate',
+                        ]); ?>
                         <div class="row">
                             <div class="col-lg-6">
                                 <?= $form->field($model, 'campaign_id')->textInput() ?>
@@ -49,10 +50,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'deduction')->textInput() ?>
+                                <?= $form->field($model, 'deduction_value')->textInput()->label("Fine($)") ?>
                             </div>
                         </div>
-                        <div class="form-group field-financepending-start_date required">
+                        <div class="form-group field-financededuction-start_date">
                             <?php
                             echo '<label class="control-label">Date</label>';
                             echo DatePicker::widget([
@@ -71,6 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
 
                         <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
+                        <?= $form->field($model, 'type')->hiddenInput(['value' => 1])->label(false) ?>
                         <div class="form-group">
                             <?= Html::submitButton('Create', ['class' => 'btn-success']) ?>
                         </div>
