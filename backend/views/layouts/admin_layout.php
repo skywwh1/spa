@@ -175,6 +175,7 @@ AdminAsset::register($this);
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="/finance-pending/index" data-menu="finance-pending-index"><i class="fa fa-circle-o"></i> Pending List</a></li>
+                        <li><a href="/finance-deduction/index" data-menu="finance-deduction-index"><i class="fa fa-circle-o"></i> Deduction List</a></li>
                         </li>
                     </ul>
                 </li>

@@ -182,6 +182,28 @@ class ModelsUtil
         '1' => 'active',
     );
 
+    const  deduction_type = array(
+        1 => 'discount',
+        2 => 'install deduction',
+        3 => 'fine',
+    );
+
+    const deduction_status = array(
+        0 => 'Communicating',
+        1 => 'Confirmed',
+        2 => 'Compensated'
+    );
+
+    public static function getDeductionStatus($k)
+    {
+        return static::getValue(static::deduction_status, $k);
+    }
+
+    public static function getDeductionType($k)
+    {
+        return static::getValue(static::deduction_type, $k);
+    }
+
     public static function getRedirectStatus($k)
     {
         return static::getValue(static::redirect_status, $k);

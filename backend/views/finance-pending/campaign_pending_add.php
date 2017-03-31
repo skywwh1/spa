@@ -10,7 +10,7 @@ $this->title = 'Add Campaign Pending';
 $this->params['breadcrumbs'][] = ['label' => 'Finance Pending', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="finance-pending-create"></div>
+<div id="nav-menu" data-menu="finance-pending-index"></div>
 <div class="finance-pending-create">
 
 

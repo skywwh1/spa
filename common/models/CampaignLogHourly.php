@@ -169,10 +169,6 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
 
         $query->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-//        var_dump($start);
-//        var_dump($end);
-//        var_dump($query->createCommand()->sql);
-//        die();
         return $query->one();
     }
 }
