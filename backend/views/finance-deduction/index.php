@@ -71,11 +71,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'attribute' => 'match_installs',
                             // 'value' => 'match_installs',
                             // ],
-                            //[
-                            // 'label' => 'cost',
-                            // 'attribute' => 'cost',
-                            // 'value' => 'cost',
-                            // ],
+
                             [
 //                             'label' => ''
                                 'attribute' => 'deduction_value',
@@ -84,10 +80,15 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
 //                                'label' => 'type',
                                 'attribute' => 'type',
-                                'value' => function($model){
+                                'value' => function ($model) {
                                     return ModelsUtil::getDeductionType($model->type);
                                 },
                                 'filter' => ModelsUtil::deduction_type,
+                            ],
+                            [
+//                             'label' => 'cost',
+                                'attribute' => 'cost',
+                                'value' => 'cost',
                             ],
                             [
 //                                'label' => 'deduction_cost',

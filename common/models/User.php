@@ -74,6 +74,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['lang'], 'string', 'max' => 30],
             [['username'], 'unique'],
             [['email'], 'unique'],
+            [['password_hash'], 'safe'],
 //            [['password_reset_token'], 'unique'],
         ];
     }

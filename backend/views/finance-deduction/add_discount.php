@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'deduction_value')->textInput()->label("Discount") ?>
+                                <?= $form->field($model, 'deduction_value')->textInput()->label("Discount(%)") ?>
                             </div>
                         </div>
                         <div class="form-group field-financededuction-start_date">

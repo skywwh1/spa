@@ -36,6 +36,7 @@ class UserController extends Controller
                             'update',
                             'view',
                             'delete',
+                            'reset-password',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -137,6 +138,28 @@ class UserController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionResetPassword()
+    {
+        $user_id = Yii::$app->user->id;
+        $model = User::findIdentity($user_id);
+//        $model = new User();
+
+        if ($model->load(Yii::$app->request->post())) {
+//            var_dump($model->password_hash);
+//            die();
+            $model->setPassword($model->password_hash);
+            $model->save();
+            return $this->render('reset-pass', [
+                'model' => $model,
+            ]);
+        } else {
+            $model->password_hash = null;
+            return $this->render('reset-pass', [
+                'model' => $model,
+            ]);
         }
     }
 }

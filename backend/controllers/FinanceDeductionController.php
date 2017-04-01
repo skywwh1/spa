@@ -271,6 +271,14 @@ class FinanceDeductionController extends Controller
             $model->om = User::findIdentity($channel->om)->username;
             $model->bd = User::findIdentity($cam->advertiser0->bd)->username;
             $model->adv = $cam->advertiser0->username;
+            if ($model->type == 1) {
+                $model->deduction_cost = $model->cost * ($model->deduction_value / 100);
+            } else if ($model->type == 2) {
+                $model->deduction_cost = ($model->cost / $model->installs) * $model->deduction_value;
+
+            } else if ($model->type == 3) {
+                $model->deduction_cost = $model->deduction_value;
+            }
             if ($model->save()) {
                 $save = true;
             } else {
