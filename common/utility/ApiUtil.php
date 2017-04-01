@@ -165,6 +165,11 @@ class ApiUtil
                         $string .= $i . ':' . $j . ';';
                     }
                 }
+                if(is_array($v)){
+                    foreach ($v as $i => $j) {
+                        $string .= $i . ':' . $j . ';';
+                    }
+                }
             }
         }
         return $string;
