@@ -273,11 +273,13 @@ class FinanceDeductionController extends Controller
             $model->adv = $cam->advertiser0->username;
             if ($model->type == 1) {
                 $model->deduction_cost = $model->cost * ($model->deduction_value / 100);
+                $model->deduction_revenue = $model->revenue * ($model->deduction_value / 100);
             } else if ($model->type == 2) {
                 $model->deduction_cost = ($model->cost / $model->installs) * $model->deduction_value;
-
+                $model->deduction_revenue = $model->deduction_cost / (1 - $model->margin);
             } else if ($model->type == 3) {
                 $model->deduction_cost = $model->deduction_value;
+                $model->deduction_revenue = $model->deduction_cost;
             }
             if ($model->save()) {
                 $save = true;
