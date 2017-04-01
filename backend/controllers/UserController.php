@@ -152,6 +152,7 @@ class UserController extends Controller
 //            die();
             $model->setPassword($model->password_hash);
             $model->save();
+            $model->password_hash = null;
             return $this->render('reset-pass', [
                 'model' => $model,
             ]);
