@@ -37,7 +37,11 @@ use yii\helpers\Url;
 </style>
 <div class="sts_created" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
 
-    <h4>Dear <?= Html::encode($channel->username) ?>:</h4>
+    <h4>Dear <?php if (!empty($channel->contacts)) {
+            echo Html::encode($channel->contacts);
+        } else {
+            echo Html::encode($channel->username);
+        } ?>:</h4>
 
     <p>&nbsp;&nbsp; &nbsp;Hope this email finds you well.</p>
 

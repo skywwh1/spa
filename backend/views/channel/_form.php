@@ -19,7 +19,7 @@ use yii\widgets\ActiveForm;
         <div class="box box-info">
             <div class="box-body">
                 <div class="channel-form"><?php $form = ActiveForm::begin(); ?>
-                    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'readonly' => $model->isNewRecord ? false : 'readonly']) ?>
 
                     <?= $form->field($model, 'password_hash')->passwordInput() ?>
 
@@ -41,7 +41,7 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'master_channel')->widget(Typeahead::classname(), [
                         'pluginOptions' => ['highlight' => true],
-                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '','readonly' => $model->isNewRecord ? false : 'readonly'],
                         'dataset' => [
                             [
                                 'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",

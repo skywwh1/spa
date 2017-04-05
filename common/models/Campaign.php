@@ -240,7 +240,9 @@ class Campaign extends \yii\db\ActiveRecord
 
     public static function getCampaignsByUuidMultiple($uuid)
     {
-        $data = static::find()->select('id,campaign_uuid')->where(['like', 'campaign_uuid', $uuid])->andWhere(['status' => 1])->limit(20)->all();
+//        $query = static::find();
+//        $query->select("")
+        $data = static::find()->select(['id','CONCAT(id,"-",campaign_uuid) campaign_uuid'])->where(['like', 'campaign_uuid', $uuid])->orWhere(['like', 'id', $uuid])->andWhere(['status' => 1])->limit(20)->all();
         $out['results'] = array_values($data);
         return Json::encode($out);
     }

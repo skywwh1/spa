@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'templateResult' => new JsExpression('function(campaign) { return campaign.campaign_uuid; }'),
                         'templateSelection' => new JsExpression('function (campaign) { return campaign.campaign_uuid; }'),
                     ],
-                ]);
+                    ])->label("Campaign ID-UUID");
                 ?>
 
                 <?php
