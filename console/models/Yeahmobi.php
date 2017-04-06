@@ -94,7 +94,7 @@ class Yeahmobi
             var_dump($camp->getErrors());
         }
         $allCams = Campaign::findAllByAdv($apiModel->adv_id);
-        ApiUtil::pauseCampaignAndSts($liveCamps, $allCams);
+        //ApiUtil::pauseCampaignAndSts($liveCamps, $allCams);
     }
 
     private function genCampaigns($url, AdvertiserApi $apis)
