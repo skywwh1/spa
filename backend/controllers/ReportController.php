@@ -168,8 +168,6 @@ class ReportController extends Controller
             $type = $searchModel->type;
             if ($type == 1) {
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
-//                var_dump($dataProvider);
-//                die();
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
             } else {

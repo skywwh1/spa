@@ -95,9 +95,14 @@ class ReportChannelSearch extends ReportChannelHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+
+        }
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
 //                var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
@@ -176,9 +181,14 @@ class ReportChannelSearch extends ReportChannelHourly
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
@@ -246,9 +256,14 @@ class ReportChannelSearch extends ReportChannelHourly
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
         return $dataProvider;
     }
 }

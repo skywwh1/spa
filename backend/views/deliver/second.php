@@ -24,7 +24,7 @@ if (!is_null($delivers)) {
         <div class="col-lg-6">
             <div class="box box-info">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Offer <?= $deliver->campaign_uuid ?> to <?= $deliver->channel0 ?></h3>
+                    <h3 class="box-title">Offer <?= $deliver->campaign->campaign_name ?> to <?= $deliver->channel0 ?></h3>
                 </div>
                 <div class="box-body">
 

@@ -284,8 +284,6 @@ class ReportSummarySearch extends ReportSummaryHourly
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
             'ad.username' => $this->adv_name,
-            'u.username' => $this->bd,
-            'o.username' => $this->om,
             'cam.campaign_uuid' => $this->campaign_uuid,
             'cam.category' => $this->category,
             'cam.pricing_mode' => $this->price_model,
@@ -294,8 +292,7 @@ class ReportSummarySearch extends ReportSummaryHourly
             'cam.traffic_source' => $this->traffic_source,
         ]);
 
-        $query->andFilterWhere(['like', 'time_format', $this->time_format])
-            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'cam.target_geo', $this->geo])
             ->andFilterWhere(['like', 'u.username', $this->bd])
@@ -364,7 +361,10 @@ class ReportSummarySearch extends ReportSummaryHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
+        $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user o', 'ch.om = o.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -373,8 +373,6 @@ class ReportSummarySearch extends ReportSummaryHourly
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
             'ad.username' => $this->adv_name,
-            'u.username' => $this->bd,
-            'o.username' => $this->om,
             'cam.campaign_uuid' => $this->campaign_uuid,
             'cam.category' => $this->category,
             'cam.pricing_mode' => $this->price_model,

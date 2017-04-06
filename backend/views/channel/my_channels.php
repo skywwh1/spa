@@ -8,7 +8,7 @@ use yii\widgets\Pjax;
 /* @var $searchModel common\models\ChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'My Channels';
+$this->title = 'Channel List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
 //            ['class' => 'yii\grid\SerialColumn'],
 //
-//            'id',
+                        'id',
                         'username',
 //            'firstname',
 //            'lastname',
@@ -35,13 +35,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'password_hash',
                         // 'password_reset_token',
                         // 'settlement_type',
-                        'master_channel',
+                        [
+                            'attribute' => 'om',
+                            'value' => 'om0.username',
+                            'filter' => false,
+                        ],
+                        [
+                            'attribute' => 'master_channel',
+                            'value' => 'masterChannel.username',
+                            'filter' => false,
+                        ],
                         // 'account_name',
                         // 'branch_name',
                         // 'card_number',
                         // 'contacts',
                         // 'updated_at',
-                        // 'email:email',
+                        'email:email',
                         // 'country',
                         // 'city',
                         // 'address',
@@ -60,15 +69,25 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'confirmed',
                         // 'suspended',
                         // 'deleted',
-                        'status',
+//                        'status',
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($data) {
+                                return ModelsUtil::getAdvertiserStatus($data->status);
+                            },
+                            'filter' => ModelsUtil::advertiser_status,
+                        ],
+
                         // 'traffic_source',
                         // 'pricing_mode',
                         // 'post_back',
                         'total_revenue',
                         'payable',
                         'paid',
+                        'note:text',
                         // 'strong_geo',
                         // 'strong_catagory',
+
                         ['class' => 'yii\grid\ActionColumn',
                             'template' => '{view}{update}'
                         ],

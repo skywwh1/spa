@@ -95,9 +95,12 @@ AdminAsset::register($this);
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="/deliver/create" data-menu="STS"><i class="fa fa-circle-o"></i>S2S</a></li>
-                        <li><a href="/deliver/testlink" data-menu="testlink"><i class="fa fa-circle-o"></i>Test Link</a></li>
-                        <li><a href="/deliver/index" data-menu="deliver_index"><i class="fa fa-circle-o"></i>S2S Log</a></li>
-                        <li><a href="/redirect-log/index" data-menu="redirect-log-index"><i class="fa fa-circle-o"></i>Redirect Log</a></li>
+                        <li><a href="/deliver/testlink" data-menu="testlink"><i class="fa fa-circle-o"></i>Test Link</a>
+                        </li>
+                        <li><a href="/deliver/index" data-menu="deliver_index"><i class="fa fa-circle-o"></i>S2S Log</a>
+                        </li>
+                        <li><a href="/redirect-log/index" data-menu="redirect-log-index"><i class="fa fa-circle-o"></i>Redirect
+                                Log</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -109,11 +112,16 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign List</a></li>
-                        <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create Offer</a></li>
-                        <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i class="fa fa-circle-o"></i> Applying Offers</a></li>
-                        <li><a href="/api-campaign/index"  data-menu="api-campaign-index"><i class="fa fa-circle-o"></i> API Offers</a></li>
-                        <li><a href="/stream/index"  data-menu="stream-index"><i class="fa fa-circle-o"></i> Post records</a></li>
+                        <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign
+                                List</a></li>
+                        <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create
+                                Offer</a></li>
+                        <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i
+                                        class="fa fa-circle-o"></i> Applying Offers</a></li>
+                        <li><a href="/api-campaign/index" data-menu="api-campaign-index"><i class="fa fa-circle-o"></i>
+                                API Offers</a></li>
+                        <li><a href="/stream/index" data-menu="stream-index"><i class="fa fa-circle-o"></i> Post records</a>
+                        </li>
 
                     </ul>
                 </li>
@@ -125,10 +133,14 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/advertiser/index" data-menu="advertiser-index"><i class="fa fa-circle-o"></i> ADV List</a></li>
-                        <li><a href="/advertiser/create" data-menu="advertiser_create"><i class="fa fa-circle-o"></i> Create ADV</a></li>
-                        <li><a href="/advertiser-api/index" data-menu="advertiser-api-index"><i class="fa fa-circle-o"></i> Advertiser Api List</a></li>
-                        <li><a href="/ip-table/index" data-menu="ip-table-index"><i class="fa fa-circle-o"></i> Advertiser IP List</a></li>
+                        <li><a href="/advertiser/index" data-menu="advertiser-index"><i class="fa fa-circle-o"></i> ADV
+                                List</a></li>
+                        <li><a href="/advertiser/create" data-menu="advertiser_create"><i class="fa fa-circle-o"></i>
+                                Create ADV</a></li>
+                        <li><a href="/advertiser-api/index" data-menu="advertiser-api-index"><i
+                                        class="fa fa-circle-o"></i> Advertiser Api List</a></li>
+                        <li><a href="/ip-table/index" data-menu="ip-table-index"><i class="fa fa-circle-o"></i>
+                                Advertiser IP List</a></li>
 
                         </li>
                     </ul>
@@ -142,27 +154,42 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/channel/index" data-menu="channel_index"><i class="fa fa-circle-o"></i> Channel List</a></li>
-                        <li><a href="/channel/my-channels" data-menu="my_channels"><i class="fa fa-circle-o"></i> My Channels</a></li>
-                        <li><a href="/channel/applying" data-menu="applicants"><i class="fa fa-circle-o"></i> Applicant List</a></li>
-                        <li><a href="/channel/create" data-menu="channel-create"><i class="fa fa-circle-o"></i> Create Channel</a></li>
+                        <?php
+                        if (Yii::$app->user->can('admin')) {
+                            ?>
+                            <li><a href="/channel/index" data-menu="channel_index"><i class="fa fa-circle-o"></i>
+                                    Channel
+                                    List</a></li>
+                        <?php } ?>
+                        <li><a href="/channel/my-channels" data-menu="my_channels"><i class="fa fa-circle-o"></i> My
+                                Channels</a></li>
+                        <li><a href="/channel/applying" data-menu="applicants"><i class="fa fa-circle-o"></i> Applicant
+                                List</a></li>
+                        <li><a href="/channel/create" data-menu="channel-create"><i class="fa fa-circle-o"></i> Create
+                                Channel</a></li>
                     </ul>
                 </li>
 
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-table"></i> <span>Reports</span>
-                    <span class="pull-right-container">
+                        <span class="pull-right-container">
                       <i class="fa fa-angle-left pull-right"></i>
                     </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/report/report-adv" data-menu="report-adv"><i class="fa fa-circle-o"></i> ADV Reports</a></li>
-                        <li><a href="/report/report-channel" data-menu="report-channel"><i class="fa fa-circle-o"></i> Channel Reports</a></li>
-                        <li><a href="/report/report-summary" data-menu="report-summary"><i class="fa fa-circle-o"></i> Summary Reports</a></li>
-                        <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign Reports</a></li>
-                        <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match Installs</a></li>
-                        <li><a href="/log-post/index" data-menu="log-post-index"><i class="fa fa-circle-o"></i> Installs</a></li>
+                        <li><a href="/report/report-adv" data-menu="report-adv"><i class="fa fa-circle-o"></i> ADV
+                                Reports</a></li>
+                        <li><a href="/report/report-channel" data-menu="report-channel"><i class="fa fa-circle-o"></i>
+                                Channel Reports</a></li>
+                        <li><a href="/report/report-summary" data-menu="report-summary"><i class="fa fa-circle-o"></i>
+                                Summary Reports</a></li>
+                        <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign
+                                Reports</a></li>
+                        <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match
+                                Installs</a></li>
+                        <li><a href="/log-post/index" data-menu="log-post-index"><i class="fa fa-circle-o"></i> Installs</a>
+                        </li>
                     </ul>
                 </li>
 
@@ -174,11 +201,30 @@ AdminAsset::register($this);
                         </span>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="/finance-pending/index" data-menu="finance-pending-index"><i class="fa fa-circle-o"></i> Pending List</a></li>
-                        <li><a href="/finance-deduction/index" data-menu="finance-deduction-index"><i class="fa fa-circle-o"></i> Deduction List</a></li>
+                        <li><a href="/finance-pending/index" data-menu="finance-pending-index"><i
+                                        class="fa fa-circle-o"></i> Pending List</a></li>
+                        <li><a href="/finance-deduction/index" data-menu="finance-deduction-index"><i
+                                        class="fa fa-circle-o"></i> Deduction List</a></li>
                         </li>
                     </ul>
                 </li>
+                <?php
+                if (Yii::$app->user->can('admin')) {
+                    ?>
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="fa fa-edit"></i> <span>Users</span>
+                            <span class="pull-right-container">
+                          <i class="fa fa-angle-left pull-right"></i>
+                        </span>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li><a href="/user/index" data-menu="user-index"><i class="fa fa-circle-o"></i> User
+                                    List</a></li>
+                            </li>
+                        </ul>
+                    </li>
+                <?php } ?>
             </ul>
         </section>
         <!-- /.sidebar -->
@@ -196,7 +242,7 @@ AdminAsset::register($this);
         </section>
 
         <section class="content">
-                <?= $content ?>
+            <?= $content ?>
         </section>
     </div>
 

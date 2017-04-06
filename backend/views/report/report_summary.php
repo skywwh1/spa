@@ -358,12 +358,11 @@ if (!empty($dataProvider)) {
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'showPageSummary' => true,
-                            'layout' => '{summary} {items} {pager}',
+                            'layout' => '{toolbar} {summary} {items} {pager}',
                             'toolbar' => [
-                                '{toggleData}',
+                                '{export}',
                             ],
                             'columns' => $columns,
-                            'showFooter' => true,
                         ]); ?>
                     </div>
                 </div>
