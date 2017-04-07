@@ -15,7 +15,6 @@ use yii\helpers\Json;
  * @property integer $id
  * @property integer $advertiser
  * @property string $campaign_name
- * @property integer $tag
  * @property string $campaign_uuid
  * @property string $pricing_mode
  * @property string $payout_currency
@@ -30,6 +29,8 @@ use yii\helpers\Json;
  * @property string $daily_cap
  * @property string $daily_budget
  * @property string $adv_price
+ * @property integer $tag
+ * @property integer $direct
  * @property string $now_payout
  * @property string $target_geo
  * @property string $traffic_source
@@ -93,7 +94,7 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
-            [['recommended', 'indirect', 'cap', 'cvr', 'tag', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['recommended', 'indirect', 'cap', 'cvr', 'tag', 'direct', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
             [['note'], 'string'],
             [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap', 'app_name', 'app_size', 'version', 'app_rate', 'description'], 'safe'],
@@ -155,6 +156,7 @@ class Campaign extends \yii\db\ActiveRecord
             'epc' => 'Epc',
             'avg_price' => 'Avg Price',
             'tag' => 'Tag',
+            'direct' => 'Direct',
             'status' => 'Status',
             'open_type' => 'Open Type',
             'subid_status' => 'Subid Status',
@@ -242,7 +244,7 @@ class Campaign extends \yii\db\ActiveRecord
     {
 //        $query = static::find();
 //        $query->select("")
-        $data = static::find()->select(['id','CONCAT(id,"-",campaign_uuid) campaign_uuid'])->where(['like', 'campaign_uuid', $uuid])->orWhere(['like', 'id', $uuid])->andWhere(['status' => 1])->limit(20)->all();
+        $data = static::find()->select(['id', 'CONCAT(id,"-",campaign_uuid) campaign_uuid'])->where(['like', 'campaign_uuid', $uuid])->orWhere(['like', 'id', $uuid])->andWhere(['status' => 1])->limit(20)->all();
         $out['results'] = array_values($data);
         return Json::encode($out);
     }

@@ -23,6 +23,20 @@ $this->params['breadcrumbs'][] = $this->title;
                 $gridColumns = [
                     'id',
                     [
+                        'attribute' => 'tag',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignTag($model->tag);
+                        },
+                        'filter' => ModelsUtil::campaign_tag,
+                    ],
+                    [
+                        'attribute' => 'direct',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignDirect($model->direct);
+                        },
+                        'filter' => ModelsUtil::campaign_direct,
+                    ],
+                    [
                         'attribute' => 'advertiser',
                         'value' => 'advertiser0.username',
                     ],
@@ -142,6 +156,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ['class' => 'bg-success'];
                                 }
                             }
+                        ],
+                        [
+                            'attribute' => 'direct',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignDirect($model->direct);
+                            },
+                            'filter' => ModelsUtil::campaign_direct,
+//                            'contentOptions' => function ($model) {
+//                                if ($model->tag == 3) {
+//                                    return ['class' => 'bg-danger'];
+//                                } else if ($model->tag == 2) {
+//                                    return ['class' => 'bg-warning'];
+//                                } else {
+//                                    return ['class' => 'bg-success'];
+//                                }
+//                            }
                         ],
                         'id',
                         [

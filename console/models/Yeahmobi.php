@@ -101,9 +101,9 @@ class Yeahmobi
     {
         $page = 1;
         $limit = 30;
-        $url = $url . '&limit=' . $limit . '&page=' . $page;
+        $new_url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
-        $curl->get($url);
+        $curl->get($new_url);
         $response = $curl->response;
         if ($response == false) {
             echo "cannot get the url";
@@ -117,10 +117,10 @@ class Yeahmobi
         if ($totalPage > 1) {
             for ($i = 2; $i <= $totalPage; $i++) {
                 $page = $i;
-                $url = $url . '&limit=' . $limit . '&page=' . $page;
-                $camps_second = $this->getApi($url);
+                $new_url = $url . '&limit=' . $limit . '&page=' . $page;
+                $camps_second = $this->getApi($new_url);
                 if (!empty($camps_second)) {
-                    array_merge($camps, $camps_second);
+                    $camps = array_merge($camps, $camps_second);
                 }
             }
         }

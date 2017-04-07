@@ -24,7 +24,7 @@ class CampaignSearch extends Campaign
                 'note', 'preview_link', 'icon', 'package_name', 'app_name', 'app_size', 'category',
                 'version', 'app_rate', 'description', 'creative_link', 'creative_type',
                 'creative_description', 'carriers', 'conversion_flow', 'epc', 'track_way',
-                'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist', 'tag'], 'safe'],
+                'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist', 'tag', 'direct'], 'safe'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
         ];
     }
@@ -90,6 +90,7 @@ class CampaignSearch extends Campaign
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
             'tag' => $this->tag,
+            'direct' => $this->direct,
         ]);
 
         $query->andFilterWhere(['like', 'campaign_name', $this->campaign_name])

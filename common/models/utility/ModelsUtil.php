@@ -154,8 +154,9 @@ class ModelsUtil
 
     const campaign_tag = array(
         1 => 'Normal',
-        2 => 'Good-Test',
-        3 => 'Good-Private',
+        2 => 'Good',
+        3 => 'Private',
+        4 => 'Keep',
     );
 
     const apply_status = array(
@@ -193,6 +194,19 @@ class ModelsUtil
         1 => 'Confirmed',
         2 => 'Compensated'
     );
+
+    const campaign_direct = array(
+//        0 => '',
+        1 => 'Direct',
+        2 => '1st',
+        3 => '2nd',
+        4 => '3rd+',
+    );
+
+    public static function getCampaignDirect($k)
+    {
+        return static::getValue(static::campaign_direct, $k);
+    }
 
     public static function getDeductionStatus($k)
     {
