@@ -152,6 +152,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ['class' => 'bg-danger'];
                                 } else if ($model->tag == 2) {
                                     return ['class' => 'bg-warning'];
+
+                                } else if ($model->tag == 4) {
+                                    return ['class' => 'bg-info'];
                                 } else {
                                     return ['class' => 'bg-success'];
                                 }
