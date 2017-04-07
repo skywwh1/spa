@@ -23,8 +23,8 @@ class Yeahmobi
     {
         $apiModel = AdvertiserApi::findOne(['id' => 6]);
         $data_key = $apiModel->json_offers_param;
-        $ios_url = $apiModel->url . '&filters[type][$eq]=ios';
-        $android_url = $apiModel->url . '&filters[type][$eq]=android';
+        $ios_url = $apiModel->url . '&filters[type][$eq]=ios&limit=50&page=1';
+        $android_url = $apiModel->url . '&filters[type][$eq]=android&limit=50&page=1';
         $ios = array();
         $android = array();
         $ios = $this->genCampaigns($ios_url, $apiModel);
@@ -99,6 +99,9 @@ class Yeahmobi
 
     private function genCampaigns($url, AdvertiserApi $apis)
     {
+        $page = 1;
+        $limit = 30;
+        $url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
         $curl->get($url);
         $response = $curl->response;
@@ -109,13 +112,47 @@ class Yeahmobi
         $response = json_decode($response);
         $data = $response->data;
         $records = $data->data;
+        $camps = $this->getData($records);
+        $totalPage = $data->totalpage;
+        if ($totalPage > 1) {
+            for ($i = 2; $i <= $totalPage; $i++) {
+                $page = $i;
+                $url = $url . '&limit=' . $limit . '&page=' . $page;
+                $camps_second = $this->getApi($url);
+                if (!empty($camps_second)) {
+                    array_merge($camps, $camps_second);
+                }
+            }
+        }
+
+        $apiCamps = ApiUtil::genApiCampaigns($apis, $camps);
+        return $apiCamps;
+    }
+
+    public function getData($data)
+    {
         $camps = array();
-        foreach ($records as $id => $cam) {
+        foreach ($data as $id => $cam) {
             $cam->id = $id;
             $camps[] = $cam;
         }
-        $apiCamps = ApiUtil::genApiCampaigns($apis, $camps);
-        return $apiCamps;
+        return $camps;
+    }
+
+    public function getApi($url)
+    {
+        $curl = new Curl();
+        $curl->get($url);
+        $response = $curl->response;
+        if ($response == false) {
+            echo "cannot get the url";
+            return null;
+        }
+        $response = json_decode($response);
+        $data = $response->data;
+        $records = $data->data;
+        $camps = $this->getData($records);
+        return $camps;
     }
 
 }
