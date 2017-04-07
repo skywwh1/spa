@@ -105,7 +105,7 @@ use yii\widgets\ActiveForm;
                 <div class='col-xs-5'>
                     <div class="form-group">
                         <label class="control-label" for="campaign-daily_cap">Open Cap</label>
-                        <?= Html::dropDownList('open_cap', '0', ModelsUtil::user_status, ['class' => 'form-control']) // $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status)      ?>
+                        <?= Html::dropDownList('open_cap', '0', ModelsUtil::user_status, ['class' => 'form-control']) // $form->field($model, 'open_cap')->dropDownList(ModelsUtil::user_status)       ?>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@ use yii\widgets\ActiveForm;
         <div class="box-body">
             <?= $form->field($model, 'recommended')->dropDownList(ModelsUtil::user_status) ?>
 
-            <?= $form->field($model, 'indirect')->dropDownList(ModelsUtil::user_status) ?>
+            <?= $form->field($model, 'direct')->dropDownList(ModelsUtil::campaign_direct) ?>
 
             <?= $form->field($model, 'open_type')->dropDownList(ModelsUtil::open_type) ?>
 
