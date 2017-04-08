@@ -87,9 +87,11 @@ class HeadWay
         }
 
         $camp->campaign_uuid = $uuid;
-        $camp->campaign_name = $model->campaign_name;
-        $camp->campaign_name = str_replace('MB|||', '', $camp->campaign_name);
-        $camp->campaign_name = str_replace('|M1120', '', $camp->campaign_name);
+        if (empty($camp->campaign_name)) {
+            $camp->campaign_name = $model->campaign_name;
+            $camp->campaign_name = str_replace('MB|||', '', $camp->campaign_name);
+            $camp->campaign_name = str_replace('|M1120', '', $camp->campaign_name);
+        }
         $camp->platform = strtolower($model->platform);
         $camp->pricing_mode = strtolower($model->pricing_mode);
         $camp->adv_price = $model->adv_price;

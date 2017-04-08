@@ -52,8 +52,9 @@ class Glispa
                 $camp = new Campaign();
             }
             $camp->campaign_uuid = $uuid;
-            $camp->campaign_name = $model->campaign_name;
-
+            if(empty($camp->campaign_name)){
+                $camp->campaign_name = $model->campaign_name;
+            }
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;

@@ -113,12 +113,13 @@ use yii\helpers\Url;
         echo $creative;
         echo $traffic_source;
         echo $daily_cap;
+        echo $conversion_flow;
+        echo $carrier;
         echo $kpi;
         echo $notes;
         echo $others;
         //            echo $exclude_traffic;
-        echo $conversion_flow;
-        echo $carrier;
+
 
         ?>
         </tbody>

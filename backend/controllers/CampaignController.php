@@ -100,7 +100,7 @@ class CampaignController extends Controller
     public function actionCreate()
     {
         $model = new Campaign();
-
+        $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeSave($model);
             $model->status = 1; //running
@@ -259,6 +259,14 @@ class CampaignController extends Controller
         }
         if (!empty($campaign->device)) {
             $campaign->device = explode(',', $campaign->device);
+        } else {
+            $campaign->device = ['phone', 'tablet'];
+        }
+        if (empty($campaign->min_version)) {
+            $campaign->min_version = 'min';
+        }
+        if (empty($campaign->max_version)) {
+            $campaign->max_version = 'max';
         }
     }
 

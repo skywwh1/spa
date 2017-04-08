@@ -111,7 +111,9 @@ class Movista
                             $campaign = new Campaign();
                         }
                         $campaign->advertiser = $api->adv_id;
-                        $campaign->campaign_name = $apiCampaign->campaign_name;
+                        if (empty($campaign->campaign_name)) {
+                            $campaign->campaign_name = $apiCampaign->campaign_name;
+                        }
                         $campaign->campaign_uuid = $api->adv_id . '_' . $apiCampaign->campaign_id;
                         $campaign->pricing_mode = $apiCampaign->pricing_mode;
                         $campaign->payout_currency = $apiCampaign->payout_currency;
