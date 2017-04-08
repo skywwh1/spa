@@ -53,7 +53,7 @@ use yii\helpers\Url;
         <?php
         $id = '<td width="100px"> ID</td>';
         $campaign_name = '<td> Campaign name</td>';
-        $version = '<td> OS/Version(Min-Max) </td>';
+        $version = '<td> OS/Version</td>';
         $target_geo = '<td> Target Geo</td>';
         $payout = '<td> Payout</td>';
         $preview_link = '<td>Preview Link</td>';
@@ -70,7 +70,7 @@ use yii\helpers\Url;
         foreach ($delivers as $deliver) {
             $id .= '<td>' . Html::encode($deliver->campaign->id) . '</td>';
             $campaign_name .= '<td width="130px">' . Html::encode($deliver->campaign->campaign_name) . '</td>';
-            $version .= '<td>' . Html::encode($deliver->campaign->platform) . '/' . Html::encode($deliver->campaign->min_version) . '-' . Html::encode($deliver->campaign->max_version) . '</td>';
+            $version .= '<td>' . Html::encode($deliver->campaign->platform) . '/' . Html::encode(empty($deliver->campaign->min_version) ? 'Min' : $deliver->campaign->min_version) . '-' . Html::encode(empty($deliver->campaign->max_version) ? 'Max' : $deliver->campaign->max_version) . '</td>';
             $target_geo .= '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>';
             $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
             $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';

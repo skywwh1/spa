@@ -105,7 +105,9 @@ class DeliverController extends Controller
                     $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
                     $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
                     $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
                     $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
                     $delivers[] = $deliver;
                 }
             }
@@ -136,7 +138,7 @@ class DeliverController extends Controller
         }
         $data = array();
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
-           // $model->is_send_create = 0;
+            // $model->is_send_create = 0;
             $model->status = 1;
             $model->end_time = null;
             if ($model->save()) {
