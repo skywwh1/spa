@@ -144,8 +144,13 @@ class Movista
                         $campaign->description = strip_tags($apiCampaign->description);
 //                        $campaign->creative_link = $apiCampaign->creative_link;
                         $campaign->creative_description = $apiCampaign->creative_description;
-                        $campaign->carriers = $apiCampaign->carriers;
-                        $campaign->conversion_flow = $apiCampaign->conversion_flow;
+                        if(empty($campaign->carriers)){
+                            $campaign->carriers = $apiCampaign->carriers;
+                        }
+                        if(empty($campaign->conversion_flow)){
+
+                            $campaign->conversion_flow = $apiCampaign->conversion_flow;
+                        }
                         $campaign->status = $apiCampaign->status == 'running' ? 1 : 2;
                         $campaign->adv_link = $apiCampaign->adv_link;
                         $adv = Advertiser::findOne(['id' => $api->adv_id]);
