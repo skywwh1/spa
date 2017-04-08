@@ -58,7 +58,9 @@ if (!is_null($delivers)) {
                         '0' => 'Yes',
                         '1' => 'No',
                     ]) ?>
-                    <?= $form->field($deliver, 'note')->textarea(['rows' => 6]) ?>
+                    <?= $form->field($deliver, 'kpi')->textarea(['rows' => 1]) ?>
+                    <?= $form->field($deliver, 'note')->textarea() ?>
+                    <?= $form->field($deliver, 'others')->textarea(['rows' => 1]) ?>
 
                     <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>
                     <?= $form->field($deliver, 'campaign_id')->hiddenInput()->label(false) ?>

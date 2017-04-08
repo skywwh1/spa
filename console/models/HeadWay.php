@@ -106,7 +106,9 @@ class HeadWay
         $camp->daily_cap = $daily_cap;
         $camp->target_geo = $model->target_geo;
         $camp->adv_link = substr($model->adv_link, 0, stripos($model->adv_link, '?'));
-        $camp->note = $model->note . PHP_EOL . $model->description;
+        if (empty($camp->note)) {
+            $camp->note = $model->note . PHP_EOL . $model->description;
+        }
         $camp->preview_link = $model->preview_link;
         $camp->status = ($model->status == 'active') ? 1 : 2;
 //        if (isset($model->creative_link)) {

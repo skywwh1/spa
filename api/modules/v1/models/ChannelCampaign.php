@@ -53,7 +53,9 @@ class ChannelCampaign extends Deliver
                 return $model->campaign->carriers;
             },
 
-            'Notes' => 'note',
+            'Notes' => function ($model) {
+                return $model->kpi . $model->note . $model->others;
+            },
             'Package Name' => function ($model) {
                 return $model->campaign->package_name;
             },

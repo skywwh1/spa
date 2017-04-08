@@ -37,6 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'value' => \yii\helpers\Url::to('@track' . $model->track_url),
             'format' => 'url'
         ],
+        'kpi:text',
         'note:text',
+        'others:text'
     ],
 ]) ?>

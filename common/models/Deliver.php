@@ -41,7 +41,9 @@ use yii\db\Query;
  * @property string $deduction_percent
  * @property string $profit
  * @property string $margin
+ * @property string $kpi
  * @property string $note
+ * @property string $others
  * @property integer $is_send_create
  * @property integer $is_manual
  *
@@ -79,6 +81,7 @@ class Deliver extends \yii\db\ActiveRecord
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
             [['track_url'], 'string', 'max' => 255],
             [['channel0', 'daily_cap', 'note'], 'safe'],
+            [['kpi', 'note', 'others'], 'string'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['creator'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['creator' => 'id']],
@@ -123,7 +126,9 @@ class Deliver extends \yii\db\ActiveRecord
             'deduction_percent' => 'Deduction Percent',
             'profit' => 'Profit',
             'margin' => 'Margin',
-            'note' => 'Note',
+            'kpi' => 'Kpi',
+            'note' => 'Restriction',
+            'others' => 'Others',
             'is_send_create' => 'If Notify',
             'is_manual' => 'Is Manual',
             'channel0' => 'Channel',

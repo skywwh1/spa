@@ -65,7 +65,9 @@ class Glispa
             $camp->daily_cap = $daily_cap;
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
-            $camp->note = $model->description . PHP_EOL . $model->note;
+            if (empty($camp->note)) {
+                $camp->note = $model->description . PHP_EOL . $model->note;
+            }
             if (!empty($model->preview_link) && empty($camp->preview_link)) {
                 $links = explode(',', $model->preview_link);
                 foreach ($links as $item) {

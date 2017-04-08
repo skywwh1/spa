@@ -34,7 +34,9 @@ use yii\helpers\Json;
  * @property string $now_payout
  * @property string $target_geo
  * @property string $traffic_source
+ * @property string $kpi
  * @property string $note
+ * @property string $others
  * @property string $preview_link
  * @property string $icon
  * @property string $package_name
@@ -96,10 +98,10 @@ class Campaign extends \yii\db\ActiveRecord
             [['campaign_name', 'campaign_uuid', 'adv_link', 'daily_cap', 'adv_price', 'now_payout'], 'required'],
             [['recommended', 'indirect', 'cap', 'cvr', 'tag', 'direct', 'status', 'open_type', 'subid_status', 'third_party', 'link_type', 'creator', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'now_payout', 'avg_price'], 'number'],
-            [['note'], 'string'],
+            [['kpi', 'note', 'others', 'description'], 'string'],
             [['promote_start', 'promote_end', 'effective_time', 'adv_update_time', 'target_geo', 'advertiser', 'payout_currency', 'device', 'daily_budget', 'daily_cap', 'app_name', 'app_size', 'version', 'app_rate', 'description'], 'safe'],
             [['campaign_uuid', 'pricing_mode', 'platform', 'min_version', 'max_version', 'traffic_source', 'package_name', 'carriers', 'conversion_flow', 'epc'], 'string', 'max' => 100],
-            [['campaign_name', 'preview_link', 'icon', 'category', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'other_setting', 'ip_blacklist'], 'string', 'max' => 255],
+            [['campaign_name', 'preview_link', 'icon', 'category', 'creative_link', 'creative_type', 'creative_description', 'track_way', 'track_link_domain', 'adv_link', 'ip_blacklist'], 'string', 'max' => 255],
             [['campaign_uuid'], 'unique'],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
             ['advertiser', 'required', 'message' => 'Advertiser does not exist'],
@@ -133,8 +135,10 @@ class Campaign extends \yii\db\ActiveRecord
             'adv_price' => 'Adv Price',
             'now_payout' => 'Now Payout',
             'target_geo' => 'Target Geo',
-            'traffic_source' => 'Traffice Source',
-            'note' => 'Note',
+            'traffic_source' => 'Traffic Source',
+            'kpi' => 'KPI',
+            'note' => 'Restriction',
+            'others' => 'Others',
             'preview_link' => 'Preview Link',
             'icon' => 'Icon',
             'package_name' => 'Package Name',
