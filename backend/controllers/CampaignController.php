@@ -253,7 +253,9 @@ class CampaignController extends Controller
      */
     protected function beforeUpdate(&$campaign)
     {
-        $campaign->target_geo = explode(',', $campaign->target_geo);
+        if (!empty($campaign->target_geo)) {
+            $campaign->target_geo = explode(',', $campaign->target_geo);
+        }
         if (!empty($campaign->traffic_source)) {
             $campaign->traffic_source = explode(',', $campaign->traffic_source);
         }

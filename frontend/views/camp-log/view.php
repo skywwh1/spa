@@ -64,7 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                'unique_click',
 //                'install',
 //                'cvr',
+                'kpi',
                 'note',
+                'others',
             ],
         ]) ?>
         <?= Html::a('Back', Yii::$app->request->referrer, ['class' => 'btn btn-primary']);
