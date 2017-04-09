@@ -127,7 +127,9 @@ class Movista
                         $campaign->adv_price = $apiCampaign->adv_price;
                         $campaign->now_payout = $apiCampaign->adv_price > 1 ? $apiCampaign->adv_price * 0.9 : $apiCampaign->adv_price;
                         $campaign->target_geo = $apiCampaign->target_geo;
-                        $campaign->traffic_source = $apiCampaign->traffic_source;
+                        if(empty($campaign->traffic_source)){
+                            $campaign->traffic_source = $apiCampaign->traffic_source;
+                        }
                         if (empty($campaign->note)) {
                             $campaign->note = strip_tags($apiCampaign->note);
                         }
