@@ -254,9 +254,6 @@ class ChannelController extends Controller
         if (!empty($model->payment_way)) {
             $model->payment_way = explode(',', $model->payment_way);
         }
-        if (!empty($model->payment_term)) {
-            $model->payment_term = explode(',', $model->payment_term);
-        }
 
         if (!empty($model->traffic_source)) {
             $model->traffic_source = explode(',', $model->traffic_source);

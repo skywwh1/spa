@@ -164,10 +164,10 @@ class Movista
                         $liveCamps[] = $campaign->campaign_uuid;
                     }
                 }
-                $all = Campaign::findAll(['advertiser' => $api->adv_id]);
-                if (!empty($liveCamps)) {
-                    $this->updateCampaignStatus($liveCamps, $all);
-                }
+//                $all = Campaign::findAll(['advertiser' => $api->adv_id]);
+//                if (!empty($liveCamps)) {
+//                    $this->updateCampaignStatus($liveCamps, $all);
+//                }
             }
         }
     }

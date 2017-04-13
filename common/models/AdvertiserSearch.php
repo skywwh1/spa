@@ -82,7 +82,6 @@ class AdvertiserSearch extends Advertiser
         $query->andFilterWhere(['like', 'a.username', $this->username])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'settlement_type', $this->settlement_type])
             ->andFilterWhere(['like', 'system', $this->system])
             ->andFilterWhere(['like', 'contacts', $this->contacts])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])

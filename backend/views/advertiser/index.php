@@ -28,11 +28,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'username',
 //                        'settlement_type',
                         [
-                            'attribute' => 'settlement_type',
+                            'attribute' => 'payment_term',
                             'value' => function ($data) {
-                                return ModelsUtil::getSettlementType($data->settlement_type);
+                                return ModelsUtil::getPaymentTerm($data->payment_term);
                             },
-                            'filter' => ModelsUtil::settlement_type,
+                            'filter' => ModelsUtil::payment_term,
                         ],
                         [
                             'attribute' => 'bd',

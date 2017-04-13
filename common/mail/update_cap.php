@@ -46,7 +46,7 @@ use yii\helpers\Url;
 
     <p>&nbsp;&nbsp; &nbsp;Hope this email finds you well.</p>
 
-    <p>&nbsp;&nbsp; &nbsp;Here are some new campaigns for you today. Please kindly check the following latest offer
+    <p>&nbsp;&nbsp; &nbsp;Please kindly check the following latest offer
         updates and make the changes accordingly.</p>
 
     <table border="1">

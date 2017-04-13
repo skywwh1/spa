@@ -20,7 +20,7 @@ use yii\widgets\ActiveForm;
             <?php $form = ActiveForm::begin(); ?>
 
             <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'settlement_type')->dropDownList(ModelsUtil::settlement_type) ?>
+            <?= $form->field($model, 'payment_term')->dropDownList(ModelsUtil::payment_term) ?>
             <?= $form->field($model, 'pm')->textInput(['maxlength' => true, 'readonly' => true]) ?>
             <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
                 'pluginOptions' => ['highlight' => true],
@@ -58,6 +58,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'skype')->textInput() ?>
             <?= $form->field($model, 'phone1')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'timezone')->dropDownList(ModelsUtil::timezone) ?>
             <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 
             <div class="form-group">

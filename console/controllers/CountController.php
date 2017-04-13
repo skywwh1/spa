@@ -9,7 +9,13 @@
 namespace console\controllers;
 
 
+use backend\models\FinanceAdvertiserBillTerm;
+use backend\models\FinanceAdvertiserCampaignBillTerm;
+use backend\models\FinanceChannelBillTerm;
+use backend\models\FinanceChannelCampaignBillTerm;
+use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\Channel;
 use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
@@ -19,6 +25,8 @@ use common\models\LogPost;
 use common\models\RedirectLog;
 use common\models\Stream;
 use console\models\StatsUtil;
+use DateTime;
+use DateTimeZone;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 
@@ -71,7 +79,7 @@ class CountController extends Controller
             }
             $model->delete();
         }
-        echo date('Y-m-d\TH:i:s\Z', (time()-$now)) . "\n";
+        echo date('Y-m-d\TH:i:s\Z', (time() - $now)) . "\n";
     }
 
     public function actionUpdateClicks()
@@ -371,4 +379,281 @@ class CountController extends Controller
 
     }
 
+    public function actionStatsAdvertiserMonthly()
+    {
+        //统计上个月账单：
+        $first_day_last_month = date('Y.m.d', strtotime('first day of last month'));
+        $last_day_last_month = date('Y.m.d', strtotime('last day of last month'));
+        $period = $first_day_last_month . '-' . $last_day_last_month;
+//        echo $period;die();
+        $last_bills = FinanceAdvertiserBillTerm::findAll(['period' => $period]);
+
+//        $last_bills = FinanceAdvertiserBillTerm::findAll(['status' => 0]);
+        if (!empty($last_bills)) {
+            foreach ($last_bills as $item) {
+                $stats = new StatsUtil();
+                $rows = $stats->statsAdvertiserMonthly($item->start_time, $item->end_time, $item->adv_id);
+                if (!empty($rows)) {
+                    $rows = json_decode(json_encode($rows), FALSE);
+                    foreach ($rows as $obj) {
+                        $bill_campaign = FinanceAdvertiserCampaignBillTerm::findOne(['bill_id' => $item->bill_id, 'campaign_id' => $obj->campaign_id]);
+                        if (empty($bill_campaign)) {
+                            $bill_campaign = new FinanceAdvertiserCampaignBillTerm();
+                        }
+                        $bill_campaign->bill_id = $item->bill_id;
+                        $bill_campaign->adv_id = $item->adv_id;
+                        $bill_campaign->time_zone = $item->time_zone;
+                        $bill_campaign->campaign_id = $obj->campaign_id;
+                        $bill_campaign->start_time = $item->start_time;
+                        $bill_campaign->end_time = $item->end_time;
+                        $bill_campaign->clicks = $obj->clicks;
+                        $bill_campaign->unique_clicks = $obj->unique_clicks;
+                        $bill_campaign->installs = $obj->installs;
+                        $bill_campaign->match_installs = $obj->match_installs;
+                        $bill_campaign->redirect_installs = $obj->redirect_installs;
+                        $bill_campaign->redirect_match_installs = $obj->redirect_match_installs;
+                        $bill_campaign->pay_out = $obj->pay_out;
+                        $bill_campaign->adv_price = $obj->adv_price;
+                        $bill_campaign->cost = $obj->cost;
+                        $bill_campaign->redirect_cost = $obj->redirect_cost;
+                        $bill_campaign->revenue = $obj->revenue;
+                        $bill_campaign->redirect_revenue = $obj->redirect_revenue;
+                        if (!$bill_campaign->save()) {
+                            var_dump($bill_campaign->getErrors());
+                        }
+                    }
+                }
+                $campaign_bill = FinanceAdvertiserCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->adv_id);
+                if (!empty($campaign_bill) && !empty($campaign_bill->clicks)) {
+                    $item->clicks = $campaign_bill->clicks;
+                    $item->unique_clicks = $campaign_bill->unique_clicks;
+                    $item->installs = $campaign_bill->installs;
+                    $item->match_installs = $campaign_bill->match_installs;
+                    $item->redirect_installs = $campaign_bill->redirect_installs;
+                    $item->redirect_match_installs = $campaign_bill->redirect_match_installs;
+                    $item->pay_out = $campaign_bill->pay_out;
+                    $item->adv_price = $campaign_bill->adv_price;
+                    $item->cost = $campaign_bill->cost;
+                    $item->redirect_cost = $campaign_bill->redirect_cost;
+                    $item->revenue = $campaign_bill->revenue;
+                    $item->redirect_revenue = $campaign_bill->redirect_revenue;
+                    $item->receivable = $campaign_bill->revenue;
+                }
+                $item->status = 1;
+                $item->save();
+                var_dump($item->getErrors());
+            }
+        }
+
+        //每个月2号建立一个预账单，
+        //查找周期为month的广告主：
+        $ads = Advertiser::findAll(['payment_term' => 30]);
+        foreach ($ads as $ad) {
+            $first_day_str = date('Y-m-d', strtotime('first day of this month'));
+            $last_day_str = date('Y-m-d', strtotime('last day of this month'));
+            $timezone = $ad->timezone;
+            if (empty($timezone)) {
+                $timezone = 'Etc/GMT-8';
+            }
+            //当前时区的凌晨转为0时区
+            $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+            $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+            $start_time = $start_date->getTimestamp();
+            $end_time = $end_date->getTimestamp() + 3600 * 24;
+            $bill_id = $ad->id . '_' . $start_date->format('Ym');
+            $pre_bill = FinanceAdvertiserBillTerm::findOne(['bill_id' => $bill_id]);
+            if (empty($pre_bill)) {
+                $pre_bill = new FinanceAdvertiserBillTerm();
+                $pre_bill->start_time = $start_time;
+                $pre_bill->end_time = $end_time;
+                $pre_bill->adv_id = $ad->id;
+                $pre_bill->invoice_id = 'spa-' . $ad->id . '-' . substr($first_day_str, 0, 7);
+                $pre_bill->time_zone = $timezone;
+                $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                $pre_bill->bill_id = $ad->id . '_' . $start_date->format('Ym');
+                $pre_bill->save();
+            }
+
+        }
+
+    }
+
+
+    public function actionStatsChannelMonthly()
+    {
+        //统计上个月账单：
+        //统计上个月账单：
+        $first_day_last_month = date('Y.m.d', strtotime('first day of last month'));
+        $last_day_last_month = date('Y.m.d', strtotime('last day of last month'));
+        $period = $first_day_last_month . '-' . $last_day_last_month;
+//        echo $period;die();
+        $last_bills = FinanceChannelBillTerm::findAll(['period' => $period]);
+//        $last_bills = FinanceChannelBillTerm::findAll(['status' => 0]);
+        if (!empty($last_bills)) {
+            foreach ($last_bills as $item) {
+                $stats = new StatsUtil();
+                $rows = $stats->statsChannelMonthly($item->start_time, $item->end_time, $item->channel_id);
+                if (!empty($rows)) {
+                    $rows = json_decode(json_encode($rows), FALSE);
+                    foreach ($rows as $obj) {
+                        $bill_campaign = FinanceChannelCampaignBillTerm::findOne(['bill_id' => $item->bill_id, 'campaign_id' => $obj->campaign_id]);
+                        if (empty($bill_campaign)) {
+                            $bill_campaign = new FinanceChannelCampaignBillTerm();
+                        }
+                        $bill_campaign->bill_id = $item->bill_id;
+                        $bill_campaign->channel_id = $item->channel_id;
+                        $bill_campaign->time_zone = $item->time_zone;
+                        $bill_campaign->campaign_id = $obj->campaign_id;
+                        $bill_campaign->start_time = $item->start_time;
+                        $bill_campaign->end_time = $item->end_time;
+                        $bill_campaign->clicks = $obj->clicks;
+                        $bill_campaign->unique_clicks = $obj->unique_clicks;
+                        $bill_campaign->installs = $obj->installs;
+                        $bill_campaign->match_installs = $obj->match_installs;
+                        $bill_campaign->redirect_installs = $obj->redirect_installs;
+                        $bill_campaign->redirect_match_installs = $obj->redirect_match_installs;
+                        $bill_campaign->pay_out = $obj->pay_out;
+                        $bill_campaign->adv_price = $obj->adv_price;
+                        $bill_campaign->cost = $obj->cost;
+                        $bill_campaign->redirect_cost = $obj->redirect_cost;
+                        $bill_campaign->revenue = $obj->revenue;
+                        $bill_campaign->redirect_revenue = $obj->redirect_revenue;
+                        if (!$bill_campaign->save()) {
+                            var_dump($bill_campaign->getErrors());
+                        }
+                    }
+                }
+                $campaign_bill = FinanceChannelCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->channel_id);
+                if (!empty($campaign_bill) && !empty($campaign_bill->clicks)) {
+                    $item->clicks = $campaign_bill->clicks;
+                    $item->unique_clicks = $campaign_bill->unique_clicks;
+                    $item->installs = $campaign_bill->installs;
+                    $item->match_installs = $campaign_bill->match_installs;
+                    $item->redirect_installs = $campaign_bill->redirect_installs;
+                    $item->redirect_match_installs = $campaign_bill->redirect_match_installs;
+                    $item->pay_out = $campaign_bill->pay_out;
+                    $item->adv_price = $campaign_bill->adv_price;
+                    $item->cost = $campaign_bill->cost;
+                    $item->redirect_cost = $campaign_bill->redirect_cost;
+                    $item->revenue = $campaign_bill->revenue;
+                    $item->redirect_revenue = $campaign_bill->redirect_revenue;
+                }
+                $item->status = 1;
+                $item->save();
+                var_dump($item->getErrors());
+            }
+        }
+
+        //每个月2号建立一个预账单，
+        //查找周期为month的广告主：
+        $channels = Channel::findAll(['payment_term' => 30]);
+        foreach ($channels as $channel) {
+            $first_day_str = date('Y-m-d', strtotime('first day of this month'));
+            $last_day_str = date('Y-m-d', strtotime('last day of this month'));
+            $timezone = $channel->timezone;
+            if (empty($timezone)) {
+                $timezone = 'Etc/GMT-8';
+            }
+            //当前时区的凌晨转为0时区
+            $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+            $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+            $start_time = $start_date->getTimestamp();
+            $end_time = $end_date->getTimestamp() + 3600 * 24;
+            $bill_id = $channel->id . '_' . $start_date->format('Ym');
+            $pre_bill = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+            if (empty($pre_bill)) {
+                $pre_bill = new FinanceChannelBillTerm();
+                $pre_bill->start_time = $start_time;
+                $pre_bill->end_time = $end_time;
+                $pre_bill->channel_id = $channel->id;
+                $pre_bill->invoice_id = 'spa-' . $channel->id . '-' . substr($first_day_str, 0, 7);
+                $pre_bill->time_zone = $timezone;
+                $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                $pre_bill->bill_id = $channel->id . '_' . $start_date->format('Ym');
+                $pre_bill->save();
+            }
+        }
+    }
+
+    public function genChannelBillByMonth()
+    {
+        $channels = Channel::findAll(['payment_term' => 30]);
+        foreach ($channels as $channel) {
+            $first_month = strtotime('first day of January ' . date('Y'));
+            $current = time();
+            while ($first_month < $current) {
+                $current_month = date('F', $first_month);
+                echo $current_month, PHP_EOL;
+                $first_day_str = date('Y-m-d', strtotime('first day of ' . $current_month));
+                $last_day_str = date('Y-m-d', strtotime('last day of ' . $current_month));
+                $timezone = $channel->timezone;
+                if (empty($timezone)) {
+                    $timezone = 'Etc/GMT-8';
+                }
+                //当前时区的凌晨转为0时区
+                $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+                $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+                $start_time = $start_date->getTimestamp();
+                $end_time = $end_date->getTimestamp() + 3600 * 24;
+                $bill_id = $channel->id . '_' . $start_date->format('Ym');
+                $pre_bill = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+                if (empty($pre_bill)) {
+                    $pre_bill = new FinanceChannelBillTerm();
+                    $pre_bill->start_time = $start_time;
+                    $pre_bill->end_time = $end_time;
+                    $pre_bill->channel_id = $channel->id;
+                    $pre_bill->invoice_id = 'spa-' . $channel->id . '-' . substr($first_day_str, 0, 7);
+                    $pre_bill->time_zone = $timezone;
+                    $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                    $pre_bill->bill_id = $channel->id . '_' . $start_date->format('Ym');
+                    $pre_bill->save();
+                }
+                $first_month = strtotime("+1 month", $first_month);
+            }
+        }
+    }
+
+    public function genAdvBillByMonth()
+    {
+        $ads = Advertiser::findAll(['payment_term' => 30]);
+        foreach ($ads as $ad) {
+            $first_month = strtotime('first day of January ' . date('Y'));
+            $current = time();
+            while ($first_month < $current) {
+                $current_month = date('F', $first_month);
+                echo $current_month, PHP_EOL;
+                $first_day_str = date('Y-m-d', strtotime('first day of ' . $current_month));
+                $last_day_str = date('Y-m-d', strtotime('last day of ' . $current_month));
+                $timezone = $ad->timezone;
+                if (empty($timezone)) {
+                    $timezone = 'Etc/GMT-8';
+                }
+                //当前时区的凌晨转为0时区
+                $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+                $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+                $start_time = $start_date->getTimestamp();
+                $end_time = $end_date->getTimestamp() + 3600 * 24;
+                $bill_id = $ad->id . '_' . $start_date->format('Ym');
+                $pre_bill = FinanceAdvertiserBillTerm::findOne(['bill_id' => $bill_id]);
+                if (empty($pre_bill)) {
+                    $pre_bill = new FinanceAdvertiserBillTerm();
+                    $pre_bill->start_time = $start_time;
+                    $pre_bill->end_time = $end_time;
+                    $pre_bill->adv_id = $ad->id;
+                    $pre_bill->invoice_id = 'spa-' . $ad->id . '-' . substr($first_day_str, 0, 7);
+                    $pre_bill->time_zone = $timezone;
+                    $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                    $pre_bill->bill_id = $ad->id . '_' . $start_date->format('Ym');
+                    $pre_bill->save();
+                }
+                $first_month = strtotime("+1 month", $first_month);
+            }
+        }
+    }
+
+    public function actionTest()
+    {
+        $this->genChannelBillByMonth();
+        $this->genAdvBillByMonth();
+    }
 }

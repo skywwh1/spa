@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use backend\models\FinanceAdvertiserCampaignBillTerm;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\CampaignStsUpdate;
@@ -38,8 +39,60 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        echo 'Next Week: '. date('Y-m-d', strtotime('-3 month')) ."\n";
-        echo 'Next Week: '. strtotime('-3 month')."\n";
+        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
+        var_dump($aa);
+        die();
+        $aa = new CountController();
+        $aa->genChannelBillByMonth();
+//        $month = strtotime('2017-01-01');
+//        $end = time();
+//        while($month < $end)
+//        {
+//            $aa  = date('F', $month);
+//            echo $aa, PHP_EOL;
+//            $month = strtotime("+1 month", $month);
+//            echo strtotime('last day of '.$aa), PHP_EOL;
+//            echo date('Y m d',strtotime('last day of '.$aa)), PHP_EOL;
+//        }
+        die();
+
+        $end = time();
+
+
+//        $start = date('Y-m-d H:00', time());
+//        echo $start . "\n";
+//        date_default_timezone_set("Etc/GMT-0");
+//        $start = date('Y-m-d H:00', time());
+//        echo $start . "\n";
+        $first_day_str = date('Y-m-d H:00', strtotime('first day of this month'));
+        echo $first_day_str."\n";
+        die();
+        $last_day_str = date('Y-m-d H:00', strtotime('last day of last month'));
+//        echo date('Y-m-d', strtotime('last day of last month'));
+                $timezone = 'Etc/GMT-8';
+//        echo date('Y-m-d H:00', time())."\n";
+
+        strtotime($first_day_str);
+        $date = new DateTime('2017-03-01', new DateTimeZone('Etc/GMT-8'));
+        echo date('Y-m-d H:00', $date->getTimestamp());
+
+//        $date = new DateTime(date('Y-m-d H:00', time()), new DateTimeZone('UTC'));
+//            echo $date->getTimestamp() . "\n";
+//        echo date('Y-m-d H:00', $date->getTimestamp())."\n";
+        die();
+        echo time() . "\n";
+        echo date('Y-m-d H:00', time()) . "\n";
+        $date = new DateTime(date('Y-m-d H:00', time()), new DateTimeZone('Etc/GMT+8'));
+        echo $date->format('Y-m-d H:i:sP') . "\n";
+        echo $date->getTimestamp() . "\n";
+        echo date('Y-m-d H:00', $date->getTimestamp());
+//        $start = new DateTime('2017-03-06 11:00', new DateTimeZone('Asia/Shanghai'));
+//        var_dump($start->format('Y-m-d H:i:sP'));
+//        $stats = new StatsUtil();
+//        $stats->statsFeedHourly(0,time());
+//        echo date('Y-m-d', strtotime('last day of last month'));
+//        echo 'Next Week: ' . date('Y-m-d', strtotime('-3 month')) . "\n";
+//        echo 'Next Week: ' . strtotime('-3 month') . "\n";
         die();
         $stats = new StatsUtil();
         $start = Config::findLastStatsHourly();

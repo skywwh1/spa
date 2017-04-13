@@ -9,10 +9,13 @@
 namespace console\models;
 
 
+use common\models\Advertiser;
+use common\models\Campaign;
 use common\models\CampaignLogDaily;
 use common\models\CampaignLogHourly;
 use common\models\Config;
 use common\models\Deliver;
+use common\models\LogFeedHourly;
 use Yii;
 use yii\db\Query;
 
@@ -354,5 +357,164 @@ class StatsUtil
                 $item->save();
             }
         }
+    }
+
+    public function statsFeedHourly($start_time, $end_time)
+    {
+        date_default_timezone_set("Asia/Shanghai");
+        $select = [
+            'lf.auth_token',
+            'lf.campaign_id',
+            'from_unixtime(lf.feed_time, "%y-%m-%d %h:00") time',
+            'unix_timestamp( from_unixtime(lf.feed_time, "%y-%m-%d %h:00") ) timestamp',
+            'sum(lf.adv_price) revenue',
+            'avg(lf.adv_price) adv_price',
+            'sum(lp.pay_out) cost'
+        ];
+        $from = 'log_feed lf';
+        $query = new Query();
+        $query->select($select);
+        $query->from($from);
+        $query->leftJoin('log_post lp', 'lf.click_uuid = lp.click_uuid');
+        $query->where(['>=', 'lf.feed_time', $start_time]);
+        $query->andWhere(['<=', 'lf.feed_time', $end_time]);
+        $query->groupBy([
+            'lf.auth_token',
+            'lf.campaign_id',
+            'time',
+            'timestamp']);
+        $query->orderBy('timestamp');
+
+        $command = $query->createCommand();
+        var_dump($command->sql);
+        $rows = $command->queryAll();
+        foreach ($rows as $item) {
+            $time_format = '';
+            $timestamp = '';
+            $adv_price = '';
+            $cost = '';
+            $revenue = '';
+            $adv_id = '';
+            $campaign_id = '';
+            foreach ($item as $k => $v) {
+                if ($k == 'timestamp') {
+                    $timestamp = $v;
+                }
+                if ($k == 'time') {
+                    $time_format = $v;
+                }
+                if ($k == 'adv_price') {
+                    $adv_price = $v;
+                }
+                if ($k == 'cost') {
+                    $cost = $v;
+                }
+                if ($k == 'revenue') {
+                    $revenue = $v;
+                }
+                if ($k == 'campaign_id') {
+                    $campaign_id = $v;
+                    $cam = Campaign::findById($v);
+                    if (!empty($cam)) {
+                        $adv_id = $cam->advertiser;
+                    }
+                }
+            }
+            if (empty($adv_id)) {
+                continue;
+            }
+            $hourly = LogFeedHourly::findOne(['adv_id' => $adv_id, 'time' => $timestamp]);
+            if (empty($hourly)) {
+                $hourly = new LogFeedHourly();
+                $hourly->adv_id = $adv_id;
+                $hourly->campaign_id = $campaign_id;
+                $hourly->time = $timestamp;
+            }
+            $hourly->time_format = $time_format;
+            if (!empty($cost)) {
+                $hourly->cost = $cost;
+            }
+            $hourly->revenue = $revenue;
+            $hourly->adv_price = $adv_price;
+
+            if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
+            }
+        }
+    }
+
+    public function statsAdvertiserMonthly($start_time, $end_time, $adv_id)
+    {
+        $select = [
+            'cam.advertiser',
+            'clh.campaign_id',
+            'sum(clh.clicks) clicks',
+            'sum(clh.unique_clicks) unique_clicks',
+            'sum(clh.installs) installs',
+            'sum(clh.match_installs) match_installs',
+            'sum(clh.redirect_installs) redirect_installs',
+            'sum(clh.redirect_match_installs) redirect_match_installs',
+            'avg(clh.pay_out) pay_out',
+            'avg(clh.adv_price) adv_price',
+            'sum(clh.cost) cost',
+            'sum(clh.redirect_cost) redirect_cost',
+            'sum(clh.revenue) revenue',
+            'sum(clh.redirect_revenue) redirect_revenue',
+        ];
+        $from = 'campaign_log_hourly clh';
+        $query = new Query();
+        $query->select($select);
+        $query->from($from);
+        $query->leftJoin('campaign cam', 'cam.id = clh.campaign_id');
+        $query->where(['>=', 'clh.time', $start_time]);
+        $query->andWhere(['<', 'clh.time', $end_time]);
+        $query->andWhere(['cam.advertiser' => $adv_id]);
+        $query->groupBy([
+            'clh.campaign_id'
+        ]);
+        $query->orderBy('clh.campaign_id');
+
+        $command = $query->createCommand();
+        var_dump($command->sql);
+        $rows = $command->queryAll();
+        return $rows;
+    }
+
+    public function statsChannelMonthly($start_time, $end_time, $channel_id)
+    {
+        $select = [
+//            'cam.advertiser',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'sum(clh.clicks) clicks',
+            'sum(clh.unique_clicks) unique_clicks',
+            'sum(clh.installs) installs',
+            'sum(clh.match_installs) match_installs',
+            'sum(clh.redirect_installs) redirect_installs',
+            'sum(clh.redirect_match_installs) redirect_match_installs',
+            'avg(clh.pay_out) pay_out',
+            'avg(clh.adv_price) adv_price',
+            'sum(clh.cost) cost',
+            'sum(clh.redirect_cost) redirect_cost',
+            'sum(clh.revenue) revenue',
+            'sum(clh.redirect_revenue) redirect_revenue',
+        ];
+        $from = 'campaign_log_hourly clh';
+        $query = new Query();
+        $query->select($select);
+        $query->from($from);
+//        $query->leftJoin('campaign cam', 'cam.id = clh.campaign_id');
+        $query->where(['>=', 'clh.time', $start_time]);
+        $query->andWhere(['<', 'clh.time', $end_time]);
+        $query->andWhere(['clh.channel_id' => $channel_id]);
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+        ]);
+        $query->orderBy('clh.campaign_id');
+
+        $command = $query->createCommand();
+        $rows = $command->queryAll();
+        return $rows;
     }
 }

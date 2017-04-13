@@ -206,6 +206,14 @@ AdminAsset::register($this);
                         <li><a href="/finance-deduction/index" data-menu="finance-deduction-index"><i
                                         class="fa fa-circle-o"></i> Deduction List</a></li>
                         </li>
+                        <li><a href="/finance-compensation/index" data-menu="finance-compensation-index"><i class="fa fa-circle-o"></i> Compensation List</a></li>
+                        </li>
+                        </li>
+                        <li><a href="/finance-advertiser-bill-term/index" data-menu="finance-advertiser-bill-month-index"><i class="fa fa-circle-o"></i> Advertiser Receivable</a></li>
+                        </li>
+                        </li>
+                        <li><a href="/finance-channel-bill-term/index" data-menu="finance-channel-bill-term-index"><i class="fa fa-circle-o"></i> Channel Payable</a></li>
+                        </li>
                     </ul>
                 </li>
                 <?php

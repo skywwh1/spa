@@ -66,7 +66,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'filter' => ModelsUtil::campaign_status,
                     ],
+                    'kpi',
                     'note',
+                    'others',
                 ];
 
                 $fullExportMenu = ExportMenu::widget([

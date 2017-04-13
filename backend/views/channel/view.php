@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => isset($model->masterChannel) ? $model->masterChannel->username : "",
                         ],
                         'payment_way',
-                        'payment_term',
+                        [
+                            'attribute' => 'payment_term',
+                            'value' => function ($model) {
+                                return ModelsUtil::getPaymentTerm($model->payment_term);
+                            }
+                        ],
                         'beneficiary_name',
                         'bank_country',
                         'bank_name',

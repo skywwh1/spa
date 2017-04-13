@@ -23,8 +23,6 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'password_hash')->passwordInput() ?>
 
-                    <?= $form->field($model, 'settlement_type')->dropDownList(ModelsUtil::settlement_type) ?>
-
                     <?= $form->field($model, 'om')->widget(Typeahead::classname(), [
                         'pluginOptions' => ['highlight' => true],
                         'options' => ['value' => isset($model->om0) ? $model->om0->username : '',],
@@ -55,7 +53,7 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'payment_way')->checkboxList(ModelsUtil::payment_way) ?>
 
-                    <?= $form->field($model, 'payment_term')->checkboxList(ModelsUtil::payment_term) ?>
+                    <?= $form->field($model, 'payment_term')->dropDownList(ModelsUtil::payment_term) ?>
 
                     <?= $form->field($model, 'beneficiary_name')->textInput() ?>
 

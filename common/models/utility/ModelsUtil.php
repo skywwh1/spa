@@ -99,10 +99,10 @@ class ModelsUtil
     );
 
     const payment_term = array(
-        "net30" => 'NET30',
-        "net15" => 'NET15',
-        "bi-weekly" => 'Bi-weekly',
-        "weekly" => 'Weekly',
+        "30" => 'NET30',
+        "15" => 'NET15',
+        "14" => 'Bi-weekly',
+        "7" => 'Weekly',
     );
 
     const timezone = array(
@@ -202,6 +202,59 @@ class ModelsUtil
         3 => '2nd',
         4 => '3rd+',
     );
+
+    const compensation_status = array(
+//        0:approval,1:approved,2:rejtct
+        0 => 'Approval',
+        1 => 'Approved',
+        2 => 'Reject',
+    );
+
+    const receivable_status = array(
+        1 => 'Pending',
+        2 => 'BD Leader Approval',
+        3 => 'BD Leader Reject',
+        4 => 'Finance Approval',
+        5 => 'Finance Reject',
+        6 => 'Receivable',
+        7 => 'Received',
+        8 => 'Overdue',
+    );
+
+    const payable_status = array(
+        1 => 'Pending',
+        2 => 'OM Leader Approval',
+        3 => 'OM Leader Reject',
+        4 => 'Finance Approval',
+        5 => 'Finance Reject',
+        6 => 'Payable',
+        7 => 'Paid',
+    );
+
+    public static function getPayableStatus($k)
+    {
+        return static::getValue(static::payable_status, $k);
+    }
+
+    public static function getPaymentTerm($k)
+    {
+        return static::getValue(static::payment_term, $k);
+    }
+
+    public static function getReceivableStatus($k)
+    {
+        return static::getValue(static::receivable_status, $k);
+    }
+
+    public static function getTimezone($k)
+    {
+        return static::getValue(static::timezone, $k);
+    }
+
+    public static function getCompensationStatus($k)
+    {
+        return static::getValue(static::compensation_status, $k);
+    }
 
     public static function getCampaignDirect($k)
     {

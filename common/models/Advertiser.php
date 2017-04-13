@@ -11,7 +11,7 @@ use Yii;
  * @property string $username
  * @property string $firstname
  * @property string $lastname
- * @property string $settlement_type
+ * @property integer $payment_term
  * @property integer $pm
  * @property integer $bd
  * @property string $system
@@ -20,7 +20,7 @@ use Yii;
  * @property double $total_revenue
  * @property double $receivable
  * @property double $received
- * @property string  $pricing_mode
+ * @property string $pricing_mode
  * @property integer $type
  * @property string $auth_token
  * @property string $auth_key
@@ -71,12 +71,12 @@ class Advertiser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'post_parameter', 'email'], 'required'],
-            [['status',  'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['payment_term', 'status', 'status', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
-            [['username', 'firstname', 'lastname', 'settlement_type', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
+            [['username', 'firstname', 'lastname', 'system', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['contacts', 'password_hash', 'password_reset_token', 'company', 'address', 'note'], 'string', 'max' => 255],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
-            [['pricing_mode','email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
+            [['pricing_mode', 'email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
             [['phone1', 'phone2'], 'string', 'max' => 20],
             [['country'], 'string', 'max' => 10],
             [['city'], 'string', 'max' => 120],
@@ -103,7 +103,7 @@ class Advertiser extends \yii\db\ActiveRecord
             'firstname' => 'Firstname',
             'lastname' => 'Lastname',
             'team' => 'Team',
-            'settlement_type' => 'Settlement Type',
+            'payment_term' => 'Payment Term',
             'pm' => 'PM',
             'bd' => 'BD',
             'system' => 'System',
@@ -165,7 +165,7 @@ class Advertiser extends \yii\db\ActiveRecord
         if ($insert) {
             $this->created_time = time();
             $this->updated_time = time();
-            $this->auth_token = uniqid('adv').uniqid();
+            $this->auth_token = uniqid('adv') . uniqid();
         } else {
             $this->updated_time = time();
         }

@@ -22,11 +22,10 @@ use yii\web\IdentityInterface;
  * @property string $auth_key
  * @property string $password_hash
  * @property string $password_reset_token
- * @property string $settlement_type
+ * @property integer $payment_term
  * @property integer $om
  * @property integer $master_channel
  * @property string $payment_way
- * @property string $payment_term
  * @property string $beneficiary_name
  * @property string $bank_country
  * @property string $bank_name
@@ -96,8 +95,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['payment_way', 'payment_term'], 'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
-            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable'], 'integer'],
-            [['pricing_mode', 'username', 'firstname', 'lastname', 'settlement_type', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
+            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable', 'payment_term'], 'integer'],
+            [['pricing_mode', 'username', 'firstname', 'lastname', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'company', 'address', 'post_back', 'paid'], 'string', 'max' => 255],
             [['email', 'wechat', 'skype'], 'string', 'max' => 100],
@@ -132,7 +131,6 @@ class Channel extends ActiveRecord implements IdentityInterface
             'auth_key' => 'Auth Key',
             'password_hash' => 'Password',
             'password_reset_token' => 'Password Reset Token',
-            'settlement_type' => 'Settlement Type',
             'om' => 'OM',
             'master_channel' => 'Master Channel',
             'payment_way' => 'Payment Way',
@@ -241,9 +239,6 @@ class Channel extends ActiveRecord implements IdentityInterface
     {
         if (!empty($this->payment_way) && is_array($this->payment_way)) {
             $this->payment_way = implode(',', $this->payment_way);
-        }
-        if (!empty($this->payment_term) && is_array($this->payment_term)) {
-            $this->payment_term = implode(',', $this->payment_term);
         }
         if ($insert) {
             $this->created_time = time();

@@ -26,8 +26,10 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'team',
                             //'settlement_type',
                             [
-                                'attribute' => 'settlement_type',
-                                'value' => ModelsUtil::getValue(ModelsUtil::settlement_type, $model->settlement_type),
+                                'attribute' => 'payment_term',
+                                'value' => function($model){
+                                    return ModelsUtil::getPaymentTerm( $model->payment_term);
+                                },
                             ],
                             // 'bd',
                             [
@@ -69,6 +71,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             //'deleted',
                             'note:ntext',
                             //'created_time:datetime',
+                            [
+                                'attribute' => 'timezone',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getTimezone($model->timezone);
+                                }
+                            ],
                             [
                                 'attribute' => 'created_time',
                                 'format' => ['date', 'php:Y-m-d H:i:s']
