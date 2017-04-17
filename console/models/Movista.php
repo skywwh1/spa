@@ -38,10 +38,7 @@ class Movista
         }
         $aa = rtrim($aa, '&');
         $url .= '?' . $aa;
-        $curl = new Curl();
-        $response = $curl->get($url);
-        $response = json_decode($response);
-        $data = $response->$data_key;
+        $data = $this->getAllData($url);
         if (isset($data)) {
             $this->genCampaign($apis, $data);
         }
@@ -127,7 +124,7 @@ class Movista
                         $campaign->adv_price = $apiCampaign->adv_price;
                         $campaign->now_payout = $apiCampaign->adv_price > 1 ? $apiCampaign->adv_price * 0.9 : $apiCampaign->adv_price;
                         $campaign->target_geo = $apiCampaign->target_geo;
-                        if(empty($campaign->traffic_source)){
+                        if (empty($campaign->traffic_source)) {
                             $campaign->traffic_source = $apiCampaign->traffic_source;
                         }
                         if (empty($campaign->note)) {
@@ -146,10 +143,10 @@ class Movista
                         $campaign->description = strip_tags($apiCampaign->description);
 //                        $campaign->creative_link = $apiCampaign->creative_link;
                         $campaign->creative_description = $apiCampaign->creative_description;
-                        if(empty($campaign->carriers)){
+                        if (empty($campaign->carriers)) {
                             $campaign->carriers = $apiCampaign->carriers;
                         }
-                        if(empty($campaign->conversion_flow)){
+                        if (empty($campaign->conversion_flow)) {
 
                             $campaign->conversion_flow = $apiCampaign->conversion_flow;
                         }
@@ -185,5 +182,25 @@ class Movista
             }
         }
         var_dump('Movista');
+    }
+
+    private function getAllData($url)
+    {
+        $offset = true;
+        $all = array();
+        $url_offset = $url;
+        while ($offset != false) {
+            $curl = new Curl();
+            $response = $curl->get($url_offset);
+            $response = json_decode($response);
+            $data = $response->offers;
+            $all = array_merge($all, $data);
+            $offset = $response->offset;
+            echo "offset=" . $offset . "\n";
+            var_dump($offset);
+            $url_offset = $url . '&offset=' . $offset;
+            echo "url = " . $url_offset . "\n";
+        }
+        return $all;
     }
 }
