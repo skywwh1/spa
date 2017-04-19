@@ -12,6 +12,7 @@ namespace console\controllers;
 use console\models\Glispa;
 use console\models\HeadWay;
 use console\models\Movista;
+use console\models\Nposting;
 use console\models\Yeahmobi;
 use yii\console\Controller;
 
@@ -55,6 +56,12 @@ class ApiController extends Controller
     public function actionGetGlispa()
     {
         $yeah = new Glispa();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetNposting()
+    {
+        $yeah = new Nposting();
         $yeah->getApiCampaign();
     }
 }
