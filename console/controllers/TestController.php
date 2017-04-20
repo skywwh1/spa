@@ -39,14 +39,12 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        echo strtotime('2017-04-01')."\n";
-        echo  date('Y-m-d', strtotime('2017-04-01'));
-        die();
-        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
-        var_dump($aa);
-        die();
-        $aa = new CountController();
-        $aa->genChannelBillByMonth();
+//        echo strtotime('2017-04-01')."\n";
+//        echo  date('Y-m-d', strtotime('2017-04-01'));
+//        die();
+//        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
+//        var_dump($aa);
+//        die();
 //        $month = strtotime('2017-01-01');
 //        $end = time();
 //        while($month < $end)

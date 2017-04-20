@@ -97,6 +97,7 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
             ->andFilterWhere(['like', 'cap', $this->cap])
+            ->andFilterWhere(['<>', 'status', 0])
             ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;
