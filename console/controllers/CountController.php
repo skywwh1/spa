@@ -439,6 +439,7 @@ class CountController extends Controller
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
                     $item->receivable = $campaign_bill->revenue;
                 }
+
                 $item->status = 1;
                 $item->save();
                 var_dump($item->getErrors());

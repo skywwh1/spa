@@ -48,6 +48,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -83,6 +84,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
+            ->andFilterWhere(['<>', 'cost', 0])
             ->andFilterWhere(['like', 'cap', $this->cap]);
 
         return $dataProvider;

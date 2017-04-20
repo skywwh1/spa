@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use common\models\Advertiser;
+use common\models\Campaign;
 use Yii;
 
 /**
@@ -29,13 +30,26 @@ use Yii;
  * @property string $redirect_cost
  * @property string $revenue
  * @property string $redirect_revenue
+ * @property string $add_historic
+ * @property string $pending
+ * @property string $deduction
+ * @property string $add_revenue
+ * @property string $final_revenue
+ * @property string $actual_margin
+ * @property string $received_amount
  * @property string $receivable
+ * @property string $prepayment
  * @property integer $status
+ * @property string $note
  * @property integer $update_time
  * @property integer $create_time
  *
+ * @property FinanceAddRevenue[] $financeAddRevenues
  * @property Advertiser $adv
  * @property FinanceAdvertiserCampaignBillTerm[] $financeAdvertiserCampaignBillTerms
+ * @property Campaign[] $campaigns
+ * @property FinanceAdvertiserPrepayment[] $financeAdvertiserPrepayments
+ * @property FinanceDeduction[] $financeDeductions
  */
 class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
 {
@@ -55,7 +69,8 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
         return [
             [['bill_id', 'invoice_id', 'period', 'adv_id', 'start_time', 'end_time'], 'required'],
             [['adv_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'receivable'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic', 'pending', 'deduction', 'add_revenue', 'final_revenue', 'actual_margin', 'received_amount', 'receivable', 'prepayment'], 'number'],
+            [['note'], 'string'],
             [['bill_id', 'period'], 'string', 'max' => 255],
             [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
             [['invoice_id'], 'unique'],
@@ -90,11 +105,28 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
             'redirect_cost' => 'Redirect Cost',
             'revenue' => 'Revenue',
             'redirect_revenue' => 'Redirect Revenue',
+            'add_historic' => 'Add Historic',
+            'pending' => 'Pending',
+            'deduction' => 'Deduction',
+            'add_revenue' => 'Add Revenue',
+            'final_revenue' => 'Final Revenue',
+            'actual_margin' => 'Actual Margin',
+            'received_amount' => 'Received Amount',
             'receivable' => 'Receivable',
+            'prepayment' => 'Prepayment',
             'status' => 'Status',
+            'note' => 'Note',
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinanceAddRevenues()
+    {
+        return $this->hasMany(FinanceAddRevenue::className(), ['advertiser_bill_id' => 'bill_id']);
     }
 
     /**
@@ -111,6 +143,30 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
     public function getFinanceAdvertiserCampaignBillTerms()
     {
         return $this->hasMany(FinanceAdvertiserCampaignBillTerm::className(), ['bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaigns()
+    {
+        return $this->hasMany(Campaign::className(), ['id' => 'campaign_id'])->viaTable('finance_advertiser_campaign_bill_term', ['bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinanceAdvertiserPrepayments()
+    {
+        return $this->hasMany(FinanceAdvertiserPrepayment::className(), ['advertiser_bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinanceDeductions()
+    {
+        return $this->hasMany(FinanceDeduction::className(), ['adv_bill_id' => 'bill_id']);
     }
 
     public function beforeSave($insert)

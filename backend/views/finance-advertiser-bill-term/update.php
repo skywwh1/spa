@@ -109,12 +109,19 @@ $this->params['breadcrumbs'][] = 'Update';
             <div class="box box-info">
                 <div class="box-body">
                     <p>
-                    <h4>Payable</h4>
+                    <h4>Receivable</h4>
                     </p>
                     <?= GridView::widget([
                         'dataProvider' => $receivableList,
                         'layout' => '{items}',
                         'columns' => [
+                            [
+                                'label' => 'Payment Term',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getPaymentTerm($model->adv->payment_term);
+                                }
+
+                            ],
                             [
                                 // 'label' => 'invoice_id',
                                 'attribute' => 'status',
@@ -124,23 +131,45 @@ $this->params['breadcrumbs'][] = 'Update';
                                 'filter' => ModelsUtil::receivable_status,
                             ],
                             [
-                                // 'label' => 'invoice_id',
-                                'attribute' => 'invoice_id',
-                                'value' => 'invoice_id',
+                                'label' => 'System Revenue',
+                                'attribute' => 'revenue',
+                                'value' => 'revenue',
                             ],
                             [
-                                // 'label' => 'adv_id',
-                                'attribute' => 'adv_id',
-                                'value' => 'adv.username',
+                                'attribute' => 'add_historic',
+                                'value' => 'add_historic',
                             ],
                             [
-                                // 'label' => 'time_zone',
-                                'attribute' => 'time_zone',
-                                'value' => function ($model) {
-                                    return ModelsUtil::getTimezone($model->time_zone);
-                                },
-                                'filter' => ModelsUtil::timezone,
-
+                                'attribute' => 'pending',
+                                'value' => 'pending',
+                            ],
+                            [
+                                'attribute' => 'deduction',
+                                'value' => 'deduction',
+                            ],
+                            [
+                                'attribute' => 'add_revenue',
+                                'value' => 'add_revenue',
+                            ],
+                            [
+                                'attribute' => 'final_revenue',
+                                'value' => 'final_revenue',
+                            ],
+                            [
+                                'attribute' => 'actual_margin',
+                                'value' => 'actual_margin',
+                            ],
+                            [
+                                'attribute' => 'received_amount',
+                                'value' => 'received_amount',
+                            ],
+                            [
+                                'attribute' => 'receivable',
+                                'value' => 'receivable',
+                            ],
+                            [
+                                'attribute' => 'prepayment',
+                                'value' => 'prepayment',
                             ],
 //                            [
 //                                // 'label' => 'start_time',
@@ -204,27 +233,7 @@ $this->params['breadcrumbs'][] = 'Update';
 //                                'attribute' => 'redirect_cost',
 //                                'value' => 'redirect_cost',
 //                            ],
-                            [
-                                'attribute' => 'revenue',
-                                'value' => 'revenue',
-                            ],
-                            [
-                                'attribute' => 'receivable',
-                                'value' => 'receivable',
-                            ],
-                            [
-                                'attribute' => 'period',
-                                'value' => 'adv.bd0.username',
-                            ],
-                            [
-                                'attribute' => 'period',
-                                'value' => 'period',
-                            ],
-//                            [
-//                                'label' => 'redirect_revenue',
-//                                'attribute' => 'redirect_revenue',
-//                                'value' => 'redirect_revenue',
-//                            ],
+
 
                         ],
                     ]); ?>
@@ -243,6 +252,7 @@ $this->params['breadcrumbs'][] = 'Update';
                     <?= GridView::widget([
                         'dataProvider' => $systemRevenueList,
                         'layout' => '{items}',
+                        'showPageSummary' => true,
                         'columns' => [
 
                             [
@@ -256,13 +266,14 @@ $this->params['breadcrumbs'][] = 'Update';
                             ],
                             [
                                 // 'label' => 'time_zone',
-                                'attribute' => 'campaign.campaign_name',
+                                'attribute' => 'campaign.name',
 //                                'value' => 'time_zone',
                             ],
                             [
 //                             'label' => 'clicks',
                                 'attribute' => 'clicks',
                                 'value' => 'clicks',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'unique_clicks',
@@ -278,6 +289,7 @@ $this->params['breadcrumbs'][] = 'Update';
 //                             'label' => 'match_installs',
                                 'attribute' => 'match_installs',
                                 'value' => 'match_installs',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'redirect_installs',
@@ -313,6 +325,7 @@ $this->params['breadcrumbs'][] = 'Update';
 //                             'label' => 'cost',
                                 'attribute' => 'cost',
                                 'value' => 'cost',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'redirect_cost',
@@ -323,6 +336,7 @@ $this->params['breadcrumbs'][] = 'Update';
 //                             'label' => 'revenue',
                                 'attribute' => 'revenue',
                                 'value' => 'revenue',
+                                'pageSummary' => true,
                             ],
                             [
                                 'label' => 'Margin',

@@ -48,6 +48,7 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);

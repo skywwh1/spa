@@ -146,6 +146,7 @@ class FinanceAdvertiserBillTermController extends Controller
 
             //systemRevenue
             $systemRevenueModel = new FinanceAdvertiserCampaignBillTermSearch();
+            $systemRevenueModel->bill_id = $bill_id;
             $systemRevenueList = $systemRevenueModel->search(Yii::$app->request->queryParams);
 
             // pending
@@ -167,7 +168,6 @@ class FinanceAdvertiserBillTermController extends Controller
             $addRevenueModel = new FinanceAddRevenueSearch();
             $addRevenueModel->advertiser_bill_id = $bill_id;
             $addRevenueList = $addRevenueModel->search(Yii::$app->request->queryParams);
-
 
 
             return $this->render('update', [
