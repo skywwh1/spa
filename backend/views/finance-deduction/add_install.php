@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
 
                         <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
-                        <?= $form->field($model, 'type')->hiddenInput(['value' => 1])->label(false) ?>
+                        <?= $form->field($model, 'type')->hiddenInput(['value' => 2])->label(false) ?>
                         <div class="form-group">
                             <?= Html::submitButton('Create', ['class' => 'btn-success']) ?>
                         </div>

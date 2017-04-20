@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\FinanceDeductionForm;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\Channel;
@@ -109,11 +110,11 @@ class FinanceDeductionController extends Controller
      */
     public function actionAddDiscount()
     {
-        $model = new FinanceDeduction();
+        $model = new FinanceDeductionForm();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($this->saveDeduction($model)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index', 'id' => $model->id]);
             }
         } else {
             return $this->render('add_discount', [
@@ -129,11 +130,11 @@ class FinanceDeductionController extends Controller
      */
     public function actionAddInstall()
     {
-        $model = new FinanceDeduction();
+        $model = new FinanceDeductionForm();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($this->saveDeduction($model)) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['index', 'id' => $model->id]);
             }
         } else {
             return $this->render('add_install', [
@@ -149,7 +150,7 @@ class FinanceDeductionController extends Controller
      */
     public function actionAddFine()
     {
-        $model = new FinanceDeduction();
+        $model = new FinanceDeductionForm();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($this->saveDeduction($model)) {
@@ -174,7 +175,7 @@ class FinanceDeductionController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'id' => $model->id]);
         } else {
             return $this->renderAjax('update', [
                 'model' => $model,
@@ -213,78 +214,76 @@ class FinanceDeductionController extends Controller
 
     public function actionValidate()
     {
-        $model = new FinanceDeduction();
+        $model = new FinanceDeductionForm();
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post())) {
-            if (empty($model->channel_id)) {
-                $channel = Channel::findByUsername($model->channel_name);
-                if (isset($channel)) {
-                    $model->channel_id = $channel->id;
-                }
-            }
-            if (!is_int($model->start_date)) {
-                $start = new DateTime($model->start_date, new DateTimeZone('Etc/GMT-8'));
-                $model->start_date = $start->getTimestamp();
-            }
-            if (!is_int($model->end_date)) {
-                $end = new DateTime($model->end_date, new DateTimeZone('Etc/GMT-8'));
-                $model->end_date = $end->getTimestamp();
-            }
-            \Yii::$app->response->format = Response::FORMAT_JSON;
-            return ActiveForm::validate($model);
+            $this->asJson(ActiveForm::validate($model));
         }
     }
 
     /**
-     * @param FinanceDeduction $model
+     * @param FinanceDeductionForm $model
      * @return bool
      */
 
     private function saveDeduction(&$model)
     {
+        date_default_timezone_set('Etc/GMT-8');
         $save = false;
         //加载channel_id;
         $channel = Channel::findByUsername($model->channel_name);
         $cam = Campaign::findById($model->campaign_id);
+        strtotime($model->start_date);
         //加载report 数据；
-        $start = new DateTime($model->start_date, new DateTimeZone('Etc/GMT-8'));
-        $end = new DateTime($model->end_date, new DateTimeZone('Etc/GMT-8'));
-        $model->start_date = $start->getTimestamp();
-        $model->end_date = $end->getTimestamp();
-        $end = $end->add(new DateInterval('P1D'));
-        $start = $start->getTimestamp();
-        $end = $end->getTimestamp();
+        $start = strtotime($model->start_date);
+        $end = strtotime($model->end_date);
+        $model->start_date = $start;
+        $model->end_date = $end;
 //        var_dump($start);
 //        var_dump($end);
 //        var_dump($model->campaign_id);
 //        var_dump($model->channel_name);
 //        die();
-        $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
+        $channel_bill_id = $channel->id . '_' . date('Ym', $start);
+        $adv_bill_id = $cam->advertiser0->id . '_' . date('Ym', $start);
+
+        $records = CampaignLogHourly::findDateReport($start, $end + 3600 * 24, $model->campaign_id, $channel->id);
         if (isset($records)) {
-            $model->channel_id = $channel->id;
-            $model->installs = $records->installs;
-            $model->match_installs = $records->match_installs;
-            $model->cost = $records->cost;
-            $model->revenue = $records->revenue;
-            $model->margin = $model->revenue == 0 ? 0 : ($model->revenue - $model->cost) / $model->revenue;
-            $model->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
-            $model->om = User::findIdentity($channel->om)->username;
-            $model->bd = User::findIdentity($cam->advertiser0->bd)->username;
-            $model->adv = $cam->advertiser0->username;
-            if ($model->type == 1) {
-                $model->deduction_cost = $model->cost * ($model->deduction_value / 100);
-                $model->deduction_revenue = $model->revenue * ($model->deduction_value / 100);
-            } else if ($model->type == 2) {
-                $model->deduction_cost = ($model->cost / $model->installs) * $model->deduction_value;
-                $model->deduction_revenue = $model->deduction_cost / (1 - $model->margin);
-            } else if ($model->type == 3) {
-                $model->deduction_cost = $model->deduction_value;
-                $model->deduction_revenue = $model->deduction_cost;
+            $deduction = new FinanceDeduction();
+            $deduction->channel_bill_id = $channel_bill_id;
+            $deduction->adv_bill_id = $adv_bill_id;
+            $deduction->channel_id = $channel->id;
+            $deduction->campaign_id = $cam->id;
+            $deduction->start_date = $start;
+            $deduction->end_date = $end;
+            $deduction->type = $model->type;
+            $deduction->deduction_value = $model->deduction_value;
+            $deduction->installs = $records->installs;
+            $deduction->match_installs = $records->match_installs;
+            $deduction->cost = $records->cost;
+            $deduction->revenue = $records->revenue;
+            $deduction->margin = $deduction->revenue == 0 ? 0 : ($deduction->revenue - $deduction->cost) / $deduction->revenue;
+            $deduction->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
+            $deduction->om = User::findIdentity($channel->om)->username;
+            $deduction->bd = User::findIdentity($cam->advertiser0->bd)->username;
+            $deduction->adv = $cam->advertiser0->username;
+            if ($deduction->type == 1) {
+                $deduction->deduction_cost = $deduction->cost * ($deduction->deduction_value / 100);
+                $deduction->deduction_revenue = $deduction->revenue * ($deduction->deduction_value / 100);
+            } else if ($deduction->type == 2) {
+                $deduction->deduction_cost = ($deduction->cost / $deduction->installs) * $deduction->deduction_value;
+                $deduction->deduction_revenue = $deduction->deduction_cost / (1 - $deduction->margin);
+            } else if ($deduction->type == 3) {
+                $deduction->deduction_cost = $deduction->deduction_value;
+                $deduction->deduction_revenue = $deduction->deduction_cost;
             }
-            if ($model->save()) {
+//            var_dump($deduction);
+//            die();
+            if ($deduction->save()) {
                 $save = true;
+                $model->id = $deduction->id;
             } else {
-                var_dump($model->getErrors());
+                var_dump($deduction->getErrors());
                 die();
             }
         }

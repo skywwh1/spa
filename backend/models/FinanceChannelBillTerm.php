@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Campaign;
 use common\models\Channel;
 use Yii;
 
@@ -29,6 +30,8 @@ use Yii;
  * @property string $redirect_cost
  * @property string $revenue
  * @property string $redirect_revenue
+ * @property string $add_historic_cost
+ * @property string $pending
  * @property string $deduction
  * @property string $compensation
  * @property string $add_cost
@@ -39,10 +42,15 @@ use Yii;
  * @property string $apply_prepayment
  * @property string $balance
  * @property integer $status
+ * @property string $note
  * @property integer $update_time
  * @property integer $create_time
  *
+ * @property FinanceAddCost[] $financeAddCosts
+ * @property FinanceChannelPrepayment[] $financeApplyPrepayments
  * @property Channel $channel
+ * @property FinanceChannelCampaignBillTerm[] $financeChannelCampaignBillTerms
+ * @property Campaign[] $campaigns
  */
 class FinanceChannelBillTerm extends \yii\db\ActiveRecord
 {
@@ -62,7 +70,8 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
         return [
             [['bill_id', 'invoice_id', 'period', 'channel_id', 'start_time', 'end_time'], 'required'],
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
+            [['note'], 'string'],
             [['bill_id', 'period'], 'string', 'max' => 255],
             [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
@@ -96,6 +105,8 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
             'redirect_cost' => 'Redirect Cost',
             'revenue' => 'Revenue',
             'redirect_revenue' => 'Redirect Revenue',
+            'add_historic_cost' => 'Add Historic Cost',
+            'pending' => 'Pending',
             'deduction' => 'Deduction',
             'compensation' => 'Compensation',
             'add_cost' => 'Add Cost',
@@ -106,6 +117,7 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
             'apply_prepayment' => 'Apply Prepayment',
             'balance' => 'Balance',
             'status' => 'Status',
+            'note' => 'Note',
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
         ];
@@ -114,9 +126,41 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getFinanceAddCosts()
+    {
+        return $this->hasMany(FinanceAddCost::className(), ['channel_bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinanceApplyPrepayments()
+    {
+        return $this->hasMany(FinanceChannelPrepayment::className(), ['channel_bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getChannel()
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFinanceChannelCampaignBillTerms()
+    {
+        return $this->hasMany(FinanceChannelCampaignBillTerm::className(), ['bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaigns()
+    {
+        return $this->hasMany(Campaign::className(), ['id' => 'campaign_id'])->viaTable('finance_channel_campaign_bill_term', ['bill_id' => 'bill_id']);
     }
 
     public function beforeSave($insert)

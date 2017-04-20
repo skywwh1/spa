@@ -4,6 +4,17 @@
 
 
 $(function () {
+    if (!$.cookie('tr-body-class')) {
+        $('body').addClass('sidebar-collapse');
+    }
+    $('#a-sidebar-toggle').click(function () {
+        var body_class = $('body').attr('class');
+        if (body_class.search('sidebar-collapse') != -1) {
+            $.cookie('tr-body-class', 1);
+        }else{
+            $.removeCookie('tr-body-class');
+        }
+    });
     var body_menu = $('#nav-menu').data('menu');
     var element = $('ul li a').filter(function () {
         if (body_menu != undefined && this.dataset.menu == body_menu) {

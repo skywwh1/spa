@@ -18,9 +18,9 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap'], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note'], 'safe'],
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
         ];
     }
 
@@ -75,6 +75,8 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             'redirect_cost' => $this->redirect_cost,
             'revenue' => $this->revenue,
             'redirect_revenue' => $this->redirect_revenue,
+            'add_historic_cost' => $this->add_historic_cost,
+            'pending' => $this->pending,
             'deduction' => $this->deduction,
             'compensation' => $this->compensation,
             'add_cost' => $this->add_cost,
@@ -94,7 +96,8 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
-            ->andFilterWhere(['like', 'cap', $this->cap]);
+            ->andFilterWhere(['like', 'cap', $this->cap])
+            ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;
     }

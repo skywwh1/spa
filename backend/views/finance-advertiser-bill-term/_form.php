@@ -11,11 +11,14 @@ use yii\widgets\ActiveForm;
     <div class="col-lg-6">
         <div class="box box-info">
             <div class="box-body">
-                <div class="finance-advertiser-bill-month-form">
+                <div class="finance-advertiser-bill-term-form">
 
                     <?php $form = ActiveForm::begin(); ?>
 
-                        <?= $form->field($model, 'adv_id')->textInput() ?>
+                        <?= $form->field($model, 'bill_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'invoice_id')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'adv_id')->textInput() ?>
     <?= $form->field($model, 'time_zone')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'start_time')->textInput() ?>
     <?= $form->field($model, 'end_time')->textInput() ?>
@@ -33,6 +36,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'redirect_cost')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'revenue')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'redirect_revenue')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'receivable')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'status')->textInput() ?>
     <?= $form->field($model, 'update_time')->textInput() ?>
     <?= $form->field($model, 'create_time')->textInput() ?>
                     <div class="form-group">

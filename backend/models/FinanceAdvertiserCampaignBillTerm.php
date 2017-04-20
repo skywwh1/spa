@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Campaign;
 use Yii;
 
 /**
@@ -30,6 +31,7 @@ use Yii;
  * @property integer $create_time
  * @property integer $update_time
  *
+ * @property Campaign $campaign
  * @property FinanceAdvertiserBillTerm $bill
  */
 class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
@@ -53,6 +55,7 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
             [['bill_id'], 'string', 'max' => 255],
             [['time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
+            [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['bill_id'], 'exist', 'skipOnError' => true, 'targetClass' => FinanceAdvertiserBillTerm::className(), 'targetAttribute' => ['bill_id' => 'bill_id']],
         ];
     }
@@ -86,6 +89,14 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
     }
 
     /**

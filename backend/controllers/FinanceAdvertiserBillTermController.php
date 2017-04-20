@@ -2,6 +2,11 @@
 
 namespace backend\controllers;
 
+use backend\models\FinanceAddRevenueSearch;
+use backend\models\FinanceAdvertiserCampaignBillTermSearch;
+use backend\models\FinanceAdvertiserPrepaymentSearch;
+use backend\models\FinanceDeductionSearch;
+use backend\models\FinancePendingSearch;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
@@ -30,7 +35,7 @@ class FinanceAdvertiserBillTermController extends Controller
     }
 
     /**
-     * Lists all FinanceAdvertiserBillMonth models.
+     * Lists all FinanceAdvertiserBillTerm models.
      * @return mixed
      */
     public function actionIndex()
@@ -45,21 +50,19 @@ class FinanceAdvertiserBillTermController extends Controller
     }
 
     /**
-     * Displays a single FinanceAdvertiserBillMonth model.
-     * @param integer $adv_id
-     * @param integer $start_time
-     * @param integer $end_time
+     * Displays a single FinanceAdvertiserBillTerm model.
+     * @param string $id
      * @return mixed
      */
-    public function actionView($adv_id, $start_time, $end_time)
+    public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($adv_id, $start_time, $end_time),
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new FinanceAdvertiserBillMonth model.
+     * Creates a new FinanceAdvertiserBillTerm model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
@@ -68,7 +71,7 @@ class FinanceAdvertiserBillTermController extends Controller
         $model = new FinanceAdvertiserBillTerm();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'adv_id' => $model->adv_id, 'start_time' => $model->start_time, 'end_time' => $model->end_time]);
+            return $this->redirect(['view', 'id' => $model->bill_id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -77,19 +80,17 @@ class FinanceAdvertiserBillTermController extends Controller
     }
 
     /**
-     * Updates an existing FinanceAdvertiserBillMonth model.
+     * Updates an existing FinanceAdvertiserBillTerm model.
      * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $adv_id
-     * @param integer $start_time
-     * @param integer $end_time
+     * @param string $id
      * @return mixed
      */
-    public function actionUpdate($adv_id, $start_time, $end_time)
+    public function actionUpdate($id)
     {
-        $model = $this->findModel($adv_id, $start_time, $end_time);
+        $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'adv_id' => $model->adv_id, 'start_time' => $model->start_time, 'end_time' => $model->end_time]);
+            return $this->redirect(['view', 'id' => $model->bill_id]);
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -98,35 +99,97 @@ class FinanceAdvertiserBillTermController extends Controller
     }
 
     /**
-     * Deletes an existing FinanceAdvertiserBillMonth model.
+     * Deletes an existing FinanceAdvertiserBillTerm model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $adv_id
-     * @param integer $start_time
-     * @param integer $end_time
+     * @param string $id
      * @return mixed
      */
-    public function actionDelete($adv_id, $start_time, $end_time)
+    public function actionDelete($id)
     {
-        $this->findModel($adv_id, $start_time, $end_time)->delete();
+        $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     /**
-     * Finds the FinanceAdvertiserBillMonth model based on its primary key value.
+     * Finds the FinanceAdvertiserBillTerm model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $adv_id
-     * @param integer $start_time
-     * @param integer $end_time
+     * @param string $id
      * @return FinanceAdvertiserBillTerm the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($adv_id, $start_time, $end_time)
+    protected function findModel($id)
     {
-        if (($model = FinanceAdvertiserBillTerm::findOne(['adv_id' => $adv_id, 'start_time' => $start_time, 'end_time' => $end_time])) !== null) {
+        if (($model = FinanceAdvertiserBillTerm::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionEdit($bill_id)
+    {
+        $model = $this->findModel($bill_id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                $this->asJson(['success' => 1]);
+            } else {
+                var_dump($model->getErrors());
+            }
+        } else {
+
+            //receivable
+            $receivableModel = new FinanceAdvertiserBillTermSearch();
+            $receivableModel->bill_id = $bill_id;
+            $receivableList = $receivableModel->search(Yii::$app->request->queryParams);
+
+            //systemRevenue
+            $systemRevenueModel = new FinanceAdvertiserCampaignBillTermSearch();
+            $systemRevenueList = $systemRevenueModel->search(Yii::$app->request->queryParams);
+
+            // pending
+            $pendingSearchModel = new FinancePendingSearch();
+            $pendingSearchModel->adv_bill_id = $bill_id;
+            $pendingList = $pendingSearchModel->search(Yii::$app->request->queryParams);
+
+            //deduction
+            $deductionSearchModel = new FinanceDeductionSearch();
+            $deductionSearchModel->adv_bill_id = $bill_id;
+            $deductionList = $deductionSearchModel->search(Yii::$app->request->queryParams);
+
+            //prepayment
+            $prepaymentSearch = new FinanceAdvertiserPrepaymentSearch();
+            $prepaymentSearch->advertiser_bill_id = $bill_id;
+            $prepaymentList = $prepaymentSearch->search(Yii::$app->request->queryParams);
+
+            //addRevenue
+            $addRevenueModel = new FinanceAddRevenueSearch();
+            $addRevenueModel->advertiser_bill_id = $bill_id;
+            $addRevenueList = $addRevenueModel->search(Yii::$app->request->queryParams);
+
+
+
+            return $this->render('update', [
+                'receivableList' => $receivableList,
+                'model' => $model,
+                'systemRevenueList' => $systemRevenueList,
+                'deductionList' => $deductionList,
+                'pendingList' => $pendingList,
+                'prepaymentList' => $prepaymentList,
+                'addRevenueList' => $addRevenueList,
+            ]);
+        }
+    }
+
+    public function actionRetreat($id)
+    {
+        $bill = FinanceAdvertiserBillTerm::findOne($id);
+        $bill->status = 1;
+        if ($bill->save()) {
+            $this->asJson(['success' => 1]);
+        } else {
+            var_dump($bill->getErrors());
         }
     }
 }

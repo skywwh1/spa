@@ -9,10 +9,10 @@ use yii\db\ActiveRecord;
  * This is the model class for table "finance_compensation".
  *
  * @property integer $deduction_id
+ * @property string $compensation
  * @property string $billable_cost
  * @property string $billable_revenue
  * @property string $billable_margin
- * @property string $compensation
  * @property string $final_margin
  * @property integer $status
  * @property integer $editor
@@ -51,8 +51,8 @@ class FinanceCompensation extends ActiveRecord
         return [
             [['deduction_id', 'compensation'], 'required'],
             [['deduction_id', 'status', 'editor', 'creator'], 'integer'],
-            [['note'], 'string'],
-            [['billable_cost', 'billable_revenue', 'billable_margin', 'compensation', 'final_margin'], 'number'],
+            [['compensation', 'billable_cost', 'billable_revenue', 'billable_margin', 'final_margin'], 'number'],
+            [['note'], 'safe'],
             [['deduction_id'], 'exist', 'skipOnError' => true, 'targetClass' => FinanceDeduction::className(), 'targetAttribute' => ['deduction_id' => 'id']],
         ];
     }
@@ -64,15 +64,14 @@ class FinanceCompensation extends ActiveRecord
     {
         return [
             'deduction_id' => 'Deduction ID',
+            'compensation' => 'Compensation',
             'billable_cost' => 'Billable Cost',
             'billable_revenue' => 'Billable Revenue',
             'billable_margin' => 'Billable Margin',
-            'compensation' => 'Compensation',
             'final_margin' => 'Final Margin',
             'status' => 'Status',
             'editor' => 'Editor',
             'creator' => 'Creator',
-            'note' => 'Note',
         ];
     }
 
@@ -83,4 +82,5 @@ class FinanceCompensation extends ActiveRecord
     {
         return $this->hasOne(FinanceDeduction::className(), ['id' => 'deduction_id']);
     }
+
 }

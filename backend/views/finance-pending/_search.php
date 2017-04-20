@@ -17,15 +17,27 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'adv_bill_id') ?>
+
+    <?= $form->field($model, 'channel_bill_id') ?>
+
+    <?= $form->field($model, 'adv_id') ?>
+
     <?= $form->field($model, 'campaign_id') ?>
 
-    <?= $form->field($model, 'channel_id') ?>
+    <?php // echo $form->field($model, 'channel_id') ?>
 
-    <?= $form->field($model, 'start_date') ?>
+    <?php // echo $form->field($model, 'start_date') ?>
 
-    <?= $form->field($model, 'end_date') ?>
+    <?php // echo $form->field($model, 'end_date') ?>
 
-    <?php // echo $form->field($model, 'install') ?>
+    <?php // echo $form->field($model, 'installs') ?>
+
+    <?php // echo $form->field($model, 'match_installs') ?>
+
+    <?php // echo $form->field($model, 'adv_price') ?>
+
+    <?php // echo $form->field($model, 'pay_out') ?>
 
     <?php // echo $form->field($model, 'cost') ?>
 

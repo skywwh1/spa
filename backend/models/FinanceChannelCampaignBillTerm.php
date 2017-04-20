@@ -2,8 +2,10 @@
 
 namespace backend\models;
 
+use common\models\Campaign;
 use common\models\Channel;
 use Yii;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "finance_channel_campaign_bill_term".
@@ -28,12 +30,15 @@ use Yii;
  * @property string $redirect_cost
  * @property string $revenue
  * @property string $redirect_revenue
+ * @property string $note
  * @property integer $create_time
  * @property integer $update_time
  *
+ * @property Campaign $campaign
+ * @property FinanceChannelBillTerm $bill
  * @property Channel $channel
  */
-class FinanceChannelCampaignBillTerm extends \yii\db\ActiveRecord
+class FinanceChannelCampaignBillTerm extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -52,8 +57,11 @@ class FinanceChannelCampaignBillTerm extends \yii\db\ActiveRecord
             [['bill_id', 'channel_id', 'campaign_id', 'start_time', 'end_time'], 'required'],
             [['channel_id', 'campaign_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time', 'update_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
+            [['note'], 'string'],
             [['bill_id'], 'string', 'max' => 255],
             [['time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
+            [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
+            [['bill_id'], 'exist', 'skipOnError' => true, 'targetClass' => FinanceChannelBillTerm::className(), 'targetAttribute' => ['bill_id' => 'bill_id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
         ];
     }
@@ -84,9 +92,26 @@ class FinanceChannelCampaignBillTerm extends \yii\db\ActiveRecord
             'redirect_cost' => 'Redirect Cost',
             'revenue' => 'Revenue',
             'redirect_revenue' => 'Redirect Revenue',
+            'note' => 'Note',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getBill()
+    {
+        return $this->hasOne(FinanceChannelBillTerm::className(), ['bill_id' => 'bill_id']);
     }
 
     /**

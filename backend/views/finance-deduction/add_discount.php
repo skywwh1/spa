@@ -57,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php
                             echo '<label class="control-label">Date</label>';
                             echo DatePicker::widget([
-                                'name' => 'FinanceDeduction[start_date]',
+                                'name' => 'FinanceDeductionForm[start_date]',
                                 'value' => isset($model->start_date) ? $model->start_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                                 'type' => DatePicker::TYPE_RANGE,
-                                'name2' => 'FinanceDeduction[end_date]',
+                                'name2' => 'FinanceDeductionForm[end_date]',
                                 'value2' => isset($model->end_date) ? $model->end_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                                 'pluginOptions' => [
                                     'autoclose' => true,

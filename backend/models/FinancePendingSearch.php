@@ -18,9 +18,9 @@ class FinancePendingSearch extends FinancePending
     public function rules()
     {
         return [
-            [['id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
+            [['id', 'adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
+            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note'], 'safe'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
-            [['adv', 'pm', 'bd', 'om', 'note'], 'safe'],
         ];
     }
 
@@ -61,6 +61,7 @@ class FinancePendingSearch extends FinancePending
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
+            'adv_id' => $this->adv_id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
             'start_date' => $this->start_date,
@@ -77,7 +78,9 @@ class FinancePendingSearch extends FinancePending
             'update_time' => $this->update_time,
         ]);
 
-        $query->andFilterWhere(['like', 'adv', $this->adv])
+        $query->andFilterWhere(['like', 'adv_bill_id', $this->adv_bill_id])
+            ->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
+            ->andFilterWhere(['like', 'adv', $this->adv])
             ->andFilterWhere(['like', 'pm', $this->pm])
             ->andFilterWhere(['like', 'bd', $this->bd])
             ->andFilterWhere(['like', 'om', $this->om])

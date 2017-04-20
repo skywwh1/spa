@@ -47,7 +47,7 @@ class Nposting
 //        $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
-            if(!$model->save()){
+            if (!$model->save()) {
                 var_dump($model->getErrors());
             }
             $uuid = $model->adv_id . '_' . $model->campaign_id;
@@ -76,10 +76,9 @@ class Nposting
             $camp->adv_link = $model->adv_link;
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
-            if (empty($camp->note)) {
-                $camp->note = $model->description;
-                $camp->note = strip_tags($camp->note);
-            }
+            $camp->description = $model->description;
+            $camp->description = strip_tags($camp->description);
+            $camp->description = str_replace('&nbsp;', '', $camp->description);
             if (empty($camp->preview_link)) {
                 if ($camp->platform == 'android') {
                     $camp->preview_link = 'https://play.google.com/store/apps/details?id=' . $camp->package_name;
@@ -94,14 +93,14 @@ class Nposting
             } else {
                 $camp->status = 0;
             }
-            $camp->open_type = 0;
+            $camp->open_type = 1;
 
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
                 Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
-            }else{
+            } else {
                 var_dump($camp->getErrors());
             }
 //            $liveCamps[] = $camp->campaign_uuid;
@@ -147,7 +146,7 @@ class Nposting
                         $camp->adv_link = $cc[0]->channel_link;
                         $apiCampaigns[] = $camp;
                     } else {
-                        $miss[] = $camp->title.'-'.$camp->camp_id;
+                        $miss[] = $camp->title . '-' . $camp->camp_id;
                     }
                 }
             }

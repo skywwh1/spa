@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Advertiser;
 use common\models\Campaign;
 use common\models\Channel;
 use Yii;
@@ -10,6 +11,9 @@ use Yii;
  * This is the model class for table "finance_pending".
  *
  * @property integer $id
+ * @property string $adv_bill_id
+ * @property string $channel_bill_id
+ * @property integer $adv_id
  * @property integer $campaign_id
  * @property integer $channel_id
  * @property integer $start_date
@@ -30,16 +34,12 @@ use Yii;
  * @property integer $create_time
  * @property integer $update_time
  *
+ * @property Advertiser $adv0
  * @property Campaign $campaign
  * @property Channel $channel
  */
 class FinancePending extends \yii\db\ActiveRecord
 {
-    public $channel_name;
-    public $is_all;
-    public $adv_name;
-    public $campaign_name;
-
     /**
      * @inheritdoc
      */
@@ -54,14 +54,14 @@ class FinancePending extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
             [['campaign_id', 'channel_id', 'start_date', 'end_date'], 'required'],
-            [['campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
             [['note'], 'string'],
-            [['adv', 'pm', 'bd', 'om'], 'string', 'max' => 255],
+            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om'], 'string', 'max' => 255],
+            [['adv_id'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['adv_id' => 'id']],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
-            [['channel_name', 'is_all', 'adv_name'], 'safe'],
         ];
     }
 
@@ -72,6 +72,9 @@ class FinancePending extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'adv_bill_id' => 'Adv Bill ID',
+            'channel_bill_id' => 'Channel Bill ID',
+            'adv_id' => 'Adv ID',
             'campaign_id' => 'Campaign ID',
             'channel_id' => 'Channel ID',
             'start_date' => 'Start Date',
@@ -92,6 +95,14 @@ class FinancePending extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAdv0()
+    {
+        return $this->hasOne(Advertiser::className(), ['id' => 'adv_id']);
     }
 
     /**

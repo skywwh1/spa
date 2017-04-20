@@ -17,13 +17,19 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
+    <?= $form->field($model, 'adv_bill_id') ?>
+
+    <?= $form->field($model, 'channel_bill_id') ?>
+
     <?= $form->field($model, 'campaign_id') ?>
 
     <?= $form->field($model, 'channel_id') ?>
 
-    <?= $form->field($model, 'start_date') ?>
+    <?php // echo $form->field($model, 'timezone') ?>
 
-    <?= $form->field($model, 'end_date') ?>
+    <?php // echo $form->field($model, 'start_date') ?>
+
+    <?php // echo $form->field($model, 'end_date') ?>
 
     <?php // echo $form->field($model, 'installs') ?>
 
@@ -32,6 +38,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'cost') ?>
 
     <?php // echo $form->field($model, 'deduction_value') ?>
+
+    <?php // echo $form->field($model, 'type') ?>
 
     <?php // echo $form->field($model, 'deduction_cost') ?>
 
@@ -52,8 +60,6 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'status') ?>
 
     <?php // echo $form->field($model, 'note') ?>
-
-    <?php // echo $form->field($model, 'type') ?>
 
     <?php // echo $form->field($model, 'create_time') ?>
 

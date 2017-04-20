@@ -57,6 +57,10 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'redirect_revenue') ?>
 
+    <?php // echo $form->field($model, 'add_historic_cost') ?>
+
+    <?php // echo $form->field($model, 'pending') ?>
+
     <?php // echo $form->field($model, 'deduction') ?>
 
     <?php // echo $form->field($model, 'compensation') ?>
@@ -76,6 +80,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'balance') ?>
 
     <?php // echo $form->field($model, 'status') ?>
+
+    <?php // echo $form->field($model, 'note') ?>
 
     <?php // echo $form->field($model, 'update_time') ?>
 

@@ -2,63 +2,72 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\grid\GridView;
+//var_dump($aa);
+//die();
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceChannelBillTerm */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
-    <div class="col-lg-6">
+    <div class="col-lg-12">
         <div class="box box-info">
-            <div class="box-body">
-                <div class="finance-channel-bill-term-form">
-
-                    <?php $form = ActiveForm::begin(); ?>
-
-                        <?= $form->field($model, 'bill_id')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'invoice_id')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'period')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'channel_id')->textInput() ?>
-    <?= $form->field($model, 'time_zone')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'start_time')->textInput() ?>
-    <?= $form->field($model, 'end_time')->textInput() ?>
-    <?= $form->field($model, 'clicks')->textInput() ?>
-    <?= $form->field($model, 'unique_clicks')->textInput() ?>
-    <?= $form->field($model, 'installs')->textInput() ?>
-    <?= $form->field($model, 'match_installs')->textInput() ?>
-    <?= $form->field($model, 'redirect_installs')->textInput() ?>
-    <?= $form->field($model, 'redirect_match_installs')->textInput() ?>
-    <?= $form->field($model, 'pay_out')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'adv_price')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'daily_cap')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'cap')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'redirect_cost')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'revenue')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'redirect_revenue')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'deduction')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'compensation')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'add_cost')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'final_cost')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'actual_margin')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'paid_amount')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'payable')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'apply_prepayment')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'balance')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'status')->textInput() ?>
-    <?= $form->field($model, 'update_time')->textInput() ?>
-    <?= $form->field($model, 'create_time')->textInput() ?>
-                    <div class="form-group">
-                        <?= Html::submitButton($model->isNewRecord
-                        ? 'Create'                        : 'Update', ['class' => $model->isNewRecord ? 'btn
-                        btn-success' :
-                        'btn btn-primary']) ?>
-                    </div>
-
-                    <?php ActiveForm::end(); ?>
-
-                </div>
+            <div class="box-header with-border">
+                <h3 class="box-title">Basic Info</h3>
             </div>
+
+            <?php $form = ActiveForm::begin([
+                'options' => ['class' => 'form-horizontal'],
+            ]); ?>
+            <div class="box-body">
+
+                <?= $form->field($model, 'bill_id', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'invoice_id', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'period', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'channel_id', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput() ?>
+                <?= $form->field($model, 'time_zone', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput(['maxlength' => true]) ?>
+                <?= $form->field($model, 'status', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput() ?>
+                <?= $form->field($model, 'update_time', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textInput() ?>
+                <?= $form->field($model, 'note', [
+                    'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                    'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                ])->textarea(['rows' => 6]) ?>
+
+            </div>
+
+            <div class="box-footer">
+                <?= Html::submitButton('Commit', ['class' => 'btn btn-primary']) ?>
+            </div>
+            <?php ActiveForm::end(); ?>
+
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="box box-info">
+
         </div>
     </div>
 </div>

@@ -10,10 +10,10 @@ use kartik\grid\GridView;
 $this->title = 'Channel Payable';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="finance-channel-bill-term-index"></div>
-<div class="row">
+    <div id="nav-menu" data-menu="finance-channel-bill-term-index"></div>
+    <div class="row">
     <div class="col-lg-12">
-        <div class="box box-info table-responsive">
+        <div class="box box-info">
             <div class="box-body">
                 <div class="finance-channel-bill-term-index">
 
@@ -22,6 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
+                        'pjax' => true,
+                        'id' => 'channel-payable-list',
                         'columns' => [
                             [
                                 'class' => 'kartik\grid\ActionColumn',
@@ -34,8 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                       <span class="caret"></span></button>
                                       <ul class="dropdown-menu">
 
-                                      <li><a data-delete="0" data-title="' . $this->title . ' ' . $model->invoice_id . '" data-url="/finance-compensation/delete?id=' . $model->invoice_id . '">Edit</a></li>
-                                      <li><a data-view="0" data-title="Update Compensation ' . $model->invoice_id . '" data-url="/finance-compensation/update?id=' . $model->invoice_id . '">Retreat</a></li>
+                                      <li><a data-pjax="0" href="/finance-channel-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
+                                      <li><a data-retreat="0" data-title="' . $model->invoice_id . '" data-url="/finance-channel-bill-term/retreat?id=' . $model->bill_id . '">Retreat</a></li>
                                       </ul></div>';
 
                                     },
@@ -55,7 +57,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'bill_id',
                                 'value' => 'bill_id',
                             ],
-                            'channel.payment_term',
+                            [
+                                'label' => 'Payment Term',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getPaymentTerm($model->channel->payment_term);
+                                }
+
+                            ],
+
 //                            [
 //                                // 'label' => 'bill_id',
 //                                'attribute' => 'bill_id',
@@ -237,3 +246,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+<?php
+$this->registerJsFile(
+    '@web/js/finance-pending-campaign.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>

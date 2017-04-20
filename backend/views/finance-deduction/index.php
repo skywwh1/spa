@@ -168,12 +168,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => 'create_time',
                                     'format' => 'datetime',
                                 ],
-                                [
-//                                'label' => 'update_time',
-                                    'attribute' => 'update_time',
-                                    'value' => 'update_time',
-                                    'format' => 'datetime',
-                                ],
                             ],
                         ]); ?>
                     </div>

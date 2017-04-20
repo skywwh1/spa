@@ -8,22 +8,26 @@ use yii\widgets\ActiveForm;
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="finance-advertiser-bill-month-search">
+<div class="finance-advertiser-bill-term-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
 
+    <?= $form->field($model, 'bill_id') ?>
+
     <?= $form->field($model, 'invoice_id') ?>
+
+    <?= $form->field($model, 'period') ?>
 
     <?= $form->field($model, 'adv_id') ?>
 
     <?= $form->field($model, 'time_zone') ?>
 
-    <?= $form->field($model, 'start_time') ?>
+    <?php // echo $form->field($model, 'start_time') ?>
 
-    <?= $form->field($model, 'end_time') ?>
+    <?php // echo $form->field($model, 'end_time') ?>
 
     <?php // echo $form->field($model, 'clicks') ?>
 
@@ -56,6 +60,8 @@ use yii\widgets\ActiveForm;
     <?php // echo $form->field($model, 'receivable') ?>
 
     <?php // echo $form->field($model, 'status') ?>
+
+    <?php // echo $form->field($model, 'note') ?>
 
     <?php // echo $form->field($model, 'update_time') ?>
 

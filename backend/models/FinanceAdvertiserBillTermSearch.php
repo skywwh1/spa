@@ -18,7 +18,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
     public function rules()
     {
         return [
-            [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note'], 'safe'],
             [['adv_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'receivable'], 'number'],
         ];
@@ -81,10 +81,14 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             'create_time' => $this->create_time,
         ]);
 
-        $query->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
+        $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
+            ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
+            ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
-            ->andFilterWhere(['like', 'cap', $this->cap]);
+            ->andFilterWhere(['like', 'cap', $this->cap])
+            ->andFilterWhere(['<>', 'status', 0])
+            ->andFilterWhere(['like', 'note', $this->note]);
 
         return $dataProvider;
     }

@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\FinanceDeduction */
+/* @var $model backend\models\FinanceDeductionForm */
 
 $this->title = 'Add Fine';
 $this->params['breadcrumbs'][] = ['label' => 'Finance Deductions', 'url' => ['index']];
@@ -57,10 +57,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php
                             echo '<label class="control-label">Date</label>';
                             echo DatePicker::widget([
-                                'name' => 'FinanceDeduction[start_date]',
+                                'name' => 'FinanceDeductionForm[start_date]',
                                 'value' => isset($model->start_date) ? $model->start_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                                 'type' => DatePicker::TYPE_RANGE,
-                                'name2' => 'FinanceDeduction[end_date]',
+                                'name2' => 'FinanceDeductionForm[end_date]',
                                 'value2' => isset($model->end_date) ? $model->end_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                                 'pluginOptions' => [
                                     'autoclose' => true,
@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
 
                         <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
-                        <?= $form->field($model, 'type')->hiddenInput(['value' => 1])->label(false) ?>
+                        <?= $form->field($model, 'type')->hiddenInput(['value' => 3])->label(false) ?>
                         <div class="form-group">
                             <?= Html::submitButton('Create', ['class' => 'btn-success']) ?>
                         </div>

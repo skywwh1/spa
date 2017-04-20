@@ -2,6 +2,13 @@
 
 namespace backend\controllers;
 
+use backend\models\FinanceAddCostSearch;
+use backend\models\FinanceChannelPrepaymentSearch;
+use backend\models\FinanceChannelCampaignBillTermSearch;
+use backend\models\FinanceCompensationSearch;
+use backend\models\FinanceDeduction;
+use backend\models\FinanceDeductionSearch;
+use backend\models\FinancePendingSearch;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
@@ -119,6 +126,78 @@ class FinanceChannelBillTermController extends Controller
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    public function actionEdit($bill_id)
+    {
+        $model = $this->findModel($bill_id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                $this->asJson(['success' => 1]);
+            } else {
+                var_dump($model->getErrors());
+            }
+        } else {
+
+            //payable
+            $payableSearch = new FinanceChannelBillTermSearch();
+            $payableSearch->bill_id = $bill_id;
+            $payable = $payableSearch->search(Yii::$app->request->queryParams);
+
+            //system cost
+            $campaignBillSearchModel = new FinanceChannelCampaignBillTermSearch();
+            $campaignBillSearchModel->bill_id = $bill_id;
+            $campaignBill = $campaignBillSearchModel->search(Yii::$app->request->queryParams);
+
+            // pending
+            $pendingSearchModel = new FinancePendingSearch();
+            $pendingSearchModel->channel_bill_id = $bill_id;
+            $pendingList = $pendingSearchModel->search(Yii::$app->request->queryParams);
+
+            // deduction
+            $deductionSearchModel = new FinanceDeductionSearch();
+            $deductionSearchModel->channel_bill_id = $bill_id;
+            $deductionList = $deductionSearchModel->search(Yii::$app->request->queryParams);
+
+            //compensation
+            $compensationSearchModel = new FinanceCompensationSearch();
+            $compensationSearchModel->deduction_ids = FinanceDeduction::getDeductionIds($bill_id);
+            $compensationList = $compensationSearchModel->detailSearch(Yii::$app->request->queryParams);
+
+            //prepayment
+            $prepaymentSearch = new FinanceChannelPrepaymentSearch();
+            $prepaymentSearch->channel_bill_id = $bill_id;
+            $prepaymentList = $prepaymentSearch->search(Yii::$app->request->queryParams);
+
+            //add cost list
+            $costSearch = new FinanceAddCostSearch();
+            $costSearch->channel_bill_id = $bill_id;
+            $costList = $costSearch->search(Yii::$app->request->queryParams);
+
+
+            return $this->render('update', [
+                'payable' => $payable,
+                'model' => $model,
+                'campaignBill' => $campaignBill,
+                'pendingList' => $pendingList,
+                'deductionList' => $deductionList,
+                'compensationList' => $compensationList,
+                'prepaymentList' => $prepaymentList,
+                'costList' => $costList,
+            ]);
+        }
+    }
+
+    public function actionRetreat($id)
+    {
+        $bill = FinanceChannelBillTerm::findOne($id);
+        $bill->status = 1;
+        if ($bill->save()) {
+            $this->asJson(['success' => 1]);
+        } else {
+            var_dump($bill->getErrors());
         }
     }
 }

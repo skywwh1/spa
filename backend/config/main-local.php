@@ -7,6 +7,7 @@ $config = [
             'cookieValidationKey' => '5DCQ9VoU8YbrX2wyLtr8VAMF9sml-rYU',
         ],
     ],
+//    'timeZone'=>'Etc/GMT-8',
 ];
 
 if (!YII_ENV_TEST) {

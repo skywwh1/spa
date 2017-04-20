@@ -26,6 +26,7 @@ class AdminAsset extends AssetBundle
         'admin/js/fastclick.js',
         'admin/js/select2.full.min.js',
         'admin/js/dropdown.js', //表格和表单冲突
+        'admin/js/jquery.cookie.js', //表格和表单冲突
         'admin/js/app.min.js',
 //        'admin/js/demo.js',
         'admin/js/custom.js',

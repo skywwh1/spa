@@ -6,20 +6,20 @@ use yii\widgets\DetailView;
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceAdvertiserBillTerm */
 
-$this->title = $model->adv_id;
-$this->params['breadcrumbs'][] = ['label' => 'Finance Advertiser Bill Months', 'url' => ['index']];
+$this->title = $model->bill_id;
+$this->params['breadcrumbs'][] = ['label' => 'Finance Advertiser Bill Terms', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
 
-    <div id="nav-menu" data-menu="finance-advertiser-bill-month-view"></div>
+    <div id="nav-menu" data-menu="finance-advertiser-bill-term-view"></div>
     <div class="col-lg-12">
         <div class="box box-info">
             <div class="box-body">
 
     <p>
-        <?= Html::a('Update', ['update', 'adv_id' => $model->adv_id, 'start_time' => $model->start_time, 'end_time' => $model->end_time], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'adv_id' => $model->adv_id, 'start_time' => $model->start_time, 'end_time' => $model->end_time], [
+        <?= Html::a('Update', ['update', 'id' => $model->bill_id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Delete', ['delete', 'id' => $model->bill_id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -31,7 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
+            'bill_id',
             'invoice_id',
+            'period',
             'adv_id',
             'time_zone',
             'start_time:datetime',
@@ -52,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'redirect_revenue',
             'receivable',
             'status',
+            'note:ntext',
             'update_time:datetime',
             'create_time:datetime',
         ],
