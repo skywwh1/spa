@@ -9,10 +9,15 @@
 namespace console\controllers;
 
 
+use backend\models\FinanceAddRevenue;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserCampaignBillTerm;
+use backend\models\FinanceAdvertiserPrepayment;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelCampaignBillTerm;
+use backend\models\FinanceChannelPrepayment;
+use backend\models\FinanceDeduction;
+use backend\models\FinancePending;
 use common\models\Advertiser;
 use common\models\Campaign;
 use common\models\Channel;
@@ -438,8 +443,9 @@ class CountController extends Controller
                     $item->revenue = $campaign_bill->revenue;
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
                     $item->receivable = $campaign_bill->revenue;
+                    $item->final_revenue = $campaign_bill->revenue;
                 }
-
+                $this->countAdvBill($item);
                 $item->status = 1;
                 $item->save();
                 var_dump($item->getErrors());
@@ -539,6 +545,7 @@ class CountController extends Controller
                     $item->revenue = $campaign_bill->revenue;
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
                 }
+                $this->countChannelBill($item);
                 $item->status = 1;
                 $item->save();
                 var_dump($item->getErrors());
@@ -648,6 +655,86 @@ class CountController extends Controller
                     $pre_bill->save();
                 }
                 $first_month = strtotime("+1 month", $first_month);
+            }
+        }
+    }
+
+    /**
+     * @param FinanceAdvertiserBillTerm $model
+     */
+    private function countAdvBill(&$model)
+    {   //history revenue
+        //pending
+        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id]);
+        if (!empty($pends)) {
+            foreach ($pends as $item) {
+                $model->pending += $item->revenue;
+                $model->receivable -= $item->revenue;
+            }
+        }
+        //deduction
+        $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
+        if (!empty($deductions)) {
+            foreach ($deductions as $item) {
+                $model->deduction += $item->deduction_value;
+                $model->receivable -= $item->deduction_value;
+                $model->final_revenue -= $item->deduction_value;
+            }
+        }
+        //add revenue
+        $addRevenue = FinanceAddRevenue::findAll(['advertiser_bill_id' => $model->bill_id]);
+        if (!empty($addRevenue)) {
+            foreach ($addRevenue as $item) {
+                $model->add_revenue += $item->revenue;
+                $model->receivable += $item->revenue;
+                $model->final_revenue += $item->revenue;
+            }
+        }
+        //prepayment
+        $prepayments = FinanceAdvertiserPrepayment::findAll(['advertiser_bill_id' => $model->bill_id]);
+        if (!empty($prepayments)) {
+            foreach ($prepayments as $item) {
+                $model->prepayment += $item->prepayment;
+            }
+        }
+    }
+
+    /**
+     * @param FinanceChannelBillTerm $model
+     */
+    private function countChannelBill(&$model)
+    {   //history revenue
+        //pending
+        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id]);
+        if (!empty($pends)) {
+            foreach ($pends as $item) {
+                $model->pending += $item->revenue;
+                $model->payable -= $item->revenue;
+            }
+        }
+        //deduction
+        $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
+        if (!empty($deductions)) {
+            foreach ($deductions as $item) {
+                $model->deduction += $item->deduction_value;
+                $model->payable -= $item->deduction_value;
+                $model->final_cost -= $item->deduction_value;
+            }
+        }
+        //add revenue
+        $addRevenue = FinanceAddRevenue::findAll(['advertiser_bill_id' => $model->bill_id]);
+        if (!empty($addRevenue)) {
+            foreach ($addRevenue as $item) {
+                $model->add_cost += $item->revenue;
+                $model->payable += $item->revenue;
+                $model->final_cost += $item->revenue;
+            }
+        }
+        //prepayment
+        $prepayments = FinanceChannelPrepayment::findAll(['advertiser_bill_id' => $model->bill_id]);
+        if (!empty($prepayments)) {
+            foreach ($prepayments as $item) {
+                $model->apply_prepayment += $item->prepayment;
             }
         }
     }
