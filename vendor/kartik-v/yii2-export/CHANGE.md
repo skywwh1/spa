@@ -1,6 +1,36 @@
 Change Log: `yii2-export`
 =========================
 
+## version 1.2.7
+
+**Date:** 13-Mar-2017
+
+- (enh #163): Add dependency for kartik-v/yii2-dialog.
+- (bug #164): Process export correctly when confirmation alert is not set.
+- (bug #165): Empty export result when only first column is selected.
+- (enh #175): Add French Translations.
+- (enh #177): Update French Translations.
+- (enh #182, #183): Correct column label key increment.
+- (enh #177): Add Vietnamese Translations.
+- Update message config to include all default standard translation files.
+
+## version 1.2.6
+
+**Date:** 05-Aug-2016
+
+- (enh #135): Add Indonesian translations.
+- (enh #137): Add Estonian translations.
+- (enh #138): Add dynagrid selection support.
+- (enh #141): Add grouping option in export column.
+- (enh #149): Add Turkish translations.
+- (enh #150): Created beforeContent and afterContent settings.
+- (bug #151): Correct "undefined offset" when `batchSize` is set.
+- (bug #155): Fix '0' value being wrongly parsed in empty check.
+- (enh #156): Add Lithuanian translations.
+- (enh #159): Fix export to exel columns with comma in headers.
+- Add contribution templates.
+- (enh #161): Implement Krajee Dialog to display confirmation alerts.
+
 ## version 1.2.5
 
 **Date:** 18-Apr-2016

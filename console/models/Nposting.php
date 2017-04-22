@@ -91,7 +91,7 @@ class Nposting
             if ($model->status == 'live') {
                 $camp->status = 1;
             } else {
-                $camp->status = 0;
+                $camp->status = 2;
             }
             $camp->open_type = 1;
 

@@ -1,7 +1,9 @@
 <?php
 
+use kartik\file\FileInput;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 
@@ -15,6 +17,8 @@ use kartik\grid\GridView;
 /* @var $payable yii\data\ActiveDataProvider */
 /* @var $deductionList yii\data\ActiveDataProvider */
 /* @var $compensationList yii\data\ActiveDataProvider */
+/* @var $upload backend\models\UploadForm; */
+
 
 $this->title = 'Update Finance Channel Bill Term: ' . $model->bill_id;
 $this->params['breadcrumbs'][] = ['label' => 'Finance Channel Bill', 'url' => ['index']];
@@ -29,7 +33,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                 </div>
 
                 <?php $form = ActiveForm::begin([
-                    'options' => ['class' => 'form-horizontal'],
+                    'options' => ['class' => 'form-horizontal','enctype' => 'multipart/form-data'],
                     'id' => 'finance-channel-bill-term-form',
                 ]); ?>
                 <div class="box-body">
@@ -73,14 +77,30 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <div class="col-lg-2">
                         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                     </div>
+                    <?php ActiveForm::end(); ?>
                     <div class="col-lg-2">
                         <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-2">
-                        <?= Html::button('Upload File', ['class' => 'btn btn-primary']) ?>
+                        <?php
+                        Modal::begin([
+                            'header'=>'File Upload',
+                            'toggleButton' => [
+                                'label'=>'Upload File', 'class'=>'btn btn-primary'
+                            ],
+                        ]);
+                        echo FileInput::widget([
+                            'name' => 'imageFiles[]',
+                            'language' => 'en',
+                            'options' => ['multiple' => true],
+                            'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['/finance-channel-bill-term/upload'])]
+                        ]);
+                        Modal::end();
+
+                        //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-2">
-                        <?= Html::button('Download File', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::submitButton('Download File', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-2">
                         <?= Html::a('Add Cost', null, [
@@ -99,7 +119,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         ]) ?>
                     </div>
                 </div>
-                <?php ActiveForm::end(); ?>
+
 
             </div>
         </div>
@@ -129,10 +149,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 //                                'value' => 'bill_id',
 //                            ],
                             [
-                             'label' => 'System Cost',
-                             'attribute' => 'cost',
-                             'value' => 'cost',
-                             ],
+                                'label' => 'System Cost',
+                                'attribute' => 'cost',
+                                'value' => 'cost',
+                            ],
                             [
 //                                'label' => 'add_historic_cost',
                                 'attribute' => 'add_historic_cost',
@@ -456,11 +476,12 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $campaignBill,
                         'pjax' => true,
+                        'showPageSummary' => true,
                         'columns' => [
                             [
                                 // 'label' => 'start_time',
                                 'attribute' => 'bill.period',
-
+                                'pageSummary' => 'Summary',
                             ],
                             [
                                 // 'label' => 'channel_id',
@@ -483,9 +504,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'value' => 'end_time:datetime',
                             // ],
                             [
-                                'label' => 'clicks',
+//                                'label' => 'clicks',
                                 'attribute' => 'clicks',
                                 'value' => 'clicks',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'unique_clicks',
@@ -493,9 +515,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'value' => 'unique_clicks',
                             // ],
                             [
-                                'label' => 'installs',
+//                                'label' => 'installs',
                                 'attribute' => 'installs',
                                 'value' => 'installs',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'match_installs',
@@ -536,6 +559,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                                 'label' => 'cost',
                                 'attribute' => 'cost',
                                 'value' => 'cost',
+                                'pageSummary' => true,
                             ],
                             //[
                             // 'label' => 'redirect_cost',
@@ -543,9 +567,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'value' => 'redirect_cost',
                             // ],
                             [
-                                'label' => 'revenue',
+//                                'label' => 'revenue',
                                 'attribute' => 'revenue',
                                 'value' => 'revenue',
+                                'pageSummary' => true,
                             ],
                             [
                                 'label' => 'Margin',
@@ -1055,4 +1080,5 @@ Modal::begin([
     ],
 ]);
 echo '<div id="pending-detail-content"></div>';
-Modal::end(); ?>
+Modal::end();
+?>

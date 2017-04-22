@@ -9,12 +9,14 @@ use backend\models\FinanceCompensationSearch;
 use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
+use backend\models\UploadForm;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
 
 /**
  * FinanceChannelBillTermController implements the CRUD actions for FinanceChannelBillTerm model.
@@ -132,8 +134,17 @@ class FinanceChannelBillTermController extends Controller
     public function actionEdit($bill_id)
     {
         $model = $this->findModel($bill_id);
+        $upload = new UploadForm();
 
         if ($model->load(Yii::$app->request->post())) {
+
+            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+            var_dump($upload->imageFile);
+            die();
+            if (!$upload->upload()) {
+                // file is uploaded successfully
+                return;
+            }
             if ($model->save()) {
                 $this->asJson(['success' => 1]);
             } else {
@@ -186,6 +197,7 @@ class FinanceChannelBillTermController extends Controller
                 'compensationList' => $compensationList,
                 'prepaymentList' => $prepaymentList,
                 'costList' => $costList,
+                'upload'=>$upload,
             ]);
         }
     }
@@ -199,5 +211,26 @@ class FinanceChannelBillTermController extends Controller
         } else {
             var_dump($bill->getErrors());
         }
+    }
+
+    public function actionUpload()
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+//            var_dump($_FILES['imageFiles']);
+//            die();
+            $model->imageFiles = UploadedFile::getInstancesByName('imageFiles');
+//            var_dump($model->imageFiles );
+//            die();
+            if ($model->upload()) {
+                // file is uploaded successfully
+                return;
+            }
+        }
+
+//        return $this->render('upload', ['model' => $model]);
+//
+      //  return $this->render('upload', ['model' => $model]);
     }
 }

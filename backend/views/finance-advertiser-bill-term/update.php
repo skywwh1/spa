@@ -1,8 +1,10 @@
 <?php
 
+use kartik\file\FileInput;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -76,7 +78,22 @@ $this->params['breadcrumbs'][] = 'Update';
                         <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-2">
-                        <?= Html::button('Upload File', ['class' => 'btn btn-primary']) ?>
+                        <?php
+                        Modal::begin([
+                            'header' => 'File Upload',
+                            'toggleButton' => [
+                                'label' => 'Upload File', 'class' => 'btn btn-primary'
+                            ],
+                        ]);
+                        echo FileInput::widget([
+                            'name' => 'imageFiles[]',
+                            'language' => 'en',
+                            'options' => ['multiple' => true],
+                            'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['/finance-channel-bill-term/upload'])]
+                        ]);
+                        Modal::end();
+
+                        //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-2">
                         <?= Html::button('Download File', ['class' => 'btn btn-primary']) ?>
