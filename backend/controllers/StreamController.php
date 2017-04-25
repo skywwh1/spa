@@ -275,7 +275,7 @@ class StreamController extends Controller
 //        $model->save();
 
         $click = new LogClick();
-        $click->tx_id = $model->id;
+        $click->tx_id = isset($model->id) ? $model->id : 0;
         $click->click_uuid = $model->click_uuid;
         $click->click_id = $model->click_id;
         $click->channel_id = $model->ch_id;
@@ -294,8 +294,8 @@ class StreamController extends Controller
         $click->ip = $model->ip;
         $click->ip_long = ip2long($click->ip);
         $click->redirect = $model->redirect;
-        $click->browser = $model->browser;
-        $click->browser_type = $model->browser_type;
+        $click->browser = isset($model->browser) ? $model->browser : 0;
+        $click->browser_type = isset($model->browser_type) ? $model->browser_type : 0;
         $click->click_time = time();
         $click->save();
 
