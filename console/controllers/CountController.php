@@ -58,7 +58,7 @@ class CountController extends Controller
             $click = new LogClick();
             $click->click_uuid = $model->click_uuid;
             $click->click_id = $model->click_id;
-            $click->channel_id = $model->ch_id;
+            $click->channel_id = $model->channel_id;
             $click->campaign_id = $model->campaign_id;
             $click->campaign_uuid = $model->campaign_uuid;
             $click->pl = $model->pl;

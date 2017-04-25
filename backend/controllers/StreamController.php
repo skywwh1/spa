@@ -110,14 +110,14 @@ class StreamController extends Controller
             $model->all_parameters = $allParameters;
         }
         $model->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000);
-        $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
-        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
-        $model->pl = isset($data['pl']) ? $data['pl'] : null;
-        $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : null;
-        $model->ch_subid = isset($data['ch_subid']) ? $data['ch_subid'] : null;
-        $model->gaid = isset($data['gaid']) ? $data['gaid'] : null;
-        $model->idfa = isset($data['idfa']) ? $data['idfa'] : null;
-        $model->site = isset($data['site']) ? $data['site'] : null;
+        $model->click_id = isset($data['click_id']) ? $data['click_id'] : 0;
+        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : 0;
+        $model->pl = isset($data['pl']) ? $data['pl'] : 0;
+        $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : 0;
+        $model->ch_subid = isset($data['ch_subid']) ? $data['ch_subid'] : 0;
+        $model->gaid = isset($data['gaid']) ? $data['gaid'] : 0;
+        $model->idfa = isset($data['idfa']) ? $data['idfa'] : 0;
+        $model->site = isset($data['site']) ? $data['site'] : 0;
 //        $clientIpAddress = Yii::$app->request->getUserIP();
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -147,9 +147,9 @@ class StreamController extends Controller
             }
             $allParameters = chop($allParameters, '&');
         }
-        $model->click_id = isset($data['click_id']) ? $data['click_id'] : null;
-        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : null;
-        $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : null;
+        $model->click_id = isset($data['click_id']) ? $data['click_id'] : 0;
+        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : 0;
+        $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : 0;
         $model->ip = Yii::$app->request->getUserIP();
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
