@@ -216,11 +216,11 @@ class CountController extends Controller
                         }
 
                     }
+                    $item->is_count = 1;
+                    $item->save();
                 } else {
                     $this->echoMessage('cannot found the click log from feed click_uuid ' . $item->click_id);
                 }
-                $item->is_count = 1;
-                $item->save();
             }
         }
     }
