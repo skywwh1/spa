@@ -18,6 +18,7 @@ use backend\models\FinanceChannelCampaignBillTerm;
 use backend\models\FinanceChannelPrepayment;
 use backend\models\FinanceDeduction;
 use backend\models\FinancePending;
+use backend\models\LogClick3;
 use common\models\Advertiser;
 use common\models\Campaign;
 use common\models\Channel;
@@ -52,16 +53,14 @@ class CountController extends Controller
     {
         $now = time();
         echo date('Y-m-d\TH:i:s\Z', $now) . "\n";
-        $logs = Stream::find()->orderBy('id desc')->limit(20000)->all();
+        $logs = LogClick3::find()->orderBy('create_time desc')->limit(20000)->all();
         foreach ($logs as $model) {
-            $campaign = Campaign::findByUuid($model->cp_uid);
             $click = new LogClick();
-            $click->tx_id = $model->id;
             $click->click_uuid = $model->click_uuid;
             $click->click_id = $model->click_id;
             $click->channel_id = $model->ch_id;
-            $click->campaign_id = $campaign->id;
-            $click->campaign_uuid = $model->cp_uid;
+            $click->campaign_id = $model->campaign_id;
+            $click->campaign_uuid = $model->campaign_uuid;
             $click->pl = $model->pl;
             $click->ch_subid = $model->ch_subid;
             $click->gaid = $model->gaid;
@@ -73,7 +72,7 @@ class CountController extends Controller
             $click->daily_cap = $model->daily_cap;
             $click->all_parameters = $model->all_parameters;
             $click->ip = $model->ip;
-            $click->ip_long = ip2long($click->ip);
+            $click->ip_long = $model->ip_long;
             $click->redirect = $model->redirect;
             $click->browser = $model->browser;
             $click->browser_type = $model->browser_type;

@@ -12,7 +12,7 @@ class AdminAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-//        'admin/css/bootstrap.min.css',
+        'admin/css/bootstrap.min.css',
         'admin/css/font-awesome.min.css',
         'admin/css/ionicons.min.css',
         'admin/css/select2.min.css',

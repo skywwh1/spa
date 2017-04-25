@@ -90,17 +90,16 @@ class Nposting
             $camp->category = $model->category;
             if ($model->status == 'live') {
                 $camp->status = 1;
+            } else {
+                $camp->status = 2;
             }
-//            else {
-//                $camp->status = 2;
-//            }
             $camp->open_type = 1;
 
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
-              //  Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
+                //  Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
             } else {
                 var_dump($camp->getErrors());
             }
