@@ -192,7 +192,9 @@ class ApplyCampaignController extends Controller
             $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
             $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
             $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+            $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
             $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+            $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
             return $this->renderAjax('deliver_create', [
                 'model' => $deliver,
             ]);
