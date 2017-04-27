@@ -7,10 +7,12 @@ use backend\models\ViewAdvertiserAuthToken;
 use backend\models\ViewClickLog;
 use backend\models\ViewFeedLog;
 use common\models\Campaign;
+use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
+use common\models\LogEvent;
 use common\models\RedirectLog;
 use common\models\Stream;
 use common\models\StreamSearch;
@@ -37,7 +39,7 @@ class StreamController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['track', 'feed'],
+                        'actions' => ['track', 'feed', 'event'],
                         'allow' => true,
                         'roles' => ['?', '@'],
                     ],
@@ -150,7 +152,6 @@ class StreamController extends Controller
         $model->click_id = isset($data['click_id']) ? $data['click_id'] : 0;
         $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : 0;
         $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : 0;
-        $model->ip = Yii::$app->request->getUserIP();
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
             $ips = explode(', ', $clientIpAddress);
@@ -160,7 +161,6 @@ class StreamController extends Controller
         } else {
             $clientIpAddress = $_SERVER['REMOTE_ADDR'];
         }
-//        $model->ip = Yii::$app->request->getUserIP();
         $model->ip = $clientIpAddress;
         $model->all_parameters = $allParameters;
         $code = $this->restrictionFeed($model);
@@ -376,7 +376,74 @@ class StreamController extends Controller
             404 => 'Missing parameters',
             500 => 'Can`t found the campaign',
             501 => 'Your country is not allow!',
+            502 => 'Channel does not exist!',
         );
         return (isset($codes[$status])) ? $codes[$status] : '';
     }
+
+    public function actionEvent()
+    {
+        $model = new LogEvent();
+        $data = Yii::$app->request->getQueryParams();
+        $model->click_uuid = isset($data['click_id']) ? $data['click_id'] : null;
+        $model->channel_id = isset($data['ch_id']) ? $data['ch_id'] : null;
+        $model->auth_token = isset($data['auth_token']) ? $data['auth_token'] : null;
+        $model->ip = Yii::$app->request->getUserIP();
+        if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
+            $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $ips = explode(', ', $clientIpAddress);
+            if (count($ips) > 1) {
+                $clientIpAddress = $ips[1];
+            }
+        } else {
+            $clientIpAddress = $_SERVER['REMOTE_ADDR'];
+        }
+        $model->ip = $clientIpAddress;
+        $model->ip_long = ip2long($model->ip);
+        $model->event_name = isset($data['event_name']) ? $data['event_name'] : null;
+        $model->event_value = isset($data['event_value']) ? $data['event_value'] : null;
+
+        if (!$model->validate()) {
+//            $this->asJson($model->getErrors());
+            $this->asJson(['status' => 'Missing Parameter']);
+        } else {
+            if ($this->restrictionEvent($model) != 200) {
+                $this->asJson($this->_getAdvCodeMessage($this->restrictionEvent($model)));
+            } else {
+                $model->save();
+                $this->asJson(['status' => 'success']);
+            }
+        }
+    }
+
+    /**
+     * @param LogEvent $model
+     * @return int
+     */
+    private function restrictionEvent($model)
+    {
+        $code = 200;
+        //1.token 限制
+        $token = $model->auth_token;
+        $adt = ViewAdvertiserAuthToken::findOne(['auth_token' => $token]);
+        if ($adt === null) {
+            $code = 400;
+            return $code;
+        }
+        //2.click uuid 限制
+        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
+        if ($clickuuid === null) {
+            $code = 401;
+            return $code;
+        }
+        //3 channel
+        $channel = Channel::findIdentity($model->channel_id);
+        if ($channel === null) {
+            $code = 502;
+            return $code;
+        }
+        return $code;
+    }
+
+
 }

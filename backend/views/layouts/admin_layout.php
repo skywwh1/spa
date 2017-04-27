@@ -182,6 +182,8 @@ AdminAsset::register($this);
                                 Reports</a></li>
                         <li><a href="/report/report-channel" data-menu="report-channel"><i class="fa fa-circle-o"></i>
                                 Channel Reports</a></li>
+                        <li><a href="/report/report-sub-channel" data-menu="report-sub-channel"><i class="fa fa-circle-o"></i>
+                               Sub Channel Reports</a></li>
                         <li><a href="/report/report-summary" data-menu="report-summary"><i class="fa fa-circle-o"></i>
                                 Summary Reports</a></li>
                         <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign

@@ -29,12 +29,13 @@ $(function () {
             break;
         }
     }
-
-    $(document).ready(function () {
-        $('.dropdown-toggle').dropdown();
-    });
-
-    $('body').tooltip({
-        selector: '[data-toggle="tooltip"]',
-    });
+});
+$(document).ready(function () {
+    $('.dropdown-toggle').dropdown();
+});
+$(document).on("pjax:end", function() {
+    $('.dropdown-toggle').dropdown();
+});
+$('body').tooltip({
+    selector: '[data-toggle="tooltip"]',
 });

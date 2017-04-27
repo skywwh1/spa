@@ -21,7 +21,15 @@
                         </ul>
                     </li>
 
-                    <li><h3>Tracking ink parameters</h3>
+                    <li><h3>Event Post back：</h3>
+                        <ul>
+                            <li><h4>http://event.superads.cn/stream/event?auth_token=<strong style='color:red'>please find the ADV
+                                        token on SuperADS</strong>&click_id={click_id}&ch_id={ch_id}&event_name={event_name}&event_value={event_value}</h4></li>
+
+                        </ul>
+                    </li>
+
+                    <li><h3>Tracking link parameters</h3>
                         <ul>
                             <li><h4>click_id={click_id}</h4></li>
                             <li><h4>ch_subid={Channel`s sub channel id}</h4></li>
