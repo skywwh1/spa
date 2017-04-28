@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use yii\db\ActiveRecord;
+use Yii;
 
 /**
  * This is the model class for table "campaign_log_sub_channel_hourly".
@@ -28,7 +28,7 @@ use yii\db\ActiveRecord;
  * @property string $redirect_revenue
  * @property integer $create_time
  */
-class CampaignLogSubChannelHourly extends ActiveRecord
+class CampaignLogSubChannelHourly extends \yii\db\ActiveRecord
 {
     public $campaign_name;
     public $channel_name;
@@ -92,13 +92,6 @@ class CampaignLogSubChannelHourly extends ActiveRecord
             'revenue' => 'Revenue',
             'redirect_revenue' => 'Redirect Revenue',
             'create_time' => 'Create Time',
-            'cvr' => 'Cvr',
-            'match_cvr' => 'Match Cvr',
-            'def' => 'Def',
-            'deduction_percent' => 'Deduction Percent',
-            'profit' => 'Profit',
-            'margin' => 'Margin',
-            'type' => 'Type',
         ];
     }
 

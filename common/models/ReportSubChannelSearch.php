@@ -8,11 +8,12 @@ use DateTimeZone;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
+use CampaignLogSubChannelHourly;
 
 /**
  * ReportSubChannelSearch represents the model behind the search form about `common\models\CampaignLogSubChannelHourly`.
  */
-class ReportSubChannelSearch extends CampaignLogSubChannelHourly
+class ReportSubChannelSearch extends CampaignLogSubChannelHourly2
 {
     /**
      * @inheritdoc

@@ -1,4 +1,2 @@
-main-local.php
-params-local.php
-main.php
-params.php
+*
+!.gitignore
