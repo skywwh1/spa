@@ -68,6 +68,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'clh.sub_channel',
             'clh.time timestamp',
             'clh.time_format',
             'clh.clicks',
@@ -150,6 +151,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'clh.sub_channel',
 //            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
@@ -169,7 +171,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'clh.daily_cap',
 
         ]);
-        $query->from('campaign_log_hourly clh');
+        $query->from('campaign_log_sub_channel_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
@@ -195,6 +197,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
+            'clh.sub_channel',
             'timestamp',
         ]);
         $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
@@ -244,7 +247,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'SUM(clh.redirect_revenue) redirect_revenue',
 
         ]);
-        $query->from('campaign_log_hourly clh');
+        $query->from('campaign_log_sub_channel_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');

@@ -45,8 +45,8 @@ $columns = [
     ],
     [
         'label' => 'Sub Channel',
-        'attribute' => 'campaign_id',
-        'value' => 'campaign_id',
+        'attribute' => 'sub_channel',
+        'value' => 'sub_channel',
 //        'filter' => false,
     ],
     [
