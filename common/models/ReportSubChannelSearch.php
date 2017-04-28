@@ -21,7 +21,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['sub_channel','daily_cap', 'type', 'start', 'end', 'time_zone', 'om'], 'safe'],
+            [['sub_channel', 'daily_cap', 'type', 'start', 'end', 'time_zone', 'om'], 'safe'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
     }
@@ -96,6 +96,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
@@ -179,6 +180,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,
             'clh.channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
             'clh.pay_out' => $this->pay_out,
             'clh.adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,
@@ -255,6 +257,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
             'ch.username' => $this->channel_name,

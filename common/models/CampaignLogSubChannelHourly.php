@@ -45,6 +45,7 @@ class CampaignLogSubChannelHourly extends \yii\db\ActiveRecord
     public $start;
     public $end;
     public $time_zone;
+    public $timestamp;
 
     /**
      * @inheritdoc
