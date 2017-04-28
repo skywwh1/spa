@@ -177,7 +177,7 @@ class CountController extends Controller
                     $logFeed->click_id = $logClick->click_id;
                     $logFeed->channel_id = $logClick->channel_id;
                     $logFeed->campaign_id = $logClick->campaign_id;
-                    $logFeed->ch_subid = $logClick->ch_subid;
+                    $logFeed->ch_subid = empty($logClick->ch_subid) ? '0' : $logClick->ch_subid;
                     $logFeed->all_parameters = $item->all_parameters;
                     $logFeed->ip = $item->ip;
                     $logFeed->ip_long = $item->ip_long;
@@ -205,6 +205,7 @@ class CountController extends Controller
                             $post->discount = $logClick->discount;
                             $post->daily_cap = $logClick->daily_cap;
                             $post->is_redirect = $sts->is_redirect;
+                            $post->ch_subid = empty($logClick->ch_subid) ? '0' : $logClick->ch_subid;
                             $post->post_link = $this->genPostLink($sts->channel->post_back, $logClick->all_parameters);
                             //* 0:need to post, 1.posted
                             $post->post_status = 0;

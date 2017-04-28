@@ -12,6 +12,7 @@ use Yii;
  * @property string $click_id
  * @property integer $channel_id
  * @property integer $campaign_id
+ * @property string $ch_subid
  * @property string $pay_out
  * @property string $discount
  * @property string $daily_cap
@@ -48,7 +49,7 @@ class LogPost extends \yii\db\ActiveRecord
             [['channel_id', 'campaign_id', 'daily_cap', 'post_time', 'post_status', 'is_redirect', 'create_time'], 'safe'],
             [['pay_out', 'discount'], 'safe'],
             [['post_link', 'advertiser_name'], 'safe'],
-            [['click_uuid', 'click_id'], 'string', 'max' => 255],
+            [['click_uuid', 'click_id', 'ch_subid'], 'string', 'max' => 255],
             [['click_uuid'], 'unique'],
         ];
     }
@@ -64,6 +65,7 @@ class LogPost extends \yii\db\ActiveRecord
             'click_id' => 'Click ID',
             'channel_id' => 'Channel ID',
             'campaign_id' => 'Campaign ID',
+            'ch_subid' => 'Ch Subid',
             'pay_out' => 'Pay Out',
             'discount' => 'Discount',
             'daily_cap' => 'Daily Cap',
