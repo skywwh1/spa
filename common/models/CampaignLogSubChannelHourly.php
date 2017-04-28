@@ -27,6 +27,8 @@ use Yii;
  * @property string $revenue
  * @property string $redirect_revenue
  * @property integer $create_time
+ * @property Campaign $campaign
+ * @property Channel $channel
  */
 class CampaignLogSubChannelHourly extends \yii\db\ActiveRecord
 {
@@ -95,6 +97,29 @@ class CampaignLogSubChannelHourly extends \yii\db\ActiveRecord
         ];
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
+    }
     /**
      * @param $campaign_id
      * @param $channel_id

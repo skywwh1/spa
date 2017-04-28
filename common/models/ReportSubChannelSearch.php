@@ -20,8 +20,8 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time'], 'integer'],
-            [['sub_channel', 'time_format', 'daily_cap', 'cap'], 'safe'],
+            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
+            [['sub_channel','daily_cap', 'type', 'start', 'end', 'time_zone', 'om'], 'safe'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
     }
@@ -131,7 +131,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false,
+//            'pagination' => false,
         ]);
 
         $this->load($params);

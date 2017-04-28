@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
         <!-- general form elements -->
         <div class="box box-primary">
             <?php $form = ActiveForm::begin([
-                'action' => ['report-channel'],
+                'action' => ['report-sub-channel'],
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
