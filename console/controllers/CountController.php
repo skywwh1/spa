@@ -346,6 +346,16 @@ class CountController extends Controller
         $stats->updateNullPrice();
         $stats->updateCaps();
 
+        //统计子渠道：
+        $stats->statsSubChannelMatchInstallHourly($start_time, $end_time);
+        $stats->statsSubChannelRedirectMatchInstallHourly($start_time, $end_time);
+
+        $stats->statsSubChannelInstallHourly($start_time, $end_time);
+        $stats->statsSubChannelRedirectInstallHourly($start_time, $end_time);
+
+        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
+        $stats->statsSubChannelClickHourly($start_time, $end_time);
+
 //        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
 //        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
 //        echo 'start time daily' . $start_time . "\n";

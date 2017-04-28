@@ -103,4 +103,16 @@ class CampaignLogSubChannelHourly extends ActiveRecord
             'type' => 'Type',
         ];
     }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $sub_channel_id
+     * @param $timestamp
+     * @return static
+     */
+    public static function findIdentity($campaign_id, $channel_id, $sub_channel_id, $timestamp)
+    {
+        return static::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel_id, 'time' => $timestamp]);
+    }
 }

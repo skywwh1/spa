@@ -13,6 +13,7 @@ use common\models\Advertiser;
 use common\models\Campaign;
 use common\models\CampaignLogDaily;
 use common\models\CampaignLogHourly;
+use common\models\CampaignLogSubChannelHourly;
 use common\models\Config;
 use common\models\Deliver;
 use common\models\LogFeedHourly;
@@ -516,5 +517,216 @@ class StatsUtil
         $command = $query->createCommand();
         $rows = $command->queryAll();
         return $rows;
+    }
+
+    public function statsSubChannelHourly($type, $start_time, $end_time)
+    {
+        date_default_timezone_set("Asia/Shanghai");
+        $from = 'log_click fc';
+        $clicks_select = 'count(*) clicks';
+        $timestamp_select = 'fc.click_time';
+        $pay_out_select = '';
+        $adv_price_select = '';
+        $cost_select = '';
+        $revenue_select = '';
+        switch ($type) {
+            case 1:
+                $from = 'log_click fc';
+                $clicks_select = 'count(*) clicks';
+                break;
+            case 2:
+                $from = 'log_click fc';
+                $clicks_select = 'count(distinct(fc.ip_long)) clicks';
+                break;
+            case 3:
+                $from = 'log_post fc';
+                $timestamp_select = 'fc.post_time';
+                $clicks_select = 'count(*) clicks';
+                $pay_out_select = 'AVG(fc.pay_out) payout';
+                $cost_select = 'SUM(fc.pay_out) cost';
+                break;
+            case 4:
+                $from = 'log_feed fc';
+                $timestamp_select = 'fc.feed_time';
+                $clicks_select = 'count(*) clicks';
+                $adv_price_select = 'AVG(fc.adv_price) adv_price';
+                $revenue_select = 'SUM(fc.adv_price) revenue';
+                break;
+            case 5:                    //统计redirect match installs
+                $from = 'log_feed fc';
+                $timestamp_select = 'fc.feed_time';
+                $clicks_select = 'count(*) clicks';
+                $revenue_select = 'SUM(fc.adv_price) revenue';
+                break;
+            case 6:                    //统计redirect post
+                $from = 'log_post fc';
+                $timestamp_select = 'fc.post_time';
+                $clicks_select = 'count(*) clicks';
+                $cost_select = 'SUM(fc.pay_out) cost';
+                break;
+        }
+        $select = ['fc.campaign_id',
+            'fc.channel_id',
+            'fc.ch_subid',
+            'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
+            $clicks_select
+        ];
+        if (!empty($pay_out_select)) {
+            array_push($select, $pay_out_select);
+        }
+        if (!empty($adv_price_select)) {
+            array_push($select, $adv_price_select);
+        }
+        if (!empty($cost_select)) {
+            array_push($select, $cost_select);
+        }
+        if (!empty($revenue_select)) {
+            array_push($select, $revenue_select);
+        }
+        Yii::$app->db->createCommand('set time_zone="+8:00"')->execute();
+        $query = new Query();
+        $query->select($select);
+        $query->from($from);
+        $query->where(['>=', $timestamp_select, $start_time]);
+        $query->andWhere(['<=', $timestamp_select, $end_time]);
+
+        if ($type == 5 || $type == 6) {
+            $query->andWhere(['is_redirect' => 1]);
+        }
+
+        $query->groupBy(['fc.campaign_id',
+            'fc.channel_id',
+            'fc.ch_subid',
+            'time', 'timestamp']);
+        $query->orderBy('timestamp');
+
+        $command = $query->createCommand();
+        var_dump($command->sql);
+//        die();
+        $rows = $command->queryAll();
+        foreach ($rows as $item) {
+            $channel_id = '';
+            $campaign_id = '';
+            $sub_channel_id = '';
+            $timestamp = '';
+            $time = '';
+            $clicks = '';
+            $payout = '';
+            $adv_price = '';
+            $cost = '';
+            $revenue = '';
+            foreach ($item as $k => $v) {
+                if ($k == 'channel_id') {
+                    $channel_id = $v;
+                }
+                if ($k == 'campaign_id') {
+                    $campaign_id = $v;
+                }
+                if ($k == 'ch_subid') {
+                    $sub_channel_id = $v;
+                }
+                if ($k == 'timestamp') {
+                    $timestamp = $v;
+                }
+                if ($k == 'time') {
+                    $time = $v;
+                }
+                if ($k == 'clicks') {
+                    $clicks = $v;
+                }
+                if ($k == 'payout') {
+                    $payout = $v;
+                }
+                if ($k == 'adv_price') {
+                    $adv_price = $v;
+                }
+                if ($k == 'cost') {
+                    $cost = $v;
+                }
+                if ($k == 'revenue') {
+                    $revenue = $v;
+                }
+            }
+            $hourly = CampaignLogSubChannelHourly::findIdentity($campaign_id, $channel_id, $sub_channel_id, $timestamp);
+            if (empty($hourly)) {
+                $hourly = new CampaignLogSubChannelHourly();
+                $hourly->channel_id = $channel_id;
+                $hourly->campaign_id = $campaign_id;
+                $hourly->sub_channel = $sub_channel_id;
+                $hourly->time = $timestamp;
+                $hourly->time_format = $time;
+            }
+            switch ($type) {
+                case 1:
+                    $hourly->clicks = $clicks;
+                    if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
+                        $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
+                        if (!empty($sts)) {
+                            if ($hourly->pay_out == 0) {
+                                $hourly->pay_out = $sts->pay_out;
+                            }
+                            if ($hourly->adv_price == 0) {
+                                $hourly->adv_price = $sts->campaign->adv_price;
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    $hourly->unique_clicks = $clicks;
+                    break;
+                case 3:
+                    $hourly->installs = $clicks;
+                    $hourly->pay_out = $payout;
+                    $hourly->cost = $cost;
+                    break;
+                case 4:
+                    $hourly->match_installs = $clicks;
+                    $hourly->adv_price = $adv_price;
+                    $hourly->revenue = $revenue;
+                    break;
+                case 5:
+                    $hourly->redirect_match_installs = $clicks;
+                    $hourly->redirect_revenue = $revenue;
+                    break;
+                case 6:
+                    $hourly->redirect_installs = $clicks;
+                    $hourly->redirect_cost = $cost;
+                    break;
+            }
+            if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
+            }
+        }
+    }
+
+    public function statsSubChannelClickHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(1, $start_time, $end_time);
+    }
+
+    public function statsSubChannelUniqueClickHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(2, $start_time, $end_time);
+    }
+
+    public function statsSubChannelMatchInstallHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(4, $start_time, $end_time);
+    }
+
+    public function statsSubChannelInstallHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(3, $start_time, $end_time);
+    }
+
+    public function statsSubChannelRedirectInstallHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(6, $start_time, $end_time);
+    }
+
+    public function statsSubChannelRedirectMatchInstallHourly($start_time, $end_time)
+    {
+        $this->statsSubChannelHourly(5, $start_time, $end_time);
     }
 }
