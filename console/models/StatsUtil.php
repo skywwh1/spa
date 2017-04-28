@@ -153,7 +153,7 @@ class StatsUtil
         date_default_timezone_set("Asia/Shanghai");
         $from = 'log_click fc';
         $clicks_select = 'count(*) clicks';
-        $timestamp_select = 'fc.click_time';
+        $timestamp_select = 'fc.create_time';
         $pay_out_select = '';
         $adv_price_select = '';
         $cost_select = '';
@@ -524,7 +524,7 @@ class StatsUtil
         date_default_timezone_set("Asia/Shanghai");
         $from = 'log_click fc';
         $clicks_select = 'count(*) clicks';
-        $timestamp_select = 'fc.click_time';
+        $timestamp_select = 'fc.create_time';
         $pay_out_select = '';
         $adv_price_select = '';
         $cost_select = '';
