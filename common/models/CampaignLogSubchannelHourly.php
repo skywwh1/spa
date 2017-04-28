@@ -33,14 +33,12 @@ class CampaignLogSubChannelHourly extends ActiveRecord
     public $campaign_name;
     public $channel_name;
     public $om;
-
     public $cvr;
     public $match_cvr;
     public $def;
     public $deduction_percent;
     public $profit;
     public $margin;
-
     public $type;
     public $start;
     public $end;
