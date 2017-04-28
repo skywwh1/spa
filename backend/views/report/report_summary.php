@@ -140,10 +140,7 @@ $columns = [
     ],
     [
         'attribute' => 'cost',
-        'value' => function ($model) {
-            $model = (object)$model;
-            return $model->installs * $model->pay_out;
-        },
+        'value' => 'cost',
         'filter' => false,
         'pageSummary' => true,
     ],
@@ -176,10 +173,6 @@ $columns = [
     ],
     [
         'attribute' => 'revenue',
-        'value' => function ($model) {
-            $model = (object)$model;
-            return $model->match_installs * $model->adv_price;
-        },
         'filter' => false,
         'pageSummary' => true,
     ],

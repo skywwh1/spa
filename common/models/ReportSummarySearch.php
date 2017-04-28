@@ -43,7 +43,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false,
+//            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -72,9 +72,16 @@ class ReportSummarySearch extends ReportSummaryHourly
             'clh.clicks',
             'clh.unique_clicks',
             'clh.installs',
+            'clh.redirect_installs',
+            'clh.match_installs',
+            'clh.redirect_match_installs',
             'clh.match_installs',
             'clh.pay_out',
             'clh.adv_price',
+            'clh.cost',
+            'clh.redirect_cost',
+            'clh.redirect_revenue',
+            'clh.revenue',
             'clh.daily_cap',
             'ad.username adv_name',
             'u.username bd',
@@ -137,7 +144,7 @@ class ReportSummarySearch extends ReportSummaryHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => false,
+//            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -168,8 +175,14 @@ class ReportSummarySearch extends ReportSummaryHourly
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
             'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
             'AVG(clh.pay_out) pay_out',
             'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
             'ad.username adv_name',
             'u.username bd',
             'o.username om',
@@ -262,8 +275,14 @@ class ReportSummarySearch extends ReportSummaryHourly
             'sum(clh.unique_clicks) unique_clicks',
             'sum(clh.installs) installs',
             'sum(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
             'avg(clh.pay_out) pay_out',
             'avg(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
             'clh.daily_cap',
             'ad.username adv_name',
             'u.username bd',
@@ -354,6 +373,11 @@ class ReportSummarySearch extends ReportSummaryHourly
 //            'AVG(clh.adv_price) adv_price',
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
 //            'u.username om',
 //            'campaign_name',
 
