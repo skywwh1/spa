@@ -9,6 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
+use common\models\Platform;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Channel */
@@ -123,6 +124,14 @@ use yii\widgets\ActiveForm;
 
                     <?= $form->field($model, 'post_back')->textInput(['maxlength' => true]) ?>
 
+                    <?= $form->field($model, 'os')->dropDownList(
+                        Platform::find()
+                            ->select(['name', 'id'])
+                            ->orderBy('id')
+                            ->indexBy('id')
+                            ->column()
+                    ) ?>
+
                     <?php
                     echo $form->field($model, 'strong_geo')->widget(Select2::classname(), [
 //                        'initValueText' => $model->strong_geo, // set the initial display text
@@ -169,6 +178,9 @@ use yii\widgets\ActiveForm;
                             'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
                         ],
                     ]); ?>
+
+                    <?= $form->field($model, 'recommended')->dropDownList(ModelsUtil::status) ?>
+
                     <div class="form-group">
                         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
                     </div><?php ActiveForm::end(); ?>

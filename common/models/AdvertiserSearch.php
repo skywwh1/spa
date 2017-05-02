@@ -62,7 +62,7 @@ class AdvertiserSearch extends Advertiser
         $query->andFilterWhere([
             'a.id' => $this->id,
             'pm' => $this->pm,
-            'status' => $this->status,
+            'a.status' => $this->status,
             'total_revenue' => $this->total_revenue,
             'receivable' => $this->receivable,
             'received' => $this->received,
@@ -82,6 +82,7 @@ class AdvertiserSearch extends Advertiser
         $query->andFilterWhere(['like', 'a.username', $this->username])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
+            ->andFilterWhere(['like', 'bd', Yii::$app->user->id])
             ->andFilterWhere(['like', 'system', $this->system])
             ->andFilterWhere(['like', 'contacts', $this->contacts])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])

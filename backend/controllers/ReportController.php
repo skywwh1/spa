@@ -60,12 +60,40 @@ class ReportController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new ReportSearch();
+       /* $searchModel = new ReportSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);*/
+        $searchModel = new ReportSearch();
+
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        $searchModel->type = 2;
+        $dataProvider = $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+        if (!empty(Yii::$app->request->queryParams)) {
+            $searchModel->load(Yii::$app->request->queryParams);
+            $type = $searchModel->type;
+            echo $type;
+            if ($type == 1) {
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+            } else if ($type == 2) {
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }
+        }
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 
@@ -142,6 +170,7 @@ class ReportController extends Controller
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
         $searchModel->type = 2;
+        $searchModel->bd = Yii::$app->user->id;
         $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);

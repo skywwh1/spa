@@ -45,6 +45,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'masterChannel.username',
                             'filter' => false,
                         ],
+                        [
+                            'attribute' => 'os',
+                            'value' => function ($data) {
+                                return ModelsUtil::getPlatform($data->os);
+                            },
+                            'filter' =>ModelsUtil::platform,
+                        ],
                         // 'account_name',
                         // 'branch_name',
                         // 'card_number',
@@ -85,6 +92,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         'payable',
                         'paid',
                         'note:text',
+                        [
+                            'attribute' => 'recommended',
+                            'value' => function ($data) {
+                                return ModelsUtil::getStatus($data->recommended);
+                            },
+                            'filter' => ModelsUtil::status,
+                        ],
                         // 'strong_geo',
                         // 'strong_catagory',
 

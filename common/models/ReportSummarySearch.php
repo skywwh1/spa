@@ -44,6 +44,18 @@ class ReportSummarySearch extends ReportSummaryHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -120,7 +132,10 @@ class ReportSummarySearch extends ReportSummaryHourly
             ->andFilterWhere(['like', 'o.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-        $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+        }
 //        var_dump($start);
 //        var_dump($end);
 //        var_dump($query->createCommand()->sql);
@@ -145,6 +160,18 @@ class ReportSummarySearch extends ReportSummaryHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -225,7 +252,9 @@ class ReportSummarySearch extends ReportSummaryHourly
             'clh.channel_id',
             'timestamp',
         ]);
-        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 
@@ -246,6 +275,34 @@ class ReportSummarySearch extends ReportSummaryHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'unique_clicks' => [
+                        'asc' => ['unique_clicks' => SORT_ASC],
+                        'desc' => ['unique_clicks' => SORT_DESC],
+                    ],
+                    'installs' => [
+                        'asc' => ['installs' => SORT_ASC],
+                        'desc' => ['installs' => SORT_DESC],
+                    ],
+                    'unique_clicks' => [
+                        'asc' => ['unique_clicks' => SORT_ASC],
+                        'desc' => ['unique_clicks' => SORT_DESC],
+                    ],
+                    'pay_out' => [
+                        'asc' => ['pay_out' => SORT_ASC],
+                        'desc' => ['pay_out' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -321,7 +378,10 @@ class ReportSummarySearch extends ReportSummaryHourly
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',]);
-        $query->orderBy(['cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+        }
 //        var_dump($start);
 //        var_dump($end);
 //        var_dump($query->createCommand()->sql);

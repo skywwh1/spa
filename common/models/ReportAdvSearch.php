@@ -41,6 +41,26 @@ class ReportAdvSearch extends ReportAdvHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -98,7 +118,11 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-        $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
+        }
+
         return $dataProvider;
     }
 
@@ -113,6 +137,26 @@ class ReportAdvSearch extends ReportAdvHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -174,7 +218,11 @@ class ReportAdvSearch extends ReportAdvHourly
             'clh.channel_id',
             'timestamp',
         ]);
-        $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
+        }
+
         return $dataProvider;
     }
 

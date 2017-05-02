@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ChannelSearch */
@@ -52,6 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'alipay',
                         // 'lang',
                         'timezone',
+                        'om',
                         // 'firstaccess',
                         // 'lastaccess',
                         // 'picture',
@@ -78,6 +80,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                             ],
                         ],
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{om-edit}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'om-edit' => function ($url, $model) {
+                                    return Html::a('editOM', null, [
+                                        'class' => 'btn btn-primary btn-xs',
+                                        'title' => Yii::t('yii', 'edit'),
+                                        'data-method' => 'post',
+                                        'data-pjax' => $url,
+                                        'data-view' => '0',
+                                    ]);
+                                },
+                            ],
+                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>
@@ -85,3 +103,6 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php $this->registerJsFile('@web/js/editOM.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]);
+?>

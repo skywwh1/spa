@@ -50,6 +50,7 @@ class ChannelController extends Controller
                             'my-channels',
                             'test',
                             'get_channel_multiple',
+                            'om-edit'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -298,5 +299,20 @@ class ChannelController extends Controller
         echo Campaign::getCampaignsByUuid($uuid);
     }
 
+    public function actionOmEdit($id)
+    {
+        $channel = new Channel();
+        $request = Yii::$app->request;
+
+        if ($request->isAjax && $request->post()) {
+            $model =  Channel::findOne($id);
+            $model->om = Yii::$app->user->id;
+            $model->save();
+            return "success";
+        }else{
+            return "failed";
+        }
+
+    }
 
 }
