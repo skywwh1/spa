@@ -16,7 +16,9 @@ use common\models\CampaignLogHourly;
 use common\models\CampaignLogSubChannelHourly;
 use common\models\Config;
 use common\models\Deliver;
+use common\models\LogAutoCheck;
 use common\models\LogFeedHourly;
+use common\utility\MailUtil;
 use Yii;
 use yii\db\Query;
 
@@ -728,5 +730,63 @@ class StatsUtil
     public function statsSubChannelRedirectMatchInstallHourly($start_time, $end_time)
     {
         $this->statsSubChannelHourly(5, $start_time, $end_time);
+    }
+
+    /**
+     *
+     */
+    public function checkCvr($start_time)
+    {
+        echo "Check CVR" . PHP_EOL;
+        $logs = CampaignLogHourly::find()->where(['>=', 'time', $start_time])->all();
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                if ($log->match_installs > 10) { // match cvr > 10
+                    $camp = Campaign::findById($log->campaign_id);
+                    if (!empty($camp)) {
+                        $traffic_source = $camp->traffic_source;
+                        echo $traffic_source . PHP_EOL;
+                        if (strpos($traffic_source, 'incent') !== 0) { // non-incent
+                            echo "camp-" . $camp->id . PHP_EOL;
+                            $cvr = ($log->match_installs / $log->clicks) * 100;
+                            $sts = Deliver::findIdentity($camp->id, $log->channel_id);
+                            if($sts->status ==1){
+                                $check = new LogAutoCheck();
+                                $check->campaign_id = $camp->id;
+                                $check->channel_id = $sts->channel_id;
+                                $check->campaign_name = $camp->campaign_name;
+                                $check->channel_name = $sts->channel->username;
+                                $check->match_cvr = $cvr;
+                                $check->match_install = $log->match_installs;
+
+                                if ($cvr > 3) {
+                                    $sts->status = 2;
+                                    $check->action = 'pause';
+                                    $sts->save();
+                                    $check->save();
+                                    echo "deliver pause-" . $camp->id."-".$sts->channel_id . PHP_EOL;
+                                } else if ($cvr > 1.5) {
+                                    $old_discount = $sts->discount;
+                                    if($old_discount != 99){
+                                        echo "deliver discount-" . $camp->id."-".$sts->channel_id ." set from ".$sts->discount." to 99". PHP_EOL;
+                                        $sts->discount = 99;
+                                        $sts->save();
+                                        $check->action = '99%discount';
+                                        $check->save();
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+
+        // send mail
+        $sendings = LogAutoCheck::findAll(['is_send' => 0]);
+        if (!empty($sendings)) {
+            MailUtil::autoCheckCvr($sendings);
+        }
     }
 }

@@ -6,10 +6,12 @@
  * Date: 2017-01-13
  * Time: 15:32
  */
+
 namespace common\utility;
 
 use common\models\Channel;
 use common\models\Deliver;
+use common\models\LogAutoCheck;
 use common\models\SendMailLog;
 use Yii;
 
@@ -20,7 +22,7 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('channel_created', ['channel' => $channel]);
         $mail->setTo($channel->email);
-        if(isset( $channel->om0)){
+        if (isset($channel->om0)) {
             $mail->setCc($channel->om0->email);
         }
         $mail->setSubject('SuperADS account create success');
@@ -161,6 +163,28 @@ class MailUtil
             return true;
         } else {
             return false;
+        }
+    }
+
+    /**
+     * @param LogAutoCheck[] $checks
+     */
+    public static function autoCheckCvr($checks)
+    {
+        $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
+        $mail->setTo('operations@superads.cn');
+        $mail->setSubject('Anticheat - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheck', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            foreach ($checks as $check) {
+                $check->is_send = 1;
+                $check->save();
+            }
         }
     }
 }
