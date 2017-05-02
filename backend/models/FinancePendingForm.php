@@ -77,13 +77,8 @@ class FinancePendingForm extends Model
         //不能跨月
 //        var_dump(strtotime($this->start_date));
 //        die();
-        if (strtotime($this->start_date) < strtotime('first day of this month') || strtotime($this->start_date) > strtotime('last day of this month')) {
-            $this->addError('channel_name', 'Only this month');
-
-        }
-        if (strtotime($this->end_date) < strtotime('first day of this month') || strtotime($this->end_date) > strtotime('last day of this month')) {
-            $this->addError('channel_name', 'Only this month');
-
+        if (date("m",strtotime($this->start_date)) != date("m",strtotime($this->end_date))) {
+            $this->addError('channel_name', 'start date and end date must in the same month!');
         }
         if ($this->type == 1) { //campaign pending
             $adv_bill = $this->campaign_id . '_' . date('Ym', strtotime($this->start_date));
