@@ -170,12 +170,14 @@ class CampaignStsUpdateController extends Controller
                 $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
                 $sts->end_time = $model->effect_time;
                 $sts->save();
-                return $this->redirect(['deliver/index']);
+               // return $this->redirect(['deliver/index']);
+                return $this->redirect(Yii::$app->request->referrer);
             } else if ($type == 1) {
                 $camp = Campaign::findById($model->campaign_id);
                 $camp->promote_end = $model->effect_time;
                 $camp->save();
-                return $this->redirect(['campaign/index']);
+              //  return $this->redirect(['campaign/index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
             return $this->renderAjax('pause', [
@@ -208,7 +210,8 @@ class CampaignStsUpdateController extends Controller
                 $model->type = $type;//2 is sts 1 is campaign
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
                 $model->save();
-                return $this->redirect(['deliver/index']);
+             // return $this->redirect(['deliver/index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
             return $this->renderAjax('update_cap', [
@@ -247,7 +250,8 @@ class CampaignStsUpdateController extends Controller
                 $sts->discount_numerator = 1;
                 $sts->discount_denominator = 1;
                 $sts->save();
-                return $this->redirect(['deliver/index']);
+            //    return $this->redirect(['deliver/index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
 
         } else {
@@ -282,7 +286,8 @@ class CampaignStsUpdateController extends Controller
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
                 $model->save();
 
-                return $this->redirect(['deliver/index']);
+             //   return $this->redirect(['deliver/index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
 
         } else {

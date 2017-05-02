@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'attribute' => 'bd',
                             'value'=> 'bd0.username',
-//                            'filter' => false,
+                            'filter' => false,
                         ],
 
                         'system',

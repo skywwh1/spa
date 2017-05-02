@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]);
                 $gridColumns = [
-                    'id',
                     [
                         'attribute' => 'tag',
                         'value' => function ($model) {
@@ -40,14 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         'attribute' => 'advertiser',
                         'value' => 'advertiser0.username',
                     ],
-
+                    'id',
                     [
                         'attribute' => 'campaign_name',
                         'value' => 'name',
                     ],
-                    'campaign_uuid',
-                    'pricing_mode',
-                    'category',
+                  //  'campaign_uuid',
                     'target_geo',
                     'platform',
                     [
@@ -69,6 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'kpi',
                     'note',
                     'others',
+                    'pricing_mode',
+                    'category',
                 ];
 
                 $fullExportMenu = ExportMenu::widget([
@@ -136,7 +135,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                       <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
                                       <li><a href="/campaign/update?id=' . $model->id . '" >Update</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>' .
+                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
+                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/geoUpdate?type=1&channel_id=&campaign_id=' . $model->id . '">GEO Updates</a></li>' .
                                         $restart
                                         . '</ul>
                                     </div>';

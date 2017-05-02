@@ -106,8 +106,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         'total_revenue',
                         'payable',
                         'paid',
+                        [
+                            'attribute' => 'os',
+                            'value' => ModelsUtil::getPlatform($model->os)
+                        ],
                         'strong_geo',
                         'strong_category',
+                        [
+                            'attribute' => 'recommended',
+                            'value' => ModelsUtil::getStatus($model->recommended)
+                        ],
                     ],
                 ]) ?>
 

@@ -18,7 +18,7 @@ class ChannelSearch extends Channel
     public function rules()
     {
         return [
-            [['id', 'type', 'om', 'master_channel', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable'], 'integer'],
+            [['id', 'type', 'om', 'master_channel', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'traffic_source', 'pricing_mode', 'total_revenue', 'payable','os','recommended'], 'integer'],
             [['username', 'firstname', 'lastname', 'auth_key', 'password_hash', 'password_reset_token', 'payment_way', 'payment_term', 'beneficiary_name', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'system', 'contacts', 'email', 'cc_email', 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'wechat', 'skype', 'alipay', 'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_category'], 'safe'],
         ];
     }
@@ -75,6 +75,8 @@ class ChannelSearch extends Channel
             'pricing_mode' => $this->pricing_mode,
             'total_revenue' => $this->total_revenue,
             'payable' => $this->payable,
+            'os' => $this->os,
+            'recommended' => $this->recommended,
         ]);
 
         $query->andFilterWhere(['like', 'username', $this->username])
@@ -127,7 +129,7 @@ class ChannelSearch extends Channel
     {
         $this->load($params);
         $this->status = 2;
-        return $this->search();
+        return $this->searchApplicants();
     }
 
     /**
@@ -155,5 +157,32 @@ class ChannelSearch extends Channel
         $this->load($params);
         $this->om = Yii::$app->user->id;
         return $this->search();
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @return ActiveDataProvider
+     */
+    public function searchApplicants()
+    {
+        $query = Channel::find();
+
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        // grid filtering conditions
+
+        $query->andFilterWhere(['!=', 'om',  Yii::$app->user->id]);
+        $query->andFilterWhere(['=', 'status', 2]);
+
+        return $dataProvider;
     }
 }

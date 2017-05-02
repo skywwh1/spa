@@ -35,9 +35,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => 'Campaign',
-                                'attribute' => 'campaign_id',
+                                'attribute' => 'campaignName',
                                 'value' => 'campaign.campaign_name',
-                                'filter' => false,
+                                //'filter' => false,
                             ],
                             [
                                 // 'label' => 'channel_id',
@@ -46,9 +46,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => 'Channel',
-                                'attribute' => 'channel_id',
+                                'attribute' => 'channelName',
                                 'value' => 'channel.username',
-                                'filter' => false,
+                               // 'filter' => false,
                             ],
                             [
                                 // 'label' => 'campaign_id_new',
@@ -57,9 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'label' => 'Redirect Campaign',
-                                'attribute' => 'campaign_id_new',
+                                'attribute' => 'redirectCampaignName',
                                 'value' => 'campaignIdNew.campaign_name',
-                                'filter' => false,
+                             //   'filter' => false,
                             ],
 //            [
 //                // 'label' => 'daily_cap',

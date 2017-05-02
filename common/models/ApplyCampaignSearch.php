@@ -12,6 +12,9 @@ use common\models\ApplyCampaign;
  */
 class ApplyCampaignSearch extends ApplyCampaign
 {
+    public function attributes(){
+        return array_merge(parent::attributes(),['channelName','campaignName','om']);
+    }
     /**
      * @inheritdoc
      */
@@ -19,6 +22,7 @@ class ApplyCampaignSearch extends ApplyCampaign
     {
         return [
             [['campaign_id', 'channel_id', 'status', 'create_time'], 'integer'],
+            [['channelName','campaignName','om'], 'safe'],
         ];
     }
 
@@ -60,9 +64,18 @@ class ApplyCampaignSearch extends ApplyCampaign
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-            'status' => $this->status,
+            'apply_campaign.status' => $this->status,
             'create_time' => $this->create_time,
         ]);
+
+        $query->join('INNER JOIN','channel','apply_campaign.channel_id = channel.id');
+        $query->andFilterWhere(['like','channel.username',$this->channelName]);
+        $query->join('INNER JOIN','user','channel.om = user.id');
+        $query->andFilterWhere(['like','user.username',$this->om]);
+
+        $query->join('INNER JOIN','campaign','apply_campaign.campaign_id = campaign.id');
+        $query->andFilterWhere(['like','campaign.campaign_name',$this->campaignName]);
+
         $query->orderBy('create_time DESC');
 
         return $dataProvider;
