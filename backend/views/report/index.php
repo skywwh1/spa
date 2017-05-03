@@ -10,7 +10,7 @@ use common\models\Campaign;
 $this->title = 'Campaign Report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="campaign"></div>
+<div id="nav-menu" data-menu="report-index"></div>
 <?php echo $this->render('_search', ['model' => $searchModel]);
 if ($searchModel->type == 2) {
     $layout = '{summary} {items} {pager}';
