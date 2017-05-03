@@ -82,7 +82,7 @@ class AdvertiserSearch extends Advertiser
         $query->andFilterWhere(['like', 'a.username', $this->username])
             ->andFilterWhere(['like', 'firstname', $this->firstname])
             ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'bd', Yii::$app->user->id])
+//            ->andFilterWhere(['like', 'bd', Yii::$app->user->id])
             ->andFilterWhere(['like', 'system', $this->system])
             ->andFilterWhere(['like', 'contacts', $this->contacts])
             ->andFilterWhere(['like', 'auth_key', $this->auth_key])
@@ -104,6 +104,13 @@ class AdvertiserSearch extends Advertiser
             ->andFilterWhere(['like', 'timezone', $this->timezone])
             ->andFilterWhere(['like', 'user.username', $this->bd,])
             ->andFilterWhere(['like', 'note', $this->note]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+
+        }
         $query->orderBy('created_time desc');
 
         return $dataProvider;

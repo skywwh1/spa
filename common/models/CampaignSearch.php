@@ -54,6 +54,14 @@ class CampaignSearch extends Campaign
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'adv_price' => [
+                        'asc' => ['adv_price' => SORT_ASC],
+                        'desc' => ['adv_price' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -122,7 +130,10 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
             ->andFilterWhere(['like', 'a.username', $this->advertiser])
             ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
-        $query->orderBy('create_time DESC');
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy('create_time DESC');
+        }
 
         return $dataProvider;
     }

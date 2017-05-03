@@ -51,6 +51,30 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'sub_channel' => [
+                        'asc' => ['clh.sub_channel' => SORT_ASC],
+                        'desc' => ['clh.sub_channel' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -112,7 +136,9 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
 
         }
-        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 
@@ -133,6 +159,30 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 //            'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'sub_channel' => [
+                        'asc' => ['clh.sub_channel' => SORT_ASC],
+                        'desc' => ['clh.sub_channel' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -202,7 +252,9 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'clh.sub_channel',
             'timestamp',
         ]);
-        $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
 //        var_dump(strtotime($this->start));
 //        var_dump(strtotime($this->end));
 //        var_dump($query->createCommand()->sql);
