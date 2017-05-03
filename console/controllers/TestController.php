@@ -22,6 +22,7 @@ use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
 use console\models\Glispa;
+use console\models\Mi;
 use console\models\Movista;
 use console\models\StaticsUtil;
 use console\models\StatsUtil;
@@ -43,38 +44,8 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-//        $curl = curl_init();
-//
-//        curl_setopt_array($curl, array(
-//            CURLOPT_URL => "http://api.nposting.com/campaign/lists?lang=english&api_cd=f421b8d6334cf1971ebfa56b49fdedc2",
-//            CURLOPT_RETURNTRANSFER => true,
-//            CURLOPT_ENCODING => "",
-//            CURLOPT_MAXREDIRS => 10,
-//            CURLOPT_TIMEOUT => 30,
-//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-//            CURLOPT_CUSTOMREQUEST => "GET",
-//            CURLOPT_USERAGENT =>  "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750",
-//            CURLOPT_COOKIE =>  "",
-//        ));
-//
-//        $response = curl_exec($curl);
-//        $err = curl_error($curl);
-//
-//        curl_close($curl);
-//
-//        if ($err) {
-//            echo "cURL Error #:" . $err;
-//        } else {
-//            echo $response;
-//        }
-        $apiModel = AdvertiserApi::findOne(['id' => 8]);
-        $data_key = $apiModel->json_offers_param;
-        $url = $apiModel->url;
-        $curl = new Curl();
-        $curl->setOption(CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
-        $curl->setOption(CURLOPT_COOKIE,'');
-        $response = $curl->get($url);
-        var_dump($response);
+        $aa = new Mi();
+        $aa->getApiCampaign();
         die();
 
 //        echo strtotime('2017-04-01')."\n";
