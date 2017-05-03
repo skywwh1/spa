@@ -11,6 +11,7 @@ namespace common\utility;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\SendMailLog;
+use common\models\CampaignStsUpdate;
 use Yii;
 
 class MailUtil
@@ -117,7 +118,7 @@ class MailUtil
         $mail = Yii::$app->mailer->compose('update_payout', ['deliver' => $deliver]);
         $mail->setTo($channel->email);
         $cc = array($channel->om0->email);
-        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+       if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
             $cc = array_merge($cc, explode(';', $channel->cc_email));
         }
         $mail->setCc($cc);
@@ -156,6 +157,35 @@ class MailUtil
             $isSend = 1;
         }
         $param = array('type' => 'pause', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param Deliver $deliver
+     * @return string
+     */
+    public static function updateGeo($deliver)
+    {
+
+        $channel = Channel::findIdentity($deliver->channel_id);
+        $mail = Yii::$app->mailer->compose('updateGeo', ['deliver' => $deliver]);
+        $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+        $mail->setSubject('Geo Update Campaign - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'geoUpdate', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
         if ($isSend) {
             return true;

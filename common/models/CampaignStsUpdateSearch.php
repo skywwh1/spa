@@ -18,8 +18,8 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
     public function rules()
     {
         return [
-            [['id', 'campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'effect_time', 'create_time'], 'integer'],
-            [['name', 'value'], 'safe'],
+            [['id', 'campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected',], 'integer'],
+            [['name', 'value','effect_time','create_time'], 'safe'],
         ];
     }
 
@@ -47,6 +47,34 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'effect_time' => [
+                        'asc' => ['effect_time' => SORT_ASC],
+                        'desc' => ['effect_time' => SORT_DESC],
+                    ],
+                    'create_time' => [
+                        'asc' => ['create_time' => SORT_ASC],
+                        'desc' => ['create_time' => SORT_DESC],
+                    ],
+                    'campaign_id' => [
+                        'asc' => ['campaign_id' => SORT_ASC],
+                        'desc' => ['campaign_id' => SORT_DESC],
+                    ],
+                    'channel_id' => [
+                        'asc' => ['channel_id' => SORT_ASC],
+                        'desc' => ['channel_id' => SORT_DESC],
+                    ],
+                    'value' => [
+                        'asc' => ['value' => SORT_ASC],
+                        'desc' => ['value' => SORT_DESC],
+                    ],
+                    'old_value' => [
+                        'asc' => ['old_value' => SORT_ASC],
+                        'desc' => ['old_value' => SORT_DESC],
+                    ],
+                ],
+            ]
         ]);
 
         $this->load($params);
@@ -68,11 +96,15 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
             'is_effected' => $this->is_effected,
             'effect_time' => $this->effect_time,
             'create_time' => $this->create_time,
+            'name' => 'payout',
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'value', $this->value]);
 
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(["effect_time" => SORT_DESC]);
+        }
         return $dataProvider;
     }
 }

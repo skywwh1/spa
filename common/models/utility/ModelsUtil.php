@@ -231,6 +231,16 @@ class ModelsUtil
         7 => 'Paid',
     );
 
+    const update_type = array(
+        1 => 'Campaign',
+        2 => 'S2S',
+    );
+
+    const effect_type = array(
+        0 => 'effective',
+        1 => 'ineffective',
+    );
+
     public static function getPayableStatus($k)
     {
         return static::getValue(static::payable_status, $k);
@@ -351,4 +361,13 @@ class ModelsUtil
         return static::getValue(static::settlement_type, $k);
     }
 
+    public static function getUpdateType($k)
+    {
+        return static::getValue(static::update_type, $k);
+    }
+
+    public static function getEffectType($k)
+    {
+        return static::getValue(static::effect_type, $k);
+    }
 }

@@ -23,6 +23,7 @@ use Yii;
  */
 class CampaignStsUpdate extends \yii\db\ActiveRecord
 {
+   public $target_geo;
     /**
      * @inheritdoc
      */
@@ -39,7 +40,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'is_send', 'effect_time'], 'required'],
             [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'creator', 'create_time'], 'integer'],
-            [['effect_time', 'name', 'value', 'old_value'], 'safe'],
+            [['effect_time', 'name', 'value', 'old_value','target_geo'], 'safe'],
         ];
     }
 

@@ -39,6 +39,8 @@ class CampaignStsUpdateController extends Controller
                             'update-cap',
                             'update-discount',
                             'update-payout',
+                            'update-geo',
+                            'index',
 //                            'view',
 //                            'delete',
 //                            'testlink',
@@ -304,6 +306,43 @@ class CampaignStsUpdateController extends Controller
         if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = 'json';
             return ActiveForm::validate($model);
+        }
+    }
+
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $type
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @return mixed
+     */
+    public function actionUpdateGeo($type,$channel_id,$campaign_id)
+    {
+        $this->layout = false;
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+//        $model->channel_id = $channel_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $camp = Campaign::findById($model->campaign_id);
+
+            $model->type = $type;//2 is sts 1 is campaign
+            $model->name = 'update-geo';
+            $model->value =empty($model->target_geo) ? null:implode(',',$model->target_geo);
+            $model->old_value = $camp->target_geo;
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
+
+            $camp->promote_end = $model->effect_time;
+            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
+
+            $camp->save();
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            return $this->renderAjax('update_geo', [
+                'model' => $model,
+            ]);
         }
     }
 }

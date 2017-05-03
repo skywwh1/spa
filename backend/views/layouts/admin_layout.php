@@ -101,6 +101,8 @@ AdminAsset::register($this);
                         </li>
                         <li><a href="/redirect-log/index" data-menu="redirect-log-index"><i class="fa fa-circle-o"></i>Redirect
                                 Log</a></li>
+                        <li><a href="/campaign-sts-update/index" data-menu="/payout-log-index"><i class="fa fa-circle-o"></i>Payout Log
+                                </a></li>
                     </ul>
                 </li>
                 <li class="treeview">

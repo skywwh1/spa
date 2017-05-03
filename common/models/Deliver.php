@@ -46,7 +46,7 @@ use yii\db\Query;
  * @property string $others
  * @property integer $is_send_create
  * @property integer $is_manual
- *
+ * @property string $old_value
  * @property Campaign $campaign
  * @property Channel $channel
  * @property User $creator0
@@ -56,9 +56,11 @@ class Deliver extends \yii\db\ActiveRecord
     public $channel0;
     public $step;
     public $newValue;
+    public $oldValue;
     public $effect_time;
     public $time;
     public $campaign_name;
+    public $target_geo;
 
     /**
      * @inheritdoc

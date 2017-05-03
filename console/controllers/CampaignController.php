@@ -90,6 +90,7 @@ class CampaignController extends Controller
         $pause = array();
         $cap = array();
         $payout = array();
+        $updateGeo = array();
         $models = CampaignStsUpdate::getStsSendMail();
         if (isset($models)) {
             foreach ($models as $item) {
@@ -112,6 +113,13 @@ class CampaignController extends Controller
                                 $d->newValue = $item->value;
                                 $d->effect_time = $item->effect_time;
                                 $payout[$camp->id][] = $d;
+                            }
+                        }else if ($item->name == 'update-geo') {
+                            foreach ($delivers as $d) {
+                                $d->oldValue = $item->old_value;
+                                $d->effect_time = $item->effect_time;
+                                $d->target_geo = $item->target_geo;
+                                $updateGeo[$camp->id][] = $d;
                             }
                         }
                     }
@@ -177,6 +185,23 @@ class CampaignController extends Controller
                 if (isset($delivers)) {
                     foreach ($delivers as $item) {
                         if (MailUtil::paused($item)) {
+                            $this->echoMessage($item->channel_id . ' send success');
+                        } else {
+                            $this->echoMessage($item->channel_id . ' send fail');
+                        }
+                        $this->echoMessage("waiting 1s");
+                        sleep(1);
+                    }
+                }
+            }
+        }
+
+        if (!empty($updateGeo)) {
+            $this->echoMessage('UpdateGeo start');
+            foreach ($updateGeo as $campaign_id => $delivers) {
+                if (isset($delivers)) {
+                    foreach ($delivers as $item) {
+                        if (MailUtil::updateGeo($item)) {
                             $this->echoMessage($item->channel_id . ' send success');
                         } else {
                             $this->echoMessage($item->channel_id . ' send fail');
