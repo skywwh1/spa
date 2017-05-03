@@ -71,7 +71,9 @@ class Mi
 
                 $cr = explode(';', $model->creative_link);
                 foreach ($cr as $item) {
-                    if (strpos('url:', $item) != false) {
+                    if(empty($item))
+                        continue;
+                    if (strpos($item,'url:' ) != false) {
                         $camp->creative_link = str_replace('url:', '', $item);
                         break;
                     }
@@ -135,14 +137,14 @@ class Mi
             var_dump($totalPage);
             var_dump(ceil($totalPage));
             if ($totalPage >= 2) {
-                for ($i = 2; $i <= $totalPage; $i++) {
-                    $url = str_replace('{page}', $i, $old_url);
-                    $url = $this->signUrl($url, $data->key);
-                    $curl = new Curl();
-                    $response = $curl->get($url);
-                    $response = json_decode($response);
-                    $apiCampaigns = array_merge($apiCampaigns, $response->offers);
-                }
+//                for ($i = 2; $i <= $totalPage; $i++) {
+//                    $url = str_replace('{page}', $i, $old_url);
+//                    $url = $this->signUrl($url, $data->key);
+//                    $curl = new Curl();
+//                    $response = $curl->get($url);
+//                    $response = json_decode($response);
+//                    $apiCampaigns = array_merge($apiCampaigns, $response->offers);
+//                }
             }
         }
 

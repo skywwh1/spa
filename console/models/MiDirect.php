@@ -70,6 +70,18 @@ class MiDirect
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->tag = 1;
+            if (!empty($model->creative_link)) {
+
+                $cr = explode(';', $model->creative_link);
+                foreach ($cr as $item) {
+                    if(empty($item))
+                        continue;
+                    if (strpos($item,'url:' ) != false) {
+                        $camp->creative_link = str_replace('url:', '', $item);
+                        break;
+                    }
+                }
+            }
 
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
