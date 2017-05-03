@@ -15,6 +15,7 @@ use common\models\ApiCampaign;
 use common\models\Campaign;
 use common\models\Deliver;
 use common\utility\ApiUtil;
+use frontend\models\PaymentForm;
 use linslin\yii2\curl\Curl;
 
 class Mi
@@ -66,6 +67,16 @@ class Mi
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             $camp->kpi = $model->note;
             $camp->preview_link = $model->preview_link;
+            if (!empty($model->creative_link)) {
+
+                $cr = explode(';', $model->creative_link);
+                foreach ($cr as $item) {
+                    if (strpos('url:', $item) != false) {
+                        $camp->creative_link = str_replace('url:', '', $item);
+                        break;
+                    }
+                }
+            }
             $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 1;
