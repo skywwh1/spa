@@ -754,4 +754,15 @@ class CountController extends Controller
         $this->genChannelBillByMonth();
         $this->genAdvBillByMonth();
     }
+
+    public function actionCheckCvr()
+    {
+        $start = Config::findLastCheckCvr();
+        $end = time();
+        // 检查cvr
+        $stats = new StatsUtil();
+        $stats->checkCvr($start);
+        Config::updateLastCheckCvr($end);
+
+    }
 }

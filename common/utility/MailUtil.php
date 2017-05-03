@@ -6,12 +6,13 @@
  * Date: 2017-01-13
  * Time: 15:32
  */
+
 namespace common\utility;
 
 use common\models\Channel;
 use common\models\Deliver;
+use common\models\LogAutoCheck;
 use common\models\SendMailLog;
-use common\models\CampaignStsUpdate;
 use Yii;
 
 class MailUtil
@@ -21,7 +22,7 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('channel_created', ['channel' => $channel]);
         $mail->setTo($channel->email);
-        if(isset( $channel->om0)){
+        if (isset($channel->om0)) {
             $mail->setCc($channel->om0->email);
         }
         $mail->setSubject('SuperADS account create success');
@@ -118,7 +119,7 @@ class MailUtil
         $mail = Yii::$app->mailer->compose('update_payout', ['deliver' => $deliver]);
         $mail->setTo($channel->email);
         $cc = array($channel->om0->email);
-       if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
             $cc = array_merge($cc, explode(';', $channel->cc_email));
         }
         $mail->setCc($cc);
@@ -166,9 +167,30 @@ class MailUtil
     }
 
     /**
-     * @param Deliver $deliver
-     * @return string
+     * @param LogAutoCheck[] $checks
      */
+    public static function autoCheckCvr($checks)
+    {
+        $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
+        $mail->setTo('operations@superads.cn');
+        $mail->setSubject('Anticheat - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheck', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            foreach ($checks as $check) {
+                $check->is_send = 1;
+                $check->save();
+            }
+        }
+    }
+    /*
+    * @param Deliver $deliver
+    * @return string
+    */
     public static function updateGeo($deliver)
     {
 
@@ -180,12 +202,12 @@ class MailUtil
             $cc = array_merge($cc, explode(';', $channel->cc_email));
         }
         $mail->setCc($cc);
-        $mail->setSubject('Geo Update Campaign - SuperADS');
+        $mail->setSubject('Geo Update - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;
         }
-        $param = array('type' => 'geoUpdate', 'isSend' => $isSend);
+        $param = array('type' => 'updateGeo', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
         if ($isSend) {
             return true;

@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use backend\models\FinanceAdvertiserCampaignBillTerm;
+use common\models\AdvertiserApi;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\CampaignStsUpdate;
@@ -27,6 +28,8 @@ use console\models\StatsUtil;
 use console\models\Yeahmobi;
 use DateTime;
 use DateTimeZone;
+use HttpException;
+use HttpRequest;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
 
@@ -39,22 +42,57 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        echo strtotime('2017-04-01')."\n";
-        echo  date('Y-m-d', strtotime('2017-04-01'));
+
+//        $curl = curl_init();
+//
+//        curl_setopt_array($curl, array(
+//            CURLOPT_URL => "http://api.nposting.com/campaign/lists?lang=english&api_cd=f421b8d6334cf1971ebfa56b49fdedc2",
+//            CURLOPT_RETURNTRANSFER => true,
+//            CURLOPT_ENCODING => "",
+//            CURLOPT_MAXREDIRS => 10,
+//            CURLOPT_TIMEOUT => 30,
+//            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+//            CURLOPT_CUSTOMREQUEST => "GET",
+//            CURLOPT_USERAGENT =>  "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750",
+//            CURLOPT_COOKIE =>  "",
+//        ));
+//
+//        $response = curl_exec($curl);
+//        $err = curl_error($curl);
+//
+//        curl_close($curl);
+//
+//        if ($err) {
+//            echo "cURL Error #:" . $err;
+//        } else {
+//            echo $response;
+//        }
+        $apiModel = AdvertiserApi::findOne(['id' => 8]);
+        $data_key = $apiModel->json_offers_param;
+        $url = $apiModel->url;
+        $curl = new Curl();
+        $curl->setOption(CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
+        $curl->setOption(CURLOPT_COOKIE,'');
+        $response = $curl->get($url);
+        var_dump($response);
         die();
-        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
-        var_dump($aa);
-        die();
-        $month = strtotime('2017-01-01');
-        $end = time();
-        while($month < $end)
-        {
-            $aa  = date('F', $month);
-            echo $aa, PHP_EOL;
-            $month = strtotime("+1 month", $month);
-            echo strtotime('last day of '.$aa), PHP_EOL;
-            echo date('Y m d',strtotime('last day of '.$aa)), PHP_EOL;
-        }
+
+//        echo strtotime('2017-04-01')."\n";
+//        echo  date('Y-m-d', strtotime('2017-04-01'));
+//        die();
+//        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
+//        var_dump($aa);
+//        die();
+//        $month = strtotime('2017-01-01');
+//        $end = time();
+//        while($month < $end)
+//        {
+//            $aa  = date('F', $month);
+//            echo $aa, PHP_EOL;
+//            $month = strtotime("+1 month", $month);
+//            echo strtotime('last day of '.$aa), PHP_EOL;
+//            echo date('Y m d',strtotime('last day of '.$aa)), PHP_EOL;
+//        }
         die();
 
         $end = time();
