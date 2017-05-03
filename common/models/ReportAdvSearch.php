@@ -119,6 +119,14 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+
+        }
+
+
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         }
@@ -213,6 +221,12 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+
+        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
@@ -284,6 +298,14 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+
+        }
+
         return $dataProvider;
     }
 }
