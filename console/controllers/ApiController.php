@@ -11,6 +11,7 @@ namespace console\controllers;
 
 use console\models\Glispa;
 use console\models\HeadWay;
+use console\models\Mi;
 use console\models\Movista;
 use console\models\Nposting;
 use console\models\Yeahmobi;
@@ -62,6 +63,12 @@ class ApiController extends Controller
     public function actionGetNposting()
     {
         $yeah = new Nposting();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetMi()
+    {
+        $yeah = new Mi();
         $yeah->getApiCampaign();
     }
 }
