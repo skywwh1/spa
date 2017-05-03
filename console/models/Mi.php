@@ -58,6 +58,7 @@ class Mi
             $camp->daily_cap = $daily_cap == 0 ? 'open' : $daily_cap;
             $camp->target_geo = $model->target_geo;
             $camp->adv_link = $model->adv_link;
+            $camp->adv_link = str_replace('&user_id={user_id}', '', $camp->adv_link);
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
             $camp->description = $model->description;
@@ -129,8 +130,6 @@ class Mi
                     $response = $curl->get($url);
                     $response = json_decode($response);
                     $apiCampaigns = array_merge($apiCampaigns, $response->offers);
-                    if ($i = 3)
-                        break;
                 }
             }
         }
