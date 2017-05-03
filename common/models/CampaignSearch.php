@@ -231,9 +231,8 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
             ->andFilterWhere(['like', 'a.username', $this->advertiser])
-            ->andFilterWhere(['advertiser' => 35])
-            ->andFilterWhere(['advertiser' => 36])
-            ->andFilterWhere(['like', 'a.username', $this->advertiser])
+            ->andFilterWhere(['in','advertiser' ,[35,36]])
+//            ->andFilterWhere(['advertiser' => 24])
             ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
 
         if ($dataProvider->getSort()->getOrders() == null) {

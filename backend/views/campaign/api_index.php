@@ -10,7 +10,7 @@ use yii\helpers\Html;
 /* @var $searchModel common\models\CampaignSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Campaign List';
+$this->title = 'ADXMi List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
