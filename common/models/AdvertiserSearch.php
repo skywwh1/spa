@@ -108,7 +108,7 @@ class AdvertiserSearch extends Advertiser
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            $query->andFilterWhere(['a.bd' => \Yii::$app->user->id]);
 
         }
         $query->orderBy('created_time desc');
