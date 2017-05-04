@@ -29,11 +29,13 @@ class Yeahmobi
         $android = array();
         $ios = $this->genCampaigns($ios_url, $apiModel);
         $android = $this->genCampaigns($android_url, $apiModel);
-        $all = array_merge($ios, $android);
-        var_dump(count($all));
+        if(!empty($ios) && !empty($android)){
+            $all = array_merge($ios, $android);
+        }
         if (!empty($all)) {
             $this->transferApiModel($apiModel, $all);
         }
+        var_dump(count($all));
     }
 
     private function transferApiModel($apiModel, $apiCampaigns)
@@ -100,7 +102,7 @@ class Yeahmobi
     private function genCampaigns($url, AdvertiserApi $apis)
     {
         $page = 1;
-        $limit = 50;
+        $limit = 100;
         $new_url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
         $curl->get($new_url);
