@@ -29,13 +29,11 @@ class Yeahmobi
         $android = array();
         $ios = $this->genCampaigns($ios_url, $apiModel);
         $android = $this->genCampaigns($android_url, $apiModel);
-
         $all = array_merge($ios, $android);
+        var_dump(count($all));
         if (!empty($all)) {
             $this->transferApiModel($apiModel, $all);
         }
-        var_dump(count($all));
-        die();
     }
 
     private function transferApiModel($apiModel, $apiCampaigns)

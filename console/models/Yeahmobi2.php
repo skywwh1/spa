@@ -25,11 +25,10 @@ class Yeahmobi2
         $ios_url = $apiModel->url . '&filters[type][$eq]=other';
         $ios = $this->genCampaigns($ios_url, $apiModel);
 
+        var_dump(count($ios));
         if (!empty($ios)) {
             $this->transferApiModel($apiModel, $ios);
         }
-        var_dump(count($ios));
-        die();
     }
 
     private function transferApiModel($apiModel, $apiCampaigns)
