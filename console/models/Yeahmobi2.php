@@ -22,7 +22,7 @@ class Yeahmobi2
     public function getApiCampaign()
     {
         $apiModel = AdvertiserApi::findOne(['id' => 6]);
-        $ios_url = $apiModel->url . '&filters[type][$eq]=other&limit=50&page=1';
+        $ios_url = $apiModel->url . '&filters[type][$eq]=other';
         $ios = $this->genCampaigns($ios_url, $apiModel);
 
         if (!empty($ios)) {
@@ -93,7 +93,7 @@ class Yeahmobi2
     private function genCampaigns($url, AdvertiserApi $apis)
     {
         $page = 1;
-        $limit = 30;
+        $limit = 50;
         $new_url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
         $curl->get($new_url);
@@ -103,6 +103,10 @@ class Yeahmobi2
             return null;
         }
         $response = json_decode($response);
+        if(!isset($response->data)){
+            var_dump($response);
+            return null;
+        }
         $data = $response->data;
         $records = $data->data;
         $camps = $this->getData($records);
@@ -142,10 +146,14 @@ class Yeahmobi2
             return null;
         }
         $response = json_decode($response);
-        $data = $response->data;
-        $records = $data->data;
-        $camps = $this->getData($records);
-        return $camps;
+        if (isset($response->data)) {
+            $data = $response->data;
+            $records = $data->data;
+            $camps = $this->getData($records);
+            return $camps;
+        } else {
+            return null;
+        }
     }
 
 }

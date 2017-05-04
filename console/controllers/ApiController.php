@@ -16,6 +16,7 @@ use console\models\MiDirect;
 use console\models\Movista;
 use console\models\Nposting;
 use console\models\Yeahmobi;
+use console\models\Yeahmobi2;
 use yii\console\Controller;
 
 class ApiController extends Controller

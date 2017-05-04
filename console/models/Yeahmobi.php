@@ -23,8 +23,8 @@ class Yeahmobi
     {
         $apiModel = AdvertiserApi::findOne(['id' => 6]);
         $data_key = $apiModel->json_offers_param;
-        $ios_url = $apiModel->url . '&filters[type][$eq]=ios&limit=50&page=1';
-        $android_url = $apiModel->url . '&filters[type][$eq]=android&limit=50&page=1';
+        $ios_url = $apiModel->url . '&filters[type][$eq]=ios';
+        $android_url = $apiModel->url . '&filters[type][$eq]=android';
         $ios = array();
         $android = array();
         $ios = $this->genCampaigns($ios_url, $apiModel);
@@ -54,7 +54,7 @@ class Yeahmobi
                 $camp = new Campaign();
             }
             $camp->campaign_uuid = $uuid;
-            if(empty($camp->campaign_name)){
+            if (empty($camp->campaign_name)) {
                 $camp->campaign_name = $model->campaign_name;
                 $camp->campaign_name = str_replace('App Download- ', '', $camp->campaign_name);
                 $camp->campaign_name = str_replace('App Download - ', '', $camp->campaign_name);
@@ -102,7 +102,7 @@ class Yeahmobi
     private function genCampaigns($url, AdvertiserApi $apis)
     {
         $page = 1;
-        $limit = 30;
+        $limit = 50;
         $new_url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
         $curl->get($new_url);
@@ -112,6 +112,10 @@ class Yeahmobi
             return null;
         }
         $response = json_decode($response);
+        if(!isset($response->data)){
+            var_dump($response);
+            return null;
+        }
         $data = $response->data;
         $records = $data->data;
         $camps = $this->getData($records);
@@ -151,10 +155,14 @@ class Yeahmobi
             return null;
         }
         $response = json_decode($response);
-        $data = $response->data;
-        $records = $data->data;
-        $camps = $this->getData($records);
-        return $camps;
+        if (isset($response->data)) {
+            $data = $response->data;
+            $records = $data->data;
+            $camps = $this->getData($records);
+            return $camps;
+        } else {
+            return null;
+        }
     }
 
 }
