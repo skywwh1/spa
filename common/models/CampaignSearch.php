@@ -103,7 +103,7 @@ class CampaignSearch extends Campaign
 
         $query->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
-            ->andFilterWhere(['<>', 'c.pricing_mode', 'cpi'])
+            ->andFilterWhere(['<>', 'c.pricing_mode', 'cpa'])
             ->andFilterWhere(['like', 'platform', $this->platform])
             ->andFilterWhere(['like', 'min_version', $this->min_version])
             ->andFilterWhere(['like', 'max_version', $this->max_version])
