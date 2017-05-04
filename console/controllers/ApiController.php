@@ -30,11 +30,11 @@ class ApiController extends Controller
         $vista = new Movista();
         $vista->getApiCampaign();
 
-        $yeah = new Yeahmobi();
-        $yeah->getApiCampaign();
+//        $yeah = new Yeahmobi();
+//        $yeah->getApiCampaign();
 
-        $yeah = new Glispa();
-        $yeah->getApiCampaign();
+//        $yeah = new Glispa();
+//        $yeah->getApiCampaign();
 
         $yeah = new Mi();
         $yeah->getApiCampaign();
@@ -42,8 +42,8 @@ class ApiController extends Controller
         $yeah = new MiDirect();
         $yeah->getApiCampaign();
 
-        $yeah = new Yeahmobi2();
-        $yeah->getApiCampaign();
+//        $yeah = new Yeahmobi2();
+//        $yeah->getApiCampaign();
 
         $yeah = new Nposting();
         $yeah->getApiCampaign();
