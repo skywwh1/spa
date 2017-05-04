@@ -93,7 +93,7 @@ class Yeahmobi2
     private function genCampaigns($url, AdvertiserApi $apis)
     {
         $page = 1;
-        $limit = 50;
+        $limit = 100;
         $new_url = $url . '&limit=' . $limit . '&page=' . $page;
         $curl = new Curl();
         $curl->get($new_url);
