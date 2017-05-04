@@ -76,7 +76,7 @@ class MiDirect
                 foreach ($cr as $item) {
                     if(empty($item))
                         continue;
-                    if (strpos($item,'url:' ) != false) {
+                    if (strpos($item,'url:' ) !== false) {
                         $camp->creative_link = str_replace('url:', '', $item);
                         break;
                     }

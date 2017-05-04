@@ -44,22 +44,16 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-        $findme    = 'a';
-        $mystring1 = 'xyz';
-        $mystring2 = 'ABC';
-
-        $pos1 = stripos($mystring1, $findme);
-        $pos2 = stripos($mystring2, $findme);
-
-// Nope, 'a' is certainly not in 'xyz'
-        if ($pos1 === false) {
-            echo "The string '$findme' was not found in the string '$mystring1'\n";
-        }
-
-// Note our use of ===.  Simply == would not work as expected
-// because the position of 'a' is the 0th (first) character.
-        if ($pos2 !== false) {
-            echo "We found '$findme' in '$mystring2' at position $pos2 \n";
+        $aa='url:https://lh3.googleusercontent.com/BjcKaPVdy1eTWpedO-UcRl9YNJc-IT-s2DGfy5DoWbAYHS_rXxcVfJ2ZFwyAMzbaR3g;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/__MsK8Rbn30gQf53gVCZ6vV4O96iXKdJNB8tWJO0nd5KdzMG95-oXmrxEpnnp4Ot7Q;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/tb2xqVbKe7sX1wdAzcBjpieEwe5qtY2cwN88Bg33NGdwKlwjYD5HHvxtYAWvwJ5x2tn3;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/xCB0e1xS2r52zRWpFXsl0SAl5kwUuWHLuEhAlYdJBtT_r4V752MJBi8BxyQZI-CbeA;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/IH0zmMIK-0loT-uv1H0CM2N3042RPXDdEM1GtUApSdZZVsIG_P0w3EObdxZA1mu4aQ;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/YK7eLyN84EpYnxYqx2R5DhQu5A0YwApCigAQULtRqeZikOUFPxCByNONcE91-D4TQH0;mime:image/jpeg;width:512;height:250;';
+        $cr = explode(';', $aa);
+        foreach ($cr as $item) {
+            echo $item."\n";
+            if(strpos($item,'url') !==false){
+                $b = str_replace('url:', '', $item);
+                echo $b."\n";
+            }else{
+                echo 99;
+            }
         }
         die();
 

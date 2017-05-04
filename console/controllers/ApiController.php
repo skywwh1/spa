@@ -78,4 +78,10 @@ class ApiController extends Controller
         $yeah = new MiDirect();
         $yeah->getApiCampaign();
     }
+
+    public function actionGetYeah2()
+    {
+        $yeah = new Yeahmobi2();
+        $yeah->getApiCampaign();
+    }
 }

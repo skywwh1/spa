@@ -13,6 +13,7 @@ return array(
     'yii\\composer\\' => array($vendorDir . '/yiisoft/yii2-composer'),
     'yii\\bootstrap\\' => array($vendorDir . '/yiisoft/yii2-bootstrap'),
     'yii\\' => array($vendorDir . '/yiisoft/yii2'),
+    'wbraganca\\dynamicform\\' => array($vendorDir . '/wbraganca/yii2-dynamicform/src'),
     'rmrevin\\yii\\geoip\\' => array($vendorDir . '/rmrevin/yii2-geoip'),
     'phpDocumentor\\Reflection\\' => array($vendorDir . '/phpdocumentor/reflection-common/src', $vendorDir . '/phpdocumentor/reflection-docblock/src', $vendorDir . '/phpdocumentor/type-resolver/src'),
     'linslin\\yii2\\curl\\' => array($vendorDir . '/linslin/yii2-curl'),

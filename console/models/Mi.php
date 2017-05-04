@@ -65,7 +65,8 @@ class Mi
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
-            $camp->kpi = $model->note;
+            $camp->kpi = 'Day Two RR >= 30%';
+            $camp->others = $model->note;
             $camp->preview_link = $model->preview_link;
             if (!empty($model->creative_link)) {
 
@@ -73,7 +74,7 @@ class Mi
                 foreach ($cr as $item) {
                     if(empty($item))
                         continue;
-                    if (strpos($item,'url:' ) != false) {
+                    if (strpos($item,'url:' ) !== false) {
                         $camp->creative_link = str_replace('url:', '', $item);
                         break;
                     }

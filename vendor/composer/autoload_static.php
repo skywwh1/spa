@@ -25,6 +25,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
             'yii\\bootstrap\\' => 14,
             'yii\\' => 4,
         ),
+        'w' => 
+        array (
+            'wbraganca\\dynamicform\\' => 22,
+        ),
         'r' => 
         array (
             'rmrevin\\yii\\geoip\\' => 18,
@@ -136,6 +140,10 @@ class ComposerStaticInitfcfa288df89d0761a1c62bfcf644b93e
         'yii\\' => 
         array (
             0 => __DIR__ . '/..' . '/yiisoft/yii2',
+        ),
+        'wbraganca\\dynamicform\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/wbraganca/yii2-dynamicform/src',
         ),
         'rmrevin\\yii\\geoip\\' => 
         array (
