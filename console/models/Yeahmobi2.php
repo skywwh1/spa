@@ -104,7 +104,7 @@ class Yeahmobi2
         $response = json_decode($response);
         if(!isset($response->data)){
             var_dump($response);
-            return null;
+            die();
         }
         $data = $response->data;
         $records = $data->data;
@@ -151,7 +151,7 @@ class Yeahmobi2
             $camps = $this->getData($records);
             return $camps;
         } else {
-            return null;
+            die();
         }
     }
 
