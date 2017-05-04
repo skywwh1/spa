@@ -14,7 +14,7 @@ $this->title = 'CPA List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
-    <div id="nav-menu" data-menu="campaign_api"></div>
+    <div id="nav-menu" data-menu="campaign_cpa"></div>
     <div class="col-lg-12">
         <div class="box box-info">
             <div class="box-body">

@@ -105,7 +105,7 @@ class CampaignController extends Controller
     public function actionCpaIndex()
     {
         $searchModel = new CampaignSearch();
-        $dataProvider = $searchModel->apiSearch(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->cpaSearch(Yii::$app->request->queryParams);
 
         return $this->render('cpa_index', [
             'searchModel' => $searchModel,

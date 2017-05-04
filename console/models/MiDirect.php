@@ -64,7 +64,8 @@ class MiDirect
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
-            $camp->kpi = $model->note;
+            $camp->kpi = 'Day Two RR >= 30%';
+            $camp->others = $model->note;
             $camp->preview_link = $model->preview_link;
             $camp->category = $model->category;
             $camp->status = 1;
