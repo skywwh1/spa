@@ -36,8 +36,8 @@ class ApiController extends Controller
 //        $yeah = new Glispa();
 //        $yeah->getApiCampaign();
 
-        $yeah = new Mi();
-        $yeah->getApiCampaign();
+//        $yeah = new Mi();
+//        $yeah->getApiCampaign();
 
         $yeah = new MiDirect();
         $yeah->getApiCampaign();
