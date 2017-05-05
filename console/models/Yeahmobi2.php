@@ -21,7 +21,7 @@ class Yeahmobi2
 {
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 6]);
+        $apiModel = AdvertiserApi::findOne(['id' => 11]);
         $ios_url = $apiModel->url . '&filters[type][$eq]=other';
         $ios = $this->genCampaigns($ios_url, $apiModel);
 

@@ -49,6 +49,9 @@ class MiDirect
             }
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
+//            if ($camp->adv_price < 0.5) {
+//                continue;
+//            }
             $camp->now_payout = $camp->adv_price > 1 ? $camp->adv_price * 0.9 : $camp->adv_price;
             $daily_cap = $model->daily_cap;
 
@@ -75,9 +78,9 @@ class MiDirect
 
                 $cr = explode(';', $model->creative_link);
                 foreach ($cr as $item) {
-                    if(empty($item))
+                    if (empty($item))
                         continue;
-                    if (strpos($item,'url:' ) !== false) {
+                    if (strpos($item, 'url:') !== false) {
                         $camp->creative_link = str_replace('url:', '', $item);
                         break;
                     }

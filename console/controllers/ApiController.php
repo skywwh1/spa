@@ -67,8 +67,6 @@ class ApiController extends Controller
     {
         $yeah = new Yeahmobi();
         $yeah->getApiCampaign();
-        $yeah = new Yeahmobi2();
-        $yeah->getApiCampaign();
     }
 
     public function actionGetGlispa()
@@ -92,6 +90,12 @@ class ApiController extends Controller
     public function actionGetMiDirect()
     {
         $yeah = new MiDirect();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetYeah2()
+    {
+        $yeah = new Yeahmobi2();
         $yeah->getApiCampaign();
     }
 
