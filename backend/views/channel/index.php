@@ -1,7 +1,7 @@
 <?php
 
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
@@ -24,6 +24,25 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+
+                                      <li><a data-view="0" href="/channel/view?id=' . $model->id . '">View</a></li>
+                                      <li><a href="/channel/update?id=' . $model->id . '" >Update</a></li>
+                                      <li><a data-pjax="0" href="/channel/recommend?id=' . $model->id . '">Recommend Offers</a></li>
+                                      </ul>
+                                    </div>';
+                                },
+                            ],
+                        ],
 //            ['class' => 'yii\grid\SerialColumn'],
 //
                         'id',
@@ -102,9 +121,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'strong_geo',
                         // 'strong_catagory',
 
-                        ['class' => 'yii\grid\ActionColumn',
-                            'template' => '{view}{update}'
-                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

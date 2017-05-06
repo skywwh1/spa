@@ -762,6 +762,7 @@ class CountController extends Controller
         // 检查cvr
         $stats = new StatsUtil();
         $stats->checkCvr($start);
+        $stats->checkCap();
         Config::updateLastCheckCvr($end);
 
     }

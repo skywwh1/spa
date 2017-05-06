@@ -44,34 +44,9 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-        $aa='url:https://lh3.googleusercontent.com/BjcKaPVdy1eTWpedO-UcRl9YNJc-IT-s2DGfy5DoWbAYHS_rXxcVfJ2ZFwyAMzbaR3g;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/__MsK8Rbn30gQf53gVCZ6vV4O96iXKdJNB8tWJO0nd5KdzMG95-oXmrxEpnnp4Ot7Q;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/tb2xqVbKe7sX1wdAzcBjpieEwe5qtY2cwN88Bg33NGdwKlwjYD5HHvxtYAWvwJ5x2tn3;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/xCB0e1xS2r52zRWpFXsl0SAl5kwUuWHLuEhAlYdJBtT_r4V752MJBi8BxyQZI-CbeA;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/IH0zmMIK-0loT-uv1H0CM2N3042RPXDdEM1GtUApSdZZVsIG_P0w3EObdxZA1mu4aQ;mime:image/jpeg;width:288;height:512;url:https://lh3.googleusercontent.com/YK7eLyN84EpYnxYqx2R5DhQu5A0YwApCigAQULtRqeZikOUFPxCByNONcE91-D4TQH0;mime:image/jpeg;width:512;height:250;';
-        $cr = explode(';', $aa);
-        foreach ($cr as $item) {
-            echo $item."\n";
-            if(strpos($item,'url') !==false){
-                $b = str_replace('url:', '', $item);
-                echo $b."\n";
-            }else{
-                echo 99;
-            }
-        }
-        die();
 
-//        echo strtotime('2017-04-01')."\n";
-//        echo  date('Y-m-d', strtotime('2017-04-01'));
-//        die();
-//        $aa = FinanceAdvertiserCampaignBillTerm::statsByAdv(1488294000,1490972400,17);
-//        var_dump($aa);
-//        die();
-//        $month = strtotime('2017-01-01');
-//        $end = time();
-//        while($month < $end)
-//        {
-//            $aa  = date('F', $month);
-//            echo $aa, PHP_EOL;
-//            $month = strtotime("+1 month", $month);
-//            echo strtotime('last day of '.$aa), PHP_EOL;
-//            echo date('Y m d',strtotime('last day of '.$aa)), PHP_EOL;
+      $aa = new StatsUtil();
+      $aa->checkCap();
 //        }
         die();
 

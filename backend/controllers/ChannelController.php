@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Campaign;
+use common\models\CampaignSearch;
 use common\models\Deliver;
 use common\models\Stream;
 use common\models\User;
@@ -12,6 +13,8 @@ use Symfony\Component\Yaml\Dumper;
 use Yii;
 use common\models\Channel;
 use common\models\ChannelSearch;
+use yii\base\DynamicModel;
+use yii\base\Model;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -50,7 +53,8 @@ class ChannelController extends Controller
                             'my-channels',
                             'test',
                             'get_channel_multiple',
-                            'om-edit'
+                            'om-edit',
+                            'recommend'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -313,6 +317,17 @@ class ChannelController extends Controller
             return "failed";
         }
 
+    }
+
+    public function actionRecommend($id)
+    {
+        $channel = $this->findModel($id);
+        $campaignSearch = new CampaignSearch();
+        $dataProvider = $campaignSearch->recommendSearch(Yii::$app->request->queryParams);
+        return $this->render('recommend', [
+            'searchModel' => $campaignSearch,
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
 }

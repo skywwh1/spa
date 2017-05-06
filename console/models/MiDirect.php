@@ -139,6 +139,7 @@ class MiDirect
             $totalPage = $total / 50;
             var_dump($totalPage);
             var_dump(ceil($totalPage));
+            $totalPage = ceil($totalPage);
             if ($totalPage >= 2) {
                 for ($i = 2; $i <= $totalPage; $i++) {
                     $url = str_replace('{page}', $i, $old_url);

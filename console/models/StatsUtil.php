@@ -733,7 +733,7 @@ class StatsUtil
     }
 
     /**
-     *
+     * @param $start_time
      */
     public function checkCvr($start_time)
     {
@@ -750,7 +750,7 @@ class StatsUtil
                             echo "camp-" . $camp->id . PHP_EOL;
                             $cvr = ($log->match_installs / $log->clicks) * 100;
                             $sts = Deliver::findIdentity($camp->id, $log->channel_id);
-                            if($sts->status ==1){
+                            if ($sts->status == 1) {
                                 $check = new LogAutoCheck();
                                 $check->campaign_id = $camp->id;
                                 $check->channel_id = $sts->channel_id;
@@ -758,19 +758,20 @@ class StatsUtil
                                 $check->channel_name = $sts->channel->username;
                                 $check->match_cvr = $cvr;
                                 $check->match_install = $log->match_installs;
+                                $check->type = 1;
 
                                 if ($cvr > 3) {
                                     $sts->status = 2;
                                     $check->action = 'pause';
-                                    $sts->save();
+//                                    $sts->save();
                                     $check->save();
-                                    echo "deliver pause-" . $camp->id."-".$sts->channel_id . PHP_EOL;
+                                    echo "deliver pause-" . $camp->id . "-" . $sts->channel_id . PHP_EOL;
                                 } else if ($cvr > 1.5) {
                                     $old_discount = $sts->discount;
-                                    if($old_discount != 99){
-                                        echo "deliver discount-" . $camp->id."-".$sts->channel_id ." set from ".$sts->discount." to 99". PHP_EOL;
+                                    if ($old_discount != 99) {
+                                        echo "deliver discount-" . $camp->id . "-" . $sts->channel_id . " set from " . $sts->discount . " to 99" . PHP_EOL;
                                         $sts->discount = 99;
-                                        $sts->save();
+//                                        $sts->save();
                                         $check->action = '99%discount';
                                         $check->save();
                                     }
@@ -784,7 +785,38 @@ class StatsUtil
         }
 
         // send mail
-        $sendings = LogAutoCheck::findAll(['is_send' => 0]);
+        $sendings = LogAutoCheck::findAll(['is_send' => 0, 'type' => 1]);
+        if (!empty($sendings)) {
+            MailUtil::autoCheckCvr($sendings);
+        }
+    }
+
+
+    public function checkCap()
+    {
+        echo "Check CAP" . PHP_EOL;
+        $logs = CampaignLogHourly::getCurrentDay();
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                $log = json_decode(json_encode($log));
+                $check = LogAutoCheck::find()->where(['campaign_id' => $log->campaign_id, 'channel_id' => $log->channel_id])->andWhere(['>', 'create_time', strtotime('today')])->one();
+                if (empty($check)) {
+                    $check = new LogAutoCheck();
+                    $check->campaign_id = $log->campaign_id;
+                    $check->channel_id = $log->channel_id;
+                    $check->campaign_name = $log->campaign_name;
+                    $check->channel_name = $log->channel_name;
+                    $check->installs = $log->installs;
+                    $check->daily_cap = $log->daily_cap;
+                    $check->type = 2;
+                    $check->save();
+                }
+
+            }
+        }
+
+        // send mail
+        $sendings = LogAutoCheck::findAll(['is_send' => 0, 'type' => 2]);
         if (!empty($sendings)) {
             MailUtil::autoCheckCvr($sendings);
         }

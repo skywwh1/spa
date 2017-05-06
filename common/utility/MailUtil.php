@@ -215,4 +215,26 @@ class MailUtil
             return false;
         }
     }
+
+    /**
+     * @param LogAutoCheck[] $checks
+     */
+    public static function autoCheckCap($checks)
+    {
+        $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
+        $mail->setTo('operations@superads.cn');
+        $mail->setSubject('Anticheat - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheck', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            foreach ($checks as $check) {
+                $check->is_send = 1;
+                $check->save();
+            }
+        }
+    }
 }
