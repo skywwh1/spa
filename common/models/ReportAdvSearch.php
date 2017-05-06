@@ -199,7 +199,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'u.username om',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
-
+            'ad.username adv_name',
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
