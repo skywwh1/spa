@@ -52,7 +52,9 @@ class ChannelCampaign extends Deliver
             'Carrier' => function ($model) {
                 return $model->campaign->carriers;
             },
-
+            'Traffic Source' => function ($model) {
+                return $model->campaign->traffic_source;
+            },
             'Notes' => function ($model) {
                 return $model->kpi . $model->note . $model->others;
             },

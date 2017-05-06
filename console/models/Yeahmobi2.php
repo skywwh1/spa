@@ -17,25 +17,18 @@ use yii\helpers\ArrayHelper;
  * Date: 2017-02-27
  * Time: 10:19
  */
-class Yeahmobi
+class Yeahmobi2
 {
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 6]);
-        $data_key = $apiModel->json_offers_param;
-        $ios_url = $apiModel->url . '&filters[type][$eq]=ios';
-        $android_url = $apiModel->url . '&filters[type][$eq]=android';
-        $ios = array();
-        $android = array();
+        $apiModel = AdvertiserApi::findOne(['id' => 11]);
+        $ios_url = $apiModel->url . '&filters[type][$eq]=other';
         $ios = $this->genCampaigns($ios_url, $apiModel);
-        $android = $this->genCampaigns($android_url, $apiModel);
-        if(!empty($ios) && !empty($android)){
-            $all = array_merge($ios, $android);
+
+        var_dump(count($ios));
+        if (!empty($ios)) {
+            $this->transferApiModel($apiModel, $ios);
         }
-        if (!empty($all)) {
-            $this->transferApiModel($apiModel, $all);
-        }
-        var_dump(count($all));
     }
 
     private function transferApiModel($apiModel, $apiCampaigns)
@@ -47,8 +40,6 @@ class Yeahmobi
             $model->save();
             var_dump($model->getErrors());
             $uuid = $model->adv_id . '_' . $model->campaign_id;
-            if ($uuid == '24_5162769')
-                continue;
             $camp = Campaign::findByUuid($uuid);
             if (empty($camp)) {
                 $camp = new Campaign();
@@ -60,12 +51,9 @@ class Yeahmobi
                 $camp->campaign_name = str_replace('App Download - ', '', $camp->campaign_name);
                 $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
                 $len = strpos($camp->campaign_name, 'Private');
-                if (!empty($aa)) {
-                    $camp->campaign_name = substr($camp->campaign_name, 0, $len);
-                }
             }
             $camp->platform = $model->platform;
-            $camp->pricing_mode = 'cpi';
+            $camp->pricing_mode = 'cpa';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
@@ -87,6 +75,8 @@ class Yeahmobi
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->advertiser = $apiModel->adv_id;
+            $camp->conversion_flow = $model->conversion_flow;
+            $camp->carriers = $model->carriers;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
@@ -166,3 +156,14 @@ class Yeahmobi
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+

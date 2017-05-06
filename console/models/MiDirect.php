@@ -15,15 +15,14 @@ use common\models\ApiCampaign;
 use common\models\Campaign;
 use common\models\Deliver;
 use common\utility\ApiUtil;
-use frontend\models\PaymentForm;
 use linslin\yii2\curl\Curl;
 
-class Mi
+class MiDirect
 {
 
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 9]);
+        $apiModel = AdvertiserApi::findOne(['id' => 10]);
         $allCamps = $this->getAllCampaigns($apiModel);
         $apiCams = ApiUtil::genApiCampaigns($apiModel, $allCamps);
         $this->transferApiModel($apiModel, $apiCams);
@@ -50,6 +49,9 @@ class Mi
             }
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
+//            if ($camp->adv_price < 0.5) {
+//                continue;
+//            }
             $camp->now_payout = $camp->adv_price > 1 ? $camp->adv_price * 0.9 : $camp->adv_price;
             $daily_cap = $model->daily_cap;
 
@@ -68,22 +70,22 @@ class Mi
             $camp->kpi = 'Day Two RR >= 30%';
             $camp->others = $model->note;
             $camp->preview_link = $model->preview_link;
+            $camp->category = $model->category;
+            $camp->status = 1;
+            $camp->open_type = 1;
+            $camp->tag = 1;
             if (!empty($model->creative_link)) {
 
                 $cr = explode(';', $model->creative_link);
                 foreach ($cr as $item) {
-                    if(empty($item))
+                    if (empty($item))
                         continue;
-                    if (strpos($item,'url:' ) !== false) {
+                    if (strpos($item, 'url:') !== false) {
                         $camp->creative_link = str_replace('url:', '', $item);
                         break;
                     }
                 }
             }
-            $camp->category = $model->category;
-            $camp->status = 1;
-            $camp->open_type = 1;
-            $camp->tag = 1;
 
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
@@ -138,14 +140,14 @@ class Mi
             var_dump($totalPage);
             var_dump(ceil($totalPage));
             if ($totalPage >= 2) {
-//                for ($i = 2; $i <= $totalPage; $i++) {
-//                    $url = str_replace('{page}', $i, $old_url);
-//                    $url = $this->signUrl($url, $data->key);
-//                    $curl = new Curl();
-//                    $response = $curl->get($url);
-//                    $response = json_decode($response);
-//                    $apiCampaigns = array_merge($apiCampaigns, $response->offers);
-//                }
+                for ($i = 2; $i <= $totalPage; $i++) {
+                    $url = str_replace('{page}', $i, $old_url);
+                    $url = $this->signUrl($url, $data->key);
+                    $curl = new Curl();
+                    $response = $curl->get($url);
+                    $response = json_decode($response);
+                    $apiCampaigns = array_merge($apiCampaigns, $response->offers);
+                }
             }
         }
 

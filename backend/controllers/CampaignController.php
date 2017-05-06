@@ -48,6 +48,8 @@ class CampaignController extends Controller
                             'get_category',
                             'get_campaign_uuid_multiple',
                             'restart',
+                            'api-index',
+                            'cpa-index',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -75,6 +77,37 @@ class CampaignController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionApiIndex()
+    {
+//        $this->layout='mylayout';
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->apiSearch(Yii::$app->request->queryParams);
+
+        return $this->render('api_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionCpaIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->cpaSearch(Yii::$app->request->queryParams);
+
+        return $this->render('cpa_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

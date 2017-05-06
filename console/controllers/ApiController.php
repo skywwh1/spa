@@ -12,9 +12,11 @@ namespace console\controllers;
 use console\models\Glispa;
 use console\models\HeadWay;
 use console\models\Mi;
+use console\models\MiDirect;
 use console\models\Movista;
 use console\models\Nposting;
 use console\models\Yeahmobi;
+use console\models\Yeahmobi2;
 use yii\console\Controller;
 
 class ApiController extends Controller
@@ -28,11 +30,24 @@ class ApiController extends Controller
         $vista = new Movista();
         $vista->getApiCampaign();
 
-        $yeah = new Yeahmobi();
+//        $yeah = new Yeahmobi();
+//        $yeah->getApiCampaign();
+
+//        $yeah = new Glispa();
+//        $yeah->getApiCampaign();
+
+//        $yeah = new Mi();
+//        $yeah->getApiCampaign();
+
+        $yeah = new MiDirect();
         $yeah->getApiCampaign();
 
-        $yeah = new Glispa();
+//        $yeah = new Yeahmobi2();
+//        $yeah->getApiCampaign();
+
+        $yeah = new Nposting();
         $yeah->getApiCampaign();
+
     }
 
     public function actionGetHeadway()
@@ -71,4 +86,17 @@ class ApiController extends Controller
         $yeah = new Mi();
         $yeah->getApiCampaign();
     }
+
+    public function actionGetMiDirect()
+    {
+        $yeah = new MiDirect();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetYeah2()
+    {
+        $yeah = new Yeahmobi2();
+        $yeah->getApiCampaign();
+    }
+
 }
