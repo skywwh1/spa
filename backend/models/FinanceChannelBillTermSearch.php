@@ -48,6 +48,15 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                ],
+//                'defaultOrder' => ['start_time' => SORT_DESC],
+            ]
         ]);
 
         $this->load($params);
@@ -100,6 +109,9 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['<>', 'status', 0])
             ->andFilterWhere(['like', 'note', $this->note]);
 
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy([ 'start_time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 }

@@ -48,6 +48,15 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
+                    ],
+                ],
+//                'defaultOrder' => ['start_time' => SORT_DESC],
+            ]
         ]);
 
         $this->load($params);
@@ -90,6 +99,9 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             ->andFilterWhere(['<>', 'status', 0])
             ->andFilterWhere(['like', 'note', $this->note]);
 
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy([ 'start_time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 }
