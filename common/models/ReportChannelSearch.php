@@ -59,6 +59,14 @@ class ReportChannelSearch extends ReportChannelHourly
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
                     ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
+                    ],
                 ],
             ]
         ]);
@@ -97,8 +105,6 @@ class ReportChannelSearch extends ReportChannelHourly
             'cam.daily_cap cap',
             'clh.daily_cap',
             'u.username om',
-//            'campaign_name',
-
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
@@ -168,6 +174,14 @@ class ReportChannelSearch extends ReportChannelHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]

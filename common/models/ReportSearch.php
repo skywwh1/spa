@@ -186,11 +186,6 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['ch.username' => SORT_ASC],
                         'desc' => ['ch.username' => SORT_DESC],
                     ],
-
-                    'cvr' => [
-                        'asc' => ['cvr' => SORT_ASC],
-                        'desc' => ['cvr' => SORT_DESC],
-                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -202,10 +197,6 @@ class ReportSearch extends CampaignLogHourly
                     'match_install' => [
                         'asc' => ['match_install' => SORT_ASC],
                         'desc' => ['match_install' => SORT_DESC],
-                    ],
-                    'match_cvr' => [
-                        'asc' => ['match_cvr' => SORT_ASC],
-                        'desc' => ['match_cvr' => SORT_DESC],
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
@@ -301,10 +292,6 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['ch.username' => SORT_ASC],
                         'desc' => ['ch.username' => SORT_DESC],
                     ],
-                    'cvr' => [
-                        'asc' => ['cvr' => SORT_ASC],
-                        'desc' => ['cvr' => SORT_DESC],
-                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -316,10 +303,6 @@ class ReportSearch extends CampaignLogHourly
                     'match_install' => [
                         'asc' => ['match_install' => SORT_ASC],
                         'desc' => ['match_install' => SORT_DESC],
-                    ],
-                    'match_cvr' => [
-                        'asc' => ['match_cvr' => SORT_ASC],
-                        'desc' => ['match_cvr' => SORT_DESC],
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
@@ -417,21 +400,13 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['ch.username' => SORT_ASC],
                         'desc' => ['ch.username' => SORT_DESC],
                     ],
-                    'cvr' => [
-                        'asc' => ['cvr' => SORT_ASC],
-                        'desc' => ['cvr' => SORT_DESC],
-                    ],
-                    'cost' => [
-                        'asc' => ['cost' => SORT_ASC],
-                        'desc' => ['cost' => SORT_DESC],
-                    ],
                     'match_install' => [
                         'asc' => ['match_install' => SORT_ASC],
                         'desc' => ['match_install' => SORT_DESC],
                     ],
-                    'match_cvr' => [
-                        'asc' => ['match_cvr' => SORT_ASC],
-                        'desc' => ['match_cvr' => SORT_DESC],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],

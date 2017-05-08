@@ -114,7 +114,6 @@ class ChannelSearch extends Channel
             ->andFilterWhere(['like', 'paid', $this->paid])
             ->andFilterWhere(['like', 'strong_geo', $this->strong_geo])
             ->andFilterWhere(['like', 'strong_category', $this->strong_category]);
-
         return $dataProvider;
     }
 

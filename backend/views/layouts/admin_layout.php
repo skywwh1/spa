@@ -101,7 +101,7 @@ AdminAsset::register($this);
                         </li>
                         <li><a href="/redirect-log/index" data-menu="redirect-log-index"><i class="fa fa-circle-o"></i>Redirect
                                 Log</a></li>
-                        <li><a href="/campaign-sts-update/index" data-menu="/payout-log-index"><i class="fa fa-circle-o"></i>Payout Log
+                        <li><a href="/campaign-sts-update/index" data-menu="campaign-sts-update-index"><i class="fa fa-circle-o"></i>Payout Log
                                 </a></li>
                     </ul>
                 </li>
@@ -173,6 +173,8 @@ AdminAsset::register($this);
                                 List</a></li>
                         <li><a href="/channel/create" data-menu="channel-create"><i class="fa fa-circle-o"></i> Create
                                 Channel</a></li>
+                        <li><a href="/channel-black/index" data-menu="channel-black-index"><i class="fa fa-circle-o"></i> Channel
+                                BlackList</a></li>
                     </ul>
                 </li>
 
@@ -190,8 +192,12 @@ AdminAsset::register($this);
                                 Channel Reports</a></li>
                         <li><a href="/report/report-sub-channel" data-menu="report-sub-channel"><i class="fa fa-circle-o"></i>
                                Sub Channel Reports</a></li>
-                        <li><a href="/report/report-summary" data-menu="report-summary"><i class="fa fa-circle-o"></i>
-                                Summary Reports</a></li>
+                        <?php
+                        if (Yii::$app->user->can('admin')) {
+                            ?>
+                            <li><a href="/report/report-summary" data-menu="report-summary"><i class="fa fa-circle-o"></i>
+                                    Summary Reports</a></li>
+                        <?php } ?>
                         <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign
                                 Reports</a></li>
                         <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match

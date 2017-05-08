@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-<div class="campaign-sts-update-index">
+                <div class="campaign-sts-update-index">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -40,6 +40,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'channel_id',
                 'value' =>'channel_id',
                 'filter' => true,
+            ],
+            [
+                'attribute' => 'campaign_name',
+                'value' => 'campaign_name',
+//                'filter' => true,
+            ],
+            [
+                'attribute' => 'channel_name',
+                'value' => 'channel_name',
+//                'filter' => true,
             ],
 //            'channel_id',
             [

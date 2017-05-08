@@ -241,6 +241,11 @@ class ModelsUtil
         1 => 'ineffective',
     );
 
+    const black_action = array(
+        0 => 'Notice',
+        1 => 'No S2S',
+    );
+
     public static function getPayableStatus($k)
     {
         return static::getValue(static::payable_status, $k);
@@ -356,9 +361,9 @@ class ModelsUtil
         return static::getValue(static::open_type, $k);
     }
 
-    public static function getSettlementType($k)
+    public static function getSettlementType($v)
     {
-        return static::getValue(static::settlement_type, $k);
+        return static::getValue(static::settlement_type, $v);
     }
 
     public static function getUpdateType($k)
@@ -369,5 +374,10 @@ class ModelsUtil
     public static function getEffectType($k)
     {
         return static::getValue(static::effect_type, $k);
+    }
+
+    public static function getBlackAction($k)
+    {
+        return static::getValue(static::black_action, $k);
     }
 }

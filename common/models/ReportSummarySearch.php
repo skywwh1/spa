@@ -50,9 +50,25 @@ class ReportSummarySearch extends ReportSummaryHourly
                         'asc' => ['clh.campaign_id' => SORT_ASC],
                         'desc' => ['clh.campaign_id' => SORT_DESC],
                     ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]
@@ -166,9 +182,25 @@ class ReportSummarySearch extends ReportSummaryHourly
                         'asc' => ['clh.campaign_id' => SORT_ASC],
                         'desc' => ['clh.campaign_id' => SORT_DESC],
                     ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]
@@ -281,6 +313,14 @@ class ReportSummarySearch extends ReportSummaryHourly
                         'asc' => ['clh.campaign_id' => SORT_ASC],
                         'desc' => ['clh.campaign_id' => SORT_DESC],
                     ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
@@ -300,6 +340,14 @@ class ReportSummarySearch extends ReportSummaryHourly
                     'pay_out' => [
                         'asc' => ['pay_out' => SORT_ASC],
                         'desc' => ['pay_out' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]

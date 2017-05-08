@@ -61,6 +61,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $time;
     public $campaign_name;
     public $target_geo;
+    public $creative_link;
 
     /**
      * @inheritdoc

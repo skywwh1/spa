@@ -47,10 +47,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'attribute' => 'os',
-                            'value' => function ($data) {
-                                return ModelsUtil::getPlatform($data->os);
-                            },
-                            'filter' =>ModelsUtil::platform,
+                            'value' => 'os',
+                            'filter' =>false,
                         ],
                         // 'account_name',
                         // 'branch_name',

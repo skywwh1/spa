@@ -225,6 +225,14 @@ class Campaign extends \yii\db\ActiveRecord
         return $this->hasMany(Channel::className(), ['id' => 'channel_id'])->viaTable('campaign_channel_log', ['campaign_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCreativeLinks()
+    {
+        return $this->hasMany(Deliver::className(), ['campaign_id' => 'id']);
+    }
+
     public function getAllCampaignUuidJson()
     {
         $data = static::find()->select('campaign_uuid')->column();
@@ -347,4 +355,8 @@ class Campaign extends \yii\db\ActiveRecord
     {
         return static::find()->where(['advertiser' => $adv_id])->all();
     }
+//    public function afterSave($insert,$changedAttributes){
+//        parent::afterSave($insert,$changedAttributes);
+//        CreativeLink::updateCreativeLink($this->creative_link,$this->id);
+//    }
 }

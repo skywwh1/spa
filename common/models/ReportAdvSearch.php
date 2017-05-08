@@ -59,6 +59,14 @@ class ReportAdvSearch extends ReportAdvHourly
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
                     ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
+                    ],
                 ],
             ]
         ]);
@@ -162,6 +170,14 @@ class ReportAdvSearch extends ReportAdvHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]

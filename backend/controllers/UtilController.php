@@ -121,4 +121,23 @@ class UtilController extends Controller
         }
         return $out;
     }
+//
+//    public function actionCreative($name)
+//    {
+//        $out = ['results' => ['id' => '', 'text' => '']];
+//        if (!$name) {
+//            return $out;
+//        }
+//
+//        $data = CreativeLink::find()
+//            ->select('creative_link id, creative_link text')
+//            ->andFilterWhere(['like', 'creative_link', $name])
+//            ->limit(50)
+//            ->asArray()
+//            ->all();
+//
+//        $out['results'] = array_values($data);
+//
+//        return $out;
+//    }
 }

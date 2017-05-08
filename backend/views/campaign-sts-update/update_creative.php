@@ -2,7 +2,6 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-use kartik\select2\Select2;
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -10,7 +9,7 @@ use yii\web\JsExpression;
 /* @var $model common\models\Campaign */
 
 ?>
-<h3>Update Creative</h3>
+    <h3>Update CreativeLink</h3>
 <?php $form = ActiveForm::begin([
     'id' => $model->formName(),
 //    'enableAjaxValidation' => true,
@@ -31,33 +30,11 @@ use yii\web\JsExpression;
     'readonly' => true,
 ]);
 ?>
-
-<?php
-echo $form->field($model, 'creative_link')->widget(Select2::classname(), [
-    'size' => Select2::MEDIUM,
-    'options' => [
-        'multiple' => true,
-    ],
-    'pluginOptions' => [
-        'allowClear' => true,
-        'minimumInputLength' => 1,
-        'language' => [
-            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
-        ],
-        'ajax' => [
-            'url' => Url::to(['util/geo']),
-            'dataType' => 'json',
-            'data' => new JsExpression('function(params) { return {name:params.term}; }')
-        ],
-        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-        'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
-        'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
-    ],
-]);
-?>
+<?= $form->field($model, 'creative_link')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'creative_type')->dropDownList(ModelsUtil::create_type) ?>
 <?= $form->field($model, 'is_send')->dropDownList(['1' => 'Yes', '0' => "No"]) ?>
-<div class="form-group">
-    <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
-</div>
+    <div class="form-group">
+        <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
+    </div>
 
 <?php ActiveForm::end(); ?>

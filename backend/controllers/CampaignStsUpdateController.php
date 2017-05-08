@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Campaign;
+use common\models\CampaignCreativeLink;
 use common\models\Deliver;
 use Yii;
 use common\models\CampaignStsUpdate;
@@ -41,6 +42,7 @@ class CampaignStsUpdateController extends Controller
                             'update-payout',
                             'update-geo',
                             'index',
+                            'update-creative',
 //                            'view',
 //                            'delete',
 //                            'testlink',
@@ -322,7 +324,7 @@ class CampaignStsUpdateController extends Controller
         $this->layout = false;
         $model = new CampaignStsUpdate();
         $model->campaign_id = $campaign_id;
-//        $model->channel_id = $channel_id;
+        $model->channel_id = $channel_id;
 
         if ($model->load(Yii::$app->request->post())) {
             $camp = Campaign::findById($model->campaign_id);
@@ -336,11 +338,46 @@ class CampaignStsUpdateController extends Controller
 
             $camp->promote_end = $model->effect_time;
             $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
-
             $camp->save();
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             return $this->renderAjax('update_geo', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $type
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @return mixed
+     */
+    public function actionUpdateCreative($type,$channel_id,$campaign_id)
+    {
+        $this->layout = false;
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $camp = Campaign::findById($model->campaign_id);
+
+            $model->type = $type;//2 is sts 1 is campaign
+            $model->name = 'update-creative';
+            $model->channel_id = $channel_id;
+            $model->value = $model->creative_link;
+            $model->old_value = $camp->creative_link;
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
+
+            $camp->promote_end = $model->effect_time;
+            $camp->creative_link = $model->creative_link;
+            $camp->save();
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            return $this->renderAjax('update_creative', [
                 'model' => $model,
             ]);
         }

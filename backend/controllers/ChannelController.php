@@ -237,6 +237,9 @@ class ChannelController extends Controller
         if (!empty($model->traffic_source)) {
             $model->traffic_source = implode(',', $model->traffic_source);
         }
+        if (!empty($model->os)) {
+            $model->os = implode(',', $model->os);
+        }
 
         if (!empty($model->strong_geo)) {
             $model->strong_geo = implode(',', $model->strong_geo);

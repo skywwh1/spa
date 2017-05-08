@@ -215,4 +215,33 @@ class MailUtil
             return false;
         }
     }
+    /*
+   * @param Deliver $deliver
+   * @return string
+   */
+    public static function updateCreativeLink($deliver)
+    {
+
+        $channel = Channel::findIdentity($deliver->channel_id);
+        $mail = Yii::$app->mailer->compose('update_creative_link', ['deliver' => $deliver]);
+        $mail->setTo($channel->email);
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+//        $mail->setTo('2539131080@qq.com');
+        $mail->setSubject('Creative Update - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'update_creative_link', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

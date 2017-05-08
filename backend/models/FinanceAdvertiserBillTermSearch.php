@@ -55,7 +55,6 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
                         'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
-//                'defaultOrder' => ['start_time' => SORT_DESC],
             ]
         ]);
 

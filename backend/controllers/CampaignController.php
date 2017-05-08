@@ -4,7 +4,6 @@ namespace backend\controllers;
 
 use common\models\Advertiser;
 use common\models\Category;
-use common\models\RegionsDomain;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
@@ -14,7 +13,6 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
-
 /**
  * CampaignController implements the CRUD actions for Campaign model.
  */

@@ -124,11 +124,11 @@ use common\models\Platform;
 
                     <?= $form->field($model, 'post_back')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'os')->dropDownList(
+                    <?= $form->field($model, 'os')->checkboxList(
                         Platform::find()
-                            ->select(['name', 'id'])
+                            ->select(['name', 'value'])
                             ->orderBy('id')
-                            ->indexBy('id')
+                            ->indexBy('value')
                             ->column()
                     ) ?>
 

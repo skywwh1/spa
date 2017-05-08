@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\CampaignStsUpdate;
+use yii\db\Query;
 
 /**
  * CampaignStsUpdateSearch represents the model behind the search form about `common\models\CampaignStsUpdate`.
@@ -19,7 +20,7 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
     {
         return [
             [['id', 'campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected',], 'integer'],
-            [['name', 'value','effect_time','create_time'], 'safe'],
+            [['name', 'value','effect_time','create_time','campaign_name','channel_name'], 'safe'],
         ];
     }
 
@@ -42,7 +43,8 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
     public function search($params)
     {
         $query = CampaignStsUpdate::find();
-
+        $query->alias('csu');
+//        $query = new Query();
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -53,7 +55,7 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
                         'asc' => ['effect_time' => SORT_ASC],
                         'desc' => ['effect_time' => SORT_DESC],
                     ],
-                    'create_time' => [
+                    'csu.create_time' => [
                         'asc' => ['create_time' => SORT_ASC],
                         'desc' => ['create_time' => SORT_DESC],
                     ],
@@ -85,6 +87,24 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
             return $dataProvider;
         }
 
+        $query->Select([
+            'csu.id',
+            'campaign_id',
+            'channel_id',
+            'name',
+            'value',
+            'old_value',
+            'csu.type',
+            'is_effected',
+            'effect_time',
+            'csu.create_time',
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            ]);
+
+        $query->leftJoin('channel ch', 'csu.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'csu.campaign_id = cam.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -100,7 +120,9 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'value', $this->value]);
+            ->andFilterWhere(['like', 'value', $this->value])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name]);
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(["effect_time" => SORT_DESC]);

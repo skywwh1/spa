@@ -91,11 +91,13 @@ class CampaignController extends Controller
         $cap = array();
         $payout = array();
         $updateGeo = array();
+        $updateCreativeLink = array();
         $models = CampaignStsUpdate::getStsSendMail();
         if (isset($models)) {
             foreach ($models as $item) {
                 if ($item->type === 1) { // campaign 群发
                     $camp = Campaign::findById($item->campaign_id);
+                    $this->echoMessage($item->name);
                     if (isset($camp)) {
                         $delivers = Deliver::findRunningByCampaignId($camp->id);
                         if ($item->name == 'pause') {
@@ -120,6 +122,13 @@ class CampaignController extends Controller
                                 $d->effect_time = $item->effect_time;
                                 $d->target_geo = $item->target_geo;
                                 $updateGeo[$camp->id][] = $d;
+                            }
+                        }else if ($item->name == 'update-creative') {
+                            foreach ($delivers as $d) {
+                                $d->oldValue = $item->old_value;
+                                $d->effect_time = $item->effect_time;
+                                $d->creative_link = $item->creative_link;
+                                $updateCreativeLink[$camp->id][] = $d;
                             }
                         }
                     }
@@ -202,6 +211,23 @@ class CampaignController extends Controller
                 if (isset($delivers)) {
                     foreach ($delivers as $item) {
                         if (MailUtil::updateGeo($item)) {
+                            $this->echoMessage($item->channel_id . ' send success');
+                        } else {
+                            $this->echoMessage($item->channel_id . ' send fail');
+                        }
+                        $this->echoMessage("waiting 1s");
+                        sleep(1);
+                    }
+                }
+            }
+        }
+
+        if (!empty($updateCreativeLink)) {
+            $this->echoMessage('Update Creative Link start');
+            foreach ($updateCreativeLink as $campaign_id => $delivers) {
+                if (isset($delivers)) {
+                    foreach ($delivers as $item) {
+                        if (MailUtil::updateCreativeLink($item)) {
                             $this->echoMessage($item->channel_id . ' send success');
                         } else {
                             $this->echoMessage($item->channel_id . ' send fail');

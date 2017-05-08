@@ -179,6 +179,15 @@ $columns = [
             return 0;
         },
         'filter' => false,
+        'contentOptions' => function ($model) {
+            $model = (object)$model;
+            if ($model->clicks > 0) {
+                $match_cvr = round(($model->match_installs / $model->clicks) * 100, 2) . '%';
+                if ($match_cvr > 2) {
+                    return ['class' => 'bg-danger'];
+                }
+            }
+        }
     ],
     [
         'label' => 'ADV Price(avg)',

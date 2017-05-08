@@ -73,6 +73,14 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
                         'asc' => ['ch.username' => SORT_ASC],
                         'desc' => ['ch.username' => SORT_DESC],
                     ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
+                    ],
                 ],
             ]
         ]);
@@ -180,6 +188,14 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
                     'channel_name' => [
                         'asc' => ['ch.username' => SORT_ASC],
                         'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
                     ],
                 ],
             ]

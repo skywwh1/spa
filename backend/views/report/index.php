@@ -205,7 +205,7 @@ if (!empty($searchModel->type)) {
 }
 if (!empty($dataProvider)) {
 ?>
-<div id="nav-menu" data-menu="index"></div>
+<!--<div id="nav-menu" data-menu="index"></div>-->
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info">
