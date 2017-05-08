@@ -63,17 +63,26 @@ class MiDirect
             $camp->adv_link = $model->adv_link;
             $camp->adv_link = str_replace('&user_id={user_id}', '', $camp->adv_link);
             $camp->package_name = $model->package_name;
-            $camp->platform = $model->platform;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             $camp->kpi = 'Day Two RR >= 30%';
             $camp->others = $model->note;
             $camp->preview_link = $model->preview_link;
+            if (empty($camp->platform)) {
+                if (strpos($camp->preview_link, 'play.google')) {
+                    $camp->platform = 'android';
+                } else if (strpos($camp->preview_link, 'apple')) {
+                    $camp->platform = 'ios';
+                }
+            }
             $camp->category = $model->category;
             $camp->status = 1;
             $camp->open_type = 1;
-            $camp->tag = 1;
+            $camp->tag = 2;
+            if (empty($camp->traffic_source)) {
+                $camp->traffic_source = 'non-incent,no adult';
+            }
             if (!empty($model->creative_link)) {
 
                 $cr = explode(';', $model->creative_link);
@@ -139,6 +148,7 @@ class MiDirect
             $totalPage = $total / 50;
             var_dump($totalPage);
             var_dump(ceil($totalPage));
+            $totalPage = ceil($totalPage);
             if ($totalPage >= 2) {
                 for ($i = 2; $i <= $totalPage; $i++) {
                     $url = str_replace('{page}', $i, $old_url);

@@ -12,10 +12,14 @@ use Yii;
  * @property string $campaign_name
  * @property integer $channel_id
  * @property string $channel_name
+ * @property string $om_email
  * @property string $match_cvr
  * @property integer $match_install
+ * @property integer $installs
+ * @property integer $daily_cap
  * @property string $action
  * @property integer $is_send
+ * @property integer $type
  * @property integer $update_time
  * @property integer $create_time
  */
@@ -36,8 +40,8 @@ class LogAutoCheck extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id'], 'required'],
-            [['campaign_id', 'channel_id', 'match_install', 'is_send', 'update_time', 'create_time'], 'integer'],
-            [['campaign_name', 'channel_name', 'match_cvr', 'action'], 'safe'],
+            [['campaign_id', 'channel_id', 'match_install', 'installs', 'daily_cap', 'is_send', 'type', 'update_time', 'create_time'], 'integer'],
+            [['campaign_name', 'channel_name', 'om_email', 'match_cvr', 'action'], 'safe'],
         ];
     }
 
@@ -52,10 +56,14 @@ class LogAutoCheck extends \yii\db\ActiveRecord
             'campaign_name' => 'Campaign Name',
             'channel_id' => 'Channel ID',
             'channel_name' => 'Channel Name',
+            'om_email' => 'Om Email',
             'match_cvr' => 'Match Cvr',
             'match_install' => 'Match Install',
+            'installs' => 'Installs',
+            'daily_cap' => 'Daily Cap',
             'action' => 'Action',
             'is_send' => 'Is Send',
+            'type' => 'Type',
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
         ];

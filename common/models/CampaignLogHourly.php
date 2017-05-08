@@ -2,6 +2,11 @@
 
 namespace common\models;
 
+use DateInterval;
+use DateTime;
+use DateTimeZone;
+use yii\db\Query;
+
 /**
  * This is the model class for table "campaign_log_hourly".
  *
@@ -170,5 +175,57 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
         $query->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
         return $query->one();
+    }
+
+    public static function getCurrentDay()
+    {
+        $query = new Query();
+        $start = new DateTime(date('d-m-Y', time()), new DateTimeZone('Etc/GMT-8'));
+        $end = new DateTime(date('d-m-Y', time()), new DateTimeZone('Etc/GMT-8'));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+        $query->select([
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'u.username om',
+            'cam.daily_cap cap',
+            'clh.daily_cap',
+
+        ]);
+        $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
+        // grid filtering conditions
+
+        $query->andFilterWhere(['<>', 'clh.daily_cap', 'open'])
+            ->andFilterWhere(['<>', 'clh.daily_cap', '0'])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'timestamp',
+        ]);
+        $query->having('installs > daily_cap');
+        var_dump($query->createCommand()->sql);
+        return $query->all();
     }
 }
