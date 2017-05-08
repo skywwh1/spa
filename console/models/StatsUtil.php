@@ -748,6 +748,9 @@ class StatsUtil
                         echo $traffic_source . PHP_EOL;
                         if (strpos($traffic_source, 'incent') !== 0) { // non-incent
                             echo "camp-" . $camp->id . PHP_EOL;
+                            if($log->clicks==0){
+                                continue;
+                            }
                             $cvr = ($log->match_installs / $log->clicks) * 100;
                             $sts = Deliver::findIdentity($camp->id, $log->channel_id);
                             if ($sts->status == 1) {

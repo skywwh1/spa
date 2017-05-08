@@ -214,9 +214,10 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
         $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
 
-//        $query->andFilterWhere(['<>', 'clh.daily_cap', 'open'])
-//            ->andFilterWhere(['>=', 'time', $start])
-//            ->andFilterWhere(['<', 'time', $end]);
+        $query->andFilterWhere(['<>', 'clh.daily_cap', 'open'])
+            ->andFilterWhere(['<>', 'clh.daily_cap', '0'])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
 
         $query->groupBy([
             'clh.campaign_id',
