@@ -68,6 +68,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'others',
                     'pricing_mode',
                     'category',
+                    'carriers',
+                    'conversion_flow',
                 ];
 
                 $fullExportMenu = ExportMenu::widget([

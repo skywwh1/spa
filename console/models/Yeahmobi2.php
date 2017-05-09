@@ -52,7 +52,9 @@ class Yeahmobi2
                 $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
                 $len = strpos($camp->campaign_name, 'Private');
             }
-            $camp->platform = $model->platform;
+            if(empty($camp->platform)){
+                $camp->platform = $model->platform;
+            }
             $camp->pricing_mode = 'cpa';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
@@ -75,8 +77,12 @@ class Yeahmobi2
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->advertiser = $apiModel->adv_id;
-            $camp->conversion_flow = $model->conversion_flow;
-            $camp->carriers = $model->carriers;
+            if(empty($camp->conversion_flow)){
+                $camp->conversion_flow = $model->conversion_flow;
+            }
+            if(empty($camp->carriers)){
+                $camp->carriers = $model->carriers;
+            }
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
