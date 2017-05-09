@@ -280,19 +280,7 @@ class ChannelController extends Controller
     public function actionTest()
     {
 
-        $cache = Yii::$app->cache;
-        $data = $cache->get('99');
-        var_dump($data);
-//        $aa = Channel::findOne(['id'=>25]);
-//        MailUtil::sendCreateChannel($aa);
-//        $aa = Deliver::findIdentity(3,29);
-//        MailUtil::sendSTSCreateMail($aa);
-//        $t = time();
-//        $curl = new Curl();
-//        $aa = $curl->get("https://admin.superads.cn/stream/track?id=11&aa=00&oo=99&ch_id=29&cp_uid=sdf");
-//        var_dump($aa);
-//        var_dump(count(Stream::getLatestClick(29, $t)));
-        die();
+        $this->asJson(['aa'=>99]);
     }
 
     public function actionAjaxtest()
