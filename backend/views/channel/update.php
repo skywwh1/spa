@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => $model->username, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
-<div id="nav-menu" data-menu="channel_index"></div>
+<div id="nav-menu" data-menu="my_channels"></div>
 
 <?= $this->render('_form', [
     'model' => $model,

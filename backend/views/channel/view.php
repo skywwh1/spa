@@ -10,7 +10,7 @@ $this->title = $model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="channel_index"></div>
+<div id="nav-menu" data-menu="my_channels"></div>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info table-responsive">

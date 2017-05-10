@@ -60,13 +60,13 @@ class ReportController extends Controller
      */
     public function actionIndex()
     {
-       /* $searchModel = new ReportSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        /* $searchModel = new ReportSearch();
+         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);*/
+         return $this->render('index', [
+             'searchModel' => $searchModel,
+             'dataProvider' => $dataProvider,
+         ]);*/
         $searchModel = new ReportSearch();
         $dataProvider = array();
 
@@ -86,7 +86,7 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
-            }else {
+            } else {
                 $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
@@ -151,6 +151,8 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            } else {
+                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
@@ -181,6 +183,8 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            } else {
+                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
@@ -243,7 +247,7 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
-            }else {
+            } else {
                 $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
