@@ -212,7 +212,9 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
+        if(empty($this->campaign_id) && empty($this->campaign_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -319,7 +321,9 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
+        if(empty($this->campaign_id) && empty($this->campaign_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -424,7 +428,9 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
+        if(empty($this->campaign_id) && empty($this->campaign_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -519,7 +525,9 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
+        if(empty($this->campaign_id) && empty($this->campaign_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
