@@ -22,6 +22,7 @@ class ReportSearch extends CampaignLogHourly
     public $start;
     public $end;
     public $advertiser;
+    public $om;
 
     /**
      * @inheritdoc
@@ -29,7 +30,7 @@ class ReportSearch extends CampaignLogHourly
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name', 'advertiser'], 'safe'],
+            [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name', 'advertiser', 'om'], 'safe'],
             [['time_format', 'daily_cap', 'type', 'start', 'end', 'time_zone'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
@@ -236,11 +237,13 @@ class ReportSearch extends CampaignLogHourly
             'clh.adv_price',
             'clh.cost',
             'clh.revenue',
+            'u.username om',
         ]);
 
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -251,6 +254,7 @@ class ReportSearch extends CampaignLogHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'adv.username', $this->advertiser])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
@@ -335,6 +339,7 @@ class ReportSearch extends CampaignLogHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'u.username om',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
@@ -349,6 +354,7 @@ class ReportSearch extends CampaignLogHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -358,6 +364,7 @@ class ReportSearch extends CampaignLogHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
@@ -442,6 +449,7 @@ class ReportSearch extends CampaignLogHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'u.username om',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
@@ -455,6 +463,7 @@ class ReportSearch extends CampaignLogHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -463,6 +472,7 @@ class ReportSearch extends CampaignLogHourly
         ]);
         $query->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
@@ -540,6 +550,7 @@ class ReportSearch extends CampaignLogHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'u.username om',
 //            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
@@ -554,6 +565,7 @@ class ReportSearch extends CampaignLogHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -563,6 +575,7 @@ class ReportSearch extends CampaignLogHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 

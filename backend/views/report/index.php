@@ -65,9 +65,9 @@ $columns = [
         'filter' => false,
     ],
     [
-        'attribute' => 'advertiser',
-        'value' => 'advertiser',
-        'label' => 'Advertiser',
+        'attribute' => 'channel_name',
+        'value' => 'channel_name',
+        'label' => 'Channel',
 //        'filter' => false,
     ],
     [
@@ -198,6 +198,12 @@ $columns = [
             return $margin;
         },
         'filter' => false,
+    ],
+    [
+        'attribute' => 'om',
+        'value' => 'om',
+        'label' => 'OM',
+//        'filter' => false,
     ],
 ];
 if (!empty($searchModel->type)) {
