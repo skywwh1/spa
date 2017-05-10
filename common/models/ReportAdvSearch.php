@@ -127,11 +127,11 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->bd]);
-        } else {
-            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+//        } else {
+//            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
+//        }
 
 
         if ($dataProvider->getSort()->getOrders()==null){
@@ -236,12 +236,12 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->bd]);
-        } else {
-            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
-
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+//        } else {
+//            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
+//
+//        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
@@ -314,11 +314,11 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->bd]);
-        } else {
-            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+//        } else {
+//            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
+//        }
 
         return $dataProvider;
     }
