@@ -179,14 +179,14 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['campaign_uuid' => SORT_ASC],
                         'desc' => ['campaign_uuid' => SORT_DESC],
                     ],
-//                    'channel_id' => [
-//                        'asc' => ['ch.id' => SORT_ASC],
-//                        'desc' => ['ch.id' => SORT_DESC],
-//                    ],
-//                    'channel_name' => [
-//                        'asc' => ['ch.username' => SORT_ASC],
-//                        'desc' => ['ch.username' => SORT_DESC],
-//                    ],
+                    'channel_id' => [
+                        'asc' => ['ch.id' => SORT_ASC],
+                        'desc' => ['ch.id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -212,7 +212,7 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-        if(empty($this->campaign_id) && empty($this->campaign_name)){
+        if (empty($this->campaign_id) && empty($this->campaign_name)) {
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -222,7 +222,7 @@ class ReportSearch extends CampaignLogHourly
         $end = $end->getTimestamp();
 
         $query->select([
-            'adv.username advertiser',
+            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
@@ -239,8 +239,8 @@ class ReportSearch extends CampaignLogHourly
         ]);
 
         $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -255,7 +255,7 @@ class ReportSearch extends CampaignLogHourly
             ->andFilterWhere(['<', 'time', $end]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
-            $query->orderBy(['adv.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
 
         return $dataProvider;
@@ -288,14 +288,14 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['campaign_uuid' => SORT_ASC],
                         'desc' => ['campaign_uuid' => SORT_DESC],
                     ],
-//                    'channel_id' => [
-//                        'asc' => ['ch.id' => SORT_ASC],
-//                        'desc' => ['ch.id' => SORT_DESC],
-//                    ],
-//                    'channel_name' => [
-//                        'asc' => ['ch.username' => SORT_ASC],
-//                        'desc' => ['ch.username' => SORT_DESC],
-//                    ],
+                    'channel_id' => [
+                        'asc' => ['ch.id' => SORT_ASC],
+                        'desc' => ['ch.id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -321,7 +321,7 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-        if(empty($this->campaign_id) && empty($this->campaign_name)){
+        if (empty($this->campaign_id) && empty($this->campaign_name)) {
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -331,10 +331,10 @@ class ReportSearch extends CampaignLogHourly
         $end = $end->getTimestamp();
 
         $query->select([
-            'adv.username advertiser',
+            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
-//            'clh.channel_id',
+            'clh.channel_id',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
@@ -347,8 +347,8 @@ class ReportSearch extends CampaignLogHourly
         ]);
 
         $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -357,16 +357,17 @@ class ReportSearch extends CampaignLogHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'adv.username', $this->advertiser])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         $query->groupBy([
             'clh.campaign_id',
+            'clh.channel_id',
             'timestamp']);
 
         if ($dataProvider->getSort()->getOrders() == null) {
-            $query->orderBy(['adv.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
 
         return $dataProvider;
@@ -399,14 +400,14 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['campaign_uuid' => SORT_ASC],
                         'desc' => ['campaign_uuid' => SORT_DESC],
                     ],
-//                    'channel_id' => [
-//                        'asc' => ['ch.id' => SORT_ASC],
-//                        'desc' => ['ch.id' => SORT_DESC],
-//                    ],
-//                    'channel_name' => [
-//                        'asc' => ['ch.username' => SORT_ASC],
-//                        'desc' => ['ch.username' => SORT_DESC],
-//                    ],
+                    'channel_id' => [
+                        'asc' => ['ch.id' => SORT_ASC],
+                        'desc' => ['ch.id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
                     'match_install' => [
                         'asc' => ['match_install' => SORT_ASC],
                         'desc' => ['match_install' => SORT_DESC],
@@ -428,7 +429,7 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-        if(empty($this->campaign_id) && empty($this->campaign_name)){
+        if (empty($this->campaign_id) && empty($this->campaign_name)) {
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -440,7 +441,7 @@ class ReportSearch extends CampaignLogHourly
         $query->select([
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
-//            'clh.channel_id',
+            'clh.channel_id',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
@@ -452,8 +453,8 @@ class ReportSearch extends CampaignLogHourly
         ]);
 
         $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -461,12 +462,12 @@ class ReportSearch extends CampaignLogHourly
             'channel_id' => $this->channel_id,
         ]);
         $query->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-//            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
-            $query->orderBy(['adv.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
 
         return $dataProvider;
@@ -492,14 +493,14 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['campaign_uuid' => SORT_ASC],
                         'desc' => ['campaign_uuid' => SORT_DESC],
                     ],
-//                    'channel_id' => [
-//                        'asc' => ['ch.id' => SORT_ASC],
-//                        'desc' => ['ch.id' => SORT_DESC],
-//                    ],
-//                    'channel_name' => [
-//                        'asc' => ['ch.username' => SORT_ASC],
-//                        'desc' => ['ch.username' => SORT_DESC],
-//                    ],
+                    'channel_id' => [
+                        'asc' => ['ch.id' => SORT_ASC],
+                        'desc' => ['ch.id' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -525,7 +526,7 @@ class ReportSearch extends CampaignLogHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-        if(empty($this->campaign_id) && empty($this->campaign_name)){
+        if (empty($this->campaign_id) && empty($this->campaign_name)) {
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -538,7 +539,7 @@ class ReportSearch extends CampaignLogHourly
             'adv.username advertiser',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
-//            'clh.channel_id',
+            'clh.channel_id',
 //            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
@@ -551,8 +552,8 @@ class ReportSearch extends CampaignLogHourly
         ]);
 
         $query->from('campaign_log_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -561,15 +562,17 @@ class ReportSearch extends CampaignLogHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-//            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         $query->groupBy([
-            'clh.campaign_id']);
+            'clh.campaign_id',
+            'clh.channel_id',
+        ]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
-            $query->orderBy(['adv.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
 
         return $dataProvider;
