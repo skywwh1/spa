@@ -89,6 +89,9 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        if(empty($this->campaign_id) && empty($this->channel_name)){
+            return null;
+        }
 //        $a = strtotime($this->start);
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
@@ -205,11 +208,11 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-//        var_dump(strtotime($this->start . '-1 day'));
-//        var_dump(strtotime($this->end . '+1 day'));
+        if(empty($this->campaign_id) && empty($this->channel_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
-//        $start = $start->sub(new DateInterval('P1D'));
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
@@ -299,6 +302,9 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        if(empty($this->campaign_id) && empty($this->channel_name)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -341,6 +347,123 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         } else {
             $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
         }
+        return $dataProvider;
+    }
+
+    public function sumSearch($params)
+    {
+        //        $query = ReportChannelHourly::find();
+        $query = new Query();
+//        $query->alias('clh');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+//            'pagination' => false,
+            'sort' =>[
+                'attributes' => [
+                    'campaign_id' => [
+                        'asc' => ['clh.campaign_id' => SORT_ASC],
+                        'desc' => ['clh.campaign_id' => SORT_DESC],
+                    ],
+                    'clicks' => [
+                        'asc' => ['clicks' => SORT_ASC],
+                        'desc' => ['clicks' => SORT_DESC],
+                    ],
+                    'sub_channel' => [
+                        'asc' => ['clh.sub_channel' => SORT_ASC],
+                        'desc' => ['clh.sub_channel' => SORT_DESC],
+                    ],
+                    'campaign_name' => [
+                        'asc' => ['cam.campaign_name' => SORT_ASC],
+                        'desc' => ['cam.campaign_name' => SORT_DESC],
+                    ],
+                    'channel_name' => [
+                        'asc' => ['ch.username' => SORT_ASC],
+                        'desc' => ['ch.username' => SORT_DESC],
+                    ],
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                    'revenue' => [
+                        'asc' => ['revenue' => SORT_ASC],
+                        'desc' => ['revenue' => SORT_DESC],
+                    ],
+                ],
+            ]
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        if(empty($this->campaign_id) && empty($this->channel_name)){
+            return null;
+        }
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+        $query->select([
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+//            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
+//            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'u.username om',
+            'cam.daily_cap cap',
+            'clh.daily_cap',
+
+        ]);
+        $query->from('campaign_log_sub_channel_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'clh.campaign_id' => $this->campaign_id,
+            'clh.channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
+            'clh.pay_out' => $this->pay_out,
+            'clh.adv_price' => $this->adv_price,
+            'ch.username' => $this->channel_name,
+        ]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+        ]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
+
         return $dataProvider;
     }
 }

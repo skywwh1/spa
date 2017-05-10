@@ -250,9 +250,9 @@ class MailUtil
      */
     public static function autoCheckCap($checks)
     {
-        $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
+        $mail = Yii::$app->mailer->compose('over_cap', ['checks' => $checks]);
         $mail->setTo('operations@superads.cn');
-        $mail->setSubject('Anticheat - SuperADS');
+        $mail->setSubject('Over Cap Alarm - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;

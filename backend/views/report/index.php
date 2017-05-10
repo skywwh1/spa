@@ -65,10 +65,10 @@ $columns = [
         'filter' => false,
     ],
     [
-        'attribute' => 'channel_name',
-        'value' => 'channel_name',
-        'label' => 'Channel',
-        'filter' => false,
+        'attribute' => 'advertiser',
+        'value' => 'advertiser',
+        'label' => 'Advertiser',
+//        'filter' => false,
     ],
     [
         'attribute' => 'clicks',

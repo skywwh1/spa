@@ -82,11 +82,12 @@ class ReportController extends Controller
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;
-            echo $type;
             if ($type == 1) {
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }else {
+                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
@@ -242,6 +243,8 @@ class ReportController extends Controller
                 $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
             } else if ($type == 2) {
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            }else {
+                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);

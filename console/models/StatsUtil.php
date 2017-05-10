@@ -810,6 +810,7 @@ class StatsUtil
                     $check->campaign_name = $log->campaign_name;
                     $check->channel_name = $log->channel_name;
                     $check->installs = $log->installs;
+                    $check->match_install = $log->match_installs;
                     $check->daily_cap = $log->daily_cap;
                     $check->type = 2;
                     $check->save();
@@ -821,7 +822,7 @@ class StatsUtil
         // send mail
         $sendings = LogAutoCheck::findAll(['is_send' => 0, 'type' => 2]);
         if (!empty($sendings)) {
-            MailUtil::autoCheckCvr($sendings);
+            MailUtil::autoCheckCap($sendings);
         }
     }
 }
