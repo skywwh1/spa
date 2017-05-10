@@ -130,8 +130,7 @@ class ReportAdvSearch extends ReportAdvHourly
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-
+            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
         }
 
 
@@ -240,7 +239,7 @@ class ReportAdvSearch extends ReportAdvHourly
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
 
         }
         $query->groupBy([
@@ -318,8 +317,7 @@ class ReportAdvSearch extends ReportAdvHourly
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-
+            $query->andFilterWhere(['ad.id' => \Yii::$app->user->id]);
         }
 
         return $dataProvider;
