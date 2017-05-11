@@ -116,21 +116,21 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
-<?php Modal::begin([
-    'id' => 'black-channel-modal',
-    'size' => 'modal-lg',
-    'clientOptions' => [
-        'backdrop' => 'static',
-        'keyboard' => false,
-    ],
-]);
-
-echo '<div id="black-channel-content"></div>';
-
-Modal::end(); ?>
+<?php //Modal::begin([
+//    'id' => 'black-channel-modal',
+//    'size' => 'modal-lg',
+//    'clientOptions' => [
+//        'backdrop' => 'static',
+//        'keyboard' => false,
+//    ],
+//]);
+//
+//echo '<div id="black-channel-content"></div>';
+//
+////Modal::end(); ?>
 <?php
-$this->registerJsFile(
-    '@web/js/black-channel.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
-?>
+//$this->registerJsFile(
+//    '@web/js/black-channel.js',
+//    ['depends' => [\yii\web\JqueryAsset::className()]]
+//);
+//?>

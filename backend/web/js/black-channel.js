@@ -5,7 +5,7 @@
 
 $('#submit-button').on('click', function () {
     $('.black_channel_form').each(function () {
-        //$(this).submit();
+        $(this).submit();
     });
 });
 $('.black_channel_form').each(function () {
@@ -37,9 +37,6 @@ $('.black_channel_form').each(function () {
 });
 
 $('#black-channel-modal').on('hidden.bs.modal', function (e) {
-    //$(".modal-backdrop").remove();
-    //$("body").removeClass('fade modal in');
-    //$('#black-channel-modal').remove();
     $(this).modal('hide');
     $('#black-channel-modal').modal('hide');
     $('#black-channel-content').empty();
@@ -52,23 +49,12 @@ $('#black-channel-modal').on('hidden.bs.modal', function (e) {
 function renderS2s(){
     var form = $('.black_channel_form');
     // do something...
-    //$(location).attr('href', '/deliver/go-create');
     if (form.find('.has-error').length) {
         return false;
     }
 
+    form.attr("class","black_form");
     //console.log(form.serialize());
     form.attr("action", '/deliver/go-create');
     form.submit();
-    //$('#black-channel-modal').modal('hide');
-    //$(location).attr('href', '/deliver/go-create');
-    //return false;
-    //$.ajax({
-    //    url: form.attr('action'),
-    //    type: 'post',
-    //    data: form.serialize(),
-    //    success: function (response) {
-    //        $(location).attr('href', '/deliver/go-create');
-    //    }
-    //});
 }

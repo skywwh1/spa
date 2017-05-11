@@ -157,11 +157,11 @@ class DeliverController extends Controller
                     $return_msg[] = $str;
                 }
                 $return_msg = implode(",",$return_msg);
-                return $return_msg;
+//                return $return_msg;
             }
             return $this->render('second', [
                 'delivers' => $delivers,
-//                'returnMsg' => empty($return_msg)?null:$return_msg
+                'returnMsg' => empty($return_msg)?null:$return_msg
             ]);
         }
         return $this->render('create', [

@@ -14,12 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div id="nav-menu" data-menu="STS"></div>
 <?php
-//if (!is_null($returnMsg)) {
-////    console.log($returnMsg);
-////    alert($returnMsg);
-//    echo "<script> var returnMsg = \"$returnMsg\";</script>" ;
-////    echo $returnMsg;
-//}
+if (!is_null($returnMsg)) {
+//    console.log($returnMsg);
+//    alert($returnMsg);
+    echo "<script> var returnMsg = \"$returnMsg\";</script>" ;
+//    echo $returnMsg;
+}
 if (!is_null($delivers)) {
     $i = 0;
     foreach ($delivers as $deliver) {
@@ -120,7 +120,7 @@ echo '<div id="black-channel-content"></div>';
 
 Modal::end(); ?>
 <script>
-//    alert(returnMsg);
+   alert(returnMsg);
 </script>
 <?php
 $this->registerJsFile(
