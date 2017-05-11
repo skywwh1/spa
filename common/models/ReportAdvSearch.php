@@ -67,6 +67,46 @@ class ReportAdvSearch extends ReportAdvHourly
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
                     ],
+                    'adv_name' => [
+                        'asc' => ['adv_name' => SORT_ASC],
+                        'desc' => ['adv_name' => SORT_DESC],
+                    ],
+                    'unique_clicks' => [
+                        'asc' => ['unique_clicks' => SORT_ASC],
+                        'desc' => ['unique_clicks' => SORT_DESC],
+                    ],
+                    'installs' => [
+                        'asc' => ['installs' => SORT_ASC],
+                        'desc' => ['installs' => SORT_DESC],
+                    ],
+                    'match_installs' => [
+                        'asc' => ['match_installs' => SORT_ASC],
+                        'desc' => ['match_installs' => SORT_DESC],
+                    ],
+                    'redirect_installs' => [
+                        'asc' => ['redirect_installs' => SORT_ASC],
+                        'desc' => ['redirect_installs' => SORT_DESC],
+                    ],
+                    'redirect_match_installs' => [
+                        'asc' => ['redirect_match_installs' => SORT_ASC],
+                        'desc' => ['redirect_match_installs' => SORT_DESC],
+                    ],
+                    'pay_out' => [
+                        'asc' => ['pay_out' => SORT_ASC],
+                        'desc' => ['pay_out' => SORT_DESC],
+                    ],
+                    'redirect_cost' => [
+                        'asc' => ['redirect_cost' => SORT_ASC],
+                        'desc' => ['redirect_cost' => SORT_DESC],
+                    ],
+                    'redirect_revenue' => [
+                        'asc' => ['redirect_revenue' => SORT_ASC],
+                        'desc' => ['redirect_revenue' => SORT_DESC],
+                    ],
+                    'bd' => [
+                        'asc' => ['bd' => SORT_ASC],
+                        'desc' => ['bd' => SORT_DESC],
+                    ],
                 ],
             ]
         ]);
@@ -177,6 +217,42 @@ class ReportAdvSearch extends ReportAdvHourly
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                    ],
+                    'adv_name' => [
+                        'asc' => ['adv_name' => SORT_ASC],
+                        'desc' => ['adv_name' => SORT_DESC],
+                    ],
+                    'unique_clicks' => [
+                        'asc' => ['unique_clicks' => SORT_ASC],
+                        'desc' => ['unique_clicks' => SORT_DESC],
+                    ],
+                    'installs' => [
+                        'asc' => ['installs' => SORT_ASC],
+                        'desc' => ['installs' => SORT_DESC],
+                    ],
+                    'match_installs' => [
+                        'asc' => ['match_installs' => SORT_ASC],
+                        'desc' => ['match_installs' => SORT_DESC],
+                    ],
+                    'redirect_installs' => [
+                        'asc' => ['redirect_installs' => SORT_ASC],
+                        'desc' => ['redirect_installs' => SORT_DESC],
+                    ],
+                    'redirect_match_installs' => [
+                        'asc' => ['redirect_match_installs' => SORT_ASC],
+                        'desc' => ['redirect_match_installs' => SORT_DESC],
+                    ],
+                    'pay_out' => [
+                        'asc' => ['pay_out' => SORT_ASC],
+                        'desc' => ['pay_out' => SORT_DESC],
+                    ],
+                    'redirect_cost' => [
+                        'asc' => ['redirect_cost' => SORT_ASC],
+                        'desc' => ['redirect_cost' => SORT_DESC],
+                    ],
+                    'redirect_revenue' => [
+                        'asc' => ['redirect_revenue' => SORT_ASC],
+                        'desc' => ['redirect_revenue' => SORT_DESC],
                     ],
                 ],
             ]

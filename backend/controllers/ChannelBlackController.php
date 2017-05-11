@@ -144,13 +144,13 @@ class ChannelBlackController extends Controller
     {
         if (($model = ChannelBlack::findOne($id)) !== null) {
             $adv = Advertiser::findOne($model->advertiser);
-            $camp = Campaign::findById($model->campaign_id);
+//            $camp = Campaign::findById($model->campaign_id);
             $channel = Channel::findOne($model->channel_id);
 
             $model->advertiser_name = $adv->username;
             $model->channel_name = $channel->username;
-            $model->campaign_name = $camp->campaign_name;
-            $model->campaign_uuid = $camp->campaign_uuid;
+//            $model->campaign_name = $camp->campaign_name;
+//            $model->campaign_uuid = $camp->campaign_uuid;
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -183,10 +183,10 @@ class ChannelBlackController extends Controller
         }
         $model->channel_id = isset($channel) ? $channel->id : null;
 
-        if (!empty($model->campaign_uuid)) {
-            $campaign = Campaign::findByUuid($model->campaign_uuid);
-        }
-        $model->campaign_id = isset($campaign) ? $campaign->id : null;
+//        if (!empty($model->campaign_uuid)) {
+//            $campaign = Campaign::findByUuid($model->campaign_uuid);
+//        }
+//        $model->campaign_id = isset($campaign) ? $campaign->id : null;
 
         if (!empty($model->geo)) {
             $model->geo = implode(',', $model->geo);

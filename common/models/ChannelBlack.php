@@ -10,7 +10,7 @@ use Yii;
  * @property integer $id
  * @property integer $advertiser
  * @property integer $channel_id
- * @property integer $campaign_id
+// * @property integer $campaign_id
  * @property string $geo
  * @property string $os
  * @property integer $action_type
@@ -23,8 +23,8 @@ use Yii;
 class ChannelBlack extends \yii\db\ActiveRecord
 {
     public $channel_name;
-    public $campaign_name;
-    public $campaign_uuid;
+//    public $campaign_name;
+//    public $campaign_uuid;
     public $advertiser_name;
     /**
      * @inheritdoc
@@ -40,12 +40,11 @@ class ChannelBlack extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['advertiser','campaign_id', 'channel_id',], 'required'],
-            [[ 'channel_id', 'campaign_id',], 'integer'],
+            [['advertiser', 'channel_id',], 'required'],
+            [[ 'channel_id',], 'integer'],
             [['note'], 'string'],
-            [['channel_name','campaign_name','advertiser','action_type','geo','os','campaign_uuid','advertiser_name'], 'safe'],
+            [['channel_name','campaign_name','advertiser','action_type','geo','os','advertiser_name'], 'safe'],
             [['advertiser'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['advertiser' => 'id']],
-            [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
         ];
     }
@@ -59,7 +58,6 @@ class ChannelBlack extends \yii\db\ActiveRecord
             'id' => 'ID',
             'advertiser' => 'Advertiser',
             'channel_id' => 'Channel ID',
-            'campaign_id' => 'Campaign ID',
             'geo' => 'Geo',
             'os' => 'OS',
             'action_type' => 'Action Type',
@@ -73,14 +71,6 @@ class ChannelBlack extends \yii\db\ActiveRecord
     public function getAdvertiser0()
     {
         return $this->hasOne(Advertiser::className(), ['id' => 'advertiser']);
-    }
-
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCampaign()
-    {
-        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
     }
 
     /**

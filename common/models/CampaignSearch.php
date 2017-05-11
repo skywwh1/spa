@@ -136,7 +136,6 @@ class CampaignSearch extends Campaign
         if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy('create_time DESC');
         }
-
         return $dataProvider;
     }
 

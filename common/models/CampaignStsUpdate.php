@@ -112,4 +112,24 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
             ->andWhere(['<', 'effect_time', time()])
             ->all();
     }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdateGeo()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-geo'])
+            ->andWhere(['<', 'effect_time', time()])
+            ->all();
+    }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdateCreativeLink()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-creative'])
+            ->andWhere(['<', 'effect_time', time()])
+            ->all();
+    }
 }

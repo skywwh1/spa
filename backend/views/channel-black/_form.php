@@ -45,19 +45,6 @@ use yii\web\JsExpression;
                                     ]
                                 ]],
                         ]) ?>
-                        <?= $form->field($model, 'campaign_uuid')->widget(Typeahead::classname(), [
-                            'pluginOptions' => ['highlight' => true],
-                            'options' => ['value' => isset($model->campaign_uuid) ? $model->campaign->campaign_uuid : ''],
-                            'dataset' => [
-                                [
-                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                                    'display' => 'value',
-                                    'remote' => [
-                                        'url' => Url::to(['campaign/campaigns_by_uuid']) . '?uuid=%QUERY',
-                                        'wildcard' => '%QUERY'
-                                    ]
-                                ]],
-                        ]) ?>
                         <?php
                         echo $form->field($model, 'geo')->widget(Select2::classname(), [
                             'size' => Select2::MEDIUM,

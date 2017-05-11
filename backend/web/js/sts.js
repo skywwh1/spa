@@ -36,3 +36,8 @@ $('#campaign-detail-modal').on('hidden.bs.modal', function (e) {
     // do something...
     $(location).attr('href', '/deliver/create');
 })
+
+//$(document).ready(function($returnMsg){
+//    $('#black-channel-content').append($returnMsg+'<br>');
+//    $('#black-channel-modal').modal('show');
+//});

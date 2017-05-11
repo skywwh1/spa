@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'advertiser_name',
             'channel_name',
-            'campaign_name',
+//            'campaign_name',
             'geo',
             'os',
 //            'action_type',

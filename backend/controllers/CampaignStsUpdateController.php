@@ -336,8 +336,8 @@ class CampaignStsUpdateController extends Controller
             $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
             $model->save();
 
-            $camp->promote_end = $model->effect_time;
-            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
+//            $camp->promote_end = $model->effect_time;
+//            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
             $camp->save();
             return $this->redirect(Yii::$app->request->referrer);
         } else {
@@ -372,8 +372,8 @@ class CampaignStsUpdateController extends Controller
             $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
             $model->save();
 
-            $camp->promote_end = $model->effect_time;
-            $camp->creative_link = $model->creative_link;
+//            $camp->promote_end = $model->effect_time;
+//            $camp->creative_link = $model->creative_link;
             $camp->save();
             return $this->redirect(Yii::$app->request->referrer);
         } else {

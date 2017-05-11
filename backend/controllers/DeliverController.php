@@ -6,6 +6,7 @@ use backend\models\StsForm;
 use backend\models\TestLinkForm;
 use common\models\Campaign;
 use common\models\CampaignStsUpdate;
+use common\models\ChannelBlack;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
@@ -17,6 +18,7 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\helpers\Json;
 
 /**
  * DeliverController implements the CRUD actions for Deliver model.
@@ -47,6 +49,8 @@ class DeliverController extends Controller
                             'testlink',
                             'sts-create',
                             'pause',
+                            'go-create',
+                            'second',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -95,6 +99,86 @@ class DeliverController extends Controller
         $model = new StsForm();
         if ($model->load(Yii::$app->request->post())) {
             $delivers = [];
+            $blackChannels = [];
+            foreach ($model->campaign_uuid as $campaign_id) {
+                $camp = Campaign::findOne($campaign_id);
+                if (!empty($camp->target_geo)) {
+                    $targetGeos = explode(",",$camp->target_geo);
+                }
+                /**
+                 * 1、首先根据campaign_id获得target_geo，advertiser
+                 * 2、根据channel_id，target_geo，advertiser查询channel_black的是否有该
+                 * 3、如果这条记录的
+                */
+                foreach ($model->channel as $channel_id) {
+                    $deliver = new Deliver();
+                    $deliver->campaign_id = $campaign_id;
+                    $deliver->channel_id = $channel_id;
+                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                    $delivers[] = $deliver;
+
+                    if (!empty($targetGeos)){
+                        foreach ($targetGeos as $geo) {
+                            $channel_black_list = ChannelBlack::find()
+                                ->where(['channel_id' => $channel_id])
+                                ->andWhere(['advertiser' => $camp->advertiser])
+                                ->andWhere(['geo' => $geo])
+                                ->asArray()
+                                ->all();
+                            if (!empty($channel_black_list)){
+                                $channel_black_list['advertiser_name'] =  $camp->advertiser0->username;
+                                $channel_black_list['channel_name'] = $deliver->channel->username;
+                                array_push($blackChannels,$channel_black_list);
+                            }
+                        }
+                    }
+                }
+            }
+
+            $data = array();
+            $return_msg = array();
+            if (!empty($blackChannels)){
+                foreach ($blackChannels as $black_channel) {
+                    // $black_channel[0]不为空
+                    if(is_array($black_channel[0]) && isset($black_channel[0])){
+                        if ( $black_channel[0]['action_type'] === 0){
+                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].' ,'.$black_channel['channel_name'].' channels are labeled as Notice black channels!';
+                        }else{
+                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].', '.$black_channel['channel_name'].' channels are labeled as No S2S black channels!';
+                        }
+                    }
+                    $return_msg[] = $str;
+                }
+                $return_msg = implode(",",$return_msg);
+                return $return_msg;
+            }
+            return $this->render('second', [
+                'delivers' => $delivers,
+//                'returnMsg' => empty($return_msg)?null:$return_msg
+            ]);
+        }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Creates a new Deliver model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionGoCreate()
+    {
+        $model = new StsForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $delivers = [];
             foreach ($model->campaign_uuid as $campaign_id) {
                 foreach ($model->channel as $channel_id) {
                     $deliver = new Deliver();
@@ -112,7 +196,43 @@ class DeliverController extends Controller
                 }
             }
 
-            return $this->render('second', [
+            return  $this->render('second', [
+                'delivers' => $delivers,
+            ]);
+        }
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
+     * Creates a new Deliver model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionGetCreate()
+    {
+        $model = new StsForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $delivers = [];
+            foreach ($model->campaign_uuid as $campaign_id) {
+                foreach ($model->channel as $channel_id) {
+                    $deliver = new Deliver();
+                    $deliver->campaign_id = $campaign_id;
+                    $deliver->channel_id = $channel_id;
+                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                    $delivers[] = $deliver;
+                }
+            }
+
+            return  $this->render('second', [
                 'delivers' => $delivers,
             ]);
         }

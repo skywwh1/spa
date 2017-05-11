@@ -8,6 +8,7 @@ use yii\widgets\ActiveForm;
 use kartik\typeahead\TypeaheadBasic;
 use kartik\typeahead\Typeahead;
 use yii\helpers\Url;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Deliver */
@@ -26,6 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    'id' => 'form-id',
 //                    'enableAjaxValidation' => true,
 //                    'validationUrl' => Url::toRoute(['sts-validate']),
+                    'options' => ['class' => 'black_channel_form'],
                 ]); ?>
 
                 <?php
@@ -110,8 +112,25 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
                 <?php ActiveForm::end(); ?>
-                <div id="test_div"></div>
             </div>
         </div>
     </div>
 </div>
+<?php Modal::begin([
+    'id' => 'black-channel-modal',
+    'size' => 'modal-lg',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="black-channel-content"></div>';
+
+Modal::end(); ?>
+<?php
+$this->registerJsFile(
+    '@web/js/black-channel.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>

@@ -83,6 +83,34 @@ class CampaignController extends Controller
             }
         }
 
+        $updateGeo = CampaignStsUpdate::getStsUpdateGeo();
+        if (isset($updateGeo)) {
+            foreach ($updateGeo as $item) {
+                $camp = Campaign::findOne($item->campaign_id);
+                if (isset($camp)) {
+                    $this->echoMessage('campaign update geo ' . $item->campaign_id);
+                    $camp ->target_geo = $item->value;
+                    $camp->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
+
+        $updateLinks = CampaignStsUpdate::getStsUpdateCreativeLink();
+        if (isset($updateLinks)) {
+            foreach ($updateLinks as $item) {
+                $camp = Campaign::findOne($item->campaign_id);
+                if (isset($camp)) {
+                    $this->echoMessage('campaign update creative link ' . $item->campaign_id);
+                    $camp ->creative_link = $item->value;
+                    $camp->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
+
     }
 
     public function actionSendUpdate()
@@ -119,6 +147,7 @@ class CampaignController extends Controller
                         }else if ($item->name == 'update-geo') {
                             foreach ($delivers as $d) {
                                 $d->oldValue = $item->old_value;
+                                $d->newValue = $item->value;
                                 $d->effect_time = $item->effect_time;
                                 $d->target_geo = $item->target_geo;
                                 $updateGeo[$camp->id][] = $d;
@@ -126,6 +155,7 @@ class CampaignController extends Controller
                         }else if ($item->name == 'update-creative') {
                             foreach ($delivers as $d) {
                                 $d->oldValue = $item->old_value;
+                                $d->newValue = $item->value;
                                 $d->effect_time = $item->effect_time;
                                 $d->creative_link = $item->creative_link;
                                 $updateCreativeLink[$camp->id][] = $d;
