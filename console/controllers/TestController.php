@@ -46,7 +46,7 @@ class TestController extends Controller
 
 
       $aa = new StatsUtil();
-      $aa->checkCap();
+      $aa->statsClicksHourly(time(),time());
 //        }
         die();
 

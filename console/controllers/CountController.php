@@ -341,8 +341,8 @@ class CountController extends Controller
         $stats->statsInstallHourly($start_time, $end_time);
         $stats->statsRedirectInstallHourly($start_time, $end_time);
 
-        $stats->statsUniqueClickHourly($start_time, $end_time);
-        $stats->statsClickHourly($start_time, $end_time);
+//        $stats->statsUniqueClickHourly($start_time, $end_time);
+//        $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
         $stats->updateCaps();
 
@@ -362,6 +362,27 @@ class CountController extends Controller
 //        echo 'end time daily' . $end_time . "\n";
 //        $stats->statsDaily($start_time, $end_time);
         Config::updateStatsTimeHourly($end);
+
+    }
+
+    public function actionStatsClicksHourly()
+    {
+        $stats = new StatsUtil();
+
+        $start = Config::findLastStatsClickHourly();
+        $end = $stats;
+        echo 'start click hourly' . $start . "\n";
+        echo 'end click hourly' . $end . "\n";
+        while ($end < time()) {
+            $end = $stats + 900;
+            $stats->statsClicksHourly($start, $end);
+        }
+        //统计子渠道：
+
+
+//        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
+//        $stats->statsSubChannelClickHourly($start_time, $end_time);
+//        Config::updateLastStatsClickHourly($end);
 
     }
 
