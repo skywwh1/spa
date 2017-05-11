@@ -837,7 +837,7 @@ class StatsUtil
             'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
             'count(*) clicks',
-            //'count(distinct(fc.ip_long)) uclicks'
+            'count(distinct(fc.ip_long)) uclicks'
         ];
         $query = new Query();
         $query->select($select);
@@ -849,7 +849,7 @@ class StatsUtil
         $query->groupBy(['fc.campaign_id',
             'fc.channel_id',
             'timestamp']);
-        $query->orderBy('timestamp');
+        $query->orderBy('timestamp desc');
 
         $command = $query->createCommand();
         var_dump($command->sql);
@@ -890,22 +890,22 @@ class StatsUtil
                 $hourly->time = $timestamp;
                 $hourly->time_format = $time;
                 $hourly->clicks = $clicks;
-                //$hourly->unique_clicks = $uclicks;
+                $hourly->unique_clicks = $uclicks;
             } else {
                 $hourly->clicks += $clicks;
-               // $hourly->unique_clicks += $uclicks;
+                $hourly->unique_clicks += $uclicks;
             }
-//            if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
-//                $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
-//                if (!empty($sts)) {
-//                    if ($hourly->pay_out == 0) {
-//                        $hourly->pay_out = $sts->pay_out;
-//                    }
-//                    if ($hourly->adv_price == 0) {
-//                        $hourly->adv_price = $sts->campaign->adv_price;
-//                    }
-//                }
-//            }
+            if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
+                $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
+                if (!empty($sts)) {
+                    if ($hourly->pay_out == 0) {
+                        $hourly->pay_out = $sts->pay_out;
+                    }
+                    if ($hourly->adv_price == 0) {
+                        $hourly->adv_price = $sts->campaign->adv_price;
+                    }
+                }
+            }
             echo $hourly->campaign_id . '-' . $hourly->channel_id . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
 //            if (!$hourly->save()) {
 //                var_dump($hourly->getErrors());

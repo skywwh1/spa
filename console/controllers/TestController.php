@@ -43,7 +43,7 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-
+date_default_timezone_set('Etc/GMT-8');
 echo strtotime('2017/05/11');
 echo date('Y-m-d H:i:s',1494460800);
 //      $aa = new StatsUtil();

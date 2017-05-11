@@ -374,7 +374,8 @@ class CountController extends Controller
         echo 'start click hourly ' . $start . "\n";
         while ($end < time()) {
             $end = $end + 900;
-            echo 'end click hourly' . $end . "\n";
+            echo 'end click hourly ' . $end . "\n";
+            echo date('Y-m-d H:i:s',$end). "\n";
             $stats->statsClicksHourly($start, $end);
         }
         //统计子渠道：
