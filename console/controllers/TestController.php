@@ -44,9 +44,10 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-
-      $aa = new StatsUtil();
-      $aa->statsClicksHourly(time(),time());
+echo strtotime('2017/05/11');
+echo date('Y-m-d H:i:s',1494460800);
+//      $aa = new StatsUtil();
+//      $aa->statsClicksHourly(time(),time());
 //        }
         die();
 

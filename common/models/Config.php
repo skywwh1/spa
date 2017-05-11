@@ -104,6 +104,9 @@ class Config extends \yii\db\ActiveRecord
         return $config->save();
     }
 
+    /**
+     * @return int
+     */
     public static function findLastStatsClickHourly()
     {
         $name = 'last_statics_clicks_hourly';
