@@ -14,7 +14,7 @@ $this->title = 'Recommend List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
-    <div id="nav-menu" data-menu="channel_index"></div>
+    <div id="nav-menu" data-menu="my_channels"></div>
     <div class="col-lg-12">
         <div class="box box-info">
             <div class="box-body">

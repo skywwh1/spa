@@ -36,7 +36,7 @@ use yii\widgets\ActiveForm;
                     ?>
                 </div>
                 <div class="col-lg-2">
-                    <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone,['value' => !empty($model->time_zone) ? $model->time_zone :'Etc/GMT-8']) ?>
+                    <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone, ['value' => !empty($model->time_zone) ? $model->time_zone : 'Etc/GMT-8']) ?>
                 </div>
                 <div class="col-lg-3">
                     <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
@@ -58,7 +58,7 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'type')->dropDownList([
                         2 => 'Daily',
                         1 => 'Hourly',
-                    ]) ?>
+                    ], ['prompt' => '--- Select ---']) ?>
                 </div>
 
             </div>

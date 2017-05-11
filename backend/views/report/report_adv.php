@@ -19,8 +19,13 @@ if ($searchModel->type == 2) {
 } else {
     $layout = '{toolbar}{summary} {items} {pager}';
 }
-$columns = [
-    [
+$time_row = [];
+if (!empty($searchModel->type)) {
+    $format = 'php:Y-m-d H:i';
+    if ($searchModel->type == 2) {
+        $format = 'php:Y-m-d';
+    }
+    $time_row = [
         'label' => 'Time(UTC)',
         'attribute' => 'timestamp',
         'value' => function ($model) use ($searchModel) {
@@ -35,8 +40,27 @@ $columns = [
             return $date->format($format);
         },
         'filter' => false,
-        'pageSummary' => 'Page Total',
-    ],
+
+    ];
+}
+$columns = [
+//    [
+//        'label' => 'Time(UTC)',
+//        'attribute' => 'timestamp',
+//        'value' => function ($model) use ($searchModel) {
+//            $model = (object)$model;
+//            $format = 'Y-m-d H:i';
+//            if ($searchModel->type == 2) {
+//                $format = 'Y-m-d';
+//            }
+//            $date = new DateTime();
+//            $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+//            $date->setTimestamp($model->timestamp);
+//            return $date->format($format);
+//        },
+//        'filter' => false,
+//        'pageSummary' => 'Page Total',
+//    ],
 //                                [
 //                                    'label' => 'Time(UTC+8)',
 //                                    'attribute' => 'time_format',
@@ -281,6 +305,9 @@ $columns = [
         'value' => 'bd',
     ],
 ];
+if (!empty($searchModel->type)) {
+    array_unshift($columns, $time_row);
+}
 if (!empty($dataProvider)) {
     ?>
     <div class="row">
