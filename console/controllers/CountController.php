@@ -371,12 +371,13 @@ class CountController extends Controller
 
         $start = Config::findLastStatsClickHourly();
         $end = $start;
-        echo 'start click hourly ' . $start . "\n";
         while ($end < time()) {
             $end = $end + 900;
+            echo 'start click hourly ' . $start . "\n";
             echo 'end click hourly ' . $end . "\n";
-            echo date('Y-m-d H:i:s',$end). "\n";
-            $stats->statsClicksHourly($start, $end);
+            echo date('Y-m-d H:i:s', $end) . "\n";
+//            $stats->statsClicksHourly($start, $end);
+            $start = $end;
         }
         //统计子渠道：
 
