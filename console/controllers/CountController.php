@@ -371,8 +371,12 @@ class CountController extends Controller
 
         $start = Config::findLastStatsClickHourly();
         $end = $start;
-        while ($end < time()) {
+        $now = time();
+        while ($end < $now) {
             $end = $end + 900;
+            if($end>$now){
+                $end = $now;
+            }
             echo 'start click hourly ' . $start . "\n";
             echo 'end click hourly ' . $end . "\n";
             echo date('Y-m-d H:i:s', $end) . "\n";
@@ -385,7 +389,7 @@ class CountController extends Controller
 //        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
 //        $stats->statsSubChannelClickHourly($start_time, $end_time);
 
-        Config::updateLastStatsClickHourly($end);
+        Config::updateLastStatsClickHourly($now);
 
     }
 
