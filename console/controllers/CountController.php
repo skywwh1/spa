@@ -376,7 +376,7 @@ class CountController extends Controller
             echo 'start click hourly ' . $start . "\n";
             echo 'end click hourly ' . $end . "\n";
             echo date('Y-m-d H:i:s', $end) . "\n";
-//            $stats->statsClicksHourly($start, $end);
+            $stats->statsClicksHourly($start, $end);
             $start = $end;
         }
         //统计子渠道：
@@ -384,7 +384,8 @@ class CountController extends Controller
 
 //        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
 //        $stats->statsSubChannelClickHourly($start_time, $end_time);
-//        Config::updateLastStatsClickHourly($end);
+
+        Config::updateLastStatsClickHourly($end);
 
     }
 
