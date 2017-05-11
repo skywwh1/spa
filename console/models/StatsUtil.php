@@ -855,6 +855,7 @@ class StatsUtil
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
+        var_dump($rows);
         foreach ($rows as $item) {
             $channel_id = '';
             $campaign_id = '';
@@ -907,9 +908,9 @@ class StatsUtil
                 }
             }
             echo $hourly->campaign_id . '-' . $hourly->channel_id . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
-//            if (!$hourly->save()) {
-//                var_dump($hourly->getErrors());
-//            }
+            if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
+            }
         }
     }
 }
