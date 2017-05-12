@@ -9,6 +9,7 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CampaignSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $channel_id int */
 
 $this->title = 'Recommend List';
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,95 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-info">
             <div class="box-body">
 
-                <?php // echo $this->render('_search', ['model' => $searchModel]);
-                $gridColumns = [
-                    [
-                        'attribute' => 'tag',
-                        'value' => function ($model) {
-                            return ModelsUtil::getCampaignTag($model->tag);
-                        },
-                        'filter' => ModelsUtil::campaign_tag,
-                    ],
-                    [
-                        'attribute' => 'direct',
-                        'value' => function ($model) {
-                            return ModelsUtil::getCampaignDirect($model->direct);
-                        },
-                        'filter' => ModelsUtil::campaign_direct,
-                    ],
-                    [
-                        'attribute' => 'advertiser',
-                        'value' => 'advertiser0.username',
-                    ],
-                    'id',
-                    [
-                        'attribute' => 'campaign_name',
-                        'value' => 'name',
-                    ],
-                    //  'campaign_uuid',
-                    'target_geo',
-                    'platform',
-                    [
-                        'attribute' => 'now_payout',
-                        'label' => 'Payout',
-                    ],
-
-                    'traffic_source',
-                    'preview_link',
-
-                    'daily_cap',
-                    [
-                        'attribute' => 'status',
-                        'value' => function ($model) {
-                            return ModelsUtil::getCampaignStatus($model->status);
-                        },
-                        'filter' => ModelsUtil::campaign_status,
-                    ],
-                    'kpi',
-                    'note',
-                    'others',
-                    'pricing_mode',
-                    'category',
-                ];
-
-                $fullExportMenu = ExportMenu::widget([
-                    'dataProvider' => $dataProvider,
-                    'columns' => $gridColumns,
-                    'fontAwesome' => true,
-                    'showConfirmAlert' => false,
-                    'pjaxContainerId' => 'sdfsdfdf',
-                    'target' => GridView::TARGET_BLANK,
-                    'dropdownOptions' => [
-                        'label' => 'Export All',
-                        'class' => 'btn btn-default'
-                    ],
-                    'exportConfig' => [
-                        ExportMenu::FORMAT_TEXT => false,
-                        ExportMenu::FORMAT_PDF => false,
-                        ExportMenu::FORMAT_EXCEL_X => false,
-                        ExportMenu::FORMAT_HTML => false,
-                    ],
-                ]); ?>
+                <?= Html::button('Select', ['class' => 'btn btn-primary', 'id' => 'recommend-channel-btn', 'data-url' => '/channel/get-recommend?id=' . $channel_id]) ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
+                    'id' => 'recommend-channel-grid',
                     'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
 //                    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
 //                    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
 //                    'autoXlFormat' => true,
 //                    'showPageSummary' => true,
-                    'layout' => '{toolbar}{summary} {items} {pager}',
-                    'toolbar' => [
-                        '{toggleData}',
-//                        '{export}',
-                        $fullExportMenu,
-                    ],
-                    'export' => [
-                        'fontAwesome' => true,
-                        'showConfirmAlert' => false,
-                        'target' => GridView::TARGET_BLANK,
-                        'label' => 'Page',
-                    ],
+                    'layout' => '{summary} {items} {pager}',
 //                    'pjax' => true, // pjax is set to always true for this demo
 //                    'pjaxSettings' => [
 //                        'neverTimeout' => true,
@@ -123,6 +45,59 @@ $this->params['breadcrumbs'][] = $this->title;
                             return ['value' => $model->id];
                         },
                         ],
+                        'id',
+                        [
+                            'class' => '\kartik\grid\DataColumn',
+                            'attribute' => 'campaign_name',
+                            'value' => function ($data) {
+                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
+                        ],
+                        [
+                            'class' => '\kartik\grid\DataColumn',
+                            'attribute' => 'target_geo',
+                            'value' => function ($data) {
+                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
+                        ],
+//                    'device',
+                        'platform',
+//                        'adv_price',
+                        'now_payout',
+                        'daily_cap',
+                        [
+                            'attribute' => 'traffic_source',
+                            'value' => 'traffic_source',
+                            'filter' => TrafficSource::find()
+                                ->select(['name', 'value'])
+                                ->orderBy('id')
+                                ->indexBy('value')
+                                ->column(),
+                        ],
+                        // 'traffic_source',
+                        // 'note',
+//                        'preview_link',
+                        // 'icon',
+                        // 'package_name',
+                        // 'app_name',
+                        // 'app_size',
+
+                        // 'version',
+                        // 'app_rate',
+                        // 'description',
+                        // 'creative_link',
+                        // 'creative_type',
+                        // 'creative_description',
+                        // 'carriers',
+                        // 'conversion_flow',
+                        // 'recommended',
+
+//                        'cvr',
+//                        'epc',
                         [
                             'attribute' => 'tag',
                             'value' => function ($model) {
@@ -158,80 +133,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                }
 //                            }
                         ],
-                        'id',
                         [
                             'attribute' => 'advertiser',
                             'value' => 'advertiser0.username',
 //                                'pageSummary' => 'Total'
                         ],
-                        [
-                            'class' => '\kartik\grid\DataColumn',
-                            'attribute' => 'campaign_name',
-                            'value' => function ($data) {
-                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
-                            },
-                            'width' => '60px',
-                            'format' => 'raw',
-                        ],
-                        'campaign_uuid',
-                        //'target_geo',
-                        [
-                            'class' => '\kartik\grid\DataColumn',
-                            'attribute' => 'target_geo',
-                            'value' => function ($data) {
-                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
-                            },
-                            'width' => '60px',
-                            'format' => 'raw',
-                        ],
-//                    'device',
-                        'platform',
-//                        'adv_price',
-                        [
-                            'attribute' => 'adv_price',
-//                                'pageSummary' => true
-                        ],
-                        'now_payout',
-                        [
-                            'attribute' => 'traffic_source',
-                            'value' => 'traffic_source',
-                            'filter' => TrafficSource::find()
-                                ->select(['name', 'value'])
-                                ->orderBy('id')
-                                ->indexBy('value')
-                                ->column(),
-                        ],
-                        // 'traffic_source',
-                        // 'note',
-//                        'preview_link',
-                        // 'icon',
-                        // 'package_name',
-                        // 'app_name',
-                        // 'app_size',
-
-                        // 'version',
-                        // 'app_rate',
-                        // 'description',
-                        // 'creative_link',
-                        // 'creative_type',
-                        // 'creative_description',
-                        // 'carriers',
-                        // 'conversion_flow',
-                        // 'recommended',
-
-                        'daily_cap',
-//                        'cvr',
-//                        'epc',
-                        [
-                            'attribute' => 'status',
-                            'value' => function ($model) {
-                                return ModelsUtil::getCampaignStatus($model->status);
-                            },
-                            'filter' => Html::activeDropDownList($searchModel, 'status',
-                                ModelsUtil::campaign_status, ['class' => 'form-control']),
-                        ],
-                        'pricing_mode',
-                        'category',
                     ],
                 ]); ?>
             </div>

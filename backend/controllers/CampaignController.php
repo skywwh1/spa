@@ -330,14 +330,20 @@ class CampaignController extends Controller
         }
     }
 
-    public function actionRecommend()
+    public function actionRecommend($id)
     {
+        $cam = $this->findModel($id);
+
         $searchModel = new ChannelSearch();
+        $searchModel->os = $cam->platform;
+        $searchModel->strong_geo = $cam->target_geo;
+        $searchModel->strong_category = $cam->category;
         $dataProvider = $searchModel->recommendSearch(Yii::$app->request->queryParams);
 
         return $this->render('recommend_channel', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'campaign' => $cam,
         ]);
     }
 }

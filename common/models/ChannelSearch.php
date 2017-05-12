@@ -205,63 +205,39 @@ class ChannelSearch extends Channel
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
-            'type' => $this->type,
-            'om' => $this->om,
-            'master_channel' => $this->master_channel,
-            'created_time' => $this->created_time,
-            'updated_time' => $this->updated_time,
-            'qq' => $this->qq,
-            'firstaccess' => $this->firstaccess,
-            'lastaccess' => $this->lastaccess,
-            'picture' => $this->picture,
-            'confirmed' => $this->confirmed,
-            'suspended' => $this->suspended,
-            'deleted' => $this->deleted,
-            'status' => $this->status,
-            'traffic_source' => $this->traffic_source,
-            'pricing_mode' => $this->pricing_mode,
-            'total_revenue' => $this->total_revenue,
-            'payable' => $this->payable,
-            'os' => $this->os,
-            'recommended' => $this->recommended,
+//            'id' => $this->id,
+//            'type' => $this->type,
+//            'om' => $this->om,
+//            'master_channel' => $this->master_channel,
+//            'created_time' => $this->created_time,
+//            'updated_time' => $this->updated_time,
+//            'qq' => $this->qq,
+//            'firstaccess' => $this->firstaccess,
+//            'lastaccess' => $this->lastaccess,
+//            'picture' => $this->picture,
+//            'confirmed' => $this->confirmed,
+//            'suspended' => $this->suspended,
+//            'deleted' => $this->deleted,
+//            'status' => $this->status,
+//            'traffic_source' => $this->traffic_source,
+//            'pricing_mode' => $this->pricing_mode,
+//            'total_revenue' => $this->total_revenue,
+//            'payable' => $this->payable,
+//            'os' => $this->os,
+            'recommended' => 1,
         ]);
-
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'firstname', $this->firstname])
-            ->andFilterWhere(['like', 'lastname', $this->lastname])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'payment_way', $this->payment_way])
-            ->andFilterWhere(['like', 'payment_term', $this->payment_term])
-            ->andFilterWhere(['like', 'beneficiary_name', $this->beneficiary_name])
-            ->andFilterWhere(['like', 'bank_country', $this->bank_country])
-            ->andFilterWhere(['like', 'bank_name', $this->bank_name])
-            ->andFilterWhere(['like', 'bank_address', $this->bank_address])
-            ->andFilterWhere(['like', 'swift', $this->swift])
-            ->andFilterWhere(['like', 'account_nu_iban', $this->account_nu_iban])
-            ->andFilterWhere(['like', 'company_address', $this->company_address])
-            ->andFilterWhere(['like', 'note', $this->note])
-            ->andFilterWhere(['like', 'system', $this->system])
-            ->andFilterWhere(['like', 'contacts', $this->contacts])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'cc_email', $this->cc_email])
-            ->andFilterWhere(['like', 'company', $this->company])
-            ->andFilterWhere(['like', 'country', $this->country])
-            ->andFilterWhere(['like', 'city', $this->city])
-            ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'phone1', $this->phone1])
-            ->andFilterWhere(['like', 'phone2', $this->phone2])
-            ->andFilterWhere(['like', 'wechat', $this->wechat])
-            ->andFilterWhere(['like', 'skype', $this->skype])
-            ->andFilterWhere(['like', 'alipay', $this->alipay])
-            ->andFilterWhere(['like', 'lang', $this->lang])
-            ->andFilterWhere(['like', 'timezone', $this->timezone])
-            ->andFilterWhere(['like', 'post_back', $this->post_back])
-            ->andFilterWhere(['like', 'paid', $this->paid])
-            ->andFilterWhere(['like', 'strong_geo', $this->strong_geo])
-            ->andFilterWhere(['like', 'strong_category', $this->strong_category]);
+        if(isset($this->os)){
+            $os = explode(',',$this->os);
+            $query->andWhere(['or like', 'os', $os]);
+        }
+        if(isset($this->strong_category)){
+            $category = explode(',',$this->strong_category);
+            $query->andWhere(['or like', 'strong_category', $category]);
+        }
+        if(isset($this->strong_geo)){
+            $geo = explode(',',$this->strong_geo);
+            $query->andWhere(['or like', 'strong_geo', $geo]);
+        }
         return $dataProvider;
     }
 }

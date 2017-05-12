@@ -7,8 +7,9 @@ use yii\widgets\Pjax;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $campaign \common\models\Campaign */
 
-$this->title = 'Recommend Channel List';
+$this->title = $campaign->id . '-' . $campaign->campaign_name . '-' . 'Recommend Channel List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row">
@@ -22,86 +23,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?php Pjax::begin(); ?>    <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
                     'columns' => [
-                        [
-                            'class' => 'yii\grid\CheckboxColumn', 'checkboxOptions' => function($model) {
-                            return ['value' => $model->id];
-                        },
-                        ],
-//            ['class' => 'yii\grid\SerialColumn'],
-//
-                        'id',
                         'username',
-//            'firstname',
-//            'lastname',
-                        // 'type',
-                        // 'auth_key',
-                        // 'password_hash',
-                        // 'password_reset_token',
-                        // 'settlement_type',
                         [
                             'attribute' => 'om',
                             'value' => 'om0.username',
                             'filter' => false,
                         ],
                         [
-                            'attribute' => 'master_channel',
-                            'value' => 'masterChannel.username',
+                            'attribute' => 'os',
+                            'value' => 'os',
                             'filter' => false,
                         ],
                         [
-                            'attribute' => 'os',
-                            'value' => 'os',
-                            'filter' =>false,
+                            'attribute' => 'strong_geo',
                         ],
-                        // 'account_name',
-                        // 'branch_name',
-                        // 'card_number',
-                        // 'contacts',
-                        // 'updated_at',
-                        'email:email',
-                        // 'country',
-                        // 'city',
-                        // 'address',
-                        // 'company',
-                        // 'phone1',
-                        // 'phone2',
-                        // 'wechat',
-                        // 'qq',
-                        // 'skype',
-                        // 'alipay',
-                        // 'lang',
-                        // 'timezone',
-                        // 'firstaccess',
-                        // 'lastaccess',
-                        // 'picture',
-                        // 'confirmed',
-                        // 'suspended',
-                        // 'deleted',
-//                        'status',
                         [
-                            'attribute' => 'status',
-                            'value' => function ($data) {
-                                return ModelsUtil::getAdvertiserStatus($data->status);
-                            },
-                            'filter' => ModelsUtil::advertiser_status,
+                            'attribute' => 'strong_category',
                         ],
-
-                        // 'traffic_source',
-                        // 'pricing_mode',
-                        // 'post_back',
-                        'note:text',
-                        [
-                            'attribute' => 'recommended',
-                            'value' => function ($data) {
-                                return ModelsUtil::getStatus($data->recommended);
-                            },
-                            'filter' => ModelsUtil::status,
-                        ],
-                        // 'strong_geo',
-                        // 'strong_catagory',
-
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>
