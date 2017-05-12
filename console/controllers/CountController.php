@@ -381,13 +381,11 @@ class CountController extends Controller
             echo 'end click hourly ' . $end . "\n";
             echo date('Y-m-d H:i:s', $end) . "\n";
             $stats->statsClicksHourly($start, $end);
+            //sub channel;
+            $stats->statsSubClicksHourly($start, $end);
             $start = $end;
         }
         //统计子渠道：
-
-
-//        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
-//        $stats->statsSubChannelClickHourly($start_time, $end_time);
 
         Config::updateLastStatsClickHourly($now);
 

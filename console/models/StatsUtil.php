@@ -1002,7 +1002,7 @@ class StatsUtil
                     }
                 }
             }
-            echo $hourly->campaign_id . '-' . $hourly->channel_id . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
+            echo $hourly->campaign_id . '-' . $hourly->channel_id .$hourly->sub_channel. '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
             if (!$hourly->save()) {
                 var_dump($hourly->getErrors());
             }

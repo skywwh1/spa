@@ -368,7 +368,7 @@ class CampaignSearch extends Campaign
         // grid filtering conditions
         $query->andWhere([
             'c.status' => 1,
-            'c.recommended' => 1,
+//            'c.recommended' => 1,
         ]);
 
         if (!empty($this->platform)) {
