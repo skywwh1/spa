@@ -266,4 +266,30 @@ class MailUtil
             }
         }
     }
+
+    public static function sendGoodOffers($campaigns)
+    {
+//        $user_id = Yii::$app->user->id;
+        $user_name = yii::$app->user->identity->username;
+        $channel = Channel::findByUsername($user_name);
+        $mail = Yii::$app->mailer->compose('good_campaign', ['campaigns' => $campaigns,'channel' =>$channel ]);
+//        $mail->setTo("2539131080@qq.com");
+        $mail->setTo($channel->email);
+        if (isset($channel->om0)) {
+            $mail->setCc($channel->om0->email);
+        }
+
+        $mail->setSubject('Good Offers Recommendation');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'send good offers', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

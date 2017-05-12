@@ -128,7 +128,8 @@ AdminAsset::register($this);
                                 API Offers</a></li>
                         <li><a href="/stream/index" data-menu="stream-index"><i class="fa fa-circle-o"></i> Post records</a>
                         </li>
-
+                        <li><a href="/my-cart/index" data-menu="my-cart-index"><i class="fa fa-circle-o"></i> My Cart</a>
+                        </li>
                     </ul>
                 </li>
                 <li class="treeview">

@@ -137,7 +137,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                       <li><a href="/campaign/update?id=' . $model->id . '" >Update</a></li>
                                       <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
                                       <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-geo?type=1&channel_id=&campaign_id=' . $model->id . '">GEO Updates</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-creative?type=1&channel_id=&campaign_id=' . $model->id . '">Creative Updates</a></li>' .
+                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-creative?type=1&channel_id=&campaign_id=' . $model->id . '">Creative Updates</a></li>
+                                      <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->id . '">Add to Cart</a></li>' .
                                         $restart
                                         . '</ul>
                                     </div>';
