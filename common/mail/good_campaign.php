@@ -74,7 +74,7 @@ use yii\helpers\Url;
           echo $preview_link;
 
         foreach ($campaigns as $campaign) {
-            $actions = '<td><a href="http://superads.com/camp-log/alloffers">Apply</a>';
+            $actions = '<td><a href="http://superads.cn/camp-log/alloffers">Apply</a>';
             $ids = '<td>' . Html::encode($campaign->id) . '</td>';
             $campaign_names = '<td width="130px">' . Html::encode($campaign->campaign_name) . '</td>';
             $target_geos = '<td>' . Html::encode($campaign->target_geo) . '</td>';

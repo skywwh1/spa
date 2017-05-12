@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
                     <p>
-                        <button type="button" id = 'emailButton' class="btn btn-success">ExportEmail</button>
-                        <?= Html::a('Cancel', ['cancel'], ['class' => 'btn btn-success']) ?>
+                        <button type="button" id = 'emailButton' class="btn btn-primary">ExportEmail</button>
+                        <?= Html::a('Cancel', ['cancel'], ['class' => 'btn btn-primary']) ?>
                     </p>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,

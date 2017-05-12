@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box">
             <div class="box-body">
-                <?= Html::button('Recommend to Channel ' . $channel->username, ['class' => 'btn btn-primary', 'id' => 'finish-recommend-channel-btn', 'data-url' => '/channel/get-recommend?id=' . $channel->id]) ?>
+                <?= Html::button('Recommend to Channel ' . $channel->username, ['class' => 'btn btn-primary', 'id' => 'finish-recommend-channel-btn', 'data-url' => '/channel/send-recommend?id=' . $channel->id.'&cams='.$cams]) ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => false,

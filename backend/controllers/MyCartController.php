@@ -11,7 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\utility\MailUtil;
-use common\models\Deliver;
+use common\models\Channel;
 
 /**
  * MyCartController implements the CRUD actions for MyCart model.
@@ -235,8 +235,10 @@ class MyCartController extends Controller
             $keys = $_POST['keylist'];
         }
 //        $my_carts = MyCart::find()->where(['id' => $keys])->all();
+        $user_name = yii::$app->user->identity->username;
+        $channel = Channel::findByUsername($user_name);
         $campaigns = Campaign::find()->where(['id' => $keys])->all();
-        if(MailUtil::sendGoodOffers($campaigns)){
+        if(MailUtil::sendGoodOffers($campaigns,$channel)){
             $this->asJson("send email success!");
         }else{
             $this->asJson("send email fail!");

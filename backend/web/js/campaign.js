@@ -50,6 +50,12 @@ $('#recommend-channel-btn').on('click', function () {
 $(document).on("click", "#finish-recommend-channel-btn", function (e) {
     var url = $(this).attr('data-url');
     alert(url);
+    $.post(url, function(result){
+        //console.log(result);
+        alert(result);
+    });
+    return false;
+    alert(url);
 });
 
 

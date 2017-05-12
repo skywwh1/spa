@@ -267,11 +267,9 @@ class MailUtil
         }
     }
 
-    public static function sendGoodOffers($campaigns)
+    public static function sendGoodOffers($campaigns,$channel)
     {
 //        $user_id = Yii::$app->user->id;
-        $user_name = yii::$app->user->identity->username;
-        $channel = Channel::findByUsername($user_name);
         $mail = Yii::$app->mailer->compose('good_campaign', ['campaigns' => $campaigns,'channel' =>$channel ]);
 //        $mail->setTo("2539131080@qq.com");
         $mail->setTo($channel->email);

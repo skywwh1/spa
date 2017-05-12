@@ -1,7 +1,7 @@
 <?php
-
+use common\models\TrafficSource;
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\MyCartSearch */
@@ -21,79 +21,128 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
                 <p>
-                    <button type="button" id = 'selectButton' class="btn btn-success">Selected</button>
-                    <button type="button" id = 'deleteButton' class="btn btn-success">Delete</button>
+                    <button type="button" id = 'selectButton' class="btn btn-primary">Select</button>
+                    <button type="button" id = 'deleteButton' class="btn btn-primary">Delete</button>
                 </p>
                 <?= GridView::widget([
-                'dataProvider' => $dataProvider,
-                'filterModel' => $searchModel,
-                        'id' => 'grid',
-                'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-                [
-                    'class' => 'yii\grid\CheckboxColumn',
-                    'header' => Html::checkBox('selection_all', false, [
-                        'class' => 'select-on-check-all',
-//                        'label' => 'Select',
-                    ]),
-                ],
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+                    'id' => 'grid',
+            'columns' => [
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'class' => 'yii\grid\CheckboxColumn',
+                'header' => Html::checkBox('selection_all', false, [
+                    'class' => 'select-on-check-all',
+                    'label' => 'Select',
+                ]),
+            ],
                 [
                 // 'label' => 'id',
                  'attribute' => 'id',
                  'value' => 'id',
-                ],
-                [
-                    // 'label' => 'campaign_id',
-                     'attribute' => 'campaign_id',
-                     'value' => 'campaign_id',
-                ],
-                [
-                    // 'label' => 'campaign_name',
-                     'attribute' => 'campaign_name',
-                     'value' => 'campaign_name',
-                ],
-                [
-                    // 'label' => 'target_geo',
-                     'attribute' => 'target_geo',
-                     'value' => 'target_geo',
-                ],
-                [
-                    // 'label' => 'platform',
-                     'attribute' => 'platform',
-                     'value' => 'platform',
-                ],
-                [
-                     'label' => 'payout',
-                     'attribute' => 'payout',
-                     'value' => 'payout',
-                ],
-                [
-                     'label' => 'daily_cap',
-                     'attribute' => 'daily_cap',
-                     'value' => 'daily_cap',
-                ],
-                [
-                     'label' => 'traffic_source',
-                     'attribute' => 'traffic_source',
-                     'value' => 'traffic_source',
-                ],
-                [
-                     'label' => 'tag',
-                     'attribute' => 'tag',
-                     'value' => 'tag',
-                ],
-                [
-                     'label' => 'direct',
-                     'attribute' => 'direct',
-                     'value' => 'direct',
-                ],
-                [
-                     'label' => 'advertiser',
-                     'attribute' => 'advertiser',
-                     'value' => function($model){
-                         return $model->advertiser0->username;
-                     }
-                ],
+            ],
+            [
+                // 'label' => 'campaign_id',
+                 'attribute' => 'campaign_id',
+                 'value' => 'campaign_id',
+            ],
+//            [
+//                // 'label' => 'campaign_name',
+//                 'attribute' => 'campaign_name',
+//                 'value' => 'campaign_name',
+//            ],
+//            [
+//                // 'label' => 'target_geo',
+//                 'attribute' => 'target_geo',
+//                 'value' => 'target_geo',
+//            ],
+            [
+                'class' => '\kartik\grid\DataColumn',
+                'attribute' => 'campaign_name',
+                'value' => function ($data) {
+                    return Html::tag('div', $data->campaign_name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                },
+                'width' => '60px',
+                'format' => 'raw',
+            ],
+            [
+                'class' => '\kartik\grid\DataColumn',
+                'attribute' => 'target_geo',
+                'value' => function ($data) {
+                    return Html::tag('div', $data->target_geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
+                },
+                'width' => '60px',
+                'format' => 'raw',
+            ],
+            [
+                // 'label' => 'platform',
+                 'attribute' => 'platform',
+                 'value' => 'platform',
+            ],
+            [
+                 'label' => 'payout',
+                 'attribute' => 'payout',
+                 'value' => 'payout',
+            ],
+            [
+                 'label' => 'daily_cap',
+                 'attribute' => 'daily_cap',
+                 'value' => 'daily_cap',
+            ],
+//            [
+//                 'label' => 'traffic_source',
+//                 'attribute' => 'traffic_source',
+//                 'value' => 'traffic_source',
+//            ],
+            [
+                'attribute' => 'traffic_source',
+                'value' => 'traffic_source',
+                'filter' => TrafficSource::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column(),
+            ],
+            [
+                'attribute' => 'tag',
+                'value' => function ($model) {
+                    return ModelsUtil::getCampaignTag($model->tag);
+                },
+                'filter' => ModelsUtil::campaign_tag,
+                'contentOptions' => function ($model) {
+                    if ($model->tag == 3) {
+                        return ['class' => 'bg-danger'];
+                    } else if ($model->tag == 2) {
+                        return ['class' => 'bg-warning'];
+
+                    } else if ($model->tag == 4) {
+                        return ['class' => 'bg-info'];
+                    } else {
+                        return ['class' => 'bg-success'];
+                    }
+                }
+            ],
+            [
+                'attribute' => 'direct',
+                'value' => function ($model) {
+                    return ModelsUtil::getCampaignDirect($model->direct);
+                },
+                'filter' => ModelsUtil::campaign_direct,
+            ],
+            [
+                 'label' => 'advertiser',
+                 'attribute' => 'advertiser',
+                 'value' => function($model){
+                     return $model->advertiser0->username;
+                 }
+            ],
+
+//        [
+//        'class' => 'yii\grid\ActionColumn',
+//        'header' => 'Action',
+//        'template' => '{view}',
+//        ],
         ],
         ]); ?>
         </div>

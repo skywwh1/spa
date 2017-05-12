@@ -344,7 +344,15 @@ class ChannelController extends Controller
 
     public function actionSendRecommend($id, $cams)
     {
+        $channel = $this->findModel($id);
+        $campaign_id = explode(',', $cams);
 
+        $campaigns = Campaign::find()->where(['id' => $campaign_id])->all();
+        if(MailUtil::sendGoodOffers($campaigns,$channel)){
+            $this->asJson("send email success!");
+        }else{
+            $this->asJson("send email fail!");
+        }
     }
 
 }
