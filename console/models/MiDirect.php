@@ -100,7 +100,7 @@ class MiDirect
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
-                //  Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
+                Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
             } else {
                 var_dump($camp->getErrors());
             }
