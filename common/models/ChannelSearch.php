@@ -184,4 +184,60 @@ class ChannelSearch extends Channel
 
         return $dataProvider;
     }
+
+    public function recommendSearch($params)
+    {
+        $query = Channel::find();
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+//            'id' => $this->id,
+//            'type' => $this->type,
+//            'om' => $this->om,
+//            'master_channel' => $this->master_channel,
+//            'created_time' => $this->created_time,
+//            'updated_time' => $this->updated_time,
+//            'qq' => $this->qq,
+//            'firstaccess' => $this->firstaccess,
+//            'lastaccess' => $this->lastaccess,
+//            'picture' => $this->picture,
+//            'confirmed' => $this->confirmed,
+//            'suspended' => $this->suspended,
+//            'deleted' => $this->deleted,
+//            'status' => $this->status,
+//            'traffic_source' => $this->traffic_source,
+//            'pricing_mode' => $this->pricing_mode,
+//            'total_revenue' => $this->total_revenue,
+//            'payable' => $this->payable,
+//            'os' => $this->os,
+            'recommended' => 1,
+        ]);
+        if(isset($this->os)){
+            $os = explode(',',$this->os);
+            $query->andWhere(['or like', 'os', $os]);
+        }
+        if(isset($this->strong_category)){
+            $category = explode(',',$this->strong_category);
+            $query->andWhere(['or like', 'strong_category', $category]);
+        }
+        if(isset($this->strong_geo)){
+            $geo = explode(',',$this->strong_geo);
+            $query->andWhere(['or like', 'strong_geo', $geo]);
+        }
+        return $dataProvider;
+    }
 }

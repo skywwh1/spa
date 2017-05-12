@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\Advertiser;
 use common\models\Category;
 use common\models\Mycart;
+use common\models\ChannelSearch;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
@@ -14,6 +15,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+
 /**
  * CampaignController implements the CRUD actions for Campaign model.
  */
@@ -49,6 +51,7 @@ class CampaignController extends Controller
                             'restart',
                             'api-index',
                             'cpa-index',
+                            'recommend',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -326,5 +329,22 @@ class CampaignController extends Controller
         if (!empty($model->device)) {
             $model->device = implode(',', $model->device);
         }
+    }
+
+    public function actionRecommend($id)
+    {
+        $cam = $this->findModel($id);
+
+        $searchModel = new ChannelSearch();
+        $searchModel->os = $cam->platform;
+        $searchModel->strong_geo = $cam->target_geo;
+        $searchModel->strong_category = $cam->category;
+        $dataProvider = $searchModel->recommendSearch(Yii::$app->request->queryParams);
+
+        return $this->render('recommend_channel', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'campaign' => $cam,
+        ]);
     }
 }

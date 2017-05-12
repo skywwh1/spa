@@ -54,7 +54,9 @@ class ChannelController extends Controller
                             'test',
                             'get_channel_multiple',
                             'om-edit',
-                            'recommend'
+                            'recommend',
+                            'get-recommend',
+                            'send-recommend'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -280,7 +282,7 @@ class ChannelController extends Controller
     public function actionTest()
     {
 
-        $this->asJson(['aa'=>99]);
+        $this->asJson(['aa' => 99]);
     }
 
     public function actionAjaxtest()
@@ -300,11 +302,11 @@ class ChannelController extends Controller
         $request = Yii::$app->request;
 
         if ($request->isAjax && $request->post()) {
-            $model =  Channel::findOne($id);
+            $model = Channel::findOne($id);
             $model->om = Yii::$app->user->id;
             $model->save();
             return "success";
-        }else{
+        } else {
             return "failed";
         }
 
@@ -314,11 +316,35 @@ class ChannelController extends Controller
     {
         $channel = $this->findModel($id);
         $campaignSearch = new CampaignSearch();
+        $campaignSearch->platform = $channel->os;
+        $campaignSearch->category = $channel->strong_category;
+        $campaignSearch->target_geo = $channel->strong_geo;
         $dataProvider = $campaignSearch->recommendSearch(Yii::$app->request->queryParams);
         return $this->render('recommend', [
             'searchModel' => $campaignSearch,
             'dataProvider' => $dataProvider,
+            'channel_id' => $id,
         ]);
+    }
+
+    public function actionGetRecommend($id, $cams)
+    {
+//        var_dump($cams);
+//        die();
+        $channel = $this->findModel($id);
+        $campaignSearch = new CampaignSearch();
+        $campaignSearch->campaign_name = explode(',', $cams);
+        $dataProvider = $campaignSearch->recommendList(Yii::$app->request->queryParams);
+        return $this->renderAjax('get-recommend', [
+            'dataProvider' => $dataProvider,
+            'cams' => $cams,
+            'channel' => $channel,
+        ]);
+    }
+
+    public function actionSendRecommend($id, $cams)
+    {
+
     }
 
 }

@@ -341,8 +341,8 @@ class CountController extends Controller
         $stats->statsInstallHourly($start_time, $end_time);
         $stats->statsRedirectInstallHourly($start_time, $end_time);
 
-        $stats->statsUniqueClickHourly($start_time, $end_time);
-        $stats->statsClickHourly($start_time, $end_time);
+//        $stats->statsUniqueClickHourly($start_time, $end_time);
+//        $stats->statsClickHourly($start_time, $end_time);
         $stats->updateNullPrice();
         $stats->updateCaps();
 
@@ -353,8 +353,8 @@ class CountController extends Controller
         $stats->statsSubChannelInstallHourly($start_time, $end_time);
         $stats->statsSubChannelRedirectInstallHourly($start_time, $end_time);
 
-        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
-        $stats->statsSubChannelClickHourly($start_time, $end_time);
+//        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
+//        $stats->statsSubChannelClickHourly($start_time, $end_time);
 
 //        $start_time = strtotime(date("Y-m-d", $start - 3600 * 24)); //统计两天的。
 //        $end_time = strtotime(date("Y-m-d", $end + 3600 * 24));
@@ -362,6 +362,34 @@ class CountController extends Controller
 //        echo 'end time daily' . $end_time . "\n";
 //        $stats->statsDaily($start_time, $end_time);
         Config::updateStatsTimeHourly($end);
+
+    }
+
+    public function actionStatsClicksHourly()
+    {
+        $stats = new StatsUtil();
+
+        $start = Config::findLastStatsClickHourly();
+        $end = $start;
+        $now = time();
+        while ($end < $now) {
+            $end = $end + 900;
+            if($end>$now){
+                $end = $now;
+            }
+            echo 'start click hourly ' . $start . "\n";
+            echo 'end click hourly ' . $end . "\n";
+            echo date('Y-m-d H:i:s', $end) . "\n";
+            $stats->statsClicksHourly($start, $end);
+            $start = $end;
+        }
+        //统计子渠道：
+
+
+//        $stats->statsSubChannelUniqueClickHourly($start_time, $end_time);
+//        $stats->statsSubChannelClickHourly($start_time, $end_time);
+
+        Config::updateLastStatsClickHourly($now);
 
     }
 
@@ -751,8 +779,24 @@ class CountController extends Controller
 
     public function actionTest()
     {
-        $this->genChannelBillByMonth();
-        $this->genAdvBillByMonth();
+        date_default_timezone_set('Etc/GMT-8');
+//        echo strtotime('2017/05/11');
+        $stats = new StatsUtil();
+
+        $start = strtotime('2017/05/11');
+        $end = $start;
+        $now = time();
+        while ($end < $now) {
+            $end = $end + 900;
+            if($end>$now){
+                $end = $now;
+            }
+            echo 'start click hourly ' . $start . "\n";
+            echo 'end click hourly ' . $end . "\n";
+            echo date('Y-m-d H:i:s', $end) . "\n";
+            $stats->statsSubClicksHourly($start, $end);
+            $start = $end;
+        }
     }
 
     public function actionCheckCvr()
