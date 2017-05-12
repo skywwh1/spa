@@ -779,8 +779,24 @@ class CountController extends Controller
 
     public function actionTest()
     {
-        $this->genChannelBillByMonth();
-        $this->genAdvBillByMonth();
+        date_default_timezone_set('Etc/GMT-8');
+//        echo strtotime('2017/05/11');
+        $stats = new StatsUtil();
+
+        $start = strtotime('2017/05/11');
+        $end = $start;
+        $now = time();
+        while ($end < $now) {
+            $end = $end + 900;
+            if($end>$now){
+                $end = $now;
+            }
+            echo 'start click hourly ' . $start . "\n";
+            echo 'end click hourly ' . $end . "\n";
+            echo date('Y-m-d H:i:s', $end) . "\n";
+            $stats->statsSubClicksHourly($start, $end);
+            $start = $end;
+        }
     }
 
     public function actionCheckCvr()

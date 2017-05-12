@@ -913,4 +913,99 @@ class StatsUtil
             }
         }
     }
+
+    public function statsSubClicksHourly($start_time, $end_time)
+    {
+        $from = 'log_click fc';
+        $timestamp_select = 'fc.create_time';
+//                $from = 'log_click fc';
+//                $clicks_select = 'count(distinct(fc.ip_long)) clicks';
+        $select = ['fc.campaign_id',
+            'fc.channel_id',
+            'fc.ch_subid',
+            'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
+            'count(*) clicks',
+            'count(distinct(fc.ip_long)) uclicks'
+        ];
+        $query = new Query();
+        $query->select($select);
+        $query->from($from);
+        $query->where(['>=', $timestamp_select, $start_time]);
+        $query->andWhere(['<', $timestamp_select, $end_time]);
+
+
+        $query->groupBy(['fc.campaign_id',
+            'fc.channel_id',
+            'fc.ch_subid',
+            'timestamp']);
+        $query->orderBy('timestamp desc');
+
+        $command = $query->createCommand();
+        var_dump($command->sql);
+//        die();
+        $rows = $command->queryAll();
+        var_dump($rows);
+        foreach ($rows as $item) {
+            $channel_id = '';
+            $campaign_id = '';
+            $sub_channel_id = '';
+            $timestamp = '';
+            $time = '';
+            $clicks = '';
+            $uclicks = '';
+            foreach ($item as $k => $v) {
+                if ($k == 'channel_id') {
+                    $channel_id = $v;
+                }
+                if ($k == 'campaign_id') {
+                    $campaign_id = $v;
+                }
+                if ($k == 'ch_subid') {
+                    $sub_channel_id = $v;
+                }
+                if ($k == 'timestamp') {
+                    $timestamp = $v;
+                }
+                if ($k == 'time') {
+                    $time = $v;
+                }
+                if ($k == 'clicks') {
+                    $clicks = $v;
+                }
+                if ($k == 'uclicks') {
+                    $uclicks = $v;
+                }
+            }
+            $hourly = CampaignLogSubChannelHourly::findIdentity($campaign_id, $channel_id, $sub_channel_id, $timestamp);
+            if (empty($hourly)) {
+                $hourly = new CampaignLogSubChannelHourly();
+                $hourly->channel_id = $channel_id;
+                $hourly->campaign_id = $campaign_id;
+                $hourly->sub_channel = $sub_channel_id;
+                $hourly->time = $timestamp;
+                $hourly->time_format = $time;
+                $hourly->clicks = $clicks;
+                $hourly->unique_clicks = $uclicks;
+            } else {
+                $hourly->clicks += $clicks;
+                $hourly->unique_clicks += $uclicks;
+            }
+            if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
+                $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
+                if (!empty($sts)) {
+                    if ($hourly->pay_out == 0) {
+                        $hourly->pay_out = $sts->pay_out;
+                    }
+                    if ($hourly->adv_price == 0) {
+                        $hourly->adv_price = $sts->campaign->adv_price;
+                    }
+                }
+            }
+            echo $hourly->campaign_id . '-' . $hourly->channel_id . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
+            if (!$hourly->save()) {
+                var_dump($hourly->getErrors());
+            }
+        }
+    }
 }
