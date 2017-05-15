@@ -269,7 +269,7 @@ class ReportSearch extends CampaignLogHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'adv.username', $this->advertiser])
+//            ->andFilterWhere(['like', 'adv.username', $this->advertiser])
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
@@ -586,7 +586,7 @@ class ReportSearch extends CampaignLogHourly
         $end = $end->getTimestamp();
 
         $query->select([
-            'adv.username advertiser',
+//            'adv.username advertiser',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
