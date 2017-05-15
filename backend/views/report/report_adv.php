@@ -5,6 +5,7 @@
 use common\models\Campaign;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use kartik\export\ExportMenu;
 
 /* @var $searchModel common\models\ReportAdvSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -449,6 +450,24 @@ if (!empty($dataProvider)) {
                                 ],
                             ],
                         ]); ?>
+                        <?php echo ExportMenu::widget([
+                            'dataProvider' => $dataProvider,
+                            'columns' => $columns,
+                            'fontAwesome' => true,
+                            'showConfirmAlert' => false,
+                            'target' => GridView::TARGET_BLANK,
+                            'dropdownOptions' => [
+                                'label' => 'Export All',
+                                'class' => 'btn btn-default'
+                            ],
+                            'exportConfig' => [
+                                ExportMenu::FORMAT_TEXT => false,
+                                ExportMenu::FORMAT_PDF => false,
+                                ExportMenu::FORMAT_EXCEL_X => false,
+                                ExportMenu::FORMAT_HTML => false,
+                            ],
+                            ]);
+                        ?>
                         <?php echo GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
