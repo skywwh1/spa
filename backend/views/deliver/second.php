@@ -15,10 +15,16 @@ $this->params['breadcrumbs'][] = $this->title;
 <div id="nav-menu" data-menu="STS"></div>
 <?php
 if (!is_null($returnMsg)) {
-//    console.log($returnMsg);
-//    alert($returnMsg);
-    echo "<script> var returnMsg = \"$returnMsg\";</script>" ;
-//    echo $returnMsg;
+//    echo "<script> var returnMsg = \"$returnMsg\";</script>" ;
+    echo("<script>var returnMsg = \"$returnMsg\";
+    if(returnMsg.indexOf('Cannot S2S') != -1){
+        alert(returnMsg);
+        location.href='/deliver/create';}
+    else{
+    if(confirm( returnMsg)) ;
+    else location.href='/deliver/create';
+    }</script>");
+//    echo("<script>if(confirm( \"$returnMsg\")) ;else location.href='/deliver/create'; </script>");
 }
 if (!is_null($delivers)) {
     $i = 0;
@@ -119,9 +125,6 @@ Modal::end(); ?>
 echo '<div id="black-channel-content"></div>';
 
 Modal::end(); ?>
-<script>
-   alert(returnMsg);
-</script>
 <?php
 $this->registerJsFile(
     '@web/js/sts.js',

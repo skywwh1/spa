@@ -10,6 +10,7 @@ use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
 use backend\models\UploadForm;
+use common\models\Channel;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
@@ -134,6 +135,7 @@ class FinanceChannelBillTermController extends Controller
     public function actionEdit($bill_id)
     {
         $model = $this->findModel($bill_id);
+        $channel = Channel::findIdentity($model->channel_id);
         $upload = new UploadForm();
 
         if ($model->load(Yii::$app->request->post())) {
@@ -191,6 +193,7 @@ class FinanceChannelBillTermController extends Controller
             return $this->render('update', [
                 'payable' => $payable,
                 'model' => $model,
+                'channel' => $channel,
                 'campaignBill' => $campaignBill,
                 'pendingList' => $pendingList,
                 'deductionList' => $deductionList,
@@ -225,7 +228,7 @@ class FinanceChannelBillTermController extends Controller
 //            die();
             if ($model->upload()) {
                 // file is uploaded successfully
-                return;
+                return '{}';
             }
         }
 

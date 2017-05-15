@@ -12,13 +12,18 @@ use backend\models\FinanceChannelBillTerm;
  */
 class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
 {
+    public $channel_name;
+    public $bank_name;
+    public $bank_address;
+    public $account_nu_iban;
+    public $swift;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note'], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift',], 'safe'],
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
         ];
@@ -43,6 +48,7 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
     public function search($params)
     {
         $query = FinanceChannelBillTerm::find();
+        $query->alias("fcb");
 
         // add conditions that should always apply here
 
@@ -95,10 +101,12 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             'payable' => $this->payable,
             'apply_prepayment' => $this->apply_prepayment,
             'balance' => $this->balance,
-            'status' => $this->status,
+            'fcb.status' => $this->status,
             'update_time' => $this->update_time,
             'create_time' => $this->create_time,
         ]);
+
+        $query->leftJoin('channel ch','fcb.channel_id = ch.id');
 
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
@@ -106,9 +114,10 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
             ->andFilterWhere(['like', 'cap', $this->cap])
-            ->andFilterWhere(['<>', 'status', 0])
+            ->andFilterWhere(['<>', 'fcb.status', 0])
             ->andFilterWhere(['like', 'note', $this->note]);
 
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name]);
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);
         }

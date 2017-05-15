@@ -47,7 +47,7 @@ use yii\helpers\Url;
         $campaign_name = '<td> Campaign name</td>';
         $channel = '<td> Channel</td>';
         $match_install = '<td> Match Install</td>';
-//        $match_cvr = '<td>Match CVR</td>';
+        $match_cvr = '<td>Match CVR</td>';
         $cap = '<td>Cap / Install</td>';
         $action = '<td> Action</td>';
 
@@ -56,7 +56,7 @@ use yii\helpers\Url;
             $campaign_name .= '<td width="130px">' . Html::encode($check->campaign_name) . '</td>';
             $channel .= '<td>' . Html::encode($check->channel_name) . '</td>';
             $match_install .= '<td>' . Html::encode($check->match_install) . '</td>';
-//            $match_cvr .= '<td>' . Html::encode($check->match_cvr) . '</td>';
+            $match_cvr .= '<td>' . Html::encode($check->match_cvr) . '</td>';
             $cap .= '<td>' . Html::encode($check->daily_cap).'/'.Html::encode($check->installs) . '</td>';
             $action .= '<td>' . Html::encode($check->action) . '</td>';
         }
@@ -65,7 +65,7 @@ use yii\helpers\Url;
         $campaign_name = '<tr>' . $campaign_name . '</tr>';
         $channel = '<tr>' . $channel . '</tr>';
         $match_install = '<tr>' . $match_install . '</tr>';
-//        $match_cvr = '<tr>' . $match_cvr . '</tr>';
+        $match_cvr = '<tr>' . $match_cvr . '</tr>';
         $cap = '<tr>' . $cap . '</tr>';
         $action = '<tr>' . $action . '</tr>';
 
@@ -73,7 +73,7 @@ use yii\helpers\Url;
         echo $campaign_name;
         echo $channel;
         echo $match_install;
-//        echo $match_cvr;
+        echo $match_cvr;
         echo $cap;
         echo $action;
 

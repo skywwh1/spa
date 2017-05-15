@@ -18,6 +18,7 @@ use kartik\grid\GridView;
 /* @var $deductionList yii\data\ActiveDataProvider */
 /* @var $compensationList yii\data\ActiveDataProvider */
 /* @var $upload backend\models\UploadForm; */
+/* @var $channel common\models\Channel; */
 
 
 $this->title = 'Update Finance Channel Bill Term: ' . $model->bill_id;
@@ -70,7 +71,26 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textarea(['rows' => 6]) ?>
-
+                    <?= $form->field($channel, 'beneficiary_name', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($channel, 'account_nu_iban', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($channel, 'bank_name', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($channel, 'bank_address', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($channel, 'swift', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
                 </div>
 
                 <div class="box-footer">

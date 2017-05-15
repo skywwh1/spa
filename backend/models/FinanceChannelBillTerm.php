@@ -55,6 +55,10 @@ use Yii;
 class FinanceChannelBillTerm extends \yii\db\ActiveRecord
 {
     public $imageFiles;
+    public $bank_name;
+    public $bank_address;
+    public $account_nu_iban;
+    public $swift;
     /**
      * @inheritdoc
      */
@@ -73,6 +77,7 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
             [['note'], 'string'],
+            [['bank_name','bank_address','account_nu_iban','swift'], 'safe'],
             [['bill_id', 'period'], 'string', 'max' => 255],
             [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],

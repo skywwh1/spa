@@ -148,15 +148,17 @@ class DeliverController extends Controller
                 foreach ($blackChannels as $black_channel) {
                     // $black_channel[0]不为空
                     if(is_array($black_channel[0]) && isset($black_channel[0])){
-                        if ( $black_channel[0]['action_type'] === 0){
-                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].' ,'.$black_channel['channel_name'].' channels are labeled as Notice black channels!';
+                        if ( $black_channel[0]['action_type'] == 0){
+//                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].' ,'.$black_channel['channel_name'].' channels are labeled as Notice black channels!';
+                            $str = 'Are you sure to S2S?Note:'.$black_channel[0]['note'];
                         }else{
-                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].', '.$black_channel['channel_name'].' channels are labeled as No S2S black channels!';
+//                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].', '.$black_channel['channel_name'].' channels are labeled as No S2S black channels!';
+                            $str = 'Cannot S2S!!!Note:'.$black_channel[0]['note'];
                         }
                     }
                     $return_msg[] = $str;
                 }
-                $return_msg = implode(",",$return_msg);
+                $return_msg = implode(";",$return_msg);
 //                return $return_msg;
             }
             return $this->render('second', [

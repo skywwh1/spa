@@ -35,7 +35,7 @@ class UploadForm extends Model
     {
         if ($this->validate()) {
             foreach ($this->imageFiles as $file) {
-                $file->saveAs('/var/www/html/spa/upload/' . $file->baseName . '.' . $file->extension);
+                $file->saveAs('/var/www/html/spa/upload/financeUpload/' . $file->baseName . '.' . $file->extension);
             }
             return true;
         } else {
