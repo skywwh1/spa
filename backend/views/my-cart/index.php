@@ -25,9 +25,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     <button type="button" id = 'deleteButton' class="btn btn-primary">Delete</button>
                 </p>
                 <?= GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
+                    'dataProvider' => $dataProvider,
+                    'filterModel' => $searchModel,
                     'id' => 'grid',
+                    'layout' => '{toolbar}{summary} {items} {pager}',
+                    'toolbar' =>['{toggleData}',] ,
+                    'toggleDataOptions' => [
+                        '$type' => '$options',
+                    ],
             'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
             [

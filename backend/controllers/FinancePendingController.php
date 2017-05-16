@@ -114,8 +114,7 @@ class FinancePendingController extends Controller
         $model = new FinancePendingForm();
 
         if ($model->load(Yii::$app->request->post())) {
-
-            if (isset($model->is_all) && $model->is_all == 1) {
+            if (isset($_POST['FinancePending']['is_all']) && $_POST['FinancePending']['is_all'] == 1) {
                 $this->createMultipleByCam($model);
                 return $this->redirect(['index']);
             } else {
@@ -140,8 +139,7 @@ class FinancePendingController extends Controller
         $model = new FinancePendingForm();
 
         if ($model->load(Yii::$app->request->post())) {
-
-            if (isset($model->is_all) && $model->is_all == 1) {
+            if (isset($_POST['FinancePending']['is_all']) && $_POST['FinancePending']['is_all'] == 1) {
                 $this->createAdvToManyChannel($model);
                 return $this->redirect(['index']);
             } else {
@@ -221,7 +219,7 @@ class FinancePendingController extends Controller
 //die();
         //加载report 数据；
         $channel_bill = $model->channel_id . '_' . date('Ym', strtotime($model->start_date));
-        $adv_bill = $cam->advertiser0->id . '_' . date('Ym', strtotime($model->start_date));
+        $adv_bill = (empty($cam->advertiser0))?null:$cam->advertiser0->id . '_' . date('Ym', strtotime($model->start_date));
 
         $start = strtotime($model->start_date);
         $end = strtotime($model->end_date) + 3600 * 24;

@@ -40,7 +40,7 @@ class FinancePendingForm extends Model
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['channel_name', 'is_all', 'adv_name'], 'safe'],
-            [['channel_name'], 'validateBill', 'skipOnEmpty' => false, 'skipOnError' => true],
+//            [['channel_name'], 'validateBill', 'skipOnEmpty' => false, 'skipOnError' => true],
         ];
     }
 

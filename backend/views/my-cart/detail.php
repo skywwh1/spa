@@ -5,6 +5,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\MyCartSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var keys array */
 
 $this->title = 'Good Campaigns';
 $this->params['breadcrumbs'][] = $this->title;
