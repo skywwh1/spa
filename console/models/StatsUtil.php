@@ -738,6 +738,17 @@ class StatsUtil
     public function checkCvr($start_time)
     {
         echo "Check CVR" . PHP_EOL;
+
+        $datetime = new \DateTime();
+        $datetime->setTimestamp($start_time);
+        echo $datetime->format('Y-m-d H:i:s');
+
+        $interval = new \DateInterval('P0DT2H');
+        $datetime->sub($interval);
+
+        echo $datetime->format('Y-m-d H:i:s');
+        $start_time = $datetime->getTimestamp();
+
         $logs = CampaignLogHourly::find()->where(['>=', 'time', $start_time])->all();
         if (!empty($logs)) {
             foreach ($logs as $log) {
@@ -754,11 +765,18 @@ class StatsUtil
                             $cvr = ($log->match_installs / $log->clicks) * 100;
                             $sts = Deliver::findIdentity($camp->id, $log->channel_id);
                             if ($sts->status == 1) {
-                                $check = new LogAutoCheck();
+                                $check = LogAutoCheck::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $sts->channel_id,
+                                'match_cvr' => $cvr, 'match_install' => $log->match_installs])->orderBy('id DESC')->one();
+                                if (empty($check)){
+                                    $check = new LogAutoCheck();
+                                }else{
+                                    continue;
+                                }
+//                                var_dump($sts->channel->username);
                                 $check->campaign_id = $camp->id;
                                 $check->channel_id = $sts->channel_id;
                                 $check->campaign_name = $camp->campaign_name;
-                                $check->channel_name = $sts->channel->username;
+                                $check->channel_name = (empty($sts->channel)?null:$sts->channel->username);
                                 $check->match_cvr = $cvr;
                                 $check->match_install = $log->match_installs;
                                 $check->type = 1;

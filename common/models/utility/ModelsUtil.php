@@ -259,7 +259,7 @@ class ModelsUtil
         'ios' => 'IOS',
         'android' => 'Android',
         'windows' => 'Windows',
-        'other' => 'Others',
+        'others' => 'Others',
     );
 
     public static function getPayableStatus($k)

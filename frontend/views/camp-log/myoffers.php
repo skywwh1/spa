@@ -4,7 +4,7 @@ use common\models\Platform;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
-
+use common\models\PriceModel;
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\CampaignChannelLogSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -33,12 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
 //            'adv_price',
             //'pricing_mode',
+//            [
+//                'attribute' => 'pricing_mode',
+//                'value' => function ($data) {
+//                    return ModelsUtil::getPricingMode($data->pricing_mode);
+//                },
+//                'filter' => ModelsUtil::pricing_mode,
+//            ],
             [
                 'attribute' => 'pricing_mode',
                 'value' => function ($data) {
-                    return ModelsUtil::getPricingMode($data->pricing_mode);
+                    return ModelsUtil::getPricingModeNew($data->pricing_mode);
                 },
-                'filter' => ModelsUtil::pricing_mode,
+                'filter' =>  PriceModel::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column(),
             ],
             [
                 'attribute' => 'pay_out',

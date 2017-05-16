@@ -21,8 +21,8 @@ class CampaignChannelLogSearch extends CampaignChannelLog
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'pricing_mode', 'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
-            [['campaign_uuid', 'track_url', 'note', 'campaign_name', 'geo', 'platform'], 'safe'],
+            [['campaign_id', 'channel_id',  'daily_cap', 'is_run', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def'], 'integer'],
+            [['campaign_uuid', 'track_url', 'note', 'campaign_name', 'geo', 'platform','pricing_mode',], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
