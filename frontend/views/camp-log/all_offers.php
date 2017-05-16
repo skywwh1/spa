@@ -9,6 +9,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
 use yii\bootstrap\Modal;
+use common\models\PriceModel;
 
 /* @var $this yii\web\View */
 /* @var $searchModel frontend\models\AllCampaignSearch */
@@ -43,9 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'pricing_mode',
                     'value' => function ($data) {
-                        return ModelsUtil::getPricingMode($data->pricing_mode);
+                        return ModelsUtil::getPricingModeNew($data->pricing_mode);
                     },
-                    'filter' => ModelsUtil::pricing_mode,
+                    'filter' =>  PriceModel::find()
+                        ->select(['name', 'value'])
+                        ->orderBy('id')
+                        ->indexBy('value')
+                        ->column(),
                 ],
                 //            'indirect',
                 //            [
@@ -74,10 +79,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 //            'platform',
                 [
                     'attribute' => 'platform',
+//                    'value' => 'platform',
                     'value' => function ($data) {
-                        return ModelsUtil::getPlatform($data->platform);
+                        return ModelsUtil::getPlatformNew($data->platform);
                     },
-                    'filter' => ModelsUtil::platform,
+//                    'filter' => ModelsUtil::platform,
+                    'filter' => \common\models\Platform::find()
+                        ->select(['name', 'value'])
+                        ->orderBy('id')
+                        ->indexBy('value')
+                        ->column()
                 ],
                 // 'budget',
                 // 'open_budget',

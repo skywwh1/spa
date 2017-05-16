@@ -18,8 +18,8 @@ class AllCampaignSearch extends Campaign
     public function rules()
     {
         return [
-            [['id', 'advertiser', 'pricing_mode', 'promote_start', 'promote_end', 'platform', 'daily_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
-            [['target_geo', 'campaign_name', 'tag', 'campaign_uuid', 'traffic_source', 'note', 'preview_link', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'adv_link', 'ip_blacklist'], 'safe'],
+            [['id', 'advertiser',  'promote_start', 'promote_end', 'daily_cap', 'icon', 'creative_type', 'recommended', 'indirect', 'cap', 'cvr', 'status', 'open_type', 'subid_status', 'track_way', 'third_party', 'track_link_domain', 'creator', 'create_time', 'update_time'], 'integer'],
+            [['target_geo', 'campaign_name', 'tag', 'campaign_uuid', 'traffic_source', 'note', 'preview_link', 'package_name', 'app_name', 'app_size', 'category', 'version', 'app_rate', 'description', 'creative_link', 'creative_description', 'carriers', 'conversion_flow', 'epc', 'adv_link', 'ip_blacklist','pricing_mode','platform'], 'safe'],
             [['adv_price', 'now_payout'], 'number'],
         ];
     }
@@ -74,7 +74,7 @@ class AllCampaignSearch extends Campaign
             'pricing_mode' => $this->pricing_mode,
             'promote_start' => $this->promote_start,
             'promote_end' => $this->promote_end,
-            'platform' => $this->platform,
+//            'platform' => $this->platform,
             'daily_cap' => $this->daily_cap,
             'adv_price' => $this->adv_price,
             'now_payout' => $this->now_payout,
@@ -99,9 +99,8 @@ class AllCampaignSearch extends Campaign
         $query->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
 //            ->andFilterWhere(['like', 'tag', $this->tag])
 //            ->andFilterWhere(['like', 'campaign_uuid', $this->campaign_uuid])
-            ->andFilterWhere(['like', 'traffic_source', $this->traffic_source]);
-//            ->andFilterWhere(['like', 'note', $this->note])
-//            ->andFilterWhere(['like', 'preview_link', $this->preview_link])
+            ->andFilterWhere(['like', 'traffic_source', $this->traffic_source])
+            ->andFilterWhere(['like', 'platform', $this->platform]);
 //            ->andFilterWhere(['like', 'package_name', $this->package_name])
 //            ->andFilterWhere(['like', 'app_name', $this->app_name])
 //            ->andFilterWhere(['like', 'app_size', $this->app_size])

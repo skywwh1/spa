@@ -246,6 +246,22 @@ class ModelsUtil
         1 => 'No S2S',
     );
 
+    const pricing_mode_new = array(
+        'cpi' => "CPI",
+        'cpa' => "CPA",
+        'cpm' => "CPM",
+        'cpc' => "CPC",
+        'cpo' => "CPO",
+        'cps' => "CPS",
+    );
+
+    const platform_new = array(
+        'ios' => 'IOS',
+        'android' => 'Android',
+        'windows' => 'Windows',
+        'other' => 'Others',
+    );
+
     public static function getPayableStatus($k)
     {
         return static::getValue(static::payable_status, $k);
@@ -379,5 +395,15 @@ class ModelsUtil
     public static function getBlackAction($k)
     {
         return static::getValue(static::black_action, $k);
+    }
+
+    public static function getPricingModeNew($k)
+    {
+        return static::getValue(static::pricing_mode_new, $k);
+    }
+
+    public static function getPlatformNew($k)
+    {
+        return static::getValue(static::platform_new, $k);
     }
 }
