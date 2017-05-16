@@ -587,6 +587,7 @@ class ReportSearch extends CampaignLogHourly
 
         $query->select([
 //            'adv.username advertiser',
+            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
