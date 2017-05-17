@@ -738,16 +738,9 @@ class StatsUtil
     public function checkCvr($start_time)
     {
         echo "Check CVR" . PHP_EOL;
-
-        $datetime = new \DateTime();
-        $datetime->setTimestamp($start_time);
-        echo $datetime->format('Y-m-d H:i:s');
-
-        $interval = new \DateInterval('P0DT2H');
-        $datetime->sub($interval);
-
-        echo $datetime->format('Y-m-d H:i:s');
-        $start_time = $datetime->getTimestamp();
+        if ($start_time > 0) {
+            $start_time = $this->getBeforeTwoHours($start_time);
+        }
 
         $logs = CampaignLogHourly::find()->where(['>=', 'time', $start_time])->all();
         if (!empty($logs)) {
@@ -812,6 +805,23 @@ class StatsUtil
         }
     }
 
+    /**
+     * @param $start_time
+     * @return int
+     */
+    public function getBeforeTwoHours($start_time){
+        $datetime = new \DateTime();
+        $datetime->setTimestamp($start_time);
+        echo $datetime->format('Y-m-d H:i:s');
+
+        $interval = new \DateInterval('P0DT2H');
+        $datetime->sub($interval);
+
+        echo $datetime->format('Y-m-d H:i:s');
+        $start_time = $datetime->getTimestamp();
+
+        return $start_time;
+    }
 
     public function checkCap()
     {
