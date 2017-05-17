@@ -80,6 +80,8 @@ use yii\web\IdentityInterface;
  */
 class Channel extends ActiveRecord implements IdentityInterface
 {
+    public $om_name;
+    public $master_channel_name;
     /**
      * @inheritdoc
      */
@@ -180,6 +182,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             'strong_category' => 'Strong Category',
             'os' => 'OS',
             'recommended' => 'Recommended',
+            'om_name' => 'OM',
+            'master_channel_name' => 'Master Channel',
         ];
     }
 

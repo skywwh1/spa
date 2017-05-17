@@ -80,9 +80,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'attribute' => 'platform',
 //                    'value' => 'platform',
-                    'value' => function ($data) {
-                        return ModelsUtil::getPlatformNew($data->platform);
-                    },
+//                    'value' => function ($data) {
+//                        return ModelsUtil::getPlatformNew($data->platform);
+//                    },
 //                    'filter' => ModelsUtil::platform,
                     'filter' => \common\models\Platform::find()
                         ->select(['name', 'value'])

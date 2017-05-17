@@ -3,26 +3,86 @@
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\widgets\Pjax;
-
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ChannelSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Channel List';
 $this->params['breadcrumbs'][] = $this->title;
+$columns = [
+    'id',
+    'username',
+    [
+        'attribute' => 'om_name',
+        'value' => 'om0.username',
+    ],
+    [
+        'attribute' => 'master_channel_name',
+        'value' => 'masterChannel.username',
+    ],
+    [
+        'attribute' => 'os',
+        'filter' => \common\models\Platform::find()
+            ->select(['name', 'value'])
+            ->orderBy('id')
+            ->indexBy('value')
+            ->column()
+    ],
+    'email:email',
+    [
+        'attribute' => 'status',
+        'value' => function ($data) {
+            return ModelsUtil::getAdvertiserStatus($data->status);
+        },
+        'filter' => ModelsUtil::advertiser_status,
+    ],
+    'total_revenue',
+    'payable',
+    'paid',
+    [
+        'attribute' => 'recommended',
+        'value' => function ($data) {
+            return ModelsUtil::getStatus($data->recommended);
+        },
+        'filter' => ModelsUtil::status,
+    ],
+    'note:text',
+]
 ?>
 <div class="row">
     <div id="nav-menu" data-menu="channel_index"></div>
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-
-
-                <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?php
+                $fullExportMenu = ExportMenu::widget([
+                    'dataProvider' => $dataProvider,
+                    'columns' => $columns,
+                    'fontAwesome' => true,
+                    'showConfirmAlert' => false,
+                    'target' => GridView::TARGET_BLANK,
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default'
+                    ],
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_EXCEL_X => false,
+                        ExportMenu::FORMAT_HTML => false,
+                    ],
+                ]);
+                ?>
 
                 <?php Pjax::begin(); ?>    <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
+                    'layout' => '{toolbar}{summary} {items} {pager}',
+                    'toolbar' =>['{toggleData}',$fullExportMenu] ,
+                    'toggleDataOptions' => [
+                        '$type' => '$options',
+                    ],
                     'columns' => [
                         [
                             'class' => 'kartik\grid\ActionColumn',
@@ -31,69 +91,37 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
                                     return '<div class="dropdown">
-                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-                                      <span class="caret"></span></button>
-                                      <ul class="dropdown-menu">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                          <span class="caret"></span></button>
+                          <ul class="dropdown-menu">
 
-                                      <li><a data-view="0" href="/channel/view?id=' . $model->id . '">View</a></li>
-                                      <li><a href="/channel/update?id=' . $model->id . '" >Update</a></li>
-                                      <li><a data-pjax="0" href="/channel/recommend?id=' . $model->id . '">Recommend Offers</a></li>
-                                      </ul>
-                                    </div>';
+                          <li><a data-view="0" href="/channel/view?id=' . $model->id . '">View</a></li>
+                          <li><a href="/channel/update?id=' . $model->id . '" >Update</a></li>
+                          <li><a data-pjax="0" href="/channel/recommend?id=' . $model->id . '">Recommend Offers</a></li>
+                          </ul>
+                        </div>';
                                 },
                             ],
                         ],
-//            ['class' => 'yii\grid\SerialColumn'],
-//
                         'id',
                         'username',
-//            'firstname',
-//            'lastname',
-                        // 'type',
-                        // 'auth_key',
-                        // 'password_hash',
-                        // 'password_reset_token',
-                        // 'settlement_type',
                         [
-                            'attribute' => 'om',
+                            'attribute' => 'om_name',
                             'value' => 'om0.username',
-                            'filter' => false,
                         ],
                         [
-                            'attribute' => 'master_channel',
+                            'attribute' => 'master_channel_name',
                             'value' => 'masterChannel.username',
-                            'filter' => false,
                         ],
                         [
                             'attribute' => 'os',
-                            'value' => 'os',
-                            'filter' =>false,
+                            'filter' => \common\models\Platform::find()
+                                ->select(['name', 'value'])
+                                ->orderBy('id')
+                                ->indexBy('value')
+                                ->column()
                         ],
-                        // 'account_name',
-                        // 'branch_name',
-                        // 'card_number',
-                        // 'contacts',
-                        // 'updated_at',
                         'email:email',
-                        // 'country',
-                        // 'city',
-                        // 'address',
-                        // 'company',
-                        // 'phone1',
-                        // 'phone2',
-                        // 'wechat',
-                        // 'qq',
-                        // 'skype',
-                        // 'alipay',
-                        // 'lang',
-                        // 'timezone',
-                        // 'firstaccess',
-                        // 'lastaccess',
-                        // 'picture',
-                        // 'confirmed',
-                        // 'suspended',
-                        // 'deleted',
-//                        'status',
                         [
                             'attribute' => 'status',
                             'value' => function ($data) {
@@ -101,14 +129,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => ModelsUtil::advertiser_status,
                         ],
-
-                        // 'traffic_source',
-                        // 'pricing_mode',
-                        // 'post_back',
                         'total_revenue',
                         'payable',
                         'paid',
-                        'note:text',
                         [
                             'attribute' => 'recommended',
                             'value' => function ($data) {
@@ -116,9 +139,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => ModelsUtil::status,
                         ],
-                        // 'strong_geo',
-                        // 'strong_catagory',
-
+                        'note:text',
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

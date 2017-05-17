@@ -6,6 +6,7 @@ use common\models\Advertiser;
 use common\models\Category;
 use common\models\Mycart;
 use common\models\ChannelSearch;
+use common\models\CampaignCreativeLink;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
@@ -15,6 +16,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
+use yii\base\Model;
+use yii\helpers\ArrayHelper;
+use yii\widgets\ActiveForm;
 
 /**
  * CampaignController implements the CRUD actions for Campaign model.
@@ -122,8 +126,11 @@ class CampaignController extends Controller
      */
     public function actionView($id)
     {
+//        return $this->renderAjax('view', [
+//            'model' => $this->findModel($id),
+//        ]);
         return $this->renderAjax('view', [
-            'model' => $this->findModel($id),
+            'model' => $this->findMutipleModel($id),
         ]);
     }
 
@@ -134,18 +141,57 @@ class CampaignController extends Controller
      */
     public function actionCreate()
     {
+//        $model = new Campaign();
+//        $this->beforeUpdate($model);
+//        if ($model->load(Yii::$app->request->post())) {
+//            $this->beforeSave($model);
+//            $model->status = 1; //running
+//            if ($model->save()) {
+//                return $this->redirect(['view', 'id' => $model->id]);
+//            }
+//        }
+//        return $this->render('create', [
+//            'model' => $model,
+//        ]);
         $model = new Campaign();
+        $modelsLink = array();
         $this->beforeUpdate($model);
+
+        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            return ActiveForm::validate($model);
+        }
+
         if ($model->load(Yii::$app->request->post())) {
+            Model::loadMultiple($modelsLink, Yii::$app->request->post());
             $this->beforeSave($model);
+
             $model->status = 1; //running
-            if ($model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+
+            $modelsLink = Yii::$app->request->post('CampaignCreativeLink');// return 2
+
+            if ($flag = $model->save(false)) {
+                foreach ($modelsLink as $modelLink) {
+                    $ccl = new CampaignCreativeLink();
+                    $ccl->campaign_id = $model->id;
+                    $ccl->creative_link = $modelLink['creative_link'];
+                    $ccl->creative_type = $modelLink['creative_type'];
+                    if (! ($flag = $ccl->save(false))) {
+                        break;
+                    }
+                }
+            }
+            if ($flag) {
+                return $this->render('view', [
+                    'model' => $this->findMutipleModel($model->id),
+                ]);
             }
         }
         return $this->render('create', [
             'model' => $model,
+            'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
         ]);
+
     }
 
     /**
@@ -156,16 +202,63 @@ class CampaignController extends Controller
      */
     public function actionUpdate($id)
     {
+//        $model = $this->findModel($id);
+//        $this->beforeUpdate($model);
+//        if ($model->load(Yii::$app->request->post())) {
+//            $this->beforeSave($model);
+//            if ($model->save()) {
+//                return $this->redirect(['index']);
+//            }
+//        }
+//        return $this->render('update', [
+//            'model' => $model,
+//        ]);
         $model = $this->findModel($id);
+        $modelsLink = CampaignCreativeLink::getCampaignCreativeLinksById($id);
+
         $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeSave($model);
-            if ($model->save()) {
+
+            $model->status = 1; //running
+
+            $oldHouseIDs = ArrayHelper::map($modelsLink, 'id', 'id');
+            $modelsLink = Yii::$app->request->post('CampaignCreativeLink');// return 2
+            $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsLink, 'id', 'id')));
+
+            if ($flag = $model->save(false)) {
+                if (! empty($deletedHouseIDs)) {
+                    CampaignCreativeLink::deleteAll(['id' => $deletedHouseIDs]);
+                }
+
+                foreach ($modelsLink as $modelLink) {
+                    $ccl = CampaignCreativeLink::findOne($modelLink['id']);
+
+                    if (!empty($ccl)){
+                        $ccl->creative_link = $modelLink['creative_link'];
+                        $ccl->creative_type = $modelLink['creative_type'];
+                    }else{
+                        if(empty( $modelLink['creative_link'])){
+                            continue;
+                        }
+                        $ccl = new CampaignCreativeLink();
+                        $ccl->campaign_id = $model->id;
+                        $ccl->creative_link = $modelLink['creative_link'];
+                        $ccl->creative_type = $modelLink['creative_type'];
+                    }
+
+                    if (! ($flag = $ccl->save(false))) {
+                        break;
+                    }
+                }
+            }
+            if ($flag) {
                 return $this->redirect(['index']);
             }
         }
         return $this->render('update', [
             'model' => $model,
+            'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
         ]);
     }
 
@@ -346,5 +439,30 @@ class CampaignController extends Controller
             'dataProvider' => $dataProvider,
             'campaign' => $cam,
         ]);
+    }
+
+    /**
+     * Finds the Campaign model,CampaignCreativeLink based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Campaign the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findMutipleModel($id)
+    {
+        if (($model = Campaign::findOne($id)) !== null) {
+            $modelCreativeLink = CampaignCreativeLink::getCampaignCreativeLinksById($id);
+            $creativeLinks = array();
+
+            foreach ($modelCreativeLink as $modelLink) {
+                array_push($creativeLinks, $modelLink->creative_link);
+                $model->creative_type = $modelLink->creative_type;
+            }
+
+            $model->creative_link = implode(",",$creativeLinks);;
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 }

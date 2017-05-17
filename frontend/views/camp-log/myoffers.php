@@ -70,9 +70,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Platform',
                 'attribute' => 'platform',
                 'value' => 'campaign.platform',
-//                'filter' =>,
+                'filter' => \common\models\Platform::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
             ],
-
 //             'actual_discount',
 //             'discount',
             //'is_run',

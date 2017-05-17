@@ -12,12 +12,15 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
+use wbraganca\dynamicform\DynamicFormWidget;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Campaign */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin([
+    'id'=> 'dynamic-form',
+]); ?>
 <div class="col-md-6">
     <div class="box box-info">
         <div class="box-header with-border">
@@ -43,7 +46,7 @@ use yii\widgets\ActiveForm;
             <?php if (isset($model->campaign_uuid)) {
                 echo $form->field($model, 'campaign_uuid')->textInput(['maxlength' => true, 'readonly' => 'readonly']);
             } else {
-                echo $form->field($model, 'campaign_uuid')->textInput(['maxlength' => true,]);
+                echo $form->field($model, 'campaign_uuid',['enableAjaxValidation' => true])->textInput(['maxlength' => true,'class'=>'form-control input-sm','placeholder'=>'Enter uuid of campaign']);
             } ?>
             <?= $form->field($model, 'pricing_mode')->dropDownList(
                 PriceModel::find()
@@ -120,9 +123,52 @@ use yii\widgets\ActiveForm;
             <h3 class="box-title">Material Info</h3>
         </div>
         <div class="box-body">
-            <?= $form->field($model, 'creative_link')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'creative_type')->dropDownList(ModelsUtil::create_type) ?>
+            <?php DynamicFormWidget::begin([
+                'widgetContainer' => 'dynamicform_wrapper',
+                'widgetBody' => '.container-items',
+                'widgetItem' => '.house-item',
+                'limit' => 10,
+                'min' => 1,
+                'insertButton' => '.add-house',
+                'deleteButton' => '.remove-house',
+                'model' => $modelsLink[0],
+                'formId' => 'dynamic-form',
+                'formFields' => [
+                    'creative_link',
+                    'creative_type',
+                ],
+            ]); ?>
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Creative Links</th>
+                    <!--            <th style="width: 450px;">Rooms</th>-->
+                    <th class="text-center" style="width: 90px;">
+                        <button type="button" class="add-house btn btn-success btn-xs"><span class="fa fa-plus"></span></button>
+                    </th>
+                </tr>
+                </thead>
+                <tbody class="container-items">
+                <?php foreach ($modelsLink as $indexHouse => $modelHouse): ?>
+                    <tr class="house-item">
+                        <td class="vcenter">
+                            <?php
+                            // necessary for update action.
+                            if (! $modelHouse->isNewRecord) {
+                                echo Html::activeHiddenInput($modelHouse, "[{$indexHouse}]id");
+                            }
+                            ?>
+                            <?= $form->field($modelHouse, "[{$indexHouse}]creative_link")->textInput(['maxlength' => true]) ?>
+                            <?= $form->field($modelHouse, "[{$indexHouse}]creative_type")->dropDownList(ModelsUtil::create_type) ?>
+                        </td>
+                        <td class="text-center vcenter" style="width: 90px; verti">
+                            <button type="button" class="remove-house btn btn-danger btn-xs"><span class="fa fa-minus"></span></button>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+                </tbody>
+            </table>
+            <?php DynamicFormWidget::end(); ?>
         </div>
     </div>
     <div class="box box-info">
