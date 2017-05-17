@@ -93,6 +93,7 @@ class MyCartSearch extends MyCart
         // add conditions that should always apply here
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $query->andFilterWhere(['in', 'id', $keys]);
