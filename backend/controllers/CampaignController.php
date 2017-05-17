@@ -233,25 +233,26 @@ class CampaignController extends Controller
                 }
 
                 foreach ($modelsLink as $modelLink) {
-                    if (!empty($modelLink['id'])){
+
+                    if (!empty($modelLink)&&isset($modelLink['id'])){
                         $ccl = CampaignCreativeLink::findOne($modelLink['id']);
+                    }
 
-                        if (!empty($ccl)){
-                            $ccl->creative_link = $modelLink['creative_link'];
-                            $ccl->creative_type = $modelLink['creative_type'];
-                        }else{
-                            if(empty( $modelLink['creative_link'])){
-                                continue;
-                            }
-                            $ccl = new CampaignCreativeLink();
-                            $ccl->campaign_id = $model->id;
-                            $ccl->creative_link = $modelLink['creative_link'];
-                            $ccl->creative_type = $modelLink['creative_type'];
+                    if (!empty($ccl)){
+                        $ccl->creative_link = $modelLink['creative_link'];
+                        $ccl->creative_type = $modelLink['creative_type'];
+                    }else{
+                        if(empty( $modelLink['creative_link'])){
+                            continue;
                         }
+                        $ccl = new CampaignCreativeLink();
+                        $ccl->campaign_id = $model->id;
+                        $ccl->creative_link = $modelLink['creative_link'];
+                        $ccl->creative_type = $modelLink['creative_type'];
+                    }
 
-                        if (! ($flag = $ccl->save(false))) {
-                            break;
-                        }
+                    if (! ($flag = $ccl->save(false))) {
+                        break;
                     }
                 }
             }
