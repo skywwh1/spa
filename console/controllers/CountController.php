@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use backend\models\FinanceAddCost;
 use backend\models\FinanceAddRevenue;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserCampaignBillTerm;
@@ -374,7 +375,7 @@ class CountController extends Controller
         $now = time();
         while ($end < $now) {
             $end = $end + 900;
-            if($end>$now){
+            if ($end > $now) {
                 $end = $now;
             }
             echo 'start click hourly ' . $start . "\n";
@@ -741,7 +742,7 @@ class CountController extends Controller
     private function countChannelBill(&$model)
     {   //history revenue
         //pending
-        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id]);
+        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id]);
         if (!empty($pends)) {
             foreach ($pends as $item) {
                 $model->pending += $item->revenue;
@@ -749,7 +750,7 @@ class CountController extends Controller
             }
         }
         //deduction
-        $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
+        $deductions = FinanceDeduction::findAll(['channel_bill_id' => $model->bill_id]);
         if (!empty($deductions)) {
             foreach ($deductions as $item) {
                 $model->deduction += $item->deduction_value;
@@ -758,16 +759,16 @@ class CountController extends Controller
             }
         }
         //add revenue
-        $addRevenue = FinanceAddRevenue::findAll(['advertiser_bill_id' => $model->bill_id]);
-        if (!empty($addRevenue)) {
-            foreach ($addRevenue as $item) {
-                $model->add_cost += $item->revenue;
-                $model->payable += $item->revenue;
-                $model->final_cost += $item->revenue;
+        $addCost = FinanceAddCost::findAll(['channel_bill_id' => $model->bill_id]);
+        if (!empty($addCost)) {
+            foreach ($addCost as $item) {
+                $model->add_cost += $item->cost;
+                $model->payable -= $item->cost;
+                $model->final_cost += $item->cost;
             }
         }
         //prepayment
-        $prepayments = FinanceChannelPrepayment::findAll(['advertiser_bill_id' => $model->bill_id]);
+        $prepayments = FinanceChannelPrepayment::findAll(['channel_bill_id' => $model->bill_id]);
         if (!empty($prepayments)) {
             foreach ($prepayments as $item) {
                 $model->apply_prepayment += $item->prepayment;
@@ -786,7 +787,7 @@ class CountController extends Controller
         $now = time();
         while ($end < $now) {
             $end = $end + 900;
-            if($end>$now){
+            if ($end > $now) {
                 $end = $now;
             }
             echo 'start click hourly ' . $start . "\n";

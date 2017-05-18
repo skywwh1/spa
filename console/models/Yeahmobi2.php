@@ -37,8 +37,9 @@ class Yeahmobi2
         $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
-            $model->save();
-            var_dump($model->getErrors());
+            if (!$model->save()) {
+                var_dump($model->getErrors());
+            }
             $uuid = $model->adv_id . '_' . $model->campaign_id;
             $camp = Campaign::findByUuid($uuid);
             if (empty($camp)) {
@@ -52,7 +53,7 @@ class Yeahmobi2
                 $camp->campaign_name = str_replace('App Download -', '', $camp->campaign_name);
                 $len = strpos($camp->campaign_name, 'Private');
             }
-            if(empty($camp->platform)){
+            if (empty($camp->platform)) {
                 $camp->platform = $model->platform;
             }
             $camp->pricing_mode = 'cpa';
@@ -77,19 +78,22 @@ class Yeahmobi2
             $camp->status = 1;
             $camp->open_type = 1;
             $camp->advertiser = $apiModel->adv_id;
-            if(empty($camp->conversion_flow)){
+            if (empty($camp->conversion_flow)) {
                 $camp->conversion_flow = $model->conversion_flow;
             }
-            if(empty($camp->carriers)){
+            if (empty($camp->carriers)) {
                 $camp->carriers = $model->carriers;
             }
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
             if ($camp->save()) {
                 Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, 1); //自动开启非手动停止的sts
+            } else {
+                var_dump($camp->campaign_uuid);
+                var_dump($camp->getErrors());
             }
             $liveCamps[] = $camp->campaign_uuid;
-            var_dump($camp->getErrors());
+
         }
         $allCams = Campaign::findAllByAdv($apiModel->adv_id);
         ApiUtil::pauseCampaignAndSts($liveCamps, $allCams);
@@ -108,7 +112,7 @@ class Yeahmobi2
             return null;
         }
         $response = json_decode($response);
-        if(!isset($response->data)){
+        if (!isset($response->data)) {
             var_dump($response);
             die();
         }
