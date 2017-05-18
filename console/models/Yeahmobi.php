@@ -29,7 +29,7 @@ class Yeahmobi
         $android = array();
         $ios = $this->genCampaigns($ios_url, $apiModel);
         $android = $this->genCampaigns($android_url, $apiModel);
-        if(!empty($ios) && !empty($android)){
+        if (!empty($ios) && !empty($android)) {
             $all = array_merge($ios, $android);
         }
         if (!empty($all)) {
@@ -69,14 +69,14 @@ class Yeahmobi
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
-            if ($daily_cap == -1) {
+            if ($daily_cap == -1 || $daily_cap === 0) {
                 $daily_cap = 'open';
             }
             if (empty($camp->promote_start)) {
                 $camp->promote_start = time();
             }
             $camp->daily_cap = $daily_cap;
-            if(empty($camp->target_geo)){
+            if (empty($camp->target_geo)) {
                 $camp->target_geo = $model->target_geo;
             }
             $camp->adv_link = $model->adv_link;
@@ -114,7 +114,7 @@ class Yeahmobi
             return null;
         }
         $response = json_decode($response);
-        if(!isset($response->data)){
+        if (!isset($response->data)) {
             var_dump($response);
             die();
         }
