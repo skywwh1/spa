@@ -20,6 +20,7 @@ use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 
+
 /**
  * CampaignController implements the CRUD actions for Campaign model.
  */
@@ -172,7 +173,9 @@ class CampaignController extends Controller
 
             if ($flag = $model->save(false)) {
                 foreach ($modelsLink as $modelLink) {
-
+                    if(empty($modelLink) || empty( $modelLink['creative_link'])){
+                        continue;
+                    }
                     $ccl = new CampaignCreativeLink();
                     $ccl->campaign_id = $model->id;
                     $ccl->creative_link = $modelLink['creative_link'];
@@ -459,11 +462,13 @@ class CampaignController extends Controller
             $creativeLinks = array();
 
             foreach ($modelCreativeLink as $modelLink) {
-                array_push($creativeLinks, $modelLink->creative_link);
-                $model->creative_type = $modelLink->creative_type;
+                $modelLink->creative_type = CampaignCreativeLink::getCreativeLinkValue($modelLink->creative_type);
+                if(!empty($modelLink->creative_type) && !empty($modelLink->creative_link)){
+                    array_push($creativeLinks,$modelLink->creative_type.":" .$modelLink->creative_link);
+                }
             }
 
-            $model->creative_link = implode(",",$creativeLinks);;
+            $model->creative_link = implode(";",$creativeLinks);;
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

@@ -362,18 +362,29 @@ class CampaignStsUpdateController extends Controller
         $this->layout = false;
         $model = new CampaignStsUpdate();
         $model->campaign_id = $campaign_id;
-        $modelsLink = CampaignCreativeLink::getCampaignCreativeLinksById($campaign_id);
+        //1、获取campaign对应的CampaignCreativeLink，并将类型和链接放到数组里面
+        $modelsLinkOld = CampaignCreativeLink::getCampaignCreativeLinksById($campaign_id);
+        $old_creative_links = array();
+        foreach ($modelsLinkOld as $modelLink) {
+            $old_creative_links[]=$modelLink['creative_link'];
+            $creative_type = CampaignCreativeLink::getCreativeLinkValue($modelLink['creative_type']);
+            array_push($old_creative_links,$creative_type.':'.$modelLink['creative_link']);
+        }
 
         if ($model->load(Yii::$app->request->post())) {
-            $this->updateCreativeLinks($modelsLink,$campaign_id);
-
             $camp = Campaign::findById($model->campaign_id);
 
+            //2、获取页面新填入的CampaignCreativeLink，并将类型和链接放到数组里面
+            $modelsLink = Yii::$app->request->post('CampaignCreativeLink');// return 2
+            //3、将新，旧的链接和类型存到CampaignStsUpdate里面
             $model->type = $type;//2 is sts 1 is campaign
             $model->name = 'update-creative';
             $model->channel_id = $channel_id;
-            $model->value = $model->creative_link;
-            $model->old_value = $camp->creative_link;
+//            $model->value = $model->creative_link;
+//            $model->old_value = $camp->creative_link;
+            $model->value = json_encode($modelsLink);
+            $model->old_value = empty($old_creative_links)?null:implode(";",$old_creative_links);
+
             $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
             $model->save();
 
@@ -384,39 +395,9 @@ class CampaignStsUpdateController extends Controller
         } else {
             return $this->renderAjax('update_creative', [
                 'model' => $model,
-                'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
+                'modelsLink' => (empty($modelsLinkOld)) ? [new CampaignCreativeLink] : $modelsLinkOld
             ]);
         }
     }
 
-    public static function updateCreativeLinks($modelsLink,$campaign_id){
-        $oldHouseIDs = ArrayHelper::map($modelsLink, 'id', 'id');
-        $modelsLink = Yii::$app->request->post('CampaignCreativeLink');// return 2
-
-        $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsLink, 'id', 'id')));
-        if (! empty($deletedHouseIDs)) {
-            CampaignCreativeLink::deleteAll(['id' => $deletedHouseIDs]);
-        }
-
-        foreach ($modelsLink as $modelLink) {
-            $ccl = CampaignCreativeLink::findOne($modelLink['id']);
-
-            if (!empty($ccl)){
-                $ccl->creative_link = $modelLink['creative_link'];
-                $ccl->creative_type = $modelLink['creative_type'];
-            }else{
-                if(empty( $modelLink['creative_link'])){
-                    continue;
-                }
-                $ccl = new CampaignCreativeLink();
-                $ccl->campaign_id = $campaign_id;
-                $ccl->creative_link = $modelLink['creative_link'];
-                $ccl->creative_type = $modelLink['creative_type'];
-            }
-
-            if (! ($flag = $ccl->save(false))) {
-                break;
-            }
-        }
-    }
 }

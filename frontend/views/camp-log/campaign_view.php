@@ -57,12 +57,12 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'version',
 //            'app_rate',
             'description',
-            'creative_link',
+            'creative_link:ntext',
             //'creative_type',
-            [
-                'attribute' => 'creative_type',
-                'value' => ModelsUtil::getCreateType($model->creative_type),
-            ],
+//            [
+//                'attribute' => 'creative_type',
+//                'value' => ModelsUtil::getCreateType($model->creative_type),
+//            ],
 //            'carriers',
 //            'conversion_flow',
 //            'recommended',

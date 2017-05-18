@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Campaign */
+/* @var $model common\models\Campaign */
 
 $this->title = $model->campaign_name;
 $this->params['breadcrumbs'][] = ['label' => 'Campaigns', 'url' => ['index']];
@@ -57,12 +58,12 @@ $this->params['breadcrumbs'][] = $this->title;
         'version',
         'app_rate',
         'description',
-        'creative_link',
+        'creative_link:ntext',
         //'creative_type',
-        [
-            'attribute' => 'creative_type',
-            'value' => ModelsUtil::getCreateType($model->creative_type),
-        ],
+//        [
+//            'attribute' => 'creative_type',
+//            'value' => ModelsUtil::getCreateType($model->creative_type),
+//        ],
         'carriers',
         'conversion_flow',
         'recommended',
