@@ -81,7 +81,7 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
             [['bill_id', 'period'], 'string', 'max' => 255],
             [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
-            [['imageFiles'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
+            [['imageFiles'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png, jpg', 'maxFiles' => 4],
         ];
     }
 
