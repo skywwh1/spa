@@ -759,7 +759,7 @@ class StatsUtil
                             $sts = Deliver::findIdentity($camp->id, $log->channel_id);
                             if ($sts->status == 1) {
                                 $check = LogAutoCheck::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $sts->channel_id,
-                                'match_cvr' => $cvr, 'match_install' => $log->match_installs])->orderBy('id DESC')->one();
+                                'match_cvr' => $cvr])->andWhere(['>', 'create_time', strtotime('today')])->one();
                                 if (empty($check)){
                                     $check = new LogAutoCheck();
                                 }else{
