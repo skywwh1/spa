@@ -9,6 +9,8 @@
 namespace common\models;
 
 use yii\helpers\Json;
+use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "campaign_sts_update".
@@ -164,5 +166,47 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
 //            $out[] = ['value' => $d];
 //        }
         return $data;
+    }
+
+    public static function updateCreativeLinks($oldModelsLink,$modelsLink,$campaign_id){
+        if (!empty($oldModelsLink)){
+            $oldHouseIDs = ArrayHelper::map($oldModelsLink, 'id', 'id');
+            $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsLink, 'id', 'id')));
+            if (! empty($deletedHouseIDs)) {
+                CampaignCreativeLink::deleteAll(['id' => $deletedHouseIDs]);
+            }
+        }
+
+        foreach ($modelsLink as $modelLink) {
+            if (!empty($modelLink)&&isset($modelLink->id)){
+                $ccl = CampaignCreativeLink::findOne($modelLink->id);
+            }
+            if (!empty($ccl)){
+                $ccl->creative_link = $modelLink->creative_link;
+                $ccl->creative_type = $modelLink->creative_type;
+            }else{
+                if(empty( $modelLink->creative_link)){
+                    continue;
+                }
+                $ccl = new CampaignCreativeLink();
+                $ccl->campaign_id = $campaign_id;
+                $ccl->creative_link = $modelLink->creative_link;
+                $ccl->creative_type = $modelLink->creative_type;
+            }
+
+            if (! ($flag = $ccl->save(false))) {
+                break;
+            }
+        }
+        return $flag;
+    }
+
+    public static function getCreativeLinkValue($creativeLink){
+        if ($creativeLink ==1){
+            $creativeLink = "banner";
+        }else if($creativeLink ==2){
+            $creativeLink = "video";
+        }
+        return $creativeLink;
     }
 }

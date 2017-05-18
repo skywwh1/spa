@@ -9,6 +9,7 @@ use frontend\models\AllCampaignSearch;
 use frontend\models\CampaignChannelLog;
 use frontend\models\CampaignChannelLogSearch;
 use frontend\models\MyCampaignSearch;
+use common\models\CampaignCreativeLink;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
@@ -117,14 +118,46 @@ class CampLogController extends Controller
         }
     }
 
+
+
     public function actionCampaignView($id)
     {
-        if (($model = Campaign::findOne($id)) == null) {
+//        if (($model = Campaign::findOne($id)) == null) {
+//            throw new NotFoundHttpException('The requested page does not exist.');
+//        }
+//        return $this->renderAjax('campaign_view', [
+//            'model' => $model,
+//        ]);
+        return $this->renderAjax('campaign_view', [
+            'model' => $this->findMutipleModel($id),
+        ]);
+    }
+
+    /**
+     * Finds the Campaign model,CampaignCreativeLink based on its primary key value.
+     * If the model is not found, a 404 HTTP exception will be thrown.
+     * @param integer $id
+     * @return Campaign the loaded model
+     * @throws NotFoundHttpException if the model cannot be found
+     */
+    protected function findMutipleModel($id)
+    {
+        if (($model = Campaign::findOne($id)) !== null) {
+            $modelCreativeLink = CampaignCreativeLink::getCampaignCreativeLinksById($id);
+            $creativeLinks = array();
+
+            foreach ($modelCreativeLink as $modelLink) {
+                $modelLink->creative_type = CampaignCreativeLink::getCreativeLinkValue($modelLink->creative_type);
+                if(!empty($modelLink->creative_type) && !empty($modelLink->creative_link)){
+                    array_push($creativeLinks,$modelLink->creative_type.":" .$modelLink->creative_link);
+                }
+            }
+
+            $model->creative_link = implode(";",$creativeLinks);;
+            return $model;
+        } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-        return $this->renderAjax('campaign_view', [
-            'model' => $model,
-        ]);
     }
 
     public function actionApply($id)

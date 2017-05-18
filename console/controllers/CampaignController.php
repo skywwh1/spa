@@ -2,6 +2,7 @@
 namespace console\controllers;
 
 use common\models\Campaign;
+use common\models\CampaignCreativeLink;
 use common\models\CampaignStsUpdate;
 use common\models\Deliver;
 use common\utility\MailUtil;
@@ -101,16 +102,18 @@ class CampaignController extends Controller
         if (isset($updateLinks)) {
             foreach ($updateLinks as $item) {
                 $camp = Campaign::findOne($item->campaign_id);
-                if (isset($camp)) {
-                    $this->echoMessage('campaign update creative link ' . $item->campaign_id);
-                    $camp ->creative_link = $item->value;
-                    $camp->save();
+                $old_creative_link = CampaignCreativeLink::getCampaignCreativeLinksById($item->campaign_id);
+                $new_creative_link = json_decode($item->value);
+                if(!empty($new_creative_link)){
+                    $flag = CampaignCreativeLink::updateCreativeLinks($old_creative_link,$new_creative_link,$item->campaign_id);
+                    if($flag){
+                        $this->echoMessage('campaign update creative link ' . $item->campaign_id);
+                        $item->is_effected = 1;
+                        $item->save();
+                    }
                 }
-                $item->is_effected = 1;
-                $item->save();
             }
         }
-
     }
 
     public function actionSendUpdate()
@@ -155,7 +158,15 @@ class CampaignController extends Controller
                         }else if ($item->name == 'update-creative') {
                             foreach ($delivers as $d) {
                                 $d->oldValue = $item->old_value;
-                                $d->newValue = $item->value;
+                                $new_links = json_decode($item->value);
+                                $str = array();
+                                foreach ($new_links as $link){
+                                    $creative_type = CampaignCreativeLink::getCreativeLinkValue($link->creative_type);
+                                    if(!empty($link->creative_type) && !empty($link->creative_link)){
+                                        array_push($str,$creative_type.':'.$link->creative_link);
+                                    }
+                                }
+                                $d->newValue = implode(";",$str);
                                 $d->effect_time = $item->effect_time;
                                 $d->creative_link = $item->creative_link;
                                 $updateCreativeLink[$camp->id][] = $d;
