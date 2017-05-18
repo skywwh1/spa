@@ -124,6 +124,7 @@ class Movista
                         $campaign->adv_price = $apiCampaign->adv_price;
                         $campaign->now_payout = $apiCampaign->adv_price > 1 ? $apiCampaign->adv_price * 0.9 : $apiCampaign->adv_price;
                         $campaign->target_geo = $apiCampaign->target_geo;
+                        $campaign->target_geo = str_replace('UK', 'GB', $campaign->target_geo);
                         if (empty($campaign->traffic_source)) {
                             $campaign->traffic_source = $apiCampaign->traffic_source;
                         }
