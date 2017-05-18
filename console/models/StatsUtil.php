@@ -758,8 +758,17 @@ class StatsUtil
                             $cvr = ($log->match_installs / $log->clicks) * 100;
                             $sts = Deliver::findIdentity($camp->id, $log->channel_id);
                             if ($sts->status == 1) {
-                                $check = LogAutoCheck::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $sts->channel_id,
-                                'match_cvr' => $cvr])->andWhere(['>', 'create_time', strtotime('today')])->one();
+                                if ($cvr > 3) {
+                                    $check = LogAutoCheck::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $sts->channel_id,])
+                                        ->andWhere(['>', 'match_cvr', 3])->andWhere(['>', 'create_time', strtotime('today')])->one();
+                                } else if ($cvr > 1.5) {
+                                    $old_discount = $sts->discount;
+                                    if ($old_discount != 99) {
+                                        $check = LogAutoCheck::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $sts->channel_id,])
+                                            ->andFilterWhere(['between', 'match_cvr', 1.5, 3])->andWhere(['>', 'create_time', strtotime('today')])->one();
+                                    }
+                                }
+
                                 if (empty($check)){
                                     $check = new LogAutoCheck();
                                 }else{
