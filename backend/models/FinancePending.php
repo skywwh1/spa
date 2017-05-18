@@ -120,4 +120,25 @@ class FinancePending extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
+
+    /**
+     * @param $start
+     * @param $end
+     * @param $campaign_id
+     * @param $channel_id
+     * @return mixed
+     */
+    public static function findPendingByCamAndChannel($campaign_id, $channel_id)
+    {
+        $query = FinancePending::find();
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $campaign_id,
+            'channel_id' => $channel_id,
+
+        ]);
+        return $query->all();
+    }
+
 }

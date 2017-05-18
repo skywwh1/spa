@@ -223,6 +223,18 @@ class FinancePendingController extends Controller
 
         $start = strtotime($model->start_date);
         $end = strtotime($model->end_date) + 3600 * 24;
+
+        $datas = FinancePending::findPendingByCamAndChannel( $model->campaign_id, $model->channel_id);
+        foreach ($datas as $financePending){
+            $flag = $this->compareTimeBetween($financePending,$start,strtotime($model->end_date));
+            var_dump($flag);
+            if(!$flag){
+                break;
+            }
+        }
+        if(!$flag)
+            return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
+
         $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
         if(!empty($records)){
             $pending = new FinancePending();
@@ -316,5 +328,17 @@ class FinancePendingController extends Controller
             }
             $this->asJson(ActiveForm::validate($model));
         }
+    }
+
+    /**比较是否在时间范围内
+     * @param $financePending
+     * @param $model
+     * @return bool
+     */
+    private function compareTimeBetween($financePending,$start,$end){
+        if (($financePending->start_date <= $start && $start <= $financePending->end_date)
+            || ($financePending->start_date <= $end && $end <= $financePending->end_date))
+            return false;
+        return true;
     }
 }
