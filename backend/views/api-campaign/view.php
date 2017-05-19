@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'version',
             'app_rate',
             'description',
-            'creative_link',
+            'creative_link:ntext',
             'creative_type',
             'creative_description',
             'carriers',
