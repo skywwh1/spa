@@ -63,7 +63,7 @@ class FinancePendingSearch extends FinancePending
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'fp.id' => $this->id,
             'adv_id' => $this->adv_id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
@@ -76,7 +76,7 @@ class FinancePendingSearch extends FinancePending
             'cost' => $this->cost,
             'revenue' => $this->revenue,
             'margin' => $this->margin,
-            'status' => $this->status,
+            'fp.status' => $this->status,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
         ]);
@@ -86,9 +86,9 @@ class FinancePendingSearch extends FinancePending
         $query->andFilterWhere(['like', 'adv_bill_id', $this->adv_bill_id])
             ->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
             ->andFilterWhere(['like', 'adv', $this->adv])
-            ->andFilterWhere(['like', 'pm', $this->pm])
+            ->andFilterWhere(['like', 'fp.pm', $this->pm])
             ->andFilterWhere(['like', 'bd', $this->bd])
-            ->andFilterWhere(['like', 'om', $this->om])
+            ->andFilterWhere(['like', 'fp.om', $this->om])
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'adv_bill_id', $this->month])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
