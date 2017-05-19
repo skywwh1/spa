@@ -3,6 +3,7 @@
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FinanceDeductionSearch */
@@ -72,6 +73,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     // 'label' => 'channel_id',
                                     'attribute' => 'channel_name',
                                     'value' => 'channel.username',
+                                ],
+                                [
+                                    'attribute' => 'month',
+                                    'value' => function($model){
+                                        return isset($model->adv_bill_id) ? substr($model->adv_bill_id,3) : Yii::$app->formatter->asDate('now', 'php:Y-m');
+                                    },
+                                    'filter' =>  DatePicker::widget([
+                                        'model' => $searchModel,
+                                        'attribute' => 'month',
+                                        'name' => 'month',
+                                        'type' => DatePicker::TYPE_INPUT,
+                                        'pluginOptions' => [
+                                            'autoclose'=>true,
+                                            'format' => 'yyyymm',
+                                        ],
+                                    ]),
                                 ],
                                 [
                                     // 'label' => 'start_date',
