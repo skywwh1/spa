@@ -12,6 +12,8 @@ use backend\models\FinancePending;
  */
 class FinancePendingSearch extends FinancePending
 {
+    public $month;
+    public $channel_name;
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class FinancePendingSearch extends FinancePending
     {
         return [
             [['id', 'adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
-            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note'], 'safe'],
+            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note','month','channel_name'], 'safe'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
         ];
     }
@@ -43,6 +45,7 @@ class FinancePendingSearch extends FinancePending
     public function search($params)
     {
         $query = FinancePending::find();
+        $query->alias("fp");
 
         // add conditions that should always apply here
 
@@ -78,13 +81,17 @@ class FinancePendingSearch extends FinancePending
             'update_time' => $this->update_time,
         ]);
 
+        $query->leftJoin('channel ch', 'fp.channel_id = ch.id');
+
         $query->andFilterWhere(['like', 'adv_bill_id', $this->adv_bill_id])
             ->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
             ->andFilterWhere(['like', 'adv', $this->adv])
             ->andFilterWhere(['like', 'pm', $this->pm])
             ->andFilterWhere(['like', 'bd', $this->bd])
             ->andFilterWhere(['like', 'om', $this->om])
-            ->andFilterWhere(['like', 'note', $this->note]);
+            ->andFilterWhere(['like', 'note', $this->note])
+            ->andFilterWhere(['like', 'adv_bill_id', $this->month])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
 
         return $dataProvider;
     }

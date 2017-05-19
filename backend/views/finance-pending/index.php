@@ -3,6 +3,7 @@
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use kartik\date\DatePicker;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FinancePendingSearch */
@@ -18,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                     <div class="finance-pending-index">
 
-                        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+<!--                        --><?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
                         <p>
                             <?= Html::a('Add Campaign Pending', ['add-campaign'], ['class' => 'btn btn-success']) ?>
@@ -28,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'id' => 'pending-list',
-                            'pjax' => true,
+                            'pjax' => false,
                             'columns' => [
                                 [
                                     'class' => 'kartik\grid\ActionColumn',
@@ -58,6 +59,22 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => 'Channel',
                                     'attribute' => 'channel_name',
                                     'value' => 'channel.username',
+                                ],
+                                [
+                                   'attribute' => 'month',
+                                    'value' => function($model){
+                                        return isset($model->adv_bill_id) ? substr($model->adv_bill_id,3) : Yii::$app->formatter->asDate('now', 'php:Y-m');
+                                    },
+                                    'filter' =>  DatePicker::widget([
+                                        'model' => $searchModel,
+                                        'attribute' => 'month',
+                                        'name' => 'month',
+                                        'type' => DatePicker::TYPE_INPUT,
+                                        'pluginOptions' => [
+                                            'autoclose'=>true,
+                                            'format' => 'yyyymm',
+                                        ],
+                                    ]),
                                 ],
                                 [
                                     // 'label' => 'campaign_id',
