@@ -224,16 +224,16 @@ class FinancePendingController extends Controller
         $start = strtotime($model->start_date);
         $end = strtotime($model->end_date) + 3600 * 24;
 
-        $datas = FinancePending::findPendingByCamAndChannel( $model->campaign_id, $model->channel_id);
-        foreach ($datas as $financePending){
-            $flag = $this->compareTimeBetween($financePending,$start,strtotime($model->end_date));
-            var_dump($flag);
-            if(!$flag){
-                break;
-            }
-        }
-        if(!$flag)
-            return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
+//        $datas = FinancePending::findPendingByCamAndChannel( $model->campaign_id, $model->channel_id);
+//        foreach ($datas as $financePending){
+//            $flag = $this->compareTimeBetween($financePending,$start,strtotime($model->end_date));
+//            var_dump($flag);
+//            if(!$flag){
+//                break;
+//            }
+//        }
+//        if(!$flag)
+//            return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
 
         $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
         if(!empty($records)){
