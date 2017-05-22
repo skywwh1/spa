@@ -4,8 +4,10 @@ namespace backend\controllers;
 
 use common\models\Deliver;
 use Yii;
+use common\models\Campaign;
 use common\models\ApplyCampaign;
 use common\models\ApplyCampaignSearch;
+use common\models\ChannelBlack;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -40,6 +42,7 @@ class ApplyCampaignController extends Controller
                             'delete',
                             'deliver-create',
                             'reject',
+                            'check-black-channel',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -180,8 +183,6 @@ class ApplyCampaignController extends Controller
                 return "success";
             } else {
                 var_dump($deliver->getErrors());
-//                die();
-//                return $deliver->getErrors();
             }
 
         } else {
@@ -211,6 +212,58 @@ class ApplyCampaignController extends Controller
                 $item->status = 2;
                 $item->save();
             }
+        }
+    }
+
+    private function checkIsBlackChannel($channel_id,$campaign_id){
+        $return_msg = array();
+        $camp = Campaign::findOne($campaign_id);
+
+        if (!empty($camp->target_geo)) {
+
+            $targetGeos = explode(",",$camp->target_geo);
+
+            if (!empty($targetGeos)){
+                foreach ($targetGeos as $geo) {
+
+                    $channel_black_list = ChannelBlack::find()
+                        ->where(['channel_id' => $channel_id])
+                        ->andWhere(['advertiser' => $camp->advertiser])
+                        ->andFilterWhere(['like', 'geo', $geo])
+                        ->all();
+
+                    if (!empty($channel_black_list)){
+                        foreach ($channel_black_list as $black_channel) {
+                            // $black_channel[0]不为空
+                            if ( $black_channel->action_type == 1){
+                                $str = 'Cannot apply for a channel in blackChannel list!'.(empty($black_channel->note)?null:'Note:'.$black_channel->note);
+                                $return_msg[] = $str;
+                            }else{
+                                $str = 'Are you sure S2S?'.(empty($black_channel->note)?null:'Note:'.$black_channel->note);
+                                $return_msg[] = $str;
+                            }
+                        }
+                    }
+                }
+                $return_msg = implode(";",$return_msg);
+            }
+        }
+        return  $return_msg;
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @return array|string
+     * 检查是否在渠道黑名单里面
+     */
+    public function actionCheckBlackChannel($campaign_id, $channel_id){
+        $request = Yii::$app->request;
+
+        if($request->isAjax && $request->get()) {
+            $returnMsg = $this->checkIsBlackChannel($channel_id,$campaign_id);
+            if (!empty($returnMsg))
+                return $returnMsg;
         }
     }
 }

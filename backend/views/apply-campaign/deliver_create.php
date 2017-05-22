@@ -43,9 +43,9 @@ $this->params['breadcrumbs'][] = 'Update';
 <?= $form->field($model, 'discount')->textInput() ?>
 <?php //$form->field($model, 'is_run')->dropDownList(ModelsUtil::status) ?>
 
-<div class="form-group">
-    <?= Html::submitButton('Approve', ['class' => 'btn btn-success']) ?>
-    <?= Html::button('Reject', ['class' => 'btn btn-danger','id'=>'campaignRejectButton']) ?>
-</div>
+    <div class="form-group">
+        <?= Html::submitButton('Approve', ['class' => 'btn btn-success']) ?>
+        <?= Html::button('Reject', ['class' => 'btn btn-danger','id'=>'campaignRejectButton']) ?>
+    </div>
 
 <?php ActiveForm::end(); ?>
