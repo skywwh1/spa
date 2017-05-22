@@ -99,7 +99,7 @@ class HeadWay
         $camp->payout_currency = $model->payout_currency;
         $camp->daily_budget = $model->daily_budget;
         $daily_cap = $model->daily_budget / $model->adv_price;
-        if (isset($daily_cap)) {
+        if (!empty($daily_cap)) {
             $daily_cap = intval($model->daily_budget / $model->adv_price);
 
         } else {
