@@ -28,6 +28,8 @@ class Mundo
         if (!empty($allCamps)) {
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $allCamps);
             $this->transferApiModel($apiModel, $apiCams);
+        } else {
+            var_dump("error network");
         }
 
     }
@@ -71,7 +73,7 @@ class Mundo
             $camp->preview_link = $model->preview_link;
             $camp->note = $model->note;
             $camp->category = $model->category;
-            $camp->kpi = $model->conversion_flow.':'.$model->status;
+            $camp->kpi = $model->conversion_flow . ':' . $model->status;
             $camp->status = 1;
             $camp->open_type = 1;
 
@@ -121,7 +123,8 @@ class Mundo
         $limit = 100;
         $total = isset($response->recordsFiltered) ? $response->recordsFiltered : 0;
         $data = isset($response->$data_key) ? $response->$data_key : array();
-//            var_dump($data);
+        echo "total " . $total . "\n";
+        var_dump($data);
 //            die();
         $apiCampaigns = $data;
         if ($total > $limit) {
@@ -129,7 +132,8 @@ class Mundo
             for ($i = 1; $i <= $totalPage; $i++) {
                 $newUrl = $url . '&skip=' . ($i * $limit);
                 $curl = new Curl();
-                $response = $curl->get($url);
+                echo "new url " . $newUrl . "\n";
+                $response = $curl->get($newUrl);
                 $response = json_decode($response);
                 if (isset($response->$data_key)) {
                     $apiCampaigns[] = $response->$data_key;
@@ -155,9 +159,9 @@ class Mundo
                 if (!empty($response)) {
                     foreach ($response as $aa) {
                         if (isset($aa->link)) {
-                            if(empty($item->isp)){
+                            if (empty($item->isp)) {
                                 $item->isp = $aa->link . ';';
-                            }else{
+                            } else {
                                 $item->isp .= $aa->link . ';';
                             }
                         }
