@@ -26,8 +26,8 @@ class Nposting
         $data_key = $apiModel->json_offers_param;
         $url = $apiModel->url;
         $curl = new Curl();
-        $curl->setOption(CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
-        $curl->setOption(CURLOPT_COOKIE,'');
+        $curl->setOption(CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
+        $curl->setOption(CURLOPT_COOKIE, '');
         $response = $curl->get($url);
 //        var_dump($response);
         if (isset($response)) {
@@ -65,7 +65,8 @@ class Nposting
             } else {
                 $camp->pricing_mode = 'cpi';
             }
-            $camp->adv_price = round($model->adv_price / 1250, 2);
+//            $camp->adv_price = round($model->adv_price / 1250, 2);
+            $camp->adv_price = $model->adv_price;
             $camp->now_payout = $camp->adv_price > 1 ? $camp->adv_price * 0.9 : $camp->adv_price;
             $daily_cap = $model->daily_cap;
 
@@ -137,8 +138,8 @@ class Nposting
                 $newUrl = $url . '&camp_id=' . $item->camp_id;
                 echo $newUrl . "\n";
                 $curl = new Curl();
-                $curl->setOption(CURLOPT_USERAGENT,"Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
-                $curl->setOption(CURLOPT_COOKIE,'');
+                $curl->setOption(CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
+                $curl->setOption(CURLOPT_COOKIE, '');
                 $response = $curl->get($newUrl);
 
                 if (isset($response)) {
