@@ -842,6 +842,11 @@ class StatsUtil
                 $check = LogAutoCheck::find()->where(['campaign_id' => $log->campaign_id, 'channel_id' => $log->channel_id])->andWhere(['>', 'create_time', strtotime('today')])->one();
                 if (empty($check)) {
                     $check = new LogAutoCheck();
+                    if ($log->clicks == 0) {
+                        continue;
+                    }
+                    $cvr = ($log->match_installs / $log->clicks) * 100;
+                    $check->match_cvr = $cvr;
                     $check->campaign_id = $log->campaign_id;
                     $check->channel_id = $log->channel_id;
                     $check->campaign_name = $log->campaign_name;
@@ -850,9 +855,16 @@ class StatsUtil
                     $check->match_install = $log->match_installs;
                     $check->daily_cap = $log->daily_cap;
                     $check->type = 2;
-                    $check->save();
+                    if ($cvr > 1.5) {
+                        $check->action = 'pause';
+                        $check->save();
+                        echo "deliver pause-" . $log->campaign_id . "-" . $log->channel_id . PHP_EOL;
+                    } else if ($cvr < 1.5) {
+                        echo "deliver discount-" . $log->campaign_id . "-" . $log->channel_id  . PHP_EOL;
+                        $check->action = '99%discount';
+                        $check->save();
+                    }
                 }
-
             }
         }
 
