@@ -130,7 +130,7 @@ class Nposting
 
     private function getAllCampaigns($data)
     {
-        $url = "http://api.nposting.com/campaign/detail?lang=english&api_cd=f421b8d6334cf1971ebfa56b49fdedc2";
+        $url = "http://api.nposting.com/campaign/lists?lang=english&api_cd=885d8d8ac0e193642c5e85229972b1cd";
         $apiCampaigns = array();
         $miss = array();
         if (!empty($data)) {
