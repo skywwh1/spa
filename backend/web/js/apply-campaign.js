@@ -3,10 +3,29 @@
  */
 
 $(document).on("click", "a[data-view=0]", function (e) {
-    // alert('aaa');
-    $('#campaign-detail-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
+    //alert('aaa');
+    var params = $(this).attr('data-url').split("?")[1];
+    $.ajax({
+        async: true,
+        url:'/apply-campaign/check-black-channel?' + params,
+        type: 'get',
+        success: function (result) {
+            if(result.indexOf("Cannot")>=0) {
+                //console.log(result);
+                alert(result);
+            }else if(result.indexOf("Are you sure S2S?")>=0){
+                console.log(result);
+                if (confirm(result)) {
+                    $('#campaign-detail-modal').modal('show').find('#campaign-detail-content').load('/apply-campaign/deliver-create?'+params);
+                }else{
+                    window.location.reload();
+                }
+            }else{
+                $('#campaign-detail-modal').modal('show').find('#campaign-detail-content').load('/apply-campaign/deliver-create?'+params);
+            }
+        }
+    });
     //$.pjax.reload({container:"#countries"});  //Reload GridView
-
 });
 $('#campaign-detail-modal').on('hidden.bs.modal', function () {
     // do something…
@@ -56,3 +75,36 @@ $(document).on('click', '#campaignRejectButton', function () {
         });
     }
 });
+
+//$(document).on('click', '#apply-btn', function () {
+//    var url = '/apply-campaign/deliver-create?campaign_id=' + $('#deliver-campaign_id').val() + '&channel_id=' + $('#deliver-channel_id').val();
+//
+//    $.get(url, function(result){
+//        //$("div").html(result);
+//        if(result.indexOf("Cannot")>0){
+//            console.log(result);
+//            alert(result);
+//        }else{
+//            $('#campaign-detail-modal').modal('hide');
+//        }
+//    });
+    //$.ajax({
+    //    async: true,
+    //    url: '/apply-campaign/deliver-create?campaign_id=' + $('#deliver-campaign_id').val() + '&channel_id=' + $('#deliver-channel_id').val(),
+    //    type: 'post',
+    //    success: function (response) {
+    //        //alert(response);
+    //        if(response.indexOf("Cannot")>0){
+    //            alert(response);
+    //        }else{
+    //
+    //        }
+    //    }
+    //});
+    //$.post(url, function(result){
+    //    console.log(result);
+    //    if(result.indexOf("Cannot")>0){
+    //        alert(result);
+    //    }
+    //});
+//});

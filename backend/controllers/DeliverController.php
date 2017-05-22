@@ -129,7 +129,7 @@ class DeliverController extends Controller
                             $channel_black_list = ChannelBlack::find()
                                 ->where(['channel_id' => $channel_id])
                                 ->andWhere(['advertiser' => $camp->advertiser])
-                                ->andWhere(['geo' => $geo])
+                                ->andFilterWhere(['like', 'geo', $geo])
                                 ->asArray()
                                 ->all();
                             if (!empty($channel_black_list)){

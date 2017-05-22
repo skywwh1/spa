@@ -175,10 +175,11 @@ class CampLogController extends Controller
             }
             $searchModel = new AllCampaignSearch();
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            return $this->render('all_offers', [
-                'searchModel' => $searchModel,
-                'dataProvider' => $dataProvider,
-            ]);
+//            return $this->render('all_offers', [
+//                'searchModel' => $searchModel,
+//                'dataProvider' => $dataProvider,
+//            ]);
+            return $this->redirect(Yii::$app->request->referrer);
         }
         return null;
     }
