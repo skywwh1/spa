@@ -103,4 +103,10 @@ class ApiController extends Controller
         $yeah->getApiCampaign();
     }
 
+    public function actionGetMundo()
+    {
+        $yeah = new Mundo();
+        $yeah->getApiCampaign();
+    }
+
 }

@@ -24,6 +24,7 @@ use common\models\Stream;
 use console\models\Glispa;
 use console\models\Mi;
 use console\models\Movista;
+use console\models\Mundo;
 use console\models\StaticsUtil;
 use console\models\StatsUtil;
 use console\models\Yeahmobi;
@@ -43,6 +44,9 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $aa = new Mundo();
+        $aa->getApiCampaign();
+
 date_default_timezone_set('Etc/GMT-8');
 echo strtotime('2017/05/17');
 echo date('Y-m-d H:i:s',1495036800);
