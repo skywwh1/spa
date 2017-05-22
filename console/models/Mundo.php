@@ -71,6 +71,7 @@ class Mundo
             $camp->preview_link = $model->preview_link;
             $camp->note = $model->note;
             $camp->category = $model->category;
+            $camp->kpi = $model->status;
             $camp->status = 1;
             $camp->open_type = 1;
 
