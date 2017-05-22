@@ -14,6 +14,7 @@ use console\models\HeadWay;
 use console\models\Mi;
 use console\models\MiDirect;
 use console\models\Movista;
+use console\models\Mundo;
 use console\models\Nposting;
 use console\models\Yeahmobi;
 use console\models\Yeahmobi2;
@@ -46,6 +47,9 @@ class ApiController extends Controller
 //        $yeah->getApiCampaign();
 
         $yeah = new Nposting();
+        $yeah->getApiCampaign();
+
+        $yeah = new Mundo();
         $yeah->getApiCampaign();
 
     }
