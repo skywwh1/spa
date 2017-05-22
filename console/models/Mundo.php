@@ -74,6 +74,9 @@ class Mundo
             $camp->note = $model->note;
             $camp->category = $model->category;
             $camp->kpi = $model->conversion_flow . ':' . $model->status;
+            if($model->conversion_flow == 'None'){
+                $camp->kpi = 'Day 2 RR > 30%';
+            }
             $camp->status = 1;
             $camp->open_type = 1;
 
@@ -118,13 +121,14 @@ class Mundo
         $data_key = $apiModel->json_offers_param;
         $url = $apiModel->url;
         $curl = new Curl();
+        echo "url " . $url . "\n";
         $response = $curl->get($url);
         $response = json_decode($response);
         $limit = 100;
         $total = isset($response->recordsFiltered) ? $response->recordsFiltered : 0;
         $data = isset($response->$data_key) ? $response->$data_key : array();
         echo "total " . $total . "\n";
-        var_dump($data);
+//        var_dump($data);
 //            die();
         $apiCampaigns = $data;
         if ($total > $limit) {
