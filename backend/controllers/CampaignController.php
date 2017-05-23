@@ -222,17 +222,6 @@ class CampaignController extends Controller
      */
     public function actionUpdate($id)
     {
-//        $model = $this->findModel($id);
-//        $this->beforeUpdate($model);
-//        if ($model->load(Yii::$app->request->post())) {
-//            $this->beforeSave($model);
-//            if ($model->save()) {
-//                return $this->redirect(['index']);
-//            }
-//        }
-//        return $this->render('update', [
-//            'model' => $model,
-//        ]);
         $model = $this->findModel($id);
         $modelsLink = CampaignCreativeLink::getCampaignCreativeLinksById($id);
 
@@ -276,10 +265,10 @@ class CampaignController extends Controller
                 }
             }
             if ($flag) {
-                return $this->redirect(['index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
         }
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
             'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
         ]);
