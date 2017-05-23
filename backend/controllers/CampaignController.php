@@ -56,6 +56,7 @@ class CampaignController extends Controller
                             'restart',
                             'api-index',
                             'cpa-index',
+                            'mundo-index',
                             'recommend',
                         ],
                         'allow' => true,
@@ -100,6 +101,21 @@ class CampaignController extends Controller
         $dataProvider = $searchModel->apiSearch(Yii::$app->request->queryParams);
 
         return $this->render('api_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionMundoIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->mundoSearch(Yii::$app->request->queryParams);
+
+        return $this->render('mundo_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
