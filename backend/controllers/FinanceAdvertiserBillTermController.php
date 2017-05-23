@@ -7,6 +7,7 @@ use backend\models\FinanceAdvertiserCampaignBillTermSearch;
 use backend\models\FinanceAdvertiserPrepaymentSearch;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
+use common\models\Advertiser;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
@@ -130,6 +131,7 @@ class FinanceAdvertiserBillTermController extends Controller
     public function actionEdit($bill_id)
     {
         $model = $this->findModel($bill_id);
+        $advertiser = Advertiser::findOne($model->adv_id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
@@ -173,6 +175,7 @@ class FinanceAdvertiserBillTermController extends Controller
             return $this->render('update', [
                 'receivableList' => $receivableList,
                 'model' => $model,
+                'advertiser' => $advertiser,
                 'systemRevenueList' => $systemRevenueList,
                 'deductionList' => $deductionList,
                 'pendingList' => $pendingList,
@@ -190,6 +193,31 @@ class FinanceAdvertiserBillTermController extends Controller
             $this->asJson(['success' => 1]);
         } else {
             var_dump($bill->getErrors());
+        }
+    }
+
+    /**
+     * @param $bill_id
+     * @return string
+     */
+    public function actionAdjust($bill_id)
+    {
+        $model = new FinanceAdvertiserBillTerm();
+        $model->bill_id = $bill_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $advBill = FinanceAdvertiserBillTerm::findOne($bill_id);
+            $advBill->adjust_revenue = $model->adjust_revenue;
+            $advBill->adjust_note = $model->adjust_note;
+            if ($advBill->save()) {
+                return $this->asJson(['success' => 1]);
+            } else {
+                var_dump($advBill->getErrors());
+            }
+        } else {
+            return $this->renderAjax('adjust', [
+                'model' => $model,
+            ]);
         }
     }
 }

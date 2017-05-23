@@ -21,6 +21,21 @@ use yii\widgets\ActiveForm;
 
             <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'payment_term')->dropDownList(ModelsUtil::payment_term) ?>
+
+            <?= $form->field($model, 'beneficiary_name')->textInput() ?>
+
+            <?= $form->field($model, 'bank_country')->textInput(['maxlength' => true]) ?>
+
+
+            <?= $form->field($model, 'bank_name')->textInput(['maxlength' => true]) ?>
+
+
+            <?= $form->field($model, 'bank_address')->textInput(['maxlength' => true]) ?>
+
+
+            <?= $form->field($model, 'swift')->textInput(['maxlength' => true]) ?>
+
+            <?= $form->field($model, 'account_nu_iban')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'pm')->textInput(['maxlength' => true, 'readonly' => true]) ?>
             <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
                 'pluginOptions' => ['highlight' => true],

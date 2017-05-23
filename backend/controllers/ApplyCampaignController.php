@@ -238,6 +238,7 @@ class ApplyCampaignController extends Controller
                             if ( $black_channel->action_type == 1){
                                 $str = 'Cannot apply for a channel in blackChannel list!'.(empty($black_channel->note)?null:'Note:'.$black_channel->note);
                                 $return_msg[] = $str;
+                                break;
                             }else{
                                 $str = 'Are you sure S2S?'.(empty($black_channel->note)?null:'Note:'.$black_channel->note);
                                 $return_msg[] = $str;

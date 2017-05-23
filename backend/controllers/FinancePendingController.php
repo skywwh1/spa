@@ -207,7 +207,8 @@ class FinancePendingController extends Controller
     }
 
     /**
-     * @param FinancePendingForm $model
+     * @param $model
+     * @return string
      */
     private function savePending($model)
     {
@@ -224,16 +225,20 @@ class FinancePendingController extends Controller
         $start = strtotime($model->start_date);
         $end = strtotime($model->end_date) + 3600 * 24;
 
-//        $datas = FinancePending::findPendingByCamAndChannel( $model->campaign_id, $model->channel_id);
-//        foreach ($datas as $financePending){
-//            $flag = $this->compareTimeBetween($financePending,$start,strtotime($model->end_date));
-//            var_dump($flag);
-//            if(!$flag){
-//                break;
-//            }
-//        }
-//        if(!$flag)
-//            return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
+        $datas = FinancePending::findPendingByCamAndChannel( $model->campaign_id, $model->channel_id);
+        $flag = true;
+        foreach ($datas as $financePending){
+            $flag = $this->compareTimeBetween($financePending,$start,strtotime($model->end_date));
+            if(!$flag)
+                break;
+        }
+        if(!$flag){
+//            var_dump("验证时间成功");
+//            die();
+            return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
+        }
+//        var_dump("无重复时间");
+//        die();
 
         $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
         if(!empty($records)){
@@ -332,7 +337,8 @@ class FinancePendingController extends Controller
 
     /**比较是否在时间范围内
      * @param $financePending
-     * @param $model
+     * @param $start
+     * @param $end
      * @return bool
      */
     private function compareTimeBetween($financePending,$start,$end){

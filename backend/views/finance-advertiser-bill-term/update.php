@@ -63,21 +63,40 @@ $this->params['breadcrumbs'][] = 'Update';
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'beneficiary_name', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'account_nu_iban', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'bank_name', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'bank_address', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'swift', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
                     <?= $form->field($model, 'note', [
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textarea(['rows' => 6]) ?>
-
                 </div>
 
                 <div class="box-footer">
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?php
                         Modal::begin([
                             'header' => 'File Upload',
@@ -95,10 +114,10 @@ $this->params['breadcrumbs'][] = 'Update';
 
                         //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::button('Download File', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::a('Add Revenue', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Add Revenue',
@@ -106,7 +125,15 @@ $this->params['breadcrumbs'][] = 'Update';
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
+                        <?= Html::a('Adjust', null, [
+                            'class' => 'btn btn-primary',
+                            'data-title' => 'Adjust',
+                            'data-url' => '/finance-advertiser-bill-term/adjust?bill_id=' . $model->bill_id,
+                            'data-view' => 0,
+                        ]) ?>
+                    </div>
+                    <div class="col-lg-1">
                         <?= Html::a('Apply Prepayment', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Apply prepayment',
@@ -131,6 +158,8 @@ $this->params['breadcrumbs'][] = 'Update';
                     <?= GridView::widget([
                         'dataProvider' => $receivableList,
                         'layout' => '{items}',
+                        'pjax' => true,
+                        'id' => 'data-list',
                         'columns' => [
                             [
                                 'label' => 'Payment Term',
@@ -171,6 +200,16 @@ $this->params['breadcrumbs'][] = 'Update';
                             [
                                 'attribute' => 'final_revenue',
                                 'value' => 'final_revenue',
+                            ],
+                            [
+                                'attribute' => 'adjust_revenue',
+                                'value' => 'adjust_revenue',
+                                'contentOptions' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->adjust_revenue >0 ) {
+                                        return ['class' => 'bg-danger'];
+                                    }
+                                }
                             ],
                             [
                                 'attribute' => 'actual_margin',

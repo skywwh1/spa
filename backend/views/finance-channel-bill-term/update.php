@@ -67,10 +67,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
-                    <?= $form->field($model, 'note', [
-                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
-                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
-                    ])->textarea(['rows' => 6]) ?>
                     <?= $form->field($channel, 'beneficiary_name', [
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
@@ -91,17 +87,21 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($model, 'note', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textarea(['rows' => 6]) ?>
                 </div>
 
                 <div class="box-footer">
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <?php ActiveForm::end(); ?>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?php
                         Modal::begin([
                             'header'=>'File Upload',
@@ -119,10 +119,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 
                         //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::submitButton('Download File', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::a('Add Cost', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Add Cost',
@@ -130,7 +130,15 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
+                        <?= Html::a('Adjust', null, [
+                            'class' => 'btn btn-primary',
+                            'data-title' => 'Adjust',
+                            'data-url' => '/finance-channel-bill-term/adjust?bill_id=' . $model->bill_id,
+                            'data-view' => 0,
+                        ]) ?>
+                    </div>
+                    <div class="col-lg-1">
                         <?= Html::a('Apply Prepayment', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Apply prepayment',
@@ -155,6 +163,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $payable,
                         'layout' => '{items}',
+                        'id' => 'data-list',
                         'columns' => [
                             [
                                 'label' => 'Account Type',
@@ -202,6 +211,16 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 //                                'label' => 'final_cost',
                                 'attribute' => 'final_cost',
                                 'value' => 'final_cost',
+                            ],
+                            [
+                                'attribute' => 'adjust_cost',
+                                'value' => 'adjust_cost',
+                                'contentOptions' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->adjust_cost >0 ) {
+                                        return ['class' => 'bg-danger'];
+                                    }
+                                }
                             ],
                             [
 //                                'label' => 'actual_margin',

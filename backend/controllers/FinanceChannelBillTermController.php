@@ -236,4 +236,29 @@ class FinanceChannelBillTermController extends Controller
 //
       //  return $this->render('upload', ['model' => $model]);
     }
+
+    /**
+     * @param $bill_id
+     * @return string
+     */
+    public function actionAdjust($bill_id)
+    {
+        $model = new FinanceChannelBillTerm();
+        $model->bill_id = $bill_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $channelBill = FinanceChannelBillTerm::findOne($bill_id);
+            $channelBill->adjust_cost = $model->adjust_cost;
+            $channelBill->adjust_note = $model->adjust_note;
+            if ($channelBill->save()) {
+                return $this->asJson(['success' => 1]);
+            } else {
+                var_dump($channelBill->getErrors());
+            }
+        } else {
+            return $this->renderAjax('adjust', [
+                'model' => $model,
+            ]);
+        }
+    }
 }

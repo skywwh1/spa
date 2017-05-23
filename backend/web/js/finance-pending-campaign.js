@@ -173,3 +173,31 @@ $(document).on("click", "a[data-retreat=0]", function (e) {
     });
 
 });
+
+$(document).ready(function () {
+    $('body').on('beforeSubmit', 'form#adjust-cost-form', function () {
+        var form = $(this);
+        // return false if form still have some validation errors
+        if (form.find('.has-error').length) {
+            return false;
+        }
+        // submit form
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: form.serialize(),
+            success: function (response) {
+                if (response.success) {
+                    $('#pending-modal').modal('hide');
+                    $.pjax.reload({container: "#data-list"});  //Reload GridView
+                } else {
+                    alert(response);
+                }
+            },
+            error: function () {
+                console.log('internal server error');
+            }
+        });
+        return false;
+    });
+});

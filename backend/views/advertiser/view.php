@@ -31,6 +31,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ModelsUtil::getPaymentTerm( $model->payment_term);
                                 },
                             ],
+                            'beneficiary_name',
+                            'bank_country',
+                            'bank_name',
+                            'bank_address',
+                            'swift',
+                            'account_nu_iban',
                             // 'bd',
                             [
                                 'attribute' => 'bd',
