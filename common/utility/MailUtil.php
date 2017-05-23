@@ -222,7 +222,6 @@ class MailUtil
    */
     public static function updateCreativeLink($deliver)
     {
-
         $channel = Channel::findIdentity($deliver->channel_id);
         $mail = Yii::$app->mailer->compose('update_creative_link', ['deliver' => $deliver]);
         $mail->setTo($channel->email);
@@ -283,6 +282,34 @@ class MailUtil
             $isSend = 1;
         }
         $param = array('type' => 'send good offers', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $advertiser
+     * @return bool
+     */
+    public static function numberConfirm($advertiser)
+    {
+        $mail = Yii::$app->mailer->compose('number_confirm', ['advertiser' => $advertiser]);
+        $mail->setTo($advertiser->email);
+//        $cc = array($advertiser->bd0->email);
+//        if (!empty($advertiser->cc_email) && !empty(explode(';', $advertiser->cc_email))) {
+//            $cc = array_merge($cc, explode(';', $advertiser->cc_email));
+//        }
+//        $mail->setCc($cc);
+        $mail->setTo("2539131080@qq.com");
+        $mail->setSubject('Number Confirm - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'cap update', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
         if ($isSend) {
             return true;
