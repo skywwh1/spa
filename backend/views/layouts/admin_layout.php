@@ -120,6 +120,8 @@ AdminAsset::register($this);
                                 List</a></li>
                         <li><a href="/campaign/api-index" data-menu="campaign_api"><i class="fa fa-circle-o"></i> ASXMI
                                 List</a></li>
+                        <li><a href="/campaign/mundo-index" data-menu="mundo_api"><i class="fa fa-circle-o"></i> Mundo
+                                List</a></li>
                         <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create
                                 Offer</a></li>
                         <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i

@@ -56,6 +56,7 @@ class CampaignController extends Controller
                             'restart',
                             'api-index',
                             'cpa-index',
+                            'mundo-index',
                             'recommend',
                         ],
                         'allow' => true,
@@ -100,6 +101,21 @@ class CampaignController extends Controller
         $dataProvider = $searchModel->apiSearch(Yii::$app->request->queryParams);
 
         return $this->render('api_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionMundoIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->mundoSearch(Yii::$app->request->queryParams);
+
+        return $this->render('mundo_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -206,17 +222,6 @@ class CampaignController extends Controller
      */
     public function actionUpdate($id)
     {
-//        $model = $this->findModel($id);
-//        $this->beforeUpdate($model);
-//        if ($model->load(Yii::$app->request->post())) {
-//            $this->beforeSave($model);
-//            if ($model->save()) {
-//                return $this->redirect(['index']);
-//            }
-//        }
-//        return $this->render('update', [
-//            'model' => $model,
-//        ]);
         $model = $this->findModel($id);
         $modelsLink = CampaignCreativeLink::getCampaignCreativeLinksById($id);
 
@@ -260,10 +265,10 @@ class CampaignController extends Controller
                 }
             }
             if ($flag) {
-                return $this->redirect(['index']);
+                return $this->redirect(Yii::$app->request->referrer);
             }
         }
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
             'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
         ]);
