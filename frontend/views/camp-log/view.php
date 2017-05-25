@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'label' => 'Creative Link',
 //                    'value' => $model->campaign->creative_link,
                     'value' => $model->creative_link,
-                    'format' => 'url'
+//                    'format' => 'url'
                 ],
                 'campaign.geo',
                 'campaign.platform',
