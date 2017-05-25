@@ -49,6 +49,7 @@ use Yii;
  */
 class CampaignChannelLog extends \yii\db\ActiveRecord
 {
+    public $creative_link;
     /**
      * @inheritdoc
      */
@@ -67,6 +68,7 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
             [['campaign_id', 'channel_id', 'discount_numerator', 'discount_denominator', 'status', 'is_run', 'end_time', 'creator', 'create_time', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
             [['kpi', 'note', 'others'], 'string'],
+            [['creative_link'],'safe'],
             [['campaign_uuid', 'track_url'], 'string', 'max' => 255],
             [['pricing_mode', 'daily_cap'], 'string', 'max' => 100],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
@@ -114,6 +116,7 @@ class CampaignChannelLog extends \yii\db\ActiveRecord
             'note' => 'Restriction',
             'others' => 'Others',
             'is_send_create' => 'Is Send Create',
+            'creative_link' => 'Creative Link'
         ];
     }
 

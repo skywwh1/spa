@@ -75,7 +75,12 @@ use yii\helpers\Url;
             $payout .= '<td>' . Html::encode($deliver->pay_out) . '</td>';
             $preview_link .= '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>';
             $link .= '<td><a href="' . Url::to('@track' . $deliver->track_url) . '">Tracking Link</a></td>';
-            $creativeSet = !empty($deliver->campaign->creative_link) ? '<a href="' . Url::to($deliver->campaign->creative_link) . '">Banner</a>' : '';
+            $creativeSet = null;
+            for($index=0;$index<count($deliver->creative_link);$index++)
+            {
+                $creativeSet .= !empty($deliver->creative_link[$index]) ? '<a href="' . Url::to($deliver->creative_link[$index]) . '">Banner</a><br />' : '';
+            }
+
             $creative .= '<td>' . $creativeSet . '</td>';
             $traffic_source .= '<td>' . $deliver->campaign->traffic_source . '</td>';
             $daily_cap .= '<td>' . Html::encode($deliver->daily_cap) . '</td>';

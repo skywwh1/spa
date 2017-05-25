@@ -112,6 +112,17 @@ class CampLogController extends Controller
     protected function findModel($campaign_id, $channel_id)
     {
         if (($model = CampaignChannelLog::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id])) !== null) {
+            $modelCreativeLink = CampaignCreativeLink::getCampaignCreativeLinksById($campaign_id);
+            $creativeLinks = array();
+
+            foreach ($modelCreativeLink as $modelLink) {
+                $modelLink->creative_type = CampaignCreativeLink::getCreativeLinkValue($modelLink->creative_type);
+                if(!empty($modelLink->creative_type) && !empty($modelLink->creative_link)){
+                    array_push($creativeLinks,$modelLink->creative_type.":" .$modelLink->creative_link);
+                }
+            }
+
+            $model->creative_link = implode(";",$creativeLinks);;
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

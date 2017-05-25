@@ -12,6 +12,7 @@ use rmrevin\yii\geoip\HostInfo;
 use yii\base\Model;
 use yii\console\Controller;
 use yii\db\BaseActiveRecord;
+use common\models\CampaignCreativeLink;
 
 /**
  * Created by PhpStorm.
@@ -28,6 +29,12 @@ class StsController extends Controller
         if (!empty($delivers)) {
             $data = array();
             foreach ($delivers as $deliver) {
+                $creative_links = CampaignCreativeLink::findAll(['campaign_id' => $deliver->campaign_id]);
+                $link_arr = array();
+                foreach ($creative_links as $link){
+                    $link_arr[] = $link->creative_link;
+                }
+                $deliver->creative_link = $link_arr;
                 $data[$deliver->channel_id][] = $deliver;
             }
             foreach ($data as $k => $v) {
