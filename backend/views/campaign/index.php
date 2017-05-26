@@ -292,6 +292,4 @@ Modal::end(); ?>
 echo '<div id="campaign-update-content"></div>';
 
 Modal::end(); ?>
-<?php $this->registerJsFile('@web/js/yii2-dynamic-form.min.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]);
-?>
+
