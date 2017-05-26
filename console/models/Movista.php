@@ -162,10 +162,10 @@ class Movista
                         $liveCamps[] = $campaign->campaign_uuid;
                     }
                 }
-//                $all = Campaign::findAll(['advertiser' => $api->adv_id]);
-//                if (!empty($liveCamps)) {
-//                    $this->updateCampaignStatus($liveCamps, $all);
-//                }
+                $all = Campaign::findAll(['advertiser' => $api->adv_id]);
+                if (!empty($liveCamps)) {
+                    $this->updateCampaignStatus($liveCamps, $all);
+                }
             }
         }
     }
@@ -178,6 +178,10 @@ class Movista
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
                 if ($item->save()) {
+                    Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
+                }
+            } else {
+                if ($item->status == 2) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
