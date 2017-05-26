@@ -313,6 +313,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>
 </div>
 <?php ActiveForm::end(); ?>
-<?php $this->registerJsFile('@web/js/campaign.js',
+<?php $this->registerJsFile('@web/js/campaign-form.js',
     ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
