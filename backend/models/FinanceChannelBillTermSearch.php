@@ -17,13 +17,14 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
     public $bank_address;
     public $account_nu_iban;
     public $swift;
+    public $om;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift',], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift','om'], 'safe'],
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
         ];
@@ -118,6 +119,62 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'note', $this->note]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy([ 'start_time' => SORT_DESC]);
+        }
+        return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function payableSearch($params)
+    {
+        $query = FinanceChannelBillTerm::find();
+        $query->alias("fcb");
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                ],
+//                'defaultOrder' => ['start_time' => SORT_DESC],
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'bill_id' => $this->bill_id,
+        ]);
+
+        $query->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
+            ->andFilterWhere(['<>', 'fcb.status', 0]);
+
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);
         }

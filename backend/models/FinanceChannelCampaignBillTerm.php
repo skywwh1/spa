@@ -40,6 +40,10 @@ use yii\db\ActiveRecord;
  */
 class FinanceChannelCampaignBillTerm extends ActiveRecord
 {
+    public $deduction_cost;
+    public $deduction_revenue;
+    public $pending_cost;
+    public $pending_revenue;
     /**
      * @inheritdoc
      */
@@ -58,6 +62,7 @@ class FinanceChannelCampaignBillTerm extends ActiveRecord
             [['channel_id', 'campaign_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time', 'update_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
             [['note'], 'string'],
+            [['deduction_cost','deduction_revenue','pending_cost','pending_revenue'],'safe'],
             [['bill_id'], 'string', 'max' => 255],
             [['time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],

@@ -32,14 +32,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'buttons' => [
                                     'all' => function ($url, $model, $key) {
                                         return '<div class="dropdown">
-                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-                                      <span class="caret"></span></button>
-                                      <ul class="dropdown-menu">
-
-                                      <li><a data-pjax="0" href="/finance-channel-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
-                                      <li><a data-retreat="0" data-title="' . $model->invoice_id . '" data-url="/finance-channel-bill-term/retreat?id=' . $model->bill_id . '">Retreat</a></li>
-                                      </ul></div>';
-
+                                              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                              <span class="caret"></span></button>
+                                              <ul class="dropdown-menu">
+                                              <li><a data-pjax="0" href="/finance-channel-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
+                                              <li><a data-retreat="0" data-title="' . $model->invoice_id . '" data-url="/finance-channel-bill-term/retreat?id=' . $model->bill_id . '">Retreat</a></li>
+                                              </ul></div>';
                                     },
                                 ],
                             ],

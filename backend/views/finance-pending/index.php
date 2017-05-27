@@ -163,11 +163,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'attribute' => 'note',
                                 // 'value' => 'note:ntext',
                                 // ],
-                                //[
-                                // 'label' => 'create_time',
-                                // 'attribute' => 'create_time',
-                                // 'value' => 'create_time:datetime',
-                                // ],
+                                [
+                                 'label' => 'create_time',
+                                 'attribute' => 'create_time',
+                                 'value' => 'create_time',
+                                 ],
                                 //[
                                 // 'label' => 'update_time',
                                 // 'attribute' => 'update_time',

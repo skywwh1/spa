@@ -6,6 +6,7 @@ use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceAdvertiserBillTerm */
@@ -55,11 +56,24 @@ $this->params['breadcrumbs'][] = 'Update';
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->dropDownList(ModelsUtil::timezone, ['disabled ' => 'disabled ']) ?>
-                    <?= $form->field($model, 'status', [
+                    <?php
+                    if(\Yii::$app->user->can('admin')){
+                        echo $form->field($model, 'status', [
+                            'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                            'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                        ])->dropDownList(ModelsUtil::receivable_status);
+                    }else{
+                        echo $form->field($model, 'status', [
+                            'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                            'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                        ])->dropDownList(ModelsUtil::receivable_status_bd);
+                    }
+                    ?>
+                    <?= $form->field($model, 'update_time', [
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
-                    <?= $form->field($model, 'update_time', [
+                    <?= $form->field($advertiser, 'address', [
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
@@ -80,6 +94,10 @@ $this->params['breadcrumbs'][] = 'Update';
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
                     <?= $form->field($advertiser, 'swift', [
+                        'labelOptions' => ['class' => 'col-sm-2 control-label'],
+                        'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
+                    ])->textInput(['readonly' => 'readonly']) ?>
+                    <?= $form->field($advertiser, 'invoice_title', [
                         'labelOptions' => ['class' => 'col-sm-2 control-label'],
                         'template' => "{label}<div class='col-sm-5'>{input}</div>{hint}\n{error}",
                     ])->textInput(['readonly' => 'readonly']) ?>
@@ -126,9 +144,9 @@ $this->params['breadcrumbs'][] = 'Update';
                         ]) ?>
                     </div>
                     <div class="col-lg-1">
-                        <?= Html::a('Adjust', null, [
+                        <?= Html::a('Sub Revenue', null, [
                             'class' => 'btn btn-primary',
-                            'data-title' => 'Adjust',
+                            'data-title' => 'Sub Revenue',
                             'data-url' => '/finance-advertiser-bill-term/adjust?bill_id=' . $model->bill_id,
                             'data-view' => 0,
                         ]) ?>
@@ -202,6 +220,7 @@ $this->params['breadcrumbs'][] = 'Update';
                                 'value' => 'final_revenue',
                             ],
                             [
+                                'label' => 'Sub Revenue',
                                 'attribute' => 'adjust_revenue',
                                 'value' => 'adjust_revenue',
                                 'contentOptions' => function ($model) {
@@ -305,112 +324,261 @@ $this->params['breadcrumbs'][] = 'Update';
                     <p>
                     <h4>System Revenue</h4>
                     </p>
+                    <?php
+                    $systemColumns = [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                        return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      <li><a data-view="0" data-title="Add Pending" data-url="/finance-pending/add-campaign-by-adv?campaign_id=' . $model->campaign_id . '">Add Pending</a></li>
+                                      <li><a data-view="0" data-title="Add Discount" data-url="/finance-deduction/add-discount-by-adv?campaign_id=' . $model->campaign_id . '">Add Discount</a></li>
+                                      <li><a data-view="0" data-title="Add Install Deduction" data-url="/finance-deduction/add-install-by-adv?campaign_id=' . $model->campaign_id . '">Add Install Deduction</a></li>
+                                      </ul></div>';
+
+                                },
+                            ],
+                        ],
+                        [
+                            // 'label' => 'bill_id',
+                            'attribute' => 'bill.period',
+                        ],
+                        [
+                            // 'label' => 'campaign_id',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        [
+                            // 'label' => 'time_zone',
+                            'attribute' => 'campaign.name',
+//                                'value' => 'time_zone',
+                        ],
+                        [
+//                             'label' => 'clicks',
+                            'attribute' => 'clicks',
+                            'value' => 'clicks',
+                            'pageSummary' => true,
+                        ],
+                        //[
+                        // 'label' => 'unique_clicks',
+                        // 'attribute' => 'unique_clicks',
+                        // 'value' => 'unique_clicks',
+                        // ],
+                        //[
+                        // 'label' => 'installs',
+                        // 'attribute' => 'installs',
+                        // 'value' => 'installs',
+                        // ],
+                        [
+//                             'label' => 'match_installs',
+                            'attribute' => 'match_installs',
+                            'value' => 'match_installs',
+                            'pageSummary' => true,
+                        ],
+                        //[
+                        // 'label' => 'redirect_installs',
+                        // 'attribute' => 'redirect_installs',
+                        // 'value' => 'redirect_installs',
+                        // ],
+                        //[
+                        // 'label' => 'redirect_match_installs',
+                        // 'attribute' => 'redirect_match_installs',
+                        // 'value' => 'redirect_match_installs',
+                        // ],
+                        [
+//                             'label' => 'pay_out',
+                            'attribute' => 'pay_out',
+                            'value' => 'pay_out',
+                        ],
+                        //[
+                        // 'label' => 'adv_price',
+                        // 'attribute' => 'adv_price',
+                        // 'value' => 'adv_price',
+                        // ],
+                        //[
+                        // 'label' => 'daily_cap',
+                        // 'attribute' => 'daily_cap',
+                        // 'value' => 'daily_cap',
+                        // ],
+                        //[
+                        // 'label' => 'cap',
+                        // 'attribute' => 'cap',
+                        // 'value' => 'cap',
+                        // ],
+                        [
+//                             'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        //[
+                        // 'label' => 'redirect_cost',
+                        // 'attribute' => 'redirect_cost',
+                        // 'value' => 'redirect_cost',
+                        // ],
+                        [
+//                             'label' => 'revenue',
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Margin',
+                            'attribute' => 'redirect_revenue',
+                            'value' => function ($model) {
+                                return $model->revenue == 0 ? 0 : round((($model->revenue - $model->cost) / $model->revenue), 2);
+                            }
+                        ],
+                        [
+                            'label' => 'ADV',
+                            'value' => 'bill.adv.username',
+                        ],
+                        [
+                            'label' => 'BD',
+                            'value' => 'bill.adv.bd0.username',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $systemRevenueList,
+                        'columns' => $systemColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
                     <?= GridView::widget([
                         'dataProvider' => $systemRevenueList,
                         'layout' => '{items}',
                         'showPageSummary' => true,
-                        'columns' => [
-
-                            [
-                                // 'label' => 'bill_id',
-                                'attribute' => 'bill.period',
-                            ],
-                            [
-                                // 'label' => 'campaign_id',
-                                'attribute' => 'campaign_id',
-                                'value' => 'campaign_id',
-                            ],
-                            [
-                                // 'label' => 'time_zone',
-                                'attribute' => 'campaign.name',
-//                                'value' => 'time_zone',
-                            ],
-                            [
-//                             'label' => 'clicks',
-                                'attribute' => 'clicks',
-                                'value' => 'clicks',
-                                'pageSummary' => true,
-                            ],
-                            //[
-                            // 'label' => 'unique_clicks',
-                            // 'attribute' => 'unique_clicks',
-                            // 'value' => 'unique_clicks',
-                            // ],
-                            //[
-                            // 'label' => 'installs',
-                            // 'attribute' => 'installs',
-                            // 'value' => 'installs',
-                            // ],
-                            [
-//                             'label' => 'match_installs',
-                                'attribute' => 'match_installs',
-                                'value' => 'match_installs',
-                                'pageSummary' => true,
-                            ],
-                            //[
-                            // 'label' => 'redirect_installs',
-                            // 'attribute' => 'redirect_installs',
-                            // 'value' => 'redirect_installs',
-                            // ],
-                            //[
-                            // 'label' => 'redirect_match_installs',
-                            // 'attribute' => 'redirect_match_installs',
-                            // 'value' => 'redirect_match_installs',
-                            // ],
-                            [
-//                             'label' => 'pay_out',
-                                'attribute' => 'pay_out',
-                                'value' => 'pay_out',
-                            ],
-                            //[
-                            // 'label' => 'adv_price',
-                            // 'attribute' => 'adv_price',
-                            // 'value' => 'adv_price',
-                            // ],
-                            //[
-                            // 'label' => 'daily_cap',
-                            // 'attribute' => 'daily_cap',
-                            // 'value' => 'daily_cap',
-                            // ],
-                            //[
-                            // 'label' => 'cap',
-                            // 'attribute' => 'cap',
-                            // 'value' => 'cap',
-                            // ],
-                            [
-//                             'label' => 'cost',
-                                'attribute' => 'cost',
-                                'value' => 'cost',
-                                'pageSummary' => true,
-                            ],
-                            //[
-                            // 'label' => 'redirect_cost',
-                            // 'attribute' => 'redirect_cost',
-                            // 'value' => 'redirect_cost',
-                            // ],
-                            [
-//                             'label' => 'revenue',
-                                'attribute' => 'revenue',
-                                'value' => 'revenue',
-                                'pageSummary' => true,
-                            ],
-                            [
-                                'label' => 'Margin',
-                                'attribute' => 'redirect_revenue',
-                                'value' => function ($model) {
-                                    return $model->revenue == 0 ? 0 : round((($model->revenue - $model->cost) / $model->revenue), 2);
-                                }
-                            ],
-                            [
-                                'label' => 'ADV',
-                                'value' => 'bill.adv.username',
-                            ],
-                            [
-                                'label' => 'BD',
-                                'value' => 'bill.adv.bd0.username',
-                            ],
+                        'columns' => $systemColumns,
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- historic revenue -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box box-info">
+                <div class="box-body">
+                    <p>
+                    <h4>Historic Revenue</h4>
+                    </p>
+                    <?php
+                    $confirmedColumns = [
+                        [
+                            'label' => 'Channel',
+                            'attribute' => 'channel_id',
+//                                'value' => 'channel_id',
+                            'value' => 'channel.username',
+                        ],
+                        [
+                            // 'label' => 'campaign_id',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        [
+                            'label' => 'Campaign Name',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign.campaign_name',
+                        ],
+                        [
+                            'attribute' => 'start_date',
+                            'value' => function ($model) {
+                                $format = 'Y-m-d';
+                                $date = new DateTime();
+                                $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                $date->setTimestamp($model->start_date);
+                                return $date->format($format);
+                            },
+                        ],
+                        [
+                            'attribute' => 'end_date',
+                            'value' => function ($model) {
+                                $format = 'Y-m-d';
+                                $date = new DateTime();
+                                $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                $date->setTimestamp($model->end_date);
+                                return $date->format($format);
+                            },
 
                         ],
+                        [
+//                                'label' => 'installs',
+                            'attribute' => 'installs',
+                            'value' => 'installs',
+                            'pageSummary' => true,
+                        ],
+                        [
+//                             'label' => 'pay_out',
+                            'attribute' => 'pay_out',
+                            'value' => 'pay_out',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+//                                'label' => 'revenue',
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'adv',
+                            'attribute' => 'adv',
+                            'value' => 'adv',
+                        ],
+                        [
+                            'label' => 'pm',
+                            'attribute' => 'pm',
+                            'value' => 'pm',
+                        ],
+                        [
+                            'label' => 'bd',
+                            'attribute' => 'bd',
+                            'value' => 'bd',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $confirmList,
+                        'columns' => $confirmedColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
+                    <?= GridView::widget([
+                        'dataProvider' => $confirmList,
+                        'columns' => $confirmedColumns,
                     ]); ?>
                 </div>
             </div>
@@ -424,126 +592,106 @@ $this->params['breadcrumbs'][] = 'Update';
                     <p>
                     <h4>Pending</h4>
                     </p>
+                    <?php
+                    $pendingColumns = [
+                        [
+                            'label' => 'ID',
+                            'attribute' => 'id',
+                            'value' => 'id',
+                        ],
+                        [
+//                                'label' => 'Channel Name',
+                            'attribute' => 'channel_id',
+                            'value' => 'channel_id',
+                        ],
+                        [
+                            'label' => 'Channel Name',
+                            'attribute' => 'channel_id',
+//                                'value' => 'channel_id',
+                            'value' => function($pendingList){
+                                return $pendingList->channel->username;
+                            }
+                        ],
+                        [
+                            // 'label' => 'campaign_id',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        [
+                            'label' => 'Campaign Name',
+                            'attribute' => 'campaign_id',
+                            'value' => function($pendingList){
+                                return $pendingList->campaign->campaign_name;
+                            }
+//                                'value' => 'campaign_id',
+                        ],
+                        [
+                            // 'label' => 'start_time',
+                            'attribute' => 'start_date',
+                            'value' => 'start_date',
+                            'format' => 'datetime',
+                        ],
+                        [
+                            'attribute' => 'end_date',
+                            'value' => 'end_date',
+                            'format' => 'datetime',
+                        ],
+                        [
+                            'label' => 'installs',
+                            'attribute' => 'installs',
+                            'value' => 'installs',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'revenue',
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'margin',
+                            'attribute' => 'margin',
+                            'value' => 'margin',
+                        ],
+                        [
+                            'label' => 'adv',
+                            'attribute' => 'adv',
+                            'value' => 'adv',
+                        ],
+                        [
+                            'label' => 'pm',
+                            'attribute' => 'pm',
+                            'value' => 'pm',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $pendingList,
+                        'columns' => $pendingColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
                     <?= GridView::widget([
                         'dataProvider' => $pendingList,
-                        'columns' => [
-                            [
-                                // 'label' => 'bill_id',
-                                'attribute' => 'channel_bill_id',
-                                'value' => 'channel_bill_id',
-                            ],
-                            [
-                                // 'label' => 'channel_id',
-                                'attribute' => 'channel_id',
-                                'value' => 'channel_id',
-                            ],
-//                        [
-//                            // 'label' => 'time_zone',
-//                            'attribute' => 'time_zone',
-//                            'value' => 'time_zone',
-//                        ],
-                            [
-                                // 'label' => 'campaign_id',
-                                'attribute' => 'campaign_id',
-                                'value' => 'campaign_id',
-                            ],
-//                    [
-//                        // 'label' => 'start_time',
-//                        'attribute' => 'start_time',
-//                        'value' => 'start_time:datetime',
-//                    ],
-                            //[
-                            // 'label' => 'end_time',
-                            // 'attribute' => 'end_time',
-                            // 'value' => 'end_time:datetime',
-                            // ],
-                            //[
-                            // 'label' => 'clicks',
-                            // 'attribute' => 'clicks',
-                            // 'value' => 'clicks',
-                            // ],
-                            //[
-                            // 'label' => 'unique_clicks',
-                            // 'attribute' => 'unique_clicks',
-                            // 'value' => 'unique_clicks',
-                            // ],
-                            //[
-                            // 'label' => 'installs',
-                            // 'attribute' => 'installs',
-                            // 'value' => 'installs',
-                            // ],
-                            //[
-                            // 'label' => 'match_installs',
-                            // 'attribute' => 'match_installs',
-                            // 'value' => 'match_installs',
-                            // ],
-                            //[
-                            // 'label' => 'redirect_installs',
-                            // 'attribute' => 'redirect_installs',
-                            // 'value' => 'redirect_installs',
-                            // ],
-                            //[
-                            // 'label' => 'redirect_match_installs',
-                            // 'attribute' => 'redirect_match_installs',
-                            // 'value' => 'redirect_match_installs',
-                            // ],
-                            //[
-                            // 'label' => 'pay_out',
-                            // 'attribute' => 'pay_out',
-                            // 'value' => 'pay_out',
-                            // ],
-                            //[
-                            // 'label' => 'adv_price',
-                            // 'attribute' => 'adv_price',
-                            // 'value' => 'adv_price',
-                            // ],
-                            //[
-                            // 'label' => 'daily_cap',
-                            // 'attribute' => 'daily_cap',
-                            // 'value' => 'daily_cap',
-                            // ],
-                            //[
-                            // 'label' => 'cap',
-                            // 'attribute' => 'cap',
-                            // 'value' => 'cap',
-                            // ],
-                            //[
-                            // 'label' => 'cost',
-                            // 'attribute' => 'cost',
-                            // 'value' => 'cost',
-                            // ],
-                            //[
-                            // 'label' => 'redirect_cost',
-                            // 'attribute' => 'redirect_cost',
-                            // 'value' => 'redirect_cost',
-                            // ],
-                            //[
-                            // 'label' => 'revenue',
-                            // 'attribute' => 'revenue',
-                            // 'value' => 'revenue',
-                            // ],
-                            //[
-                            // 'label' => 'redirect_revenue',
-                            // 'attribute' => 'redirect_revenue',
-                            // 'value' => 'redirect_revenue',
-                            // ],
-                            //[
-                            // 'label' => 'note',
-                            // 'attribute' => 'note',
-                            // 'value' => 'note:ntext',
-                            // ],
-                            //[
-                            // 'label' => 'create_time',
-                            // 'attribute' => 'create_time',
-                            // 'value' => 'create_time:datetime',
-                            // ],
-                            //[
-                            // 'label' => 'update_time',
-                            // 'attribute' => 'update_time',
-                            // 'value' => 'update_time:datetime',
-                            // ],
-
-                        ],
+                        'columns' => $pendingColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -557,125 +705,145 @@ $this->params['breadcrumbs'][] = 'Update';
                     <p>
                     <h4>Deduction</h4>
                     </p>
+                    <?php
+                    $deductionColumns = [
+                        [
+                            // 'label' => 'id',
+                            'attribute' => 'id',
+                            'value' => 'id',
+                        ],
+                        [
+                            // 'label' => 'campaign_id',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        [
+                            // 'label' => 'channel_id',
+                            'attribute' => 'channel_id',
+                            'value' => 'channel_id',
+                        ],
+                        [
+                            // 'label' => 'channel_id',
+                            'attribute' => 'channel_name',
+                            'value' => 'channel.username',
+                        ],
+                        [
+                            // 'label' => 'start_date',
+                            'attribute' => 'start_date',
+                            'value' => 'start_date',
+                            'format' => 'datetime',
+                        ],
+                        [
+                            // 'label' => 'end_date',
+                            'attribute' => 'end_date',
+                            'value' => 'end_date',
+                            'format' => 'datetime',
+                        ],
+                        //[
+                        // 'label' => 'installs',
+                        // 'attribute' => 'installs',
+                        // 'value' => 'installs',
+                        // ],
+                        //[
+                        // 'label' => 'match_installs',
+                        // 'attribute' => 'match_installs',
+                        // 'value' => 'match_installs',
+                        // ],
+
+                        [
+//                             'label' => ''
+                            'attribute' => 'deduction_value',
+                            'value' => 'deduction_value',
+                        ],
+                        [
+//                                'label' => 'type',
+                            'attribute' => 'type',
+                            'value' => function ($model) {
+                                return ModelsUtil::getDeductionType($model->type);
+                            },
+                            'filter' => ModelsUtil::deduction_type,
+                        ],
+                        [
+//                             'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                        ],
+                        [
+//                                'label' => 'deduction_cost',
+                            'attribute' => 'deduction_cost',
+                            'value' => 'deduction_cost',
+                        ],
+                        [
+//                                'label' => 'deduction_revenue',
+                            'attribute' => 'deduction_revenue',
+                            'value' => 'deduction_revenue',
+                        ],
+                        [
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                        ],
+                        //[
+                        // 'label' => 'margin',
+                        // 'attribute' => 'margin',
+                        // 'value' => 'margin',
+                        // ],
+                        //[
+                        // 'label' => 'adv',
+                        // 'attribute' => 'adv',
+                        // 'value' => 'adv',
+                        // ],
+                        [
+                            'attribute' => 'pm',
+                            'value' => 'pm',
+                        ],
+                        [
+                            'attribute' => 'bd',
+                            'value' => 'bd',
+                        ],
+                        [
+                            'attribute' => 'om',
+                            'value' => 'om',
+                        ],
+                        [
+                            'attribute' => 'status',
+                            'value' => function ($model) {
+                                return ModelsUtil::getDeductionStatus($model->status);
+                            },
+                            'filter' => ModelsUtil::deduction_status,
+                        ],
+                        //[
+                        // 'label' => 'note',
+                        // 'attribute' => 'note',
+                        // 'value' => 'note:ntext',
+                        // ],
+                        [
+//                                'label' => 'create_time',
+                            'attribute' => 'create_time',
+                            'value' => 'create_time',
+                            'format' => 'datetime',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $deductionList,
+                        'columns' => $deductionColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
                     <?= GridView::widget([
                         'dataProvider' => $deductionList,
-                        'columns' => [
-                            [
-                                // 'label' => 'id',
-                                'attribute' => 'id',
-                                'value' => 'id',
-                            ],
-                            [
-                                // 'label' => 'campaign_id',
-                                'attribute' => 'campaign_id',
-                                'value' => 'campaign_id',
-                            ],
-                            [
-                                // 'label' => 'channel_id',
-                                'attribute' => 'channel_id',
-                                'value' => 'channel_id',
-                            ],
-                            [
-                                // 'label' => 'channel_id',
-                                'attribute' => 'channel_name',
-                                'value' => 'channel.username',
-                            ],
-                            [
-                                // 'label' => 'start_date',
-                                'attribute' => 'start_date',
-                                'value' => 'start_date',
-                                'format' => 'datetime',
-                            ],
-                            [
-                                // 'label' => 'end_date',
-                                'attribute' => 'end_date',
-                                'value' => 'end_date',
-                                'format' => 'datetime',
-                            ],
-                            //[
-                            // 'label' => 'installs',
-                            // 'attribute' => 'installs',
-                            // 'value' => 'installs',
-                            // ],
-                            //[
-                            // 'label' => 'match_installs',
-                            // 'attribute' => 'match_installs',
-                            // 'value' => 'match_installs',
-                            // ],
-
-                            [
-//                             'label' => ''
-                                'attribute' => 'deduction_value',
-                                'value' => 'deduction_value',
-                            ],
-                            [
-//                                'label' => 'type',
-                                'attribute' => 'type',
-                                'value' => function ($model) {
-                                    return ModelsUtil::getDeductionType($model->type);
-                                },
-                                'filter' => ModelsUtil::deduction_type,
-                            ],
-                            [
-//                             'label' => 'cost',
-                                'attribute' => 'cost',
-                                'value' => 'cost',
-                            ],
-                            [
-//                                'label' => 'deduction_cost',
-                                'attribute' => 'deduction_cost',
-                                'value' => 'deduction_cost',
-                            ],
-                            [
-//                                'label' => 'deduction_revenue',
-                                'attribute' => 'deduction_revenue',
-                                'value' => 'deduction_revenue',
-                            ],
-                            [
-                                'attribute' => 'revenue',
-                                'value' => 'revenue',
-                            ],
-                            //[
-                            // 'label' => 'margin',
-                            // 'attribute' => 'margin',
-                            // 'value' => 'margin',
-                            // ],
-                            //[
-                            // 'label' => 'adv',
-                            // 'attribute' => 'adv',
-                            // 'value' => 'adv',
-                            // ],
-                            [
-                                'attribute' => 'pm',
-                                'value' => 'pm',
-                            ],
-                            [
-                                'attribute' => 'bd',
-                                'value' => 'bd',
-                            ],
-                            [
-                                'attribute' => 'om',
-                                'value' => 'om',
-                            ],
-                            [
-                                'attribute' => 'status',
-                                'value' => function ($model) {
-                                    return ModelsUtil::getDeductionStatus($model->status);
-                                },
-                                'filter' => ModelsUtil::deduction_status,
-                            ],
-                            //[
-                            // 'label' => 'note',
-                            // 'attribute' => 'note',
-                            // 'value' => 'note:ntext',
-                            // ],
-                            [
-//                                'label' => 'create_time',
-                                'attribute' => 'create_time',
-                                'value' => 'create_time',
-                                'format' => 'datetime',
-                            ],
-                        ],
+                        'columns' => $deductionColumns,
                     ]); ?>
                 </div>
             </div>
@@ -689,36 +857,44 @@ $this->params['breadcrumbs'][] = 'Update';
                     <p>
                     <h4>Add revenue</h4>
                     </p>
+                    <?php
+                    $addRevenueColumns = [
+                        [
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'note',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $addRevenueList,
+                        'columns' => $addRevenueColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
                     <?= GridView::widget([
                         'dataProvider' => $addRevenueList,
                         'showPageSummary' => true,
-                        'columns' => [
-                            [
-                                // 'label' => 'revenue',
-                                'attribute' => 'revenue',
-                                'value' => 'revenue',
-                                'pageSummary' => true,
-                            ],
-                            //[
-                            // 'label' => 'om',
-                            // 'attribute' => 'om',
-                            // 'value' => 'om',
-                            // ],
-                            [
-                                'attribute' => 'note',
-                            ],
-                            //[
-                            // 'label' => 'create_time',
-                            // 'attribute' => 'create_time',
-                            // 'value' => 'create_time:datetime',
-                            // ],
-                            //[
-                            // 'label' => 'update_time',
-                            // 'attribute' => 'update_time',
-                            // 'value' => 'update_time:datetime',
-                            // ],
-
-                        ],
+                        'columns' => $addRevenueColumns
                     ]); ?>
 
                 </div>
@@ -731,42 +907,45 @@ $this->params['breadcrumbs'][] = 'Update';
             <div class="box box-info">
                 <div class="box-header with-border">
                     <h4>Apply Prepayment</h4>
-
                 </div>
+                <?php
+                $prepaymentColumns = [
+                    [
+                        // 'label' => 'prepayment',
+                        'attribute' => 'prepayment',
+                        'value' => 'prepayment',
+                        'pageSummary' => true,
+                    ],
+                    [
+                        'label' => 'note',
+                        'attribute' => 'note',
+                        'value' => 'note',
+                        'format' => 'ntext',
+                    ],
+                ];
+                echo ExportMenu::widget([
+                    'dataProvider' => $prepaymentList,
+                    'columns' => $prepaymentColumns,
+                    'fontAwesome' => true,
+                    'showConfirmAlert' => false,
+                    'target' => GridView::TARGET_BLANK,
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default'
+                    ],
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_EXCEL_X => false,
+                        ExportMenu::FORMAT_HTML => false,
+                    ],
+                ]);
+                ?>
                 <div class="box-body">
                     <?= GridView::widget([
                         'dataProvider' => $prepaymentList,
                         'showPageSummary' => true,
-                        'columns' => [
-                            [
-                                // 'label' => 'prepayment',
-                                'attribute' => 'prepayment',
-                                'value' => 'prepayment',
-                                'pageSummary' => true,
-                            ],
-                            //[
-                            // 'label' => 'om',
-                            // 'attribute' => 'om',
-                            // 'value' => 'om',
-                            // ],
-                            [
-                                'label' => 'note',
-                                'attribute' => 'note',
-                                'value' => 'note',
-                                'format' => 'ntext',
-                            ],
-                            //[
-                            // 'label' => 'create_time',
-                            // 'attribute' => 'create_time',
-                            // 'value' => 'create_time:datetime',
-                            // ],
-                            //[
-                            // 'label' => 'update_time',
-                            // 'attribute' => 'update_time',
-                            // 'value' => 'update_time:datetime',
-                            // ],
-
-                        ],
+                        'columns' => $prepaymentColumns,
                     ]); ?>
 
                 </div>

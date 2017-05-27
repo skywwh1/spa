@@ -56,6 +56,7 @@ use Yii;
  * @property string $bank_address
  * @property string $swift
  * @property string $account_nu_iban
+ * @property string $invoice_title
  *
  * @property User $bd0
  * @property Campaign[] $campaigns
@@ -80,7 +81,7 @@ class Advertiser extends \yii\db\ActiveRecord
             [['payment_term', 'status', 'status', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
             [['username', 'firstname', 'lastname', 'system', 'alipay', 'timezone','beneficiary_name'], 'string', 'max' => 100],
-            [['contacts', 'password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company', 'address', 'note'], 'string', 'max' => 255],
+            [['contacts', 'password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company', 'address', 'note','invoice_title'], 'string', 'max' => 255],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['pricing_mode', 'email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
             [['phone1', 'phone2'], 'string', 'max' => 20],

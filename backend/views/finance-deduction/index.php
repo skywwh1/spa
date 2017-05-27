@@ -65,6 +65,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => 'campaign_id',
                                 ],
                                 [
+                                    // 'label' => 'campaign_id',
+                                    'attribute' => 'campaign_name',
+                                    'value' => 'campaign.campaign_name',
+                                ],
+                                [
                                     // 'label' => 'channel_id',
                                     'attribute' => 'channel_id',
                                     'value' => 'channel_id',

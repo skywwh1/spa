@@ -221,6 +221,11 @@ class ModelsUtil
         8 => 'Overdue',
     );
 
+    const receivable_status_bd = array(
+        1 => 'Pending',
+        2 => 'BD Leader Approval',
+    );
+
     const payable_status = array(
         1 => 'Pending',
         2 => 'OM Leader Approval',
@@ -229,6 +234,11 @@ class ModelsUtil
         5 => 'Finance Reject',
         6 => 'Payable',
         7 => 'Paid',
+    );
+
+    const payable_status_om = array(
+        1 => 'Pending',
+        2 => 'OM Leader Approval',
     );
 
     const update_type = array(

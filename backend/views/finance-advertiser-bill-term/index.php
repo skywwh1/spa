@@ -33,15 +33,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => 'Action',
                                 'buttons' => [
                                     'all' => function ($url, $model, $key) {
-                                            return '<div class="dropdown">
-                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-                                      <span class="caret"></span></button>
-                                      <ul class="dropdown-menu">
-
-                                      <li><a data-pjax="0" href="/finance-advertiser-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
-                                      <li><a data-retreat="0" data-title="' . $model->invoice_id . '" data-url="/finance-advertiser-bill-term/retreat?id=' . $model->bill_id . '">Retreat</a></li>
-                                      </ul></div>';
-
+                                        return '<div class="dropdown">
+                                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                                      <span class="caret"></span></button>
+                                                      <ul class="dropdown-menu">
+                                                      <li><a data-pjax="0" href="/finance-advertiser-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
+                                                      <li><a data-retreat="0" data-title="' . $model->invoice_id . '" data-url="/finance-advertiser-bill-term/retreat?id=' . $model->bill_id . '">Retreat</a></li>
+                                                      </ul></div>';
                                     },
                                 ],
                             ],
@@ -60,8 +58,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 // 'label' => 'adv_id',
-                                'attribute' => 'adv_id',
+                                'attribute' => 'adv_name',
                                 'value' => 'adv.username',
+                            ],
+                            [
+                                // 'label' => 'adv_id',
+                                'attribute' => 'payment_term',
+                                'value' => 'adv.payment_term',
                             ],
                             [
                                 // 'label' => 'time_zone',
@@ -143,7 +146,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'receivable',
                             ],
                             [
-                                'attribute' => 'period',
+                                'attribute' => 'bd',
                                 'value' => 'adv.bd0.username',
                             ],
                             [

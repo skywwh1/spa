@@ -43,6 +43,7 @@ class FinanceAddRevenueSearch extends FinanceAddRevenue
     public function search($params)
     {
         $query = FinanceAddRevenue::find();
+        $query->alias("far");
 
         // add conditions that should always apply here
 
@@ -58,6 +59,12 @@ class FinanceAddRevenueSearch extends FinanceAddRevenue
             return $dataProvider;
         }
 
+        $query->select([
+            'far.*',
+            'fab.cost',
+        ]);
+
+        $query->leftJoin('finance_advertiser_bill_term fab','fab.bill_id = far.advertiser_bill_id');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -65,10 +72,10 @@ class FinanceAddRevenueSearch extends FinanceAddRevenue
             'revenue' => $this->revenue,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
+            'advertiser_bill_id'=> $this->advertiser_bill_id
         ]);
 
-        $query->andFilterWhere(['like', 'advertiser_bill_id', $this->advertiser_bill_id])
-            ->andFilterWhere(['like', 'timezone', $this->timezone])
+        $query->andFilterWhere(['like', 'timezone', $this->timezone])
             ->andFilterWhere(['like', 'om', $this->om])
             ->andFilterWhere(['like', 'note', $this->note]);
 

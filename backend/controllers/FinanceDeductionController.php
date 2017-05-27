@@ -49,6 +49,8 @@ class FinanceDeductionController extends Controller
                             'add-fine',
                             'view',
                             'validate',
+                            'add-discount-by-adv',
+                            'add-install-by-adv',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -111,7 +113,6 @@ class FinanceDeductionController extends Controller
     public function actionAddDiscount()
     {
         $model = new FinanceDeductionForm();
-
         if ($model->load(Yii::$app->request->post())) {
             if ($this->saveDeduction($model)) {
                 return $this->redirect(['index', 'id' => $model->id]);
@@ -131,7 +132,6 @@ class FinanceDeductionController extends Controller
     public function actionAddInstall()
     {
         $model = new FinanceDeductionForm();
-
         if ($model->load(Yii::$app->request->post())) {
             if ($this->saveDeduction($model)) {
                 return $this->redirect(['index', 'id' => $model->id]);
@@ -248,7 +248,7 @@ class FinanceDeductionController extends Controller
         $adv_bill_id = $cam->advertiser0->id . '_' . date('Ym', $start);
 
         $records = CampaignLogHourly::findDateReport($start, $end + 3600 * 24, $model->campaign_id, $channel->id);
-        if (isset($records)) {
+        if (!empty($records)) {
             $deduction = new FinanceDeduction();
             $deduction->channel_bill_id = $channel_bill_id;
             $deduction->adv_bill_id = $adv_bill_id;
@@ -288,5 +288,49 @@ class FinanceDeductionController extends Controller
             }
         }
         return $save;
+    }
+
+    /**
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionAddInstallByAdv($campaign_id)
+    {
+        $model = new FinanceDeductionForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+//            if ($this->saveDeduction($model)) {
+//                return $this->redirect(Yii::$app->request->referrer);
+//            }else{
+//                var_dump($model->getErrors());
+//                die();
+//            }
+            $this->saveDeduction($model);
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            $model->campaign_id = $campaign_id;
+            return $this->renderAjax('add_install', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    /**
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionAddDiscountByAdv($campaign_id)
+    {
+        $model = new FinanceDeductionForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $this->saveDeduction($model);
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            $model->campaign_id = $campaign_id;
+            return $this->renderAjax('add_discount', [
+                'model' => $model,
+            ]);
+        }
     }
 }

@@ -141,4 +141,77 @@ class FinancePending extends \yii\db\ActiveRecord
         return $query->all();
     }
 
+    /**
+     * @param $channel_bill_id
+     * @param $adv_bill_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getHistoricFinancePending($channel_bill_id,$adv_bill_id)
+    {
+        return static::find()->andFilterWhere(['channel_bill_id' => $channel_bill_id])->andFilterWhere(['adv_bill_id' => $adv_bill_id])->andFilterWhere(['status' => 1])->all();
+    }
+
+    public  function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            if($insert){
+                $this->create_time = time();
+                $this->update_time = time();
+            }else{
+                $this->update_time = time();
+            }
+            return true;
+        }
+        return false;
+    }
+
+//    public function afterSave($insert, $changedAttributes)
+//    {
+//        if ($insert) {
+//            if($this->status == 0){
+//                FinanceChannelBillTerm::countChaPending($this->channel_bill_id,$this->cost,$this->revenue);
+//                FinanceAdvertiserBillTerm::countAdvPending($this->adv_bill_id,$this->cost,$this->revenue);
+//            }else{
+//                $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
+//                if(!empty($channel_bill)){
+//                    //如果该账单已经结束，则将该账单放到最近的某个月的利润
+//                    if ($channel_bill->status == 7){
+//                        //$channel_bill->add_historic_cost -= $this->cost;
+//                        $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
+//                        $channel_bill->payable = $channel_bill->payable-$this->cost;
+//
+//                        $channel_bill->revenue += $this->revenue;
+//                        $channel_bill->save();
+//                    }else{
+//                        $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
+//                        $channel_bill->payable = $channel_bill->payable-$this->cost;
+//
+//                        $channel_bill->revenue += $this->revenue;
+//                        $channel_bill->save();
+//                    }
+//                }
+//
+//                $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
+//                if(!$adv_bill){
+//                    //如果该账单已经结束，则将该账单放到最近的某个月的利润
+//                    if ($channel_bill->status == 7){
+//                        $adv_bill->add_historic_cost -= $this->cost;
+//                        $adv_bill->final_cost = $adv_bill->final_cost - $this->cost;
+//                        $adv_bill->payable = $adv_bill->payable-$this->cost;
+//
+//                        $adv_bill->revenue += $this->revenue;
+//                        $adv_bill->save();
+//                    }else{
+//                        $adv_bill->add_historic_cost -= $this->cost;
+//                        $adv_bill->final_cost = $adv_bill->final_cost - $this->cost;
+//                        $adv_bill->payable = $adv_bill->payable-$this->cost;
+//
+//                        $adv_bill->revenue += $this->revenue;
+//                        $adv_bill->save();
+//                    }
+//                }
+//            }
+//        }
+//        parent::afterSave($insert, $changedAttributes);
+//    }
+
 }

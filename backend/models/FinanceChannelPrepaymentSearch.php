@@ -65,10 +65,10 @@ class FinanceChannelPrepaymentSearch extends FinanceChannelPrepayment
             'prepayment' => $this->prepayment,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
+            'channel_bill_id'=> $this->channel_bill_id,
         ]);
 
-        $query->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
-            ->andFilterWhere(['like', 'timezone', $this->timezone])
+        $query->andFilterWhere(['like', 'timezone', $this->timezone])
             ->andFilterWhere(['like', 'om', $this->om])
             ->andFilterWhere(['like', 'note', $this->note]);
 

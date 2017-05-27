@@ -18,7 +18,7 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
     public function rules()
     {
         return [
-            [['bill_id', 'time_zone', 'daily_cap', 'cap', 'note'], 'safe'],
+            [['bill_id', 'time_zone', 'daily_cap', 'cap', 'note',], 'safe'],
             [['channel_id', 'campaign_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time', 'update_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
@@ -87,6 +87,55 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
             ->andFilterWhere(['<>', 'cost', 0])
             ->andFilterWhere(['like', 'note', $this->note]);
 
+        return $dataProvider;
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function financeChannelSearch($params)
+    {
+        $query = FinanceChannelCampaignBillTerm::find();
+        $query->alias("fcb");
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        $query->select([
+            'fcb.*',
+            'fp.revenue pending_revenue',
+            'fp.cost pending_cost',
+            'fd.deduction_cost',
+            'fd.deduction_revenue',
+        ]);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'bill_id'=> $this->bill_id
+        ]);
+
+        $query->leftJoin("finance_pending fp",'fp.channel_bill_id = fcb.bill_id and fp.campaign_id = fcb.campaign_id');
+        $query->leftJoin("finance_deduction fd",'fd.channel_bill_id = fcb.bill_id and fd.campaign_id = fcb.campaign_id');
+
+        $query->andFilterWhere(['like', 'fcb.time_zone', $this->time_zone])
+            ->andFilterWhere(['<>', 'fcb.cost', 0]);
+
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 }

@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <?php $form = ActiveForm::begin([
     'id' => 'adjust-cost-form',
-    'enableAjaxValidation' => true,
+//    'enableAjaxValidation' => true,
 //    'validationUrl' => '/finance-add-cost/validate',
 ]); ?>
 <?= $form->field($model, 'adjust_revenue')->textInput(['maxlength' => true]) ?>

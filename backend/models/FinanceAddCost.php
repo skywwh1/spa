@@ -23,6 +23,7 @@ use Yii;
  */
 class FinanceAddCost extends \yii\db\ActiveRecord
 {
+    public $revenue;
     /**
      * @inheritdoc
      */
@@ -88,6 +89,7 @@ class FinanceAddCost extends \yii\db\ActiveRecord
             $bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
             $bill->add_cost = $bill->add_cost + $this->cost;
             $bill->final_cost = $bill->final_cost + $this->cost;
+            $bill->payable = $bill->payable+$this->cost;
             $bill->save();
         }
         parent::afterSave($insert, $changedAttributes);

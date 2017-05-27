@@ -9,6 +9,8 @@ use common\models\CampaignLogHourly;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\User;
+use backend\models\FinanceChannelBillTerm;
+use backend\models\FinanceAdvertiserBillTerm;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -50,6 +52,7 @@ class FinancePendingController extends Controller
                             'view',
                             'add-campaign',
                             'validate',
+                            'add-campaign-by-adv',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -112,7 +115,6 @@ class FinancePendingController extends Controller
     public function actionAddCampaign()
     {
         $model = new FinancePendingForm();
-
         if ($model->load(Yii::$app->request->post())) {
             if (isset($_POST['FinancePending']['is_all']) && $_POST['FinancePending']['is_all'] == 1) {
                 $this->createMultipleByCam($model);
@@ -122,7 +124,7 @@ class FinancePendingController extends Controller
                 $this->savePending($model);
                 return $this->redirect(['index']);
             }
-        } else {
+        }else{
             return $this->render('campaign_pending_add', [
                 'model' => $model,
             ]);
@@ -263,6 +265,8 @@ class FinancePendingController extends Controller
                 var_dump($pending->getErrors());
                 die();
             }
+            FinanceChannelBillTerm::countChaPending($channel_bill,$records->cost,$records->revenue);
+            FinanceAdvertiserBillTerm::countAdvPending($adv_bill,$records->cost,$records->revenue);
         }
 
     }
@@ -346,5 +350,30 @@ class FinancePendingController extends Controller
             || ($financePending->start_date <= $end && $end <= $financePending->end_date))
             return false;
         return true;
+    }
+
+    /**
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionAddCampaignByAdv($campaign_id)
+    {
+        $model = new FinancePendingForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if (isset($_POST['FinancePending']['is_all']) && $_POST['FinancePending']['is_all'] == 1) {
+                $this->createMultipleByCam($model);
+                return $this->redirect(Yii::$app->request->referrer);
+            } else {
+                $model->channel_id = Channel::findByUsername($model->channel_name)->id;
+                $this->savePending($model);
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+        } else {
+            $model->campaign_id = $campaign_id;
+            return $this->renderAjax('campaign_pending_add', [
+                'model' => $model,
+            ]);
+        }
     }
 }
