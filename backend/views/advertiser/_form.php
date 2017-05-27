@@ -71,8 +71,10 @@ use yii\widgets\ActiveForm;
                     ->column()
             ) ?>
             <?= $form->field($model, 'country')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'skype')->textInput() ?>
             <?= $form->field($model, 'phone1')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'invoice_title')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'timezone')->dropDownList(ModelsUtil::timezone) ?>
             <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 

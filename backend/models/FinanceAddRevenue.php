@@ -23,6 +23,7 @@ use Yii;
  */
 class FinanceAddRevenue extends \yii\db\ActiveRecord
 {
+    public $cost;
     /**
      * @inheritdoc
      */

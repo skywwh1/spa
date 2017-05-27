@@ -55,6 +55,7 @@ use Yii;
  */
 class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
 {
+    public $user_id;
     /**
      * @inheritdoc
      */
@@ -183,9 +184,28 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
         return parent::beforeSave($insert); //
     }
 
+    /**
+     * 发送对账邮件
+     * 每月2号产生上个月的账单，账单状态为pending。
+     *
+     * @return array|\yii\db\ActiveRecord[]
+     */
     public function getNumberConfirmSendMail(){
-        $beginThisMonth=mktime(0,0,0,date('m'),1,date('Y'));
-        $data = FinanceAdvertiserBillTerm::find()->andFilterWhere(['status' => 1])->andFilterWhere(['>=', 'create_time', $beginThisMonth])->all();
+//        date_default_timezone_set('Etc/GMT-8');
+        $beginThisMonth = mktime(0,0,0,date('m')-2,1,date('Y'));
+        $endThisMonth = mktime(0,0,0,date('m'),1,date('Y'));
+        $data = FinanceAdvertiserBillTerm::find()->andFilterWhere(['status' => 1])->andFilterWhere(['<', 'create_time', $endThisMonth])->all();
         return $data;
+    }
+
+    public static function countAdvPending($bill_id,$cost,$revenue){
+        $bill = FinanceAdvertiserBillTerm::findOne($bill_id);
+        if(!empty($bill)){
+            $bill->pending = $bill->pending + $cost;
+            $bill->final_revenue = $bill->final_revenue - $cost;
+            $bill->receivable = $bill->receivable - $cost;
+            $bill->revenue = $bill->revenue - $revenue;
+            $bill->save();
+        }
     }
 }

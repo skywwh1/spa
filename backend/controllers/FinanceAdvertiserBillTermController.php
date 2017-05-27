@@ -134,6 +134,17 @@ class FinanceAdvertiserBillTermController extends Controller
         $advertiser = Advertiser::findOne($model->adv_id);
 
         if ($model->load(Yii::$app->request->post())) {
+            switch ($model->status)
+            {
+                case 3:
+                    $model->status = 1;
+                    break;
+                case 5:
+                    $model->status = 1;
+                    break;
+                default:
+                    $model->status = $model->status;
+            }
             if ($model->save()) {
                 $this->asJson(['success' => 1]);
             } else {
@@ -144,16 +155,26 @@ class FinanceAdvertiserBillTermController extends Controller
             //receivable
             $receivableModel = new FinanceAdvertiserBillTermSearch();
             $receivableModel->bill_id = $bill_id;
-            $receivableList = $receivableModel->search(Yii::$app->request->queryParams);
-
+//            $receivableList = $receivableModel->search(Yii::$app->request->queryParams);
+            $receivableList = $receivableModel->receivableSearch(Yii::$app->request->queryParams);
             //systemRevenue
             $systemRevenueModel = new FinanceAdvertiserCampaignBillTermSearch();
             $systemRevenueModel->bill_id = $bill_id;
             $systemRevenueList = $systemRevenueModel->search(Yii::$app->request->queryParams);
 
+            // confirmed
+            $confirmSearchModel = new FinancePendingSearch();
+            $confirmSearchModel->status = 1;
+            $theMonthBeforeLastTime =  strtotime("-1 month", $model->start_time);
+            $theMonthBeforeLastDate =  date("Ym",$theMonthBeforeLastTime);
+            $confirmSearchModel->adv_bill_id = $model->adv_id . '_' . $theMonthBeforeLastDate;
+            $confirmSearchModel->start_date = $theMonthBeforeLastTime;
+            $confirmList = $confirmSearchModel->financePendingSearch(Yii::$app->request->queryParams);
+
             // pending
             $pendingSearchModel = new FinancePendingSearch();
             $pendingSearchModel->adv_bill_id = $bill_id;
+            $pendingSearchModel->status = 0;
             $pendingList = $pendingSearchModel->search(Yii::$app->request->queryParams);
 
             //deduction
@@ -171,12 +192,12 @@ class FinanceAdvertiserBillTermController extends Controller
             $addRevenueModel->advertiser_bill_id = $bill_id;
             $addRevenueList = $addRevenueModel->search(Yii::$app->request->queryParams);
 
-
             return $this->render('update', [
                 'receivableList' => $receivableList,
                 'model' => $model,
                 'advertiser' => $advertiser,
                 'systemRevenueList' => $systemRevenueList,
+                'confirmList' => $confirmList,
                 'deductionList' => $deductionList,
                 'pendingList' => $pendingList,
                 'prepaymentList' => $prepaymentList,
@@ -207,8 +228,10 @@ class FinanceAdvertiserBillTermController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $advBill = FinanceAdvertiserBillTerm::findOne($bill_id);
-            $advBill->adjust_revenue = $model->adjust_revenue;
+            $advBill->adjust_revenue += $model->adjust_revenue;
             $advBill->adjust_note = $model->adjust_note;
+//            $advBill->final_revenue -= $advBill->adjust_revenue;
+            $advBill->receivable = $advBill->receivable-$advBill->adjust_revenue;
             if ($advBill->save()) {
                 return $this->asJson(['success' => 1]);
             } else {
@@ -218,6 +241,37 @@ class FinanceAdvertiserBillTermController extends Controller
             return $this->renderAjax('adjust', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    /**
+     * @param $bill_id
+     * @param $status
+     * @return string|\yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionFlow($bill_id,$status)
+    {
+        $model = new FinanceAdvertiserBillTerm();
+        $model->bill_id = $bill_id;
+
+        $model = $this->findModel($bill_id);
+        //BD Leader Reject and Finance Reject will set status = pending
+        switch ($status)
+        {
+            case 3:
+                $model->status = 1;
+                break;
+            case 5:
+                $model->status = 1;
+                break;
+            default:
+                $model->status = $status;
+        }
+        if ( $model->save()) {
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            var_dump($model->getErrors());
         }
     }
 }

@@ -160,4 +160,13 @@ class FinanceDeduction extends \yii\db\ActiveRecord
         return static::find()->select(['id'])->where(['channel_bill_id' => $channel_bill_id])->column();
     }
 
+    /**
+     * @param $channel_bill_id
+     * @return array
+     */
+    public static function getConfirmOrCompensatedDeduction($channel_bill_id)
+    {
+        return static::find()->where(['channel_bill_id' => $channel_bill_id])->andFilterWhere(['<>', 'status', 0])->all();
+    }
+
 }

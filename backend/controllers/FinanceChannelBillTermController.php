@@ -18,6 +18,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
+use yii\widgets\ActiveForm;
 
 /**
  * FinanceChannelBillTermController implements the CRUD actions for FinanceChannelBillTerm model.
@@ -139,13 +140,23 @@ class FinanceChannelBillTermController extends Controller
         $upload = new UploadForm();
 
         if ($model->load(Yii::$app->request->post())) {
-
-            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
-            var_dump($upload->imageFile);
-            die();
-            if (!$upload->upload()) {
-                // file is uploaded successfully
-                return;
+//            $upload->imageFile = UploadedFile::getInstance($upload, 'imageFile');
+//            var_dump($upload->imageFile);
+//            die();
+//            if (!$upload->upload()) {
+//                // file is uploaded successfully
+//                return;
+//            }
+            switch ($model->status)
+            {
+                case 3:
+                    $model->status = 1;
+                    break;
+                case 5:
+                    $model->status = 1;
+                    break;
+                default:
+                    $model->status = $model->status;
             }
             if ($model->save()) {
                 $this->asJson(['success' => 1]);
@@ -157,22 +168,34 @@ class FinanceChannelBillTermController extends Controller
             //payable
             $payableSearch = new FinanceChannelBillTermSearch();
             $payableSearch->bill_id = $bill_id;
-            $payable = $payableSearch->search(Yii::$app->request->queryParams);
+            $payable = $payableSearch->payableSearch(Yii::$app->request->queryParams);
+//            $payable = $payableSearch->search(Yii::$app->request->queryParams);
 
             //system cost
             $campaignBillSearchModel = new FinanceChannelCampaignBillTermSearch();
             $campaignBillSearchModel->bill_id = $bill_id;
-            $campaignBill = $campaignBillSearchModel->search(Yii::$app->request->queryParams);
+            $campaignBill = $campaignBillSearchModel->financeChannelSearch(Yii::$app->request->queryParams);
+
+            // confirmed
+            $confirmSearchModel = new FinancePendingSearch();
+//            $confirmSearchModel->channel_bill_id = $bill_id;
+            $confirmSearchModel->status = 1;
+            $theMonthBeforeLastTime =  strtotime("-1 month", $model->start_time);
+            $theMonthBeforeLastDate =  date("Ym",$theMonthBeforeLastTime);
+            $confirmSearchModel->channel_bill_id = $model->channel_id . '_' . $theMonthBeforeLastDate;
+            $confirmSearchModel->start_date = $theMonthBeforeLastTime;
+            $confirmList = $confirmSearchModel->financePendingSearch(Yii::$app->request->queryParams);
 
             // pending
             $pendingSearchModel = new FinancePendingSearch();
             $pendingSearchModel->channel_bill_id = $bill_id;
-            $pendingList = $pendingSearchModel->search(Yii::$app->request->queryParams);
+            $pendingSearchModel->status = 0;
+            $pendingList = $pendingSearchModel->financePendingSearch(Yii::$app->request->queryParams);
 
             // deduction
             $deductionSearchModel = new FinanceDeductionSearch();
             $deductionSearchModel->channel_bill_id = $bill_id;
-            $deductionList = $deductionSearchModel->search(Yii::$app->request->queryParams);
+            $deductionList = $deductionSearchModel->financeDeductionSearch(Yii::$app->request->queryParams);
 
             //compensation
             $compensationSearchModel = new FinanceCompensationSearch();
@@ -195,6 +218,7 @@ class FinanceChannelBillTermController extends Controller
                 'model' => $model,
                 'channel' => $channel,
                 'campaignBill' => $campaignBill,
+                'confirmList' => $confirmList,
                 'pendingList' => $pendingList,
                 'deductionList' => $deductionList,
                 'compensationList' => $compensationList,
@@ -248,8 +272,10 @@ class FinanceChannelBillTermController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $channelBill = FinanceChannelBillTerm::findOne($bill_id);
-            $channelBill->adjust_cost = $model->adjust_cost;
+            $channelBill->adjust_cost += $model->adjust_cost;
             $channelBill->adjust_note = $model->adjust_note;
+//            $channelBill->final_cost =  $channelBill->final_cost-$channelBill->adjust_cost;
+            $channelBill->payable = $channelBill->payable+$model->adjust_cost;
             if ($channelBill->save()) {
                 return $this->asJson(['success' => 1]);
             } else {
@@ -259,6 +285,50 @@ class FinanceChannelBillTermController extends Controller
             return $this->renderAjax('adjust', [
                 'model' => $model,
             ]);
+        }
+    }
+
+    public function actionValidate()
+    {
+        $model = new FinanceChannelBillTerm();
+        $request = \Yii::$app->getRequest();
+        if ($request->isPost && $model->load($request->post())) {
+            $billTerm = FinanceChannelBillTerm::findOne(['bill_id' => $model->channel_bill_id]);
+            if (!empty($billTerm)) {
+                $model->channel_id = $billTerm->channel_id;
+            }
+            $this->asJson(ActiveForm::validate($model));
+        }
+    }
+
+    /**
+     * @param $bill_id
+     * @param $status
+     * @return \yii\web\Response
+     * @throws NotFoundHttpException
+     */
+    public function actionFlow($bill_id,$status)
+    {
+        $model = new FinanceChannelBillTerm();
+        $model->bill_id = $bill_id;
+
+        $model = $this->findModel($bill_id);
+        //BD Leader Reject and Finance Reject will set status = pending
+        switch ($status)
+        {
+            case 3:
+                $model->status = 1;
+                break;
+            case 5:
+                $model->status = 1;
+                break;
+            default:
+                $model->status = $status;
+        }
+        if ( $model->save()) {
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            var_dump($model->getErrors());
         }
     }
 }

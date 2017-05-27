@@ -95,4 +95,41 @@ class FinancePendingSearch extends FinancePending
 
         return $dataProvider;
     }
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function financePendingSearch($params)
+    {
+        $query = FinancePending::find();
+        $query->alias("fp");
+
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'status' => $this->status,
+            'adv_id' => $this->adv_id,
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'adv_bill_id' => $this->adv_bill_id,
+            'channel_bill_id' => $this->channel_bill_id,
+        ]);
+
+        return $dataProvider;
+    }
 }

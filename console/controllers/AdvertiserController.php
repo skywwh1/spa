@@ -22,17 +22,18 @@ class AdvertiserController extends Controller
         $models = FinanceAdvertiserBillTerm::getNumberConfirmSendMail();
         if (isset($models)) {
             foreach ( $models as $financeAdv){
-                $advertiser = Advertiser::findOne($financeAdv->adv_id);
-                if(!empty($advertiser)){
-                    $this->echoMessage('Number Confirm');
-                    if (MailUtil::numberConfirm($advertiser)) {
-                        $this->echoMessage($advertiser->username . ' send success');
-                    } else {
-                        $this->echoMessage($advertiser->username . ' send fail');
-                    }
-                    $this->echoMessage("waiting 1s");
-                    sleep(1);
-                }
+                var_dump($financeAdv->adv_id);
+//                $advertiser = Advertiser::findOne($financeAdv->adv_id);
+//                if(!empty($advertiser)){
+//                    $this->echoMessage('Number Confirm');
+//                    if (MailUtil::numberConfirm($advertiser)) {
+//                        $this->echoMessage($advertiser->username . ' send success');
+//                    } else {
+//                        $this->echoMessage($advertiser->username . ' send fail');
+//                    }
+//                    $this->echoMessage("waiting 1s");
+//                    sleep(1);
+//                }
             }
         }
     }

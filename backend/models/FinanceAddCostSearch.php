@@ -43,7 +43,7 @@ class FinanceAddCostSearch extends FinanceAddCost
     public function search($params)
     {
         $query = FinanceAddCost::find();
-
+        $query->alias("fac");
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -58,6 +58,13 @@ class FinanceAddCostSearch extends FinanceAddCost
             return $dataProvider;
         }
 
+        $query->select([
+            'fac.*',
+            'fab.revenue',
+        ]);
+
+        $query->leftJoin('finance_channel_bill_term fab','fab.bill_id = fac.channel_bill_id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
@@ -65,10 +72,10 @@ class FinanceAddCostSearch extends FinanceAddCost
             'cost' => $this->cost,
             'create_time' => $this->create_time,
             'update_time' => $this->update_time,
+            'channel_bill_id'=> $this->channel_bill_id,
         ]);
 
-        $query->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
-            ->andFilterWhere(['like', 'timezone', $this->timezone])
+        $query->andFilterWhere(['like', 'timezone', $this->timezone])
             ->andFilterWhere(['like', 'om', $this->om])
             ->andFilterWhere(['like', 'note', $this->note]);
 

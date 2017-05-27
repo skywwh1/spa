@@ -83,4 +83,12 @@ class FinanceCompensation extends ActiveRecord
         return $this->hasOne(FinanceDeduction::className(), ['id' => 'deduction_id']);
     }
 
+    /**
+     * @param $channel_bill_id
+     * @return array
+     */
+    public static function getApprovedCompensation($deduction_ids)
+    {
+        return static::find()->andFilterWhere(['in', 'deduction_id',$deduction_ids])->andFilterWhere(['status' => 1])->all();
+    }
 }

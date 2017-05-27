@@ -23,7 +23,13 @@ use yii\widgets\ActiveForm;
                         ]); ?>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'campaign_id')->textInput() ?>
+                                <?php
+                                if (is_null($model->campaign_id)){
+                                    echo $form->field($model, 'campaign_id')->textInput();
+                                }else{
+                                    echo $form->field($model, 'campaign_id')->textInput(['readonly' => 'readonly']);
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
