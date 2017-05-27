@@ -4,7 +4,7 @@ use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
 use kartik\date\DatePicker;
-
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FinancePendingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -25,6 +25,140 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= Html::a('Add Campaign Pending', ['add-campaign'], ['class' => 'btn btn-success']) ?>
                             <?= Html::a('Add ADV Pending', ['add-adv'], ['class' => 'btn btn-success']) ?>
                         </p>
+                        <?php
+                        $columns = [
+                            [
+                                // 'label' => 'id',
+                                'attribute' => 'id',
+                                'value' => 'id',
+                            ],
+                            [
+                                'label' => 'Channel',
+                                'attribute' => 'channel_name',
+                                'value' => 'channel.username',
+                            ],
+                            [
+                                'attribute' => 'month',
+                                'value' => function($model){
+                                    return isset($model->adv_bill_id) ? substr($model->adv_bill_id,3) : Yii::$app->formatter->asDate('now', 'php:Y-m');
+                                },
+                                'filter' =>  DatePicker::widget([
+                                    'model' => $searchModel,
+                                    'attribute' => 'month',
+                                    'name' => 'month',
+                                    'type' => DatePicker::TYPE_INPUT,
+                                    'pluginOptions' => [
+                                        'autoclose'=>true,
+                                        'format' => 'yyyymm',
+                                    ],
+                                ]),
+                            ],
+                            [
+                                // 'label' => 'campaign_id',
+                                'attribute' => 'campaign_id',
+                                'value' => 'campaign_id',
+                            ],
+                            [
+                                'label' => 'Campaign',
+                                'attribute' => 'campaign_name',
+                                'value' => 'campaign.name',
+                            ],
+                            [
+                                // 'label' => 'start_date',
+                                'attribute' => 'start_date',
+                                'value' => function ($model) {
+                                    $format = 'Y-m-d';
+                                    $date = new DateTime();
+                                    $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                    $date->setTimestamp($model->start_date);
+                                    return $date->format($format);
+                                },
+                            ],
+                            [
+                                // 'label' => 'end_date',
+                                'attribute' => 'end_date',
+                                'value' => function ($model) {
+                                    $format = 'Y-m-d';
+                                    $date = new DateTime();
+                                    $date->setTimezone(new DateTimeZone('Etc/GMT-8'));
+                                    $date->setTimestamp($model->end_date);
+                                    return $date->format($format);
+                                },
+
+                            ],
+
+                            [
+                                'label' => 'installs',
+                                'attribute' => 'installs',
+                                'value' => 'installs',
+                            ],
+                            [
+                                'label' => 'cost',
+                                'attribute' => 'cost',
+                                'value' => 'cost',
+                            ],
+                            [
+                                'label' => 'revenue',
+                                'attribute' => 'revenue',
+                                'value' => 'revenue',
+                            ],
+                            [
+                                'label' => 'margin',
+                                'attribute' => 'margin',
+                                'value' => 'margin',
+                            ],
+                            [
+                                'label' => 'adv',
+                                'attribute' => 'adv',
+                                'value' => 'adv',
+                            ],
+                            [
+                                'label' => 'pm',
+                                'attribute' => 'pm',
+                                'value' => 'pm',
+                            ],
+                            [
+                                'label' => 'bd',
+                                'attribute' => 'bd',
+                                'value' => 'bd',
+                            ],
+                            [
+                                'label' => 'om',
+                                'attribute' => 'om',
+                                'value' => 'om',
+                            ],
+                            [
+                                'label' => 'status',
+                                'attribute' => 'status',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getPendingStatus($model->status);
+                                },
+                                'filter' => ModelsUtil::pending_status,
+                            ],
+                            [
+                                'label' => 'create_time',
+                                'attribute' => 'create_time',
+                                'value' => 'create_time',
+                            ],
+                        ];
+                        echo ExportMenu::widget([
+                            'dataProvider' => $dataProvider,
+                            'columns' => $columns,
+                            'fontAwesome' => true,
+                            'showConfirmAlert' => false,
+                            'target' => GridView::TARGET_BLANK,
+                            'dropdownOptions' => [
+                                'label' => 'Export All',
+                                'class' => 'btn btn-default'
+                            ],
+                            'exportConfig' => [
+                                ExportMenu::FORMAT_TEXT => false,
+                                ExportMenu::FORMAT_PDF => false,
+                                ExportMenu::FORMAT_EXCEL_X => false,
+                                ExportMenu::FORMAT_HTML => false,
+                            ],
+                        ]);
+                        ?>
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
