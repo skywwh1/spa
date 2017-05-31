@@ -191,10 +191,11 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
      * @return array|\yii\db\ActiveRecord[]
      */
     public function getNumberConfirmSendMail(){
-//        date_default_timezone_set('Etc/GMT-8');
-        $beginThisMonth = mktime(0,0,0,date('m')-2,1,date('Y'));
-        $endThisMonth = mktime(0,0,0,date('m'),1,date('Y'));
-        $data = FinanceAdvertiserBillTerm::find()->andFilterWhere(['status' => 1])->andFilterWhere(['<', 'create_time', $endThisMonth])->all();
+        $last_month_str = date('Ym', strtotime('first day of last month'));
+        $data = FinanceAdvertiserBillTerm::find()->andFilterWhere(['status' => 1])
+            ->andFilterWhere(['like', 'bill_id', $last_month_str])
+            ->andFilterWhere(['>', 'revenue', 0])
+            ->all();
         return $data;
     }
 
