@@ -76,6 +76,7 @@ use yii\helpers\Json;
  * @property User $creator0
  * @property Deliver[] $delivers
  * @property Channel[] $channels0
+ * @property CampaignCreativeLink[] $campaignCreateLinks
  */
 class Campaign extends \yii\db\ActiveRecord
 {
@@ -359,4 +360,13 @@ class Campaign extends \yii\db\ActiveRecord
 //        parent::afterSave($insert,$changedAttributes);
 //        CreativeLink::updateCreativeLink($this->creative_link,$this->id);
 //    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaignCreateLinks()
+    {
+        return $this->hasMany(CampaignCreativeLink::className(), ['campaign_id' => 'id']);
+    }
+
 }

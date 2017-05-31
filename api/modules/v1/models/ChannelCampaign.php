@@ -61,6 +61,9 @@ class ChannelCampaign extends Deliver
             'Package Name' => function ($model) {
                 return $model->campaign->package_name;
             },
+            'Creative' => function ($model) {
+                return $model->campaign->campaignCreateLinks;
+            }
         ];
     }
 }
