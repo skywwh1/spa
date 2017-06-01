@@ -44,6 +44,10 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+
+            echo strpos('asdf', 'CPE');
+
+        die();
         $aa = new Mundo();
         $aa->getApiCampaign();
 

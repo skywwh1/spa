@@ -50,7 +50,10 @@ class Mundo
                 $camp = new Campaign();
             }
             $camp->campaign_uuid = $uuid;
-            if (strpos($camp->campaign_name, 'CPE') === true) {
+            if (strpos($camp->campaign_name, 'CPE') !== false) {
+                continue;
+            }
+            if (strpos($camp->campaign_name, 'CPP') !== false) {
                 continue;
             }
             if (empty($camp->campaign_name)) {
@@ -143,8 +146,10 @@ class Mundo
                 echo "new url " . $newUrl . "\n";
                 $response = $curl->get($newUrl);
                 $response = json_decode($response);
-                if (isset($response->$data_key)) {
+                if (!empty($response->$data_key)) {
                     $apiCampaigns[] = $response->$data_key;
+                }else{
+                    break;
                 }
             }
         }
