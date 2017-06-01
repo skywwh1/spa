@@ -160,9 +160,10 @@ class Mundo
 //        https://publisher-api.mm-tracking.com/creative?publisher_token=168fe8b43bc30b61f7f0e3d32899c1b1&campId=
         if (!empty($apiCams)) {
             foreach ($apiCams as $item) {
-                if(empty($item))
+                if(!isset($item->id))
                     continue;
                 $url = 'https://publisher-api.mm-tracking.com/creative?publisher_token=168fe8b43bc30b61f7f0e3d32899c1b1&campId=' . $item->id;
+                echo "creative url " . $url . "\n";
                 $curl = new Curl();
                 $response = $curl->get($url);
                 $response = json_decode($response);
