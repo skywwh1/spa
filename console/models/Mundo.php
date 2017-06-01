@@ -50,6 +50,9 @@ class Mundo
                 $camp = new Campaign();
             }
             $camp->campaign_uuid = $uuid;
+            if (strpos($camp->campaign_name, 'CPE') === true) {
+                continue;
+            }
             if (empty($camp->campaign_name)) {
                 $camp->campaign_name = $model->campaign_name;
             }
@@ -74,7 +77,7 @@ class Mundo
             $camp->note = $model->note;
             $camp->category = $model->category;
             $camp->kpi = $model->conversion_flow . ':' . $model->status;
-            if($model->conversion_flow == 'None'){
+            if ($model->conversion_flow == 'None') {
                 $camp->kpi = 'Day 2 RR > 30%';
             }
             $camp->status = 1;
@@ -125,7 +128,7 @@ class Mundo
         $response = $curl->get($url);
         $response = json_decode($response);
         $limit = 100;
-        $total = isset($response->recordsFiltered) ? $response->recordsFiltered : 0;
+        $total = isset($response->recordsTotal) ? $response->recordsTotal : 0;
         $data = isset($response->$data_key) ? $response->$data_key : array();
         echo "total " . $total . "\n";
 //        var_dump($data);
@@ -133,7 +136,8 @@ class Mundo
         $apiCampaigns = $data;
         if ($total > $limit) {
             $totalPage = ceil($total / $limit);
-            for ($i = 1; $i <= $totalPage; $i++) {
+            echo "totalPage " . $totalPage . "\n";
+            for ($i = 1; $i < $totalPage; $i++) {
                 $newUrl = $url . '&skip=' . ($i * $limit);
                 $curl = new Curl();
                 echo "new url " . $newUrl . "\n";
@@ -156,6 +160,8 @@ class Mundo
 //        https://publisher-api.mm-tracking.com/creative?publisher_token=168fe8b43bc30b61f7f0e3d32899c1b1&campId=
         if (!empty($apiCams)) {
             foreach ($apiCams as $item) {
+                if(empty($item))
+                    continue;
                 $url = 'https://publisher-api.mm-tracking.com/creative?publisher_token=168fe8b43bc30b61f7f0e3d32899c1b1&campId=' . $item->id;
                 $curl = new Curl();
                 $response = $curl->get($url);
