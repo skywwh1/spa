@@ -4,6 +4,8 @@ namespace backend\models;
 
 use common\models\Advertiser;
 use common\models\Campaign;
+use DateTime;
+use DateTimeZone;
 use Yii;
 
 /**
@@ -199,6 +201,11 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
         return $data;
     }
 
+    /**
+     * @param $bill_id
+     * @param $cost
+     * @param $revenue
+     */
     public static function countAdvPending($bill_id,$cost,$revenue){
         $bill = FinanceAdvertiserBillTerm::findOne($bill_id);
         if(!empty($bill)){
@@ -207,6 +214,49 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
             $bill->receivable = $bill->receivable - $cost;
             $bill->revenue = $bill->revenue - $revenue;
             $bill->save();
+        }
+    }
+
+    /**
+     * @param $adv_bill
+     * @return void|\yii\db\ActiveRecord
+     */
+    public function findRecentNotEndingBill($adv_bill)
+    {
+        //按照时间逆序查询广告主的单子，然后获取的就是
+        $finance_bills = FinanceAdvertiserBillTerm::find()->andFilterWhere(['adv_id' => $adv_bill->adv_id])->orderBy(['start_time' => SORT_DESC])->all();
+        foreach ($finance_bills as $finance_bill){
+            if ($finance_bill->status != 7){
+                return $finance_bill;
+            }
+        }
+        return $this->genNewChannelBill($adv_bill);
+    }
+
+    private function genNewChannelBill($adv_bill){
+        $first_day_str = date('Y-m-d', strtotime('first day of this month'));
+        $last_day_str = date('Y-m-d', strtotime('last day of this month'));
+        $timezone = $adv_bill->timezone;
+        if (empty($timezone)) {
+            $timezone = 'Etc/GMT-8';
+        }
+        //当前时区的凌晨转为0时区
+        $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+        $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+        $start_time = $start_date->getTimestamp();
+        $end_time = $end_date->getTimestamp() + 3600 * 24;
+        $bill_id = $adv_bill->adv_id . '_' . $start_date->format('Ym');
+        $pre_bill = FinanceAdvertiserBillTerm::findOne(['bill_id' => $bill_id]);
+        if (empty($pre_bill)) {
+            $pre_bill = new FinanceAdvertiserBillTerm();
+            $pre_bill->start_time = $start_time;
+            $pre_bill->end_time = $end_time;
+            $pre_bill->adv_id = $adv_bill->adv_id;
+            $pre_bill->invoice_id = 'spa-' . $adv_bill->id . '-' . substr($first_day_str, 0, 7);
+            $pre_bill->time_zone = $timezone;
+            $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+            $pre_bill->bill_id = $adv_bill->id . '_' . $start_date->format('Ym');
+            $pre_bill->save();
         }
     }
 }

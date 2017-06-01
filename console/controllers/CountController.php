@@ -17,6 +17,7 @@ use backend\models\FinanceAdvertiserPrepayment;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelCampaignBillTerm;
 use backend\models\FinanceChannelPrepayment;
+use backend\models\FinanceCompensation;
 use backend\models\FinanceDeduction;
 use backend\models\FinancePending;
 use backend\models\LogClick3;
@@ -700,17 +701,21 @@ class CountController extends Controller
      * @param FinanceAdvertiserBillTerm $model
      */
     private function countAdvBill(&$model)
-    {   //history revenue
+    {
+//      final_revenue = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue
+//      receivable = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue-adjustRevenue
+//      history revenue
         //pending
-        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id]);
+        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
         if (!empty($pends)) {
             foreach ($pends as $item) {
                 $model->pending += $item->revenue;
                 $model->receivable -= $item->revenue;
+                $model->final_revenue -= $item->revenue;
             }
         }
         //deduction
-        $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
+        $deductions = FinanceDeduction::getConfirmOrCompensatedDeduction($model->bill_id);
         if (!empty($deductions)) {
             foreach ($deductions as $item) {
                 $model->deduction += $item->deduction_value;
@@ -740,17 +745,22 @@ class CountController extends Controller
      * @param FinanceChannelBillTerm $model
      */
     private function countChannelBill(&$model)
-    {   //history revenue
+    {
+//      payable = systemCost+add_historicCost-pendingCost-deduction_value+addCost+compensation-adjustCost
+//      final_cost = systemCost+add_historicCost-pendingCost-deduction_value+addCost
+//        history cost
         //pending
-        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id]);
+        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
         if (!empty($pends)) {
             foreach ($pends as $item) {
-                $model->pending += $item->revenue;
-                $model->payable -= $item->revenue;
+                $model->pending += $item->cost;
+                $model->payable -= $item->cost;
+                $model->final_cost -= $item->cost;
             }
         }
         //deduction
-        $deductions = FinanceDeduction::findAll(['channel_bill_id' => $model->bill_id]);
+//        $deductions = FinanceDeduction::findAll(['channel_bill_id' => $model->bill_id,'status' => 1]);
+        $deductions = FinanceDeduction::getConfirmOrCompensatedDeduction($model->bill_id);
         if (!empty($deductions)) {
             foreach ($deductions as $item) {
                 $model->deduction += $item->deduction_value;
@@ -758,15 +768,25 @@ class CountController extends Controller
                 $model->final_cost -= $item->deduction_value;
             }
         }
-        //add revenue
-        $addCost = FinanceAddCost::findAll(['channel_bill_id' => $model->bill_id]);
-        if (!empty($addCost)) {
-            foreach ($addCost as $item) {
-                $model->add_cost += $item->cost;
-                $model->payable -= $item->cost;
-                $model->final_cost += $item->cost;
-            }
-        }
+//        add cost
+//        $addCost = FinanceAddCost::findAll(['channel_bill_id' => $model->bill_id]);
+//        if (!empty($addCost)) {
+//            foreach ($addCost as $item) {
+//                $model->add_cost += $item->cost;
+////                $model->payable -= $item->cost;
+////                $model->payable += $item->cost;
+////                $model->final_cost += $item->cost;
+//            }
+//        }
+        //compensation
+//        $deduction_ids = FinanceDeduction::getDeductionIds( $model->bill_id);
+//        $compensation = FinanceCompensation::getApprovedCompensation($deduction_ids);
+//        if (!empty($compensation)) {
+//            foreach ($compensation as $item) {
+//                $model->compensation += $item->compensation;
+//                $model->payable += $item->compensation;
+//            }
+//        }
         //prepayment
         $prepayments = FinanceChannelPrepayment::findAll(['channel_bill_id' => $model->bill_id]);
         if (!empty($prepayments)) {

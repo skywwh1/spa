@@ -169,4 +169,89 @@ class FinanceDeduction extends \yii\db\ActiveRecord
         return static::find()->where(['channel_bill_id' => $channel_bill_id])->andFilterWhere(['<>', 'status', 0])->all();
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($this->status >0 ) {
+            $this->countDeductionChannelBillTerm();
+//            $this->countDeductionAdvBillTerm();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**计算pending的
+     * countPending
+     */
+    private function countDeductionChannelBillTerm(){
+        $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
+        /**
+         * 一个账单被设置成deduction,则看其是否过期
+         * */
+        if(!empty($channel_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($channel_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+//                $recent_not_ending_bill = FinanceChannelBillTerm::findRecentNotEndingBill($channel_bill);
+//                $recent_not_ending_bill->add_historic_cost -= $this->deduction_cost;
+//                $recent_not_ending_bill->final_cost = $recent_not_ending_bill->final_cost - $this->cost;
+//                $recent_not_ending_bill->payable = $recent_not_ending_bill->payable - $this->cost;
+//                $recent_not_ending_bill->revenue -= $this->deduction_revenue;
+//                $recent_not_ending_bill->save();
+//
+//                $this->resetChannelBillIdNew($this->id,$recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将deduction的账目放到本账单上面
+                $channel_bill->deduction += $this->deduction_cost;
+                $channel_bill->final_cost = $channel_bill->final_cost - $this->deduction_cost;
+                $channel_bill->payable = $channel_bill->payable - $this->deduction_cost;
+                $channel_bill->revenue -= $this->deduction_revenue;
+                $channel_bill->save();
+            }
+        }
+    }
+
+    private function countDeductionAdvBillTerm(){
+        $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
+        if(!empty($adv_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($adv_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+//                $recent_not_ending_bill = FinanceAdvertiserBillTerm::findRecentNotEndingBill($adv_bill);
+//                $recent_not_ending_bill->add_historic -= $this->deduction_revenue;
+//                $recent_not_ending_bill->final_revenue = $recent_not_ending_bill->final_revenue - $this->revenue;
+//                $recent_not_ending_bill->receivable = $recent_not_ending_bill->receivable - $this->revenue;
+//                $recent_not_ending_bill->cost -= $this->deduction_cost;
+//                $recent_not_ending_bill->save();
+//
+//                $this->resetAdvBillIdNew($recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将pending的账目放到本账单上面、
+                $adv_bill->deduction = $adv_bill->deduction + $this->deduction_revenue;
+                $adv_bill->final_revenue = $adv_bill->final_revenue - $this->deduction_revenue;
+                $adv_bill->receivable = $adv_bill->receivable - $this->deduction_revenue;
+                $adv_bill->cost -= $this->deduction_cost;
+                $adv_bill->save();
+            }
+        }
+    }
+
+    /**
+     * 对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+     * @param $recent_not_ending_bill
+     */
+    private function resetChannelBillIdNew($recent_not_ending_bill){
+        $financePending = FinanceDeduction::findOne($this->id);
+        $financePending->channel_bill_id_new = $recent_not_ending_bill->channel_bill_id;
+        $financePending->save();
+    }
+
+    /**
+     * 对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+     * @param $recent_not_ending_bill
+     */
+    private function resetAdvBillIdNew($recent_not_ending_bill){
+        $financePending = FinanceDeduction::findOne($this->id);
+        $financePending->adv_bill_id_new = $recent_not_ending_bill->adv_bill_id;
+        $financePending->save();
+    }
+
 }

@@ -6,7 +6,7 @@ use common\models\Channel;
 use Yii;
 
 /**
- * This is the model class for table "finance_add_cost".
+ * This is the model class for table "finance_sub_cost".
  *
  * @property integer $id
  * @property string $channel_bill_id
@@ -21,7 +21,7 @@ use Yii;
  * @property Channel $channel
  * @property FinanceChannelBillTerm $channelBill
  */
-class FinanceAddCost extends \yii\db\ActiveRecord
+class FinanceSubCost extends \yii\db\ActiveRecord
 {
     public $revenue;
     /**
@@ -29,7 +29,7 @@ class FinanceAddCost extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'finance_add_cost';
+        return 'finance_sub_cost';
     }
 
     /**
@@ -87,9 +87,8 @@ class FinanceAddCost extends \yii\db\ActiveRecord
     {
         if ($insert) {
             $bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
-            $bill->add_cost = $bill->add_cost + $this->cost;
-            $bill->final_cost = $bill->final_cost + $this->cost;
-            $bill->payable = $bill->payable + $this->cost;
+            $bill->adjust_cost = $bill->adjust_cost + $this->cost;
+            $bill->final_cost = $bill->final_cost - $this->cost;
             $bill->save();
         }
         parent::afterSave($insert, $changedAttributes);

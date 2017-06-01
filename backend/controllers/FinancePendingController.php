@@ -235,12 +235,8 @@ class FinancePendingController extends Controller
                 break;
         }
         if(!$flag){
-//            var_dump("验证时间成功");
-//            die();
             return "you have add pending between ".$model->start_date." and ".$model->end_date." already!Please don't do it again!";
         }
-//        var_dump("无重复时间");
-//        die();
 
         $records = CampaignLogHourly::findDateReport($start, $end, $model->campaign_id, $model->channel_id);
         if(!empty($records)){
@@ -261,14 +257,12 @@ class FinancePendingController extends Controller
             $pending->bd = User::findIdentity($cam->advertiser0->bd)->username;
             $pending->adv = $cam->advertiser0->username;
             $pending->adv_id = $cam->advertiser0->id;
+
             if (!$pending->save()) {
                 var_dump($pending->getErrors());
                 die();
             }
-            FinanceChannelBillTerm::countChaPending($channel_bill,$records->cost,$records->revenue);
-            FinanceAdvertiserBillTerm::countAdvPending($adv_bill,$records->cost,$records->revenue);
         }
-
     }
 
     private function createMultipleByCam($model)
@@ -286,7 +280,8 @@ class FinancePendingController extends Controller
     }
 
     /**
-     * @param FinancePendingForm $model
+     * @param $model
+     * @return string
      */
     private function createAdvToOneChannel($model)
     {

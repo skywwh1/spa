@@ -4,6 +4,8 @@ namespace backend\models;
 
 use common\models\Campaign;
 use common\models\Channel;
+use DateTime;
+use DateTimeZone;
 use Yii;
 
 /**
@@ -192,6 +194,49 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
             $bill->payable = $bill->payable - $cost;
             $bill->revenue = $bill->revenue - $revenue;
             $bill->save();
+        }
+    }
+
+    /**
+     * @param $channel_bill
+     * @return void|\yii\db\ActiveRecord
+     */
+    public function findRecentNotEndingBill($channel_bill)
+    {
+        //按照日期逆序查询获取
+        $finance_bills = FinanceChannelBillTerm::find()->andFilterWhere(['channel_id' => $channel_bill->channel_id])->orderBy(['start_time' => SORT_DESC])->all();
+        foreach ($finance_bills as $finance_bill){
+            if ($finance_bill->status != 7){
+                return $finance_bill;
+            }
+        }
+        return $this->genNewChannelBill($channel_bill);
+    }
+
+    private function genNewChannelBill($channel_bill){
+        $first_day_str = date('Y-m-d', strtotime('first day of this month'));
+        $last_day_str = date('Y-m-d', strtotime('last day of this month'));
+        $timezone = $channel_bill->timezone;
+        if (empty($timezone)) {
+            $timezone = 'Etc/GMT-8';
+        }
+        //当前时区的凌晨转为0时区
+        $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day_str)), new DateTimeZone($timezone));
+        $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day_str)), new DateTimeZone($timezone));
+        $start_time = $start_date->getTimestamp();
+        $end_time = $end_date->getTimestamp() + 3600 * 24;
+        $bill_id = $channel_bill->channel_id . '_' . $start_date->format('Ym');
+        $pre_bill = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+        if (empty($pre_bill)) {
+            $pre_bill = new FinanceChannelBillTerm();
+            $pre_bill->start_time = $start_time;
+            $pre_bill->end_time = $end_time;
+            $pre_bill->channel_id = $channel_bill->channel_id;
+            $pre_bill->invoice_id = 'spa-' . $channel_bill->channel_id . '-' . substr($first_day_str, 0, 7);
+            $pre_bill->time_zone = $timezone;
+            $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+            $pre_bill->bill_id = $channel_bill->channel_id . '_' . $start_date->format('Ym');
+            $pre_bill->save();
         }
     }
 }

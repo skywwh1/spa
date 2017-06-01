@@ -68,6 +68,12 @@ class FinanceDeductionForm extends Model
         if (empty($records)) {
             $this->addError('note', 'No data found in the report records');
         }
+
+        $channel_bill_id = $this->channel_id . '_' . date('Ym', strtotime($this->start_date));
+        $form = new FinancePendingForm();
+        if(!$form->checkIsCheckedOut(null,$channel_bill_id)){
+            $this->addError('note', 'Cannot deducted a closed bill');
+        }
     }
 
 
