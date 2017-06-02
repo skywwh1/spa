@@ -973,8 +973,8 @@ class CountController extends Controller
     private function countAdvBillApr(&$model)
     {
         $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
+        $model->pending = 0;
         if (!empty($pends)) {
-            $model->pending = 0;
             foreach ($pends as $item) {
                 $model->pending += $item->revenue;
                 $model->receivable -= $item->revenue;
@@ -984,8 +984,8 @@ class CountController extends Controller
         //deduction
         $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
 //        $deductions = FinanceDeduction::getConfirmOrCompensatedDeduction($model->bill_id);
+        $model->deduction = 0;
         if (!empty($deductions)) {
-            $model->deduction = 0;
             foreach ($deductions as $item) {
                 $model->deduction += $item->deduction_revenue;
                 $model->receivable -= $item->deduction_revenue;
@@ -994,8 +994,8 @@ class CountController extends Controller
         }
         //add revenue
         $addRevenue = FinanceAddRevenue::findAll(['advertiser_bill_id' => $model->bill_id]);
+        $model->add_revenue = 0;
         if (!empty($addRevenue)) {
-            $model->add_revenue = 0;
             foreach ($addRevenue as $item) {
                 $model->add_revenue += $item->revenue;
                 $model->receivable += $item->revenue;
@@ -1004,8 +1004,8 @@ class CountController extends Controller
         }
         //prepayment
         $prepayments = FinanceAdvertiserPrepayment::findAll(['advertiser_bill_id' => $model->bill_id]);
+        $model->prepayment = 0;
         if (!empty($prepayments)) {
-            $model->prepayment = 0;
             foreach ($prepayments as $item) {
                 $model->prepayment += $item->prepayment;
             }
@@ -1020,8 +1020,8 @@ class CountController extends Controller
         //pending
         $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
         var_dump($model->bill_id);
+        $model->pending = 0;
         if (!empty($pends)) {
-            $model->pending = 0;
             foreach ($pends as $item) {
                 $model->pending += $item->cost;
                 $model->payable -= $item->cost;
@@ -1031,8 +1031,8 @@ class CountController extends Controller
         //deduction
 //        $deductions = FinanceDeduction::findAll(['channel_bill_id' => $model->bill_id,'status' => 1]);
         $deductions = FinanceDeduction::getConfirmOrCompensatedDeduction($model->bill_id);
+        $model->deduction = 0;
         if (!empty($deductions)) {
-            $model->deduction = 0;
             foreach ($deductions as $item) {
                 $model->deduction += $item->deduction_value;
                 $model->payable -= $item->deduction_value;
@@ -1041,8 +1041,8 @@ class CountController extends Controller
         }
 //        add cost
         $addCost = FinanceAddCost::findAll(['channel_bill_id' => $model->bill_id]);
+        $model->add_cost = 0;
         if (!empty($addCost)) {
-            $model->add_cost = 0;
             foreach ($addCost as $item) {
                 $model->add_cost += $item->cost;
 //                $model->payable -= $item->cost;
@@ -1053,8 +1053,8 @@ class CountController extends Controller
 
         //prepayment
         $prepayments = FinanceChannelPrepayment::findAll(['channel_bill_id' => $model->bill_id]);
+        $model->apply_prepayment = 0;
         if (!empty($prepayments)) {
-            $model->apply_prepayment = 0;
             foreach ($prepayments as $item) {
                 $model->apply_prepayment += $item->prepayment;
             }
