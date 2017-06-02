@@ -173,8 +173,8 @@ class FinanceDeduction extends \yii\db\ActiveRecord
     {
         if ($this->status >0 ) {
             $this->countDeductionChannelBillTerm();
-//            $this->countDeductionAdvBillTerm();
         }
+        $this->countDeductionAdvBillTerm();
         parent::afterSave($insert, $changedAttributes);
     }
 

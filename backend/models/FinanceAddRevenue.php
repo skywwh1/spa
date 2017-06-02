@@ -82,4 +82,17 @@ class FinanceAddRevenue extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Advertiser::className(), ['id' => 'advertiser_id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            $bill = FinanceAdvertiserBillTerm::findOne($this->advertiser_bill_id);
+            $bill->add_revenue = $bill->add_revenue + $this->revenue;
+            $bill->final_revenue = $bill->final_revenue + $this->revenue;
+            $bill->receivable = $bill->receivable + $this->revenue;
+            $bill->save();
+        }
+
+        parent::afterSave($insert, $changedAttributes);
+    }
 }
