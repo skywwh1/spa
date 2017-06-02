@@ -298,12 +298,12 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('number_confirm', ['advertiser' => $advertiser]);
         $mail->setTo($advertiser->email);
-//        $cc = array($advertiser->bd0->email);
-//        if (!empty($advertiser->cc_email) && !empty(explode(';', $advertiser->cc_email))) {
-//            $cc = array_merge($cc, explode(';', $advertiser->cc_email));
-//        }
-//        $mail->setCc($cc);
-        $mail->setTo("2539131080@qq.com");
+        $cc = array($advertiser->bd0->email);
+        if (!empty($advertiser->cc_email) && !empty(explode(';', $advertiser->cc_email))) {
+            $cc = array_merge($cc, explode(';', $advertiser->cc_email));
+        }
+        $mail->setCc($cc);
+//        $mail->setTo("2539131080@qq.com");
         $mail->setSubject('Number Confirm - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
