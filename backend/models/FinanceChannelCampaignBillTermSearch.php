@@ -125,7 +125,8 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
         ]);
         // grid filtering conditions
         $query->andFilterWhere([
-            'bill_id'=> $this->bill_id
+            'bill_id'=> $this->bill_id,
+//             'fp.status' => 0
         ]);
 
         $query->leftJoin("finance_pending fp",'fp.channel_bill_id = fcb.bill_id and fp.campaign_id = fcb.campaign_id');
