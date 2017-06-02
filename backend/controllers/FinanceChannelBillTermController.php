@@ -9,6 +9,7 @@ use backend\models\FinanceCompensationSearch;
 use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
+use backend\models\FinanceSubCostSearch;
 use backend\models\UploadForm;
 use common\models\Channel;
 use Yii;
@@ -178,12 +179,8 @@ class FinanceChannelBillTermController extends Controller
 
             // confirmed
             $confirmSearchModel = new FinancePendingSearch();
-//            $confirmSearchModel->channel_bill_id = $bill_id;
+            $confirmSearchModel->channel_bill_id_new = $bill_id;
             $confirmSearchModel->status = 1;
-            $theMonthBeforeLastTime =  strtotime("-1 month", $model->start_time);
-            $theMonthBeforeLastDate =  date("Ym",$theMonthBeforeLastTime);
-            $confirmSearchModel->channel_bill_id = $model->channel_id . '_' . $theMonthBeforeLastDate;
-            $confirmSearchModel->start_date = $theMonthBeforeLastTime;
             $confirmList = $confirmSearchModel->financePendingSearch(Yii::$app->request->queryParams);
 
             // pending
@@ -212,6 +209,10 @@ class FinanceChannelBillTermController extends Controller
             $costSearch->channel_bill_id = $bill_id;
             $costList = $costSearch->search(Yii::$app->request->queryParams);
 
+            //sub cost list
+            $subCostSearch = new FinanceSubCostSearch();
+            $subCostSearch->channel_bill_id = $bill_id;
+            $subCostList = $subCostSearch->search(Yii::$app->request->queryParams);
 
             return $this->render('update', [
                 'payable' => $payable,
@@ -224,6 +225,7 @@ class FinanceChannelBillTermController extends Controller
                 'compensationList' => $compensationList,
                 'prepaymentList' => $prepaymentList,
                 'costList' => $costList,
+                'subCostList' => $subCostList,
                 'upload'=>$upload,
             ]);
         }
@@ -259,33 +261,6 @@ class FinanceChannelBillTermController extends Controller
 //        return $this->render('upload', ['model' => $model]);
 //
       //  return $this->render('upload', ['model' => $model]);
-    }
-
-    /**
-     * @param $bill_id
-     * @return string
-     */
-    public function actionAdjust($bill_id)
-    {
-        $model = new FinanceChannelBillTerm();
-        $model->bill_id = $bill_id;
-
-        if ($model->load(Yii::$app->request->post())) {
-            $channelBill = FinanceChannelBillTerm::findOne($bill_id);
-            $channelBill->adjust_cost += $model->adjust_cost;
-            $channelBill->adjust_note = $model->adjust_note;
-//            $channelBill->final_cost =  $channelBill->final_cost-$channelBill->adjust_cost;
-            $channelBill->payable = $channelBill->payable+$model->adjust_cost;
-            if ($channelBill->save()) {
-                return $this->asJson(['success' => 1]);
-            } else {
-                var_dump($channelBill->getErrors());
-            }
-        } else {
-            return $this->renderAjax('adjust', [
-                'model' => $model,
-            ]);
-        }
     }
 
     public function actionValidate()

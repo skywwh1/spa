@@ -4,6 +4,7 @@ namespace backend\models;
 
 use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\CampaignLogHourly;
 use common\models\Channel;
 use Yii;
 
@@ -13,6 +14,8 @@ use Yii;
  * @property integer $id
  * @property string $adv_bill_id
  * @property string $channel_bill_id
+ * @property string $adv_bill_id_new
+ * @property string $channel_bill_id_new
  * @property integer $adv_id
  * @property integer $campaign_id
  * @property integer $channel_id
@@ -57,8 +60,8 @@ class FinancePending extends \yii\db\ActiveRecord
             [['adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
             [['campaign_id', 'channel_id', 'start_date', 'end_date'], 'required'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
-            [['note'], 'string'],
-            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om'], 'string', 'max' => 255],
+            [['note'], 'validateDeductionValue'],
+            [['adv_bill_id', 'channel_bill_id','adv_bill_id_new', 'channel_bill_id_new', 'adv', 'pm', 'bd', 'om'], 'string', 'max' => 255],
             [['adv_id'], 'exist', 'skipOnError' => true, 'targetClass' => Advertiser::className(), 'targetAttribute' => ['adv_id' => 'id']],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
@@ -122,11 +125,9 @@ class FinancePending extends \yii\db\ActiveRecord
     }
 
     /**
-     * @param $start
-     * @param $end
      * @param $campaign_id
      * @param $channel_id
-     * @return mixed
+     * @return array|\yii\db\ActiveRecord[]
      */
     public static function findPendingByCamAndChannel($campaign_id, $channel_id)
     {
@@ -164,54 +165,152 @@ class FinancePending extends \yii\db\ActiveRecord
         return false;
     }
 
-//    public function afterSave($insert, $changedAttributes)
-//    {
-//        if ($insert) {
-//            if($this->status == 0){
-//                FinanceChannelBillTerm::countChaPending($this->channel_bill_id,$this->cost,$this->revenue);
-//                FinanceAdvertiserBillTerm::countAdvPending($this->adv_bill_id,$this->cost,$this->revenue);
-//            }else{
-//                $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
-//                if(!empty($channel_bill)){
-//                    //如果该账单已经结束，则将该账单放到最近的某个月的利润
-//                    if ($channel_bill->status == 7){
-//                        //$channel_bill->add_historic_cost -= $this->cost;
-//                        $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
-//                        $channel_bill->payable = $channel_bill->payable-$this->cost;
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($this->status == 0){
+            $this->countPendingChannelBillTerm();
+            $this->countPendingAdvBillTerm();
+        }else{
+            $this->countConfirmChannelBillTerm();
+            $this->countConfirmAdvertiserBillTerm();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**计算pending的
+     * countPending
+     */
+    private function countPendingChannelBillTerm(){
+        $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
+        /**
+         * 一个账单被设置成pending,则看其是否过期
+         * 过期的话就会有historic_cost；
+         * */
+        if(!empty($channel_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($channel_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+//                $recent_not_ending_bill = FinanceChannelBillTerm::findRecentNotEndingBill($channel_bill);
+//                $recent_not_ending_bill->pending += $this->cost;
+//                $recent_not_ending_bill->save();
 //
-//                        $channel_bill->revenue += $this->revenue;
-//                        $channel_bill->save();
-//                    }else{
-//                        $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
-//                        $channel_bill->payable = $channel_bill->payable-$this->cost;
-//
-//                        $channel_bill->revenue += $this->revenue;
-//                        $channel_bill->save();
-//                    }
-//                }
-//
-//                $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
-//                if(!$adv_bill){
-//                    //如果该账单已经结束，则将该账单放到最近的某个月的利润
-//                    if ($channel_bill->status == 7){
-//                        $adv_bill->add_historic_cost -= $this->cost;
-//                        $adv_bill->final_cost = $adv_bill->final_cost - $this->cost;
-//                        $adv_bill->payable = $adv_bill->payable-$this->cost;
-//
-//                        $adv_bill->revenue += $this->revenue;
-//                        $adv_bill->save();
-//                    }else{
-//                        $adv_bill->add_historic_cost -= $this->cost;
-//                        $adv_bill->final_cost = $adv_bill->final_cost - $this->cost;
-//                        $adv_bill->payable = $adv_bill->payable-$this->cost;
-//
-//                        $adv_bill->revenue += $this->revenue;
-//                        $adv_bill->save();
-//                    }
-//                }
-//            }
-//        }
-//        parent::afterSave($insert, $changedAttributes);
-//    }
+//                $this->resetChannelBillIdNew($this->id,$recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将解禁的账目放到本账单上面
+                $channel_bill->pending += $this->cost;
+                $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
+                $channel_bill->payable = $channel_bill->payable - $this->cost;
+                $channel_bill->revenue -= $this->revenue;//TODO maybe revenue will be changed;
+                $channel_bill->save();
+            }
+        }
+    }
+
+    private function countPendingAdvBillTerm(){
+        $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
+        if(!empty($adv_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($adv_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+//                $recent_not_ending_bill = FinanceAdvertiserBillTerm::findRecentNotEndingBill($adv_bill);
+//                $recent_not_ending_bill->pending += $this->revenue;
+//                $recent_not_ending_bill->save();
+//                $this->resetAdvBillIdNew($recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将pending的账目放到本账单上面、
+                $adv_bill->pending = $adv_bill->pending + $this->revenue;
+                $adv_bill->final_revenue = $adv_bill->final_revenue - $this->revenue;
+                $adv_bill->receivable = $adv_bill->receivable - $this->revenue;
+                $adv_bill->cost -= $this->cost;
+                $adv_bill->save();
+            }
+        }
+    }
+
+    /**
+     * 查询账单的数据，
+     */
+    private function countConfirmChannelBillTerm(){
+        $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
+        if(!empty($channel_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($channel_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+                $recent_not_ending_bill = FinanceChannelBillTerm::findRecentNotEndingBill($channel_bill);
+                $recent_not_ending_bill->add_historic_cost += $this->cost;
+                $recent_not_ending_bill->final_cost = $recent_not_ending_bill->final_cost + $this->cost;
+                $recent_not_ending_bill->payable = $recent_not_ending_bill->payable + $this->cost;
+                $recent_not_ending_bill->revenue += $this->revenue;
+                $recent_not_ending_bill->save();
+
+                $this->resetChannelBillIdNew($recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将解禁的账目放到本账单上面
+                $channel_bill->final_cost = $channel_bill->final_cost + $this->cost;
+                $channel_bill->payable = $channel_bill->payable + $this->cost;
+                $channel_bill->pending -= $this->cost;
+                $channel_bill->revenue += $this->revenue;
+                $channel_bill->save();
+
+            }
+        }
+    }
+
+    private function countConfirmAdvertiserBillTerm(){
+        $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
+        if(!empty($adv_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($adv_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+                $recent_not_ending_bill = FinanceAdvertiserBillTerm::findRecentNotEndingBill($adv_bill);
+                $recent_not_ending_bill->add_historic += $this->revenue;
+                $recent_not_ending_bill->final_revenue = $recent_not_ending_bill->final_revenue + $this->revenue;
+                $recent_not_ending_bill->receivable = $recent_not_ending_bill->receivable + $this->revenue;
+                $recent_not_ending_bill->cost += $this->cost;
+                $recent_not_ending_bill->save();
+
+                $this->resetAdvBillIdNew($recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+            }else{
+                //如果账单没有结束，则将解禁的账目放到本账单上面
+                $adv_bill->final_revenue = $adv_bill->final_revenue + $this->revenue;
+                $adv_bill->receivable = $adv_bill->receivable + $this->revenue;
+                $adv_bill->pending -= $this->revenue;
+                $adv_bill->cost += $this->cost;
+                $adv_bill->save();
+            }
+        }
+    }
+
+    /**
+     * 对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+     * @param $recent_not_ending_bill
+     */
+    private function resetChannelBillIdNew($recent_not_ending_bill){
+        $financePending = FinancePending::findOne($this->id);
+        $financePending->channel_bill_id_new = $recent_not_ending_bill->bill_id;
+        $financePending->save();
+    }
+
+    /**
+     * 对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
+     * @param $recent_not_ending_bill
+     */
+    private function resetAdvBillIdNew($recent_not_ending_bill){
+        $financePending = FinancePending::findOne($this->id);
+        $financePending->adv_bill_id_new = $recent_not_ending_bill->bill_id;
+        $financePending->save();
+    }
+
+    public function validateDeductionValue()
+    {
+        date_default_timezone_set('Etc/GMT-8');
+        if ($this->status >0 ){
+            return;
+        }
+        $records = CampaignLogHourly::findDateReport(strtotime($this->start_date), strtotime($this->end_date) + 3600 * 24, $this->campaign_id, $this->channel_id);
+        if (empty($records)) {
+            $this->addError('note', 'No data found in the report records');
+        }
+    }
 
 }

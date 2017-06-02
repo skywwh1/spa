@@ -84,11 +84,48 @@ class FinanceCompensation extends ActiveRecord
     }
 
     /**
-     * @param $channel_bill_id
-     * @return array
+     * @param $deduction_ids
+     * @return array|\yii\db\ActiveRecord[]
      */
     public static function getApprovedCompensation($deduction_ids)
     {
         return static::find()->andFilterWhere(['in', 'deduction_id',$deduction_ids])->andFilterWhere(['status' => 1])->all();
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if($this->status == 1){
+            $this->countCompensationChannelBillTerm();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    /**
+     * 计算compensation的
+     * countCompensationChannelBillTerm
+     */
+    private function countCompensationChannelBillTerm(){
+        $deduction = FinanceDeduction::findOne(['id' => $this->deduction_id]);
+        if (!empty($deduction)){
+            $channel_bill = FinanceChannelBillTerm::findOne($deduction->channel_bill_id);
+            /**
+             * 一个账单被设置成compensation,则看其是否过期
+             * */
+            if(!empty($channel_bill)){
+                //如果该账单已经结束，则将该账单放到最近的某个月的利润
+                if ($channel_bill->status == 7){
+                    //将账单的cost和revenue放到最近的一个月的账单上面
+//                    $new_channel_bill = FinanceChannelBillTerm::findOne($deduction->channel_bill_id_new);
+//                    $new_channel_bill->add_historic_cost += $this->compensation;
+//                    $new_channel_bill->payable = $new_channel_bill->payable + $this->compensation;
+//                    $new_channel_bill->save();
+                }else{
+                    //如果账单没有结束，则将compensation的账目放到本账单上面
+                    $channel_bill->compensation += $this->compensation;
+                    $channel_bill->payable = $channel_bill->payable + $this->compensation;
+                    $channel_bill->save();
+                }
+            }
+        }
     }
 }

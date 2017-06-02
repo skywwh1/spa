@@ -174,6 +174,7 @@ class FinanceDeductionController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->status = 1;
             $model->save();
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
@@ -217,6 +218,12 @@ class FinanceDeductionController extends Controller
         $model = new FinanceDeductionForm();
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post())) {
+            if (empty($model->channel_id)) {
+                $channel = Channel::findByUsername($model->channel_name);
+                if (isset($channel)) {
+                    $model->channel_id = $channel->id;
+                }
+            }
             $this->asJson(ActiveForm::validate($model));
         }
     }
@@ -282,6 +289,7 @@ class FinanceDeductionController extends Controller
             if ($deduction->save()) {
                 $save = true;
                 $model->id = $deduction->id;
+
             } else {
                 var_dump($deduction->getErrors());
                 die();

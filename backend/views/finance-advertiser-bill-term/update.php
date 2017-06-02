@@ -112,14 +112,14 @@ $this->params['breadcrumbs'][] = 'Update';
                         <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-1">
-                        <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::button('Export', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-1">
                         <?php
                         Modal::begin([
-                            'header' => 'File Upload',
+                            'header' => 'Upload File',
                             'toggleButton' => [
-                                'label' => 'Upload File', 'class' => 'btn btn-primary'
+                                'label' => 'Upload', 'class' => 'btn btn-primary'
                             ],
                         ]);
                         echo FileInput::widget([
@@ -129,13 +129,12 @@ $this->params['breadcrumbs'][] = 'Update';
                             'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['/finance-channel-bill-term/upload'])]
                         ]);
                         Modal::end();
-
                         //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-1">
-                        <?= Html::button('Download File', ['class' => 'btn btn-primary']) ?>
+                    <div class="col-lg-2">
+                        <?= Html::button('Download', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Add Revenue', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Add Revenue',
@@ -143,15 +142,15 @@ $this->params['breadcrumbs'][] = 'Update';
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Sub Revenue', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Sub Revenue',
-                            'data-url' => '/finance-advertiser-bill-term/adjust?bill_id=' . $model->bill_id,
+                            'data-url' => '/finance-sub-revenue/create?bill_id=' . $model->bill_id,
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Apply Prepayment', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Apply prepayment',
@@ -895,6 +894,58 @@ $this->params['breadcrumbs'][] = 'Update';
                         'dataProvider' => $addRevenueList,
                         'showPageSummary' => true,
                         'columns' => $addRevenueColumns
+                    ]); ?>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sub revenue -->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box box-info">
+                <div class="box-body">
+                    <p>
+                    <h4>Sub revenue</h4>
+                    </p>
+                    <?php
+                    $subRevenueColumns = [
+                        [
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'note',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $subRevenueList,
+                        'columns' => $subRevenueColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
+                    <?= GridView::widget([
+                        'dataProvider' => $subRevenueList,
+                        'showPageSummary' => true,
+                        'columns' => $subRevenueColumns
                     ]); ?>
 
                 </div>

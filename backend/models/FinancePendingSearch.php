@@ -128,6 +128,8 @@ class FinancePendingSearch extends FinancePending
             'channel_id' => $this->channel_id,
             'adv_bill_id' => $this->adv_bill_id,
             'channel_bill_id' => $this->channel_bill_id,
+            'adv_bill_id_new' => $this->adv_bill_id_new,
+            'channel_bill_id_new' => $this->channel_bill_id_new,
         ]);
 
         return $dataProvider;

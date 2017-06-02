@@ -109,14 +109,14 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     </div>
                     <?php ActiveForm::end(); ?>
                     <div class="col-lg-1">
-                        <?= Html::button('Export Excel', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::button('Export', ['class' => 'btn btn-primary']) ?>
                     </div>
                     <div class="col-lg-1">
                         <?php
                         Modal::begin([
                             'header'=>'File Upload',
                             'toggleButton' => [
-                                'label'=>'Upload File', 'class'=>'btn btn-primary'
+                                'label'=>'Upload', 'class'=>'btn btn-primary'
                             ],
                         ]);
                         echo FileInput::widget([
@@ -129,10 +129,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 
                         //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-1">
-                        <?= Html::submitButton('Download File', ['class' => 'btn btn-primary']) ?>
+                    <div class="col-lg-2">
+                        <?= Html::submitButton('Download', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Add Cost', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Add Cost',
@@ -140,15 +140,15 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Sub Cost', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Sub Cost',
-                            'data-url' => '/finance-channel-bill-term/adjust?bill_id=' . $model->bill_id,
+                            'data-url' => '/finance-sub-cost/create?bill_id=' . $model->bill_id,
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-1">
+                    <div class="col-lg-2">
                         <?= Html::a('Apply Prepayment', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Apply prepayment',
@@ -1128,6 +1128,57 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $costList,
                         'columns' => $costColumns,
+                    ]); ?>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- sub cost-->
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box box-info">
+                <div class="box-body">
+                    <p>
+                    <h4>Sub Cost</h4>
+                    </p>
+                    <?php
+                    $subCostColumns =  [
+                        [
+                            // 'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                        ],
+                        [
+                            // 'label' => 'cost',
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                        ],
+                        [
+                            'attribute' => 'note',
+                            'value' => 'note',
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $costList,
+                        'columns' => $costColumns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
+                    <?= GridView::widget([
+                        'dataProvider' => $subCostList,
+                        'columns' => $subCostColumns,
                     ]); ?>
                 </div>
             </div>

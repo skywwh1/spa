@@ -2,6 +2,9 @@
 
 namespace backend\controllers;
 
+use backend\models\FinanceChannelBillTerm;
+use backend\models\FinanceDeduction;
+use backend\models\FinancePendingForm;
 use Yii;
 use backend\models\FinanceCompensation;
 use backend\models\FinanceCompensationSearch;
@@ -73,6 +76,15 @@ class FinanceCompensationController extends Controller
         }
         if ($model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
+
+            $deduction = FinanceDeduction::findOne(['id' => $deduction_id]);
+            if (!empty($deduction)) {
+                $form = new FinancePendingForm();
+                if(!$form->checkIsCheckedOut(null,$deduction->channel_bill_id)){
+                    return  'cannot compensate to a closed bill';
+                }
+            }
+
             $this->beforeSave($model);
             if ($model->save()) {
                 return ['success' => true];
@@ -100,6 +112,7 @@ class FinanceCompensationController extends Controller
             Yii::$app->response->format = Response::FORMAT_JSON;
             $deduction = $model->deduction;
             $deduction->note = $model->note;
+
             if ($model->save() && $deduction->save()) {
                 return ['success' => true];
             } else {
@@ -159,6 +172,7 @@ class FinanceCompensationController extends Controller
     private function beforeSave(&$model)
     {
         $model->billable_cost = ($model->deduction->cost) + ($model->deduction->deduction_cost) - ($model->compensation);
+
 //        $model->billable_revenue =
     }
 }

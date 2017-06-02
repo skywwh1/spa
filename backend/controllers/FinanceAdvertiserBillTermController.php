@@ -7,6 +7,7 @@ use backend\models\FinanceAdvertiserCampaignBillTermSearch;
 use backend\models\FinanceAdvertiserPrepaymentSearch;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
+use backend\models\FinanceSubRevenueSearch;
 use common\models\Advertiser;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
@@ -165,10 +166,7 @@ class FinanceAdvertiserBillTermController extends Controller
             // confirmed
             $confirmSearchModel = new FinancePendingSearch();
             $confirmSearchModel->status = 1;
-            $theMonthBeforeLastTime =  strtotime("-1 month", $model->start_time);
-            $theMonthBeforeLastDate =  date("Ym",$theMonthBeforeLastTime);
-            $confirmSearchModel->adv_bill_id = $model->adv_id . '_' . $theMonthBeforeLastDate;
-            $confirmSearchModel->start_date = $theMonthBeforeLastTime;
+            $confirmSearchModel->adv_bill_id_new = $bill_id;
             $confirmList = $confirmSearchModel->financePendingSearch(Yii::$app->request->queryParams);
 
             // pending
@@ -192,6 +190,11 @@ class FinanceAdvertiserBillTermController extends Controller
             $addRevenueModel->advertiser_bill_id = $bill_id;
             $addRevenueList = $addRevenueModel->search(Yii::$app->request->queryParams);
 
+            //subRevenue
+            $subRevenueModel = new FinanceSubRevenueSearch();
+            $subRevenueModel->advertiser_bill_id = $bill_id;
+            $subRevenueList = $subRevenueModel->search(Yii::$app->request->queryParams);
+
             return $this->render('update', [
                 'receivableList' => $receivableList,
                 'model' => $model,
@@ -202,6 +205,7 @@ class FinanceAdvertiserBillTermController extends Controller
                 'pendingList' => $pendingList,
                 'prepaymentList' => $prepaymentList,
                 'addRevenueList' => $addRevenueList,
+                'subRevenueList' => $subRevenueList,
             ]);
         }
     }
@@ -214,33 +218,6 @@ class FinanceAdvertiserBillTermController extends Controller
             $this->asJson(['success' => 1]);
         } else {
             var_dump($bill->getErrors());
-        }
-    }
-
-    /**
-     * @param $bill_id
-     * @return string
-     */
-    public function actionAdjust($bill_id)
-    {
-        $model = new FinanceAdvertiserBillTerm();
-        $model->bill_id = $bill_id;
-
-        if ($model->load(Yii::$app->request->post())) {
-            $advBill = FinanceAdvertiserBillTerm::findOne($bill_id);
-            $advBill->adjust_revenue += $model->adjust_revenue;
-            $advBill->adjust_note = $model->adjust_note;
-//            $advBill->final_revenue -= $advBill->adjust_revenue;
-            $advBill->receivable = $advBill->receivable-$advBill->adjust_revenue;
-            if ($advBill->save()) {
-                return $this->asJson(['success' => 1]);
-            } else {
-                var_dump($advBill->getErrors());
-            }
-        } else {
-            return $this->renderAjax('adjust', [
-                'model' => $model,
-            ]);
         }
     }
 
