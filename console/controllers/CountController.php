@@ -972,6 +972,8 @@ class CountController extends Controller
      */
     private function countAdvBillApr(&$model)
     {
+        $model->final_revenue = $model->revenue;
+        $model->receivable = $model->revenue;
         $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
         $model->pending = 0;
         if (!empty($pends)) {
@@ -1017,6 +1019,8 @@ class CountController extends Controller
      */
     private function countChannelBillApr(&$model)
     {
+        $model->final_cost = $model->cost;
+        $model->payable = $model->cost;
         //pending
         $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
         var_dump($model->bill_id);
