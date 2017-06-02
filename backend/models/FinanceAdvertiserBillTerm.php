@@ -192,7 +192,7 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
      *
      * @return array|\yii\db\ActiveRecord[]
      */
-    public function getNumberConfirmSendMail(){
+    public static function getNumberConfirmSendMail(){
         $last_month_str = date('Ym', strtotime('first day of last month'));
         $data = FinanceAdvertiserBillTerm::find()->andFilterWhere(['status' => 1])
             ->andFilterWhere(['like', 'bill_id', $last_month_str])
