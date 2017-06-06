@@ -39,7 +39,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                                <?php
+                                if (is_null($model->channel_name)){
+                                echo $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
                                     'pluginOptions' => ['highlight' => true],
 //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
                                     'dataset' => [
@@ -51,7 +53,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'wildcard' => '%QUERY'
                                             ]
                                         ]],
-                                ]) ?>
+                                ]);
+                                }else{
+                                    echo $form->field($model, 'channel_name')->textInput(['readonly' => 'readonly']);
+                                }
+                               ?>
                             </div>
                         </div>
                         <div class="row">

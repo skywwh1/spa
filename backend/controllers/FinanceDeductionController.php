@@ -347,9 +347,11 @@ class FinanceDeductionController extends Controller
     /**
      * @param $campaign_id
      * @param $pending_id
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddInstallByAdv($campaign_id,$pending_id)
+    public function actionAddInstallByAdv($campaign_id,$pending_id,$period,$channel_name)
     {
         $model = new FinanceDeductionForm();
 
@@ -362,6 +364,9 @@ class FinanceDeductionController extends Controller
         } else {
             $model->campaign_id = $campaign_id;
             $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('add_install', [
                 'model' => $model,
             ]);
@@ -371,9 +376,11 @@ class FinanceDeductionController extends Controller
     /**
      * @param $campaign_id
      * @param $pending_id
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddDiscountByAdv($campaign_id,$pending_id)
+    public function actionAddDiscountByAdv($campaign_id,$pending_id,$period,$channel_name)
     {
         $model = new FinanceDeductionForm();
 
@@ -386,6 +393,9 @@ class FinanceDeductionController extends Controller
         } else {
             $model->campaign_id = $campaign_id;
             $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('add_discount', [
                 'model' => $model,
             ]);
@@ -395,9 +405,11 @@ class FinanceDeductionController extends Controller
     /**
      * @param $campaign_id
      * @param $pending_id
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddFineByAdv($campaign_id,$pending_id)
+    public function actionAddFineByAdv($campaign_id,$pending_id,$period,$channel_name)
     {
         $model = new FinanceDeductionForm();
 
@@ -411,6 +423,9 @@ class FinanceDeductionController extends Controller
         } else {
             $model->campaign_id = $campaign_id;
             $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('add_fine', [
                 'model' => $model,
             ]);

@@ -28,24 +28,36 @@ $this->params['breadcrumbs'][] = $this->title;
                         ]); ?>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'campaign_id')->textInput() ?>
+                                <?php
+                                if (is_null($model->campaign_id)){
+                                    echo $form->field($model, 'campaign_id')->textInput();
+                                }else{
+                                    echo $form->field($model, 'campaign_id')->textInput(['readonly' => 'readonly']);
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
-                                    'pluginOptions' => ['highlight' => true],
-//                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
-                                    'dataset' => [
-                                        [
-                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                                            'display' => 'value',
-                                            'remote' => [
-                                                'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
-                                                'wildcard' => '%QUERY'
-                                            ]
-                                        ]],
-                                ]) ?>
+                                <?php
+                                if (is_null($model->channel_name)){
+                                    echo  $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                                        'pluginOptions' => ['highlight' => true],
+    //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ]
+                                            ]],
+                                    ]);
+                                }else{
+                                    echo $form->field($model, 'channel_name')->textInput(['readonly' => 'readonly']);
+                                }
+                                ?>
                             </div>
                         </div>
                         <div class="row">

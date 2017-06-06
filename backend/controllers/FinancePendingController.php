@@ -351,9 +351,10 @@ class FinancePendingController extends Controller
     /**
      * @param $adv_name
      * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddAdvByAdv($adv_name,$period)
+    public function actionAddAdvByAdv($adv_name,$period,$channel_name)
     {
         $model = new FinancePendingForm();
 
@@ -362,13 +363,13 @@ class FinancePendingController extends Controller
                 $this->createMultipleByCam($model);
                 return $this->redirect(Yii::$app->request->referrer);
             } else {
-                $model->channel_id = Channel::findByUsername($model->channel_name)->id;
-                $this->savePending($model);
+                $this->createAdvToOneChannel($model);
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
 //            $model->campaign_id = $campaign_id;
             $model->adv_name = $adv_name;
+            $model->channel_name = $channel_name;
             $model->start_date = str_replace(".","-",explode("-",$period)[0]);
             $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('adv_pending_add', [
