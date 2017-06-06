@@ -122,6 +122,7 @@ class DeliverController extends Controller
                     $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
                     $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
                     $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                    $deliver->discount = isset($deliver->channel)?$deliver->channel->discount:30;
                     $delivers[] = $deliver;
 
                     if (!empty($targetGeos)){

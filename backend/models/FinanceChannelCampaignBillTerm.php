@@ -44,6 +44,7 @@ class FinanceChannelCampaignBillTerm extends ActiveRecord
     public $deduction_revenue;
     public $pending_cost;
     public $pending_revenue;
+    public $pending_id;
     /**
      * @inheritdoc
      */

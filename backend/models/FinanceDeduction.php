@@ -171,11 +171,14 @@ class FinanceDeduction extends \yii\db\ActiveRecord
 
     public function afterSave($insert, $changedAttributes)
     {
-        if ($this->status >0 ) {
-            $this->countDeductionChannelBillTerm();
+        if ($insert){
+            //对于渠道需要confirm才能去计算deduction的值
+            if ($this->status >0 ) {
+                $this->countDeductionChannelBillTerm();
+            }
+            $this->countDeductionAdvBillTerm();
+            parent::afterSave($insert, $changedAttributes);
         }
-        $this->countDeductionAdvBillTerm();
-        parent::afterSave($insert, $changedAttributes);
     }
 
     /**计算pending的
@@ -254,4 +257,57 @@ class FinanceDeduction extends \yii\db\ActiveRecord
         $financePending->save();
     }
 
+    /**
+     * @param $old_deduction_cost
+     * @param $old_deduction_revenue
+     */
+    private function updateDeductionChannelBillTerm($old_deduction_cost,$old_deduction_revenue){
+        $channel_bill = FinanceChannelBillTerm::findOne($this->channel_bill_id);
+        /**
+         * 一个账单被设置成deduction,则看其是否过期
+         * */
+        if(!empty($channel_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($channel_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+            }else{
+                //如果账单没有结束，则将deduction的账目放到本账单上面
+                $diff_cost =  $old_deduction_cost - $this->deduction_cost;
+                $diff_revenue =  $old_deduction_revenue - $this->deduction_revenue;
+                $channel_bill->deduction +=   $this->deduction_cost - $old_deduction_cost;
+                $channel_bill->final_cost = $channel_bill->final_cost + $diff_cost;
+                $channel_bill->payable = $channel_bill->payable + $diff_cost;
+                $channel_bill->revenue += $this->deduction_revenue - $old_deduction_revenue;
+                $channel_bill->save();
+            }
+        }
+    }
+
+    /**
+     * @param $old_deduction_cost
+     * @param $old_deduction_revenue
+     */
+    private function updateDeductionAdvBillTerm($old_deduction_cost,$old_deduction_revenue){
+        $adv_bill = FinanceAdvertiserBillTerm::findOne($this->adv_bill_id);
+        if(!empty($adv_bill)){
+            //如果该账单已经结束，则将该账单放到最近的某个月的利润
+            if ($adv_bill->status == 7){
+                //将账单的cost和revenue放到最近的一个月的账单上面
+            }else{
+                //如果账单没有结束，则将pending的账目放到本账单上面、
+                $diff_cost =  $old_deduction_cost - $this->deduction_cost;
+                $diff_revenue = $old_deduction_revenue - $this->deduction_revenue;
+                $adv_bill->deduction +=  $this->deduction_revenue - $old_deduction_revenue;
+                $adv_bill->final_revenue = $adv_bill->final_revenue + $diff_revenue;
+                $adv_bill->receivable = $adv_bill->receivable + $diff_revenue;
+                $adv_bill->cost += $this->deduction_cost - $old_deduction_cost;
+                $adv_bill->save();
+            }
+        }
+    }
+
+    public function updateCost($old_deduction_cost,$old_deduction_revenue){
+        $this->updateDeductionChannelBillTerm($old_deduction_cost,$old_deduction_revenue);
+        $this->updateDeductionAdvBillTerm($old_deduction_cost,$old_deduction_revenue);
+    }
 }

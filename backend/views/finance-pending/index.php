@@ -177,13 +177,27 @@ $this->params['breadcrumbs'][] = $this->title;
                                       <ul class="dropdown-menu">
 
                                       <li><a data-view="0" data-title="View Pending ' . $model->id . '" data-url="/finance-pending/view?id=' . $model->id . '">View</a></li>
-                                      <li><a data-view="0" data-title="Update Pending ' . $model->id . '" data-url="/finance-pending/update?id=' . $model->id . '">Update</a></li>
                                       </ul>
                                     </div>';
                                         },
                                     ],
                                 ],
-
+                                [
+                                    'label' => 'status',
+                                    'attribute' => 'status',
+                                    'value' => function ($model) {
+                                        return ModelsUtil::getPendingStatus($model->status);
+                                    },
+                                    'filter' => ModelsUtil::pending_status,
+                                    'contentOptions' => function ($model) {
+//                                        $model = (object)$model;
+                                        if ($model->status > 0) {
+                                            return ['class' => 'bg-green'];
+                                        }else{
+                                            return ['class' => 'bg-danger'];
+                                        }
+                                    }
+                                ],
                                 [
                                     // 'label' => 'id',
                                     'attribute' => 'id',
@@ -284,23 +298,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'om',
                                     'value' => 'om',
                                 ],
-                                [
-                                    'label' => 'status',
-                                    'attribute' => 'status',
-                                    'value' => function ($model) {
-                                        return ModelsUtil::getPendingStatus($model->status);
-                                    },
-                                    'filter' => ModelsUtil::pending_status,
-                                ],
                                 //[
                                 // 'label' => 'note',
                                 // 'attribute' => 'note',
                                 // 'value' => 'note:ntext',
                                 // ],
                                 [
-                                 'label' => 'create_time',
-                                 'attribute' => 'create_time',
-                                 'value' => 'create_time',
+                                    'label' => 'create_time',
+                                    'attribute' => 'create_time',
+                                     'value' => 'create_time',
+                                    'format' => 'datetime',
                                  ],
                                 //[
                                 // 'label' => 'update_time',

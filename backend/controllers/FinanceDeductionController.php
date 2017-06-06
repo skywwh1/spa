@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\models\FinanceDeductionForm;
+use backend\models\FinancePending;
 use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\Channel;
@@ -14,6 +15,7 @@ use Yii;
 use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -51,6 +53,7 @@ class FinanceDeductionController extends Controller
                             'validate',
                             'add-discount-by-adv',
                             'add-install-by-adv',
+                            'add-fine-by-adv',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -172,6 +175,49 @@ class FinanceDeductionController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+
+        //deduction_value可编辑,编辑之后修改相应的cost和revenue
+        if (Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $deduction_id = Yii::$app->request->post('editableKey');
+            $deduction = FinanceDeduction::findOne($deduction_id);
+            $old_deduction_value = $deduction->deduction_value;
+            $old_deduction_cost = $deduction->deduction_cost;
+            $old_deduction_revenue = $deduction->deduction_revenue;
+
+            $out = Json::encode(['output' => '', 'message' => '']);
+
+            $posted = current($_POST['FinanceDeduction']);
+            $post = ['FinanceDeduction' => $posted];
+
+            // load model like any single model validation
+            if ($deduction->load($post)) {
+                // can save model or do something before saving model
+                $output = '';
+                if (isset($posted['deduction_value'])) {
+                    $output = $posted['deduction_value'];
+                    $deduction_value = $posted['deduction_value'];
+
+                    if ($deduction->type == 1) {
+                        $deduction->deduction_cost = $deduction->cost * ($deduction_value / 100);
+                        $deduction->deduction_revenue = $deduction->revenue * ($deduction_value / 100);
+                    } else if ($deduction->type == 2) {
+                        $deduction->deduction_cost = ($deduction->cost / $deduction->installs) * $deduction_value;
+                        $deduction->deduction_revenue = $deduction->deduction_cost / (1 - $deduction->margin);
+                    } else if ($deduction->type == 3) {
+                        $deduction->deduction_cost = $deduction_value;
+                        $deduction->deduction_revenue = $deduction->deduction_cost;
+                    }
+                }
+
+                $deduction->save();
+                $deduction->updateCost($old_deduction_cost,$old_deduction_revenue);
+                $out = Json::encode(['output' => $output, 'message' => 'successifully saved']);
+            }
+            // return ajax json encoded response and exit
+            echo $out;
+            return;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             $model->status = 1;
@@ -300,23 +346,27 @@ class FinanceDeductionController extends Controller
 
     /**
      * @param $campaign_id
+     * @param $pending_id
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddInstallByAdv($campaign_id)
+    public function actionAddInstallByAdv($campaign_id,$pending_id,$period,$channel_name)
     {
         $model = new FinanceDeductionForm();
 
         if ($model->load(Yii::$app->request->post())) {
-//            if ($this->saveDeduction($model)) {
-//                return $this->redirect(Yii::$app->request->referrer);
-//            }else{
-//                var_dump($model->getErrors());
-//                die();
-//            }
             $this->saveDeduction($model);
+            if(!empty($pending_id)){
+                FinancePending::confirmPending($pending_id);
+            }
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             $model->campaign_id = $campaign_id;
+            $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('add_install', [
                 'model' => $model,
             ]);
@@ -325,20 +375,61 @@ class FinanceDeductionController extends Controller
 
     /**
      * @param $campaign_id
+     * @param $pending_id
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddDiscountByAdv($campaign_id)
+    public function actionAddDiscountByAdv($campaign_id,$pending_id,$period,$channel_name)
     {
         $model = new FinanceDeductionForm();
 
         if ($model->load(Yii::$app->request->post())) {
             $this->saveDeduction($model);
+            if(!empty($pending_id)){
+                FinancePending::confirmPending($pending_id);
+            }
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             $model->campaign_id = $campaign_id;
+            $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
             return $this->renderAjax('add_discount', [
                 'model' => $model,
             ]);
         }
     }
+
+    /**
+     * @param $campaign_id
+     * @param $pending_id
+     * @param $period
+     * @param $channel_name
+     * @return string|Response
+     */
+    public function actionAddFineByAdv($campaign_id,$pending_id,$period,$channel_name)
+    {
+        $model = new FinanceDeductionForm();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($this->saveDeduction($model)) {
+                if(!empty($pending_id)){
+                    FinancePending::confirmPending($pending_id);
+                }
+                return $this->redirect(Yii::$app->request->referrer);
+            }
+        } else {
+            $model->campaign_id = $campaign_id;
+            $model->pending_id = $pending_id;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
+            return $this->renderAjax('add_fine', [
+                'model' => $model,
+            ]);
+        }
+    }
+
 }

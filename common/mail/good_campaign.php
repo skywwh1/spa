@@ -59,6 +59,7 @@ use yii\helpers\Url;
                 $payout = '<th> Payout</th>';
                 $traffic_source = '<th>Traffic Source</th>';
                 $preview_link = '<th> Preview Link</th>';
+                $kpi = '<th> KPI</th>';
                 ?>
             </tr>
         </thead>
@@ -72,6 +73,7 @@ use yii\helpers\Url;
           echo $payout;
           echo $traffic_source;
           echo $preview_link;
+          echo $kpi;
 
         foreach ($campaigns as $campaign) {
             $actions = '<td><a href="http://superads.cn/camp-log/alloffers">Apply</a>';
@@ -83,7 +85,8 @@ use yii\helpers\Url;
             $traffic_sources = '<td>' . $campaign->traffic_source . '</td>';
             $preview_links = '<td><a href="' . Html::encode($campaign->preview_link) . '">Preview Link</a></td>';
 //            $link .= '<td><a href="' . Url::to('@track' . $campaign->track_url) . '">Tracking Link</a></td>';
-            $row = '<tr>' .$actions.$ids.$campaign_names.$target_geos.$platforms.$payouts.$traffic_sources.$preview_links.'</tr>';
+            $kpi = '<td>' . Html::encode($campaign->kpi) . '</td>';
+            $row = '<tr>' .$actions.$ids.$campaign_names.$target_geos.$platforms.$payouts.$traffic_sources.$preview_links.$kpi.'</tr>';
 
             echo $row;
         }

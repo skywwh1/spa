@@ -451,6 +451,7 @@ class StatsUtil
         $select = [
             'cam.advertiser',
             'clh.campaign_id',
+            'clh.channel_id',
             'sum(clh.clicks) clicks',
             'sum(clh.unique_clicks) unique_clicks',
             'sum(clh.installs) installs',
@@ -473,12 +474,15 @@ class StatsUtil
         $query->andWhere(['<', 'clh.time', $end_time]);
         $query->andWhere(['cam.advertiser' => $adv_id]);
         $query->groupBy([
-            'clh.campaign_id'
+            'clh.campaign_id',
+            'clh.channel_id',
         ]);
         $query->orderBy('clh.campaign_id');
 
         $command = $query->createCommand();
-        var_dump($command->sql);
+//        var_dump($start_time, $end_time, $adv_id);
+//        var_dump($command->sql);
+//        die();
         $rows = $command->queryAll();
         return $rows;
     }

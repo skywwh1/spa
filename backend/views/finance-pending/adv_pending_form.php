@@ -22,24 +22,33 @@ use yii\widgets\ActiveForm;
                         ]); ?>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
-                                    'pluginOptions' => ['highlight' => true],
-                                    'options' => ['value' => $model->adv_name,],
-                                    'dataset' => [
-                                        [
-                                            'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                                            'display' => 'value',
-                                            'remote' => [
-                                                'url' => Url::to(['campaign/get_adv_list']) . '?name=%QUERY',
-                                                'wildcard' => '%QUERY'
-                                            ]
-                                        ]],
-                                ]) ?>
+                                <?php
+                                if (is_null($model->adv_name)){
+                                    echo $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
+                                        'pluginOptions' => ['highlight' => true],
+                                        'options' => ['value' => $model->adv_name,],
+                                        'dataset' => [
+                                            [
+                                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                                'display' => 'value',
+                                                'remote' => [
+                                                    'url' => Url::to(['campaign/get_adv_list']) . '?name=%QUERY',
+                                                    'wildcard' => '%QUERY'
+                                                ]
+                                            ]],
+                                    ]);
+                                }else{
+                                    echo $form->field($model, 'adv_name')->textInput(['readonly' => 'readonly']);
+                                }
+                                ?>
+
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-6">
-                                <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                            <?php
+                            if (is_null($model->channel_name)){
+                                echo $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
                                     'pluginOptions' => ['highlight' => true],
 //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
                                     'dataset' => [
@@ -51,7 +60,11 @@ use yii\widgets\ActiveForm;
                                                 'wildcard' => '%QUERY'
                                             ]
                                         ]],
-                                ]) ?>
+                                ]);
+                            }else{
+                                echo $form->field($model, 'channel_name')->textInput(['readonly' => 'readonly']);
+                            }
+                            ?>
                             </div>
                             <div class="col-lg-6">
                                 <div class="form-group  required">

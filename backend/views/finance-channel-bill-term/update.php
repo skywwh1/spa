@@ -10,7 +10,7 @@ use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceChannelBillTerm */
-/* @var $searchModel backend\models\FinanceChannelCampaignBillTermSearch */
+/* @var $searchModel backend\models\FinanceChannelBillTermSearch */
 /* @var $campaignBill yii\data\ActiveDataProvider */
 /* @var $pendingList yii\data\ActiveDataProvider */
 /* @var $prepaymentList yii\data\ActiveDataProvider */
@@ -402,6 +402,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'attribute' => 'channel_id',
 //                                'value' => 'channel_id',
                             'value' => 'channel.username',
+                            'filter' => false,
                         ],
                         [
                             // 'label' => 'campaign_id',
@@ -409,9 +410,10 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'value' => 'campaign_id',
                         ],
                         [
-                            'label' => 'Campaign Name',
-                            'attribute' => 'campaign_id',
-                            'value' => 'campaign.campaign_name',
+//                            'label' => 'Campaign Name',
+//                            'attribute' => 'campaign_id',
+//                            'value' => 'campaign.campaign_name',
+                            'attribute' => 'campaign.name',
                         ],
                         [
 //                                'label' => 'clicks',
@@ -429,6 +431,27 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'attribute' => 'installs',
                             'value' => 'installs',
                             'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'cvr',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                if ($model->clicks > 0) {
+                                    return round(($model->installs / $model->clicks) * 100, 2) . '%';
+                                }
+                                return "0%";
+                            },
+                            'filter' => false,
+                            'contentOptions' => function ($model) {
+                                $model = (object)$model;
+                                $cvr = 0;
+                                if ($model->clicks > 0) {
+                                    $cvr = round(($model->installs / $model->clicks) * 100, 2);
+                                }
+                                if ($cvr > 2) {
+                                    return ['class' => 'bg-danger'];
+                                }
+                            }
                         ],
                         //[
                         // 'label' => 'match_installs',
@@ -492,13 +515,19 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         [
                             'label' => 'Pending Cost',
                             'attribute' => 'pending_cost',
-                            'value' => 'pending_cost',
+//                            'value' => 'pending_cost',
+                            'value' => function ($model) {
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_cost;
+                            },
                             'pageSummary' => true,
                         ],
                         [
                             'label' => 'Pending Revenue',
                             'attribute' => 'pending_revenue',
-                            'value' => 'pending_revenue',
+//                            'value' => 'pending_revenue',
+                            'value' => function ($model) {
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_revenue;
+                            },
                             'pageSummary' => true,
                         ],
                         [
@@ -555,6 +584,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         'dataProvider' => $campaignBill,
                         'pjax' => true,
                         'showPageSummary' => true,
+                        'filterModel' => $searchModel,
                         'columns' => $campaignBillColumns,
                     ]); ?>
                 </div>
@@ -813,6 +843,26 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     </p>
                     <?php
                     $deductionColumns =  [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+
+                                      <li><a data-view="0" data-title="View deduction ' . $model->id . '" data-url="/finance-deduction/view?id=' . $model->id . '">View</a></li>
+                                      <li><a data-view="0" data-title="Confirm deduction ' . $model->id . '" data-url="/finance-deduction/update?id=' . $model->id . '">Confirm</a></li>
+                                      <li><a data-view="0" data-title="Apply compensation with deduction ' . $model->id . '" data-url="/finance-compensation/create?deduction_id=' . $model->id . '">Apply Compensation</a></li>'
+//                                            $restart
+                                    . '</ul>
+                                    </div>';
+                                },
+                            ],
+                        ],
                         [
                             // 'label' => 'id',
                             'attribute' => 'id',

@@ -227,6 +227,7 @@ class FinanceChannelBillTermController extends Controller
                 'costList' => $costList,
                 'subCostList' => $subCostList,
                 'upload'=>$upload,
+                'searchModel' => $campaignBillSearchModel,
             ]);
         }
     }

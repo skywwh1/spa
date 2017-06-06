@@ -52,7 +52,8 @@ class FinancePendingController extends Controller
                             'view',
                             'add-campaign',
                             'validate',
-                            'add-campaign-by-adv',
+                            'add-adv-by-adv',
+                            'update-pending'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -348,10 +349,12 @@ class FinancePendingController extends Controller
     }
 
     /**
-     * @param $campaign_id
+     * @param $adv_name
+     * @param $period
+     * @param $channel_name
      * @return string|Response
      */
-    public function actionAddCampaignByAdv($campaign_id)
+    public function actionAddAdvByAdv($adv_name,$period,$channel_name)
     {
         $model = new FinancePendingForm();
 
@@ -360,15 +363,49 @@ class FinancePendingController extends Controller
                 $this->createMultipleByCam($model);
                 return $this->redirect(Yii::$app->request->referrer);
             } else {
-                $model->channel_id = Channel::findByUsername($model->channel_name)->id;
-                $this->savePending($model);
+                $this->createAdvToOneChannel($model);
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
-            $model->campaign_id = $campaign_id;
-            return $this->renderAjax('campaign_pending_add', [
+//            $model->campaign_id = $campaign_id;
+            $model->adv_name = $adv_name;
+            $model->channel_name = $channel_name;
+            $model->start_date = str_replace(".","-",explode("-",$period)[0]);
+            $model->end_date = str_replace(".","-",explode("-",$period)[1]);
+            return $this->renderAjax('adv_pending_add', [
                 'model' => $model,
             ]);
         }
     }
+
+    /**
+     * Updates an existing FinancePending model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdatePending($id)
+    {
+        $model = $this->findModel($id);
+        $form = new FinancePendingForm();
+        $form->start_date = date("Y-m-d",$model->start_date);
+        $form->end_date =date("Y-m-d",$model->end_date);
+        $form->adv_name = $model->adv;
+        $form->channel_name = $model->channel->username;
+        $form->note = $model->note;
+
+        if ($model->load(Yii::$app->request->post())) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+            if ($model->save()) {
+                return ['success' => true];
+            } else {
+                var_dump($model->getErrors());
+            }
+        } else {
+            return $this->renderAjax('adv_pending_update', [
+                'model' => $form,
+            ]);
+        }
+    }
+
 }

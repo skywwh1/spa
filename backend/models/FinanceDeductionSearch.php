@@ -97,6 +97,7 @@ class FinanceDeductionSearch extends FinanceDeduction
             ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
 
+        $query->orderBy(['fd.id' => SORT_DESC]);
         return $dataProvider;
     }
 

@@ -43,6 +43,7 @@ use Yii;
  */
 class FinancePending extends \yii\db\ActiveRecord
 {
+    public $adv_name;
     /**
      * @inheritdoc
      */
@@ -311,6 +312,15 @@ class FinancePending extends \yii\db\ActiveRecord
         if (empty($records)) {
             $this->addError('note', 'No data found in the report records');
         }
+    }
+
+    /**
+     * @param $id
+     */
+    public static function confirmPending($id){
+        $financePending = FinancePending::findOne($id);
+        $financePending->status = 1;
+        $financePending->save();
     }
 
 }
