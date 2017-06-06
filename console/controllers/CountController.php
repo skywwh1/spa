@@ -831,14 +831,12 @@ class CountController extends Controller
 
     }
 
-    public function actionStatsAdvertiserApr()
+    public function actionStatsAdvertiserByMonth($date)
     {
         //统计上个月账单：
-        $first_day_last_month = date('Y.m.01', strtotime('-1 month'));
-        $last_day_last_month = date('Y.m.t', strtotime('-1 month'));
-        $period = $first_day_last_month . '-' . $last_day_last_month;
-//        echo $period;
-//        die();
+        $first_day = date("Y.m.01",strtotime($date));
+        $last_day = date("Y.m.t",strtotime("$date 1 month -1 day"));
+        $period = $first_day . '-' . $last_day;
         $last_bills = FinanceAdvertiserBillTerm::findAll(['period' => $period]);
 
         if (!empty($last_bills)) {
@@ -848,7 +846,7 @@ class CountController extends Controller
                 if (!empty($rows)) {
                     $rows = json_decode(json_encode($rows), FALSE);
                     foreach ($rows as $obj) {
-                        $bill_campaign = FinanceAdvertiserCampaignBillTerm::findOne(['bill_id' => $item->bill_id, 'campaign_id' => $obj->campaign_id]);
+                        $bill_campaign = FinanceAdvertiserCampaignBillTerm::findOne(['bill_id' => $item->bill_id, 'campaign_id' => $obj->campaign_id, 'channel_id' => $obj->channel_id]);
                         if (empty($bill_campaign)) {
                             $bill_campaign = new FinanceAdvertiserCampaignBillTerm();
                         }
@@ -856,6 +854,7 @@ class CountController extends Controller
                         $bill_campaign->adv_id = $item->adv_id;
                         $bill_campaign->time_zone = $item->time_zone;
                         $bill_campaign->campaign_id = $obj->campaign_id;
+                        $bill_campaign->channel_id = $obj->channel_id;
                         $bill_campaign->start_time = $item->start_time;
                         $bill_campaign->end_time = $item->end_time;
                         $bill_campaign->clicks = $obj->clicks;
@@ -873,6 +872,7 @@ class CountController extends Controller
                         if (!$bill_campaign->save()) {
                             var_dump($bill_campaign->getErrors());
                         }
+
                     }
                 }
                 $campaign_bill = FinanceAdvertiserCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->adv_id);
@@ -900,12 +900,15 @@ class CountController extends Controller
         }
     }
 
-    public function actionStatsChannelApr()
+    public function actionStatsChannelByMonth($date)
     {
         //统计上个月账单：
-        $first_day_last_month = date('Y.m.01', strtotime('-1 month'));
-        $last_day_last_month = date('Y.m.t', strtotime('-1 month'));
-        $period = $first_day_last_month . '-' . $last_day_last_month;
+//        $first_day_last_month = date('Y.m.01', strtotime('-1 month'));
+//        $last_day_last_month = date('Y.m.t', strtotime('-1 month'));
+        $first_day = date("Y.m.01",strtotime($date));
+        $last_day = date("Y.m.t",strtotime("$date 1 month -1 day"));
+        $period = $first_day . '-' . $last_day;
+//        $period = $first_day_last_month . '-' . $last_day_last_month;
 //        echo $period;
 //        die();
         $last_bills = FinanceChannelBillTerm::findAll(['period' => $period]);
@@ -1023,7 +1026,7 @@ class CountController extends Controller
         $model->payable = $model->cost;
         //pending
         $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
-        var_dump($model->bill_id);
+//        var_dump($model->bill_id);
         $model->pending = 0;
         if (!empty($pends)) {
             foreach ($pends as $item) {
@@ -1049,7 +1052,7 @@ class CountController extends Controller
         if (!empty($addCost)) {
             foreach ($addCost as $item) {
                 $model->add_cost += $item->cost;
-//                $model->payable -= $item->cost;
+                $model->payable += $item->cost;
 //                $model->payable += $item->cost;
 //                $model->final_cost += $item->cost;
             }

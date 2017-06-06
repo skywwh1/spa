@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\FinanceAddRevenueSearch;
 use backend\models\FinanceAdvertiserCampaignBillTermSearch;
 use backend\models\FinanceAdvertiserPrepaymentSearch;
+use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
 use backend\models\FinanceSubRevenueSearch;
@@ -12,6 +13,7 @@ use common\models\Advertiser;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -206,8 +208,8 @@ class FinanceAdvertiserBillTermController extends Controller
                 'prepaymentList' => $prepaymentList,
                 'addRevenueList' => $addRevenueList,
                 'subRevenueList' => $subRevenueList,
-            ]);
-        }
+                'searchModel' => $systemRevenueModel,
+            ]); }
     }
 
     public function actionRetreat($id)

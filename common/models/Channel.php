@@ -69,6 +69,7 @@ use yii\web\IdentityInterface;
  * @property string $strong_category
  * @property string $os
  * @property integer recommended
+ * @property string $discount
  *
  * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
@@ -111,6 +112,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['email'], 'email'],
+            [['discount'], 'number'],
             [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo','os'], 'safe'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
@@ -183,6 +185,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             'os' => 'OS',
             'recommended' => 'Recommended',
             'om_name' => 'OM',
+            'discount' => 'Discount',
             'master_channel_name' => 'Master Channel',
         ];
     }

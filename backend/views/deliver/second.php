@@ -65,7 +65,7 @@ if (!is_null($delivers)) {
                     </div>
                     <?= $form->field($deliver, 'pay_out')->textInput() ?>
                     <?= $form->field($deliver, 'daily_cap')->textInput() ?>
-                    <?= $form->field($deliver, 'discount')->textInput(['value' => 30]) ?>
+                    <?= $form->field($deliver, 'discount')->textInput() ?>
                     <?= $form->field($deliver, 'is_send_create')->dropDownList([
                         '0' => 'Yes',
                         '1' => 'No',

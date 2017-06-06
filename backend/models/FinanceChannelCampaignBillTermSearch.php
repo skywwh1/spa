@@ -118,11 +118,35 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
 
         $query->select([
             'fcb.*',
+            'fp.id pending_id',
             'fp.revenue pending_revenue',
             'fp.cost pending_cost',
             'fd.deduction_cost',
             'fd.deduction_revenue',
         ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'fcb.channel_id' => $this->channel_id,
+            'fcb.campaign_id' => $this->campaign_id,
+            'fcb.start_time' => $this->start_time,
+            'fcb.end_time' => $this->end_time,
+            'fcb.clicks' => $this->clicks,
+            'fcb.unique_clicks' => $this->unique_clicks,
+            'fcb.installs' => $this->installs,
+            'fcb.match_installs' => $this->match_installs,
+            'fcb.redirect_installs' => $this->redirect_installs,
+            'fcb.redirect_match_installs' => $this->redirect_match_installs,
+            'fcb.pay_out' => $this->pay_out,
+            'fcb.adv_price' => $this->adv_price,
+            'fcb.cost' => $this->cost,
+            'fcb.redirect_cost' => $this->redirect_cost,
+            'fcb.revenue' => $this->revenue,
+            'fcb.redirect_revenue' => $this->redirect_revenue,
+            'fcb.create_time' => $this->create_time,
+            'fcb.update_time' => $this->update_time,
+        ]);
+
         // grid filtering conditions
         $query->andFilterWhere([
             'bill_id'=> $this->bill_id,

@@ -174,6 +174,9 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
 
         $query->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+//        var_dump($start, $end, $campaign_id, $channel_id);
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $query->one();
     }
 
@@ -225,7 +228,6 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
             'timestamp',
         ]);
         $query->having('installs > daily_cap');
-        var_dump($query->createCommand()->sql);
-        return $query->all();
+		var_dump($query->createCommand()->sql);        return $query->all();
     }
 }

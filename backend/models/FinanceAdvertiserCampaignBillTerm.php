@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use common\models\Campaign;
+use common\models\Channel;
 use Yii;
 
 /**
@@ -30,12 +31,19 @@ use Yii;
  * @property string $redirect_revenue
  * @property integer $create_time
  * @property integer $update_time
+ * @property integer $channel_id
  *
  * @property Campaign $campaign
  * @property FinanceAdvertiserBillTerm $bill
  */
 class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
 {
+    public $channel_name;
+    public $deduction_cost;
+    public $deduction_revenue;
+    public $pending_cost;
+    public $pending_revenue;
+    public $pending_id;
     /**
      * @inheritdoc
      */
@@ -55,6 +63,7 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
             [['bill_id'], 'string', 'max' => 255],
             [['time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],
+            [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['bill_id'], 'exist', 'skipOnError' => true, 'targetClass' => FinanceAdvertiserBillTerm::className(), 'targetAttribute' => ['bill_id' => 'bill_id']],
         ];
@@ -70,6 +79,7 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
             'adv_id' => 'Adv ID',
             'time_zone' => 'Time Zone',
             'campaign_id' => 'Campaign ID',
+            'channel_id' => 'Channel ID',
             'start_time' => 'Start Time',
             'end_time' => 'End Time',
             'clicks' => 'Clicks',
@@ -105,6 +115,14 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
     public function getBill()
     {
         return $this->hasOne(FinanceAdvertiserBillTerm::className(), ['bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
     }
 
     public function beforeSave($insert)

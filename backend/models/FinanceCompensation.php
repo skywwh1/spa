@@ -17,6 +17,7 @@ use yii\db\ActiveRecord;
  * @property integer $status
  * @property integer $editor
  * @property integer $creator
+ * @property string $note
  *
  * @property FinanceDeduction $deduction
  */

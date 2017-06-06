@@ -7,6 +7,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\export\ExportMenu;
+use kartik\editable\Editable;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceAdvertiserBillTerm */
@@ -16,7 +17,7 @@ use kartik\export\ExportMenu;
 /* @var $deductionList yii\data\ActiveDataProvider */
 /* @var $addRevenueList yii\data\ActiveDataProvider */
 /* @var $prepaymentList yii\data\ActiveDataProvider */
-
+/* @var $searchModel backend\models\FinanceAdvertiserCampaignBillTermSearch */
 
 $this->title = 'Update Finance Advertiser Bill Term: ' . $model->bill_id;
 $this->params['breadcrumbs'][] = ['label' => 'Finance Advertiser Bill Terms', 'url' => ['index']];
@@ -164,7 +165,7 @@ $this->params['breadcrumbs'][] = 'Update';
             </div>
         </div>
     </div>
-    <!-- Payable -->
+    <!-- Receivable -->
     <div class="row">
         <div class="col-lg-12">
             <div class="box box-info">
@@ -183,7 +184,6 @@ $this->params['breadcrumbs'][] = 'Update';
                                 'value' => function ($model) {
                                     return ModelsUtil::getPaymentTerm($model->adv->payment_term);
                                 }
-
                             ],
                             [
                                 // 'label' => 'invoice_id',
@@ -335,11 +335,11 @@ $this->params['breadcrumbs'][] = 'Update';
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                       <span class="caret"></span></button>
                                       <ul class="dropdown-menu">
-                                      <li><a data-view="0" data-title="Add Pending" data-url="/finance-pending/add-campaign-by-adv?campaign_id=' . $model->campaign_id . '">Add Pending</a></li>
-                                      <li><a data-view="0" data-title="Add Discount" data-url="/finance-deduction/add-discount-by-adv?campaign_id=' . $model->campaign_id . '">Add Discount</a></li>
-                                      <li><a data-view="0" data-title="Add Install Deduction" data-url="/finance-deduction/add-install-by-adv?campaign_id=' . $model->campaign_id . '">Add Install Deduction</a></li>
+                                      <li><a data-view="0" data-title="Add Pending" data-url="/finance-pending/add-adv-by-adv?adv_name=' . $model->bill->adv->username . '&period='.$model->bill->period.'">Add Pending</a></li>
+                                      <li><a data-view="0" data-title="Add Discount" data-url="/finance-deduction/add-discount-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'">Add Discount</a></li>
+                                      <li><a data-view="0" data-title="Add Install Deduction" data-url="/finance-deduction/add-install-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'">Add Install Deduction</a></li>
+                                      <li><a data-view="0" data-title="Add Fine" data-url="/finance-deduction/add-fine-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'">Add Fine</a></li>
                                       </ul></div>';
-
                                 },
                             ],
                         ],
@@ -356,6 +356,11 @@ $this->params['breadcrumbs'][] = 'Update';
                             // 'label' => 'time_zone',
                             'attribute' => 'campaign.name',
 //                                'value' => 'time_zone',
+                        ],
+                        [
+                            'label' => 'Channel',
+                            'attribute' => 'channel_name',
+//                            'value' => 'channel.username',
                         ],
                         [
 //                             'label' => 'clicks',
@@ -378,6 +383,27 @@ $this->params['breadcrumbs'][] = 'Update';
                             'attribute' => 'match_installs',
                             'value' => 'match_installs',
                             'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'cvr',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                if ($model->clicks > 0) {
+                                    return round(($model->installs / $model->clicks) * 100, 2) . '%';
+                                }
+                                return "0%";
+                            },
+                            'filter' => false,
+                            'contentOptions' => function ($model) {
+                                $model = (object)$model;
+                                $cvr = 0;
+                                if ($model->clicks > 0) {
+                                    $cvr = round(($model->installs / $model->clicks) * 100, 2);
+                                }
+                                if ($cvr > 2) {
+                                    return ['class' => 'bg-danger'];
+                                }
+                            }
                         ],
                         //[
                         // 'label' => 'redirect_installs',
@@ -430,8 +456,39 @@ $this->params['breadcrumbs'][] = 'Update';
                             'label' => 'Margin',
                             'attribute' => 'redirect_revenue',
                             'value' => function ($model) {
-                                return $model->revenue == 0 ? 0 : round((($model->revenue - $model->cost) / $model->revenue), 2);
-                            }
+                                return $model->revenue == 0 ? 0.00 : round((($model->revenue - $model->cost) / $model->revenue), 2);
+                            },
+                            'filter' => false,
+                        ],
+                        [
+                            'label' => 'Pending Cost',
+                            'attribute' => 'pending_cost',
+//                            'value' => 'pending_cost',
+                            'value' => function ($model) {
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_cost;
+                            },
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Pending Revenue',
+                            'attribute' => 'pending_revenue',
+//                            'value' => 'pending_revenue',
+                            'value' => function ($model) {
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_revenue;
+                            },
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Deduction Cost',
+                            'attribute' => 'deduction_cost',
+                            'value' => 'deduction_cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Deduction Revenue',
+                            'attribute' => 'deduction_revenue',
+                            'value' => 'deduction_revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             'label' => 'ADV',
@@ -462,8 +519,10 @@ $this->params['breadcrumbs'][] = 'Update';
                     ?>
                     <?= GridView::widget([
                         'dataProvider' => $systemRevenueList,
+                        'pjax' => true,
                         'layout' => '{items}',
                         'showPageSummary' => true,
+                        'filterModel' => $searchModel,
                         'columns' => $systemColumns,
                     ]); ?>
                 </div>
@@ -578,6 +637,7 @@ $this->params['breadcrumbs'][] = 'Update';
                     <?= GridView::widget([
                         'dataProvider' => $confirmList,
                         'columns' => $confirmedColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -593,6 +653,22 @@ $this->params['breadcrumbs'][] = 'Update';
                     </p>
                     <?php
                     $pendingColumns = [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      <li><a data-view="0" data-title="Confirm ' . $model->id . '" data-url="/finance-pending/update?id=' . $model->id . '">Confirm</a></li>
+                                      <li><a data-view="0" data-title="Update Pending ' . $model->id . '" data-url="/finance-pending/update-pending?id=' . $model->id . '">Update</a></li>
+                                      </ul></div>';
+                                },
+                            ],
+                        ],
                         [
                             'label' => 'ID',
                             'attribute' => 'id',
@@ -668,6 +744,11 @@ $this->params['breadcrumbs'][] = 'Update';
                             'attribute' => 'pm',
                             'value' => 'pm',
                         ],
+                        [
+                            'label' => 'Note',
+                            'attribute' => 'note',
+                            'value' => 'note',
+                        ],
                     ];
                     echo ExportMenu::widget([
                         'dataProvider' => $pendingList,
@@ -706,6 +787,24 @@ $this->params['breadcrumbs'][] = 'Update';
                     </p>
                     <?php
                     $deductionColumns = [
+//                        [
+//                            'class' => 'kartik\grid\ActionColumn',
+//                            'template' => '{all}',
+//                            'header' => 'Action',
+//                            'buttons' => [
+//                                'all' => function ($url, $model, $key) {
+//                                    return '<div class="dropdown">
+//                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+//                                      <span class="caret"></span></button>
+//                                      <ul class="dropdown-menu">
+//
+//                                      <li><a data-view="0" data-title="View deduction ' . $model->id . '" data-url="/finance-deduction/view?id=' . $model->id . '">View</a></li>
+//                                      <li><a data-view="0" data-title="Confirm deduction ' . $model->id . '" data-url="/finance-deduction/update?id=' . $model->id . '">Confirm</a></li>'
+//                                    . '</ul>
+//                                    </div>';
+//                                },
+//                            ],
+//                        ],
                         [
                             // 'label' => 'id',
                             'attribute' => 'id',
@@ -753,6 +852,23 @@ $this->params['breadcrumbs'][] = 'Update';
 //                             'label' => ''
                             'attribute' => 'deduction_value',
                             'value' => 'deduction_value',
+                            'class'=>'kartik\grid\EditableColumn',
+
+//                            'editableOptions'=>[
+//                                'asPopover' => false,
+//                                'inputType'=>Editable::INPUT_TEXTAREA,
+//                                'options' => [
+//                                    'rows' => 4,
+//                                ],
+//                            ],
+                            'editableOptions'=>function ($model, $key, $index) {
+                                return [
+//                                    'header' => 'employment_period',
+                                    'asPopover' => false,
+                                    'inputType' => Editable::INPUT_TEXTAREA,
+                                    'formOptions' => ['action' => ['/finance-deduction/update?id='.$key]],
+                                   ];
+                            }
                         ],
                         [
 //                                'label' => 'type',
@@ -771,15 +887,18 @@ $this->params['breadcrumbs'][] = 'Update';
 //                                'label' => 'deduction_cost',
                             'attribute' => 'deduction_cost',
                             'value' => 'deduction_cost',
+                            'pageSummary' => true,
                         ],
                         [
 //                                'label' => 'deduction_revenue',
                             'attribute' => 'deduction_revenue',
                             'value' => 'deduction_revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'revenue',
                             'value' => 'revenue',
+                            'pageSummary' => true,
                         ],
                         //[
                         // 'label' => 'margin',
@@ -821,6 +940,11 @@ $this->params['breadcrumbs'][] = 'Update';
                             'value' => 'create_time',
                             'format' => 'datetime',
                         ],
+                        [
+                            'label' => 'Note',
+                            'attribute' => 'note',
+                            'value' => 'note',
+                        ],
                     ];
                     echo ExportMenu::widget([
                         'dataProvider' => $deductionList,
@@ -843,6 +967,8 @@ $this->params['breadcrumbs'][] = 'Update';
                     <?= GridView::widget([
                         'dataProvider' => $deductionList,
                         'columns' => $deductionColumns,
+                        'showPageSummary' => true,
+                        'pjax' => true,
                     ]); ?>
                 </div>
             </div>

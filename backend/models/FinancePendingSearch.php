@@ -92,7 +92,7 @@ class FinancePendingSearch extends FinancePending
             ->andFilterWhere(['like', 'note', $this->note])
             ->andFilterWhere(['like', 'adv_bill_id', $this->month])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
-
+        $query->orderBy(['fp.id' => SORT_DESC]);
         return $dataProvider;
     }
 

@@ -276,7 +276,7 @@ class MailUtil
             $mail->setCc($channel->om0->email);
         }
 
-        $mail->setSubject('Good Offers Recommendation');
+        $mail->setSubject('Good Offers Recommendation - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;

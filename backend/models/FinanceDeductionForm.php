@@ -18,6 +18,7 @@ class FinanceDeductionForm extends Model
     public $note;
     public $type;
     public $deduction_value;
+    public $pending_id;
 
     public function rules()
     {

@@ -22,6 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <?= $form->field($model, 'deduction_id')->textInput(['maxlength' => true, 'readonly' => 'readonly']) ?>
             <?= $form->field($model, 'compensation')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 
             <div class="form-group">
                 <?= Html::submitButton('Apply', ['class' => 'btn btn-primary']) ?>
