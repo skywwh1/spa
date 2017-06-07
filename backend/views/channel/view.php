@@ -57,6 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'swift',
                         'account_nu_iban',
                         'company_address',
+                        'discount',
                         'note',
                         'contacts',
                         'created_time:datetime',

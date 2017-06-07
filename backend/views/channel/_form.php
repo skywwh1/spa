@@ -75,7 +75,13 @@ use common\models\Platform;
 
                     <?= $form->field($model, 'company_address')->textInput(['maxlength' => true]) ?>
 
-                    <?= $form->field($model, 'discount')->textInput(['value' => 30]) ?>
+                    <?php
+                       if(empty($model->discount)){
+                            echo $form->field($model, 'discount')->textInput(['value' => 30]);
+                       }else{
+                           echo $form->field($model, 'discount')->textInput();
+                       }
+                    ?>
 
                     <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 

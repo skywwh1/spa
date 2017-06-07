@@ -187,30 +187,27 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'columns' => [
-//                                [
-//                                    'class' => 'kartik\grid\ActionColumn',
-//                                    'template' => '{all}',
-//                                    'header' => 'Action',
-//                                    'buttons' => [
-//                                        'all' => function ($url, $model, $key) {
-////                                        $restart = '';
-////                                        if ($model->status != 1) {
-////                                            $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
-////                                        }
-//                                            return '<div class="dropdown">
-//                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-//                                      <span class="caret"></span></button>
-//                                      <ul class="dropdown-menu">
-//
-//                                      <li><a data-view="0" data-title="View deduction ' . $model->id . '" data-url="/finance-deduction/view?id=' . $model->id . '">View</a></li>
-//                                      <li><a data-view="0" data-title="Confirm deduction ' . $model->id . '" data-url="/finance-deduction/update?id=' . $model->id . '">Confirm</a></li>
-//                                      <li><a data-view="0" data-title="Apply compensation with deduction ' . $model->id . '" data-url="/finance-compensation/create?deduction_id=' . $model->id . '">Apply Compensation</a></li>'
-////                                            $restart
-//                                                . '</ul>
-//                                    </div>';
-//                                        },
-//                                    ],
-//                                ],
+                                [
+                                    'class' => 'kartik\grid\ActionColumn',
+                                    'template' => '{all}',
+                                    'header' => 'Action',
+                                    'buttons' => [
+                                        'all' => function ($url, $model, $key) {
+//                                        $restart = '';
+//                                        if ($model->status != 1) {
+//                                            $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
+//                                        }
+                                            return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      <li><a data-view="0" data-title="View deduction ' . $model->id . '" data-url="/finance-deduction/view?id=' . $model->id . '">View</a></li>'
+//                                            $restart
+                                                . '</ul>
+                                    </div>';
+                                        },
+                                    ],
+                                ],
                                 [
                                     'attribute' => 'status',
                                     'value' => function ($model) {

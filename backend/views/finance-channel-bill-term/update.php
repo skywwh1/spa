@@ -411,10 +411,9 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'value' => 'campaign_id',
                         ],
                         [
-//                            'label' => 'Campaign Name',
-//                            'attribute' => 'campaign_id',
-//                            'value' => 'campaign.campaign_name',
-                            'attribute' => 'campaign.name',
+                            // 'label' => 'time_zone',
+                            'attribute' => 'campaign_name',
+                            'value' => 'campaign.name',
                         ],
                         [
 //                                'label' => 'clicks',
@@ -874,6 +873,12 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'label' => 'campaign_id',
                             'attribute' => 'campaign_id',
                             'value' => 'campaign_id',
+                        ],
+                        [
+                            'label' => 'Campaign Name',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign.campaign_name'
+//                                'value' => 'campaign_id',
                         ],
                         [
                             // 'label' => 'channel_id',
