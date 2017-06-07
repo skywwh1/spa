@@ -837,6 +837,8 @@ class CountController extends Controller
         $first_day = date("Y.m.01",strtotime($date));
         $last_day = date("Y.m.t",strtotime("$date 1 month -1 day"));
         $period = $first_day . '-' . $last_day;
+        var_dump($period);
+        //当前时区的凌晨转为0时区
         $last_bills = FinanceAdvertiserBillTerm::findAll(['period' => $period]);
 
         if (!empty($last_bills)) {
@@ -875,6 +877,7 @@ class CountController extends Controller
 
                     }
                 }
+                var_dump(date("Y-m-d H:i:s",$item->start_time), date("Y-m-d H:i:s",$item->end_time), $item->adv_id);
                 $campaign_bill = FinanceAdvertiserCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->adv_id);
                 if (!empty($campaign_bill) && !empty($campaign_bill->clicks)) {
                     $item->clicks = $campaign_bill->clicks;
@@ -948,6 +951,7 @@ class CountController extends Controller
                     }
                 }
                 $campaign_bill = FinanceChannelCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->channel_id);
+
                 if (!empty($campaign_bill) && !empty($campaign_bill->clicks)) {
                     $item->clicks = $campaign_bill->clicks;
                     $item->unique_clicks = $campaign_bill->unique_clicks;

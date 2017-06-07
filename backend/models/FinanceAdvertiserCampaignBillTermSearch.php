@@ -100,7 +100,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'fab.time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
-            ->andFilterWhere(['<>', 'fab.cost', 0])
+            ->andFilterWhere(['<>', 'fab.revenue', 0])
             ->andFilterWhere(['like', 'c.username', $this->channel_name])
             ->andFilterWhere(['like', 'cap', $this->cap]);
 
