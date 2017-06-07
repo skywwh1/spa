@@ -7,6 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
+use kartik\editable\Editable;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceChannelBillTerm */
@@ -705,6 +706,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $confirmList,
                         'columns' => $confirmedColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -906,10 +908,24 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                         // 'value' => 'match_installs',
                         // ],
 
+//                        [
+////                             'label' => ''
+//                            'attribute' => 'deduction_value',
+//                            'value' => 'deduction_value',
+//                        ],
                         [
 //                             'label' => ''
                             'attribute' => 'deduction_value',
                             'value' => 'deduction_value',
+                            'class'=>'kartik\grid\EditableColumn',
+                            'editableOptions'=>function ($model, $key, $index) {
+                                return [
+//                                    'header' => 'employment_period',
+                                    'asPopover' => false,
+                                    'inputType' => Editable::INPUT_TEXTAREA,
+                                    'formOptions' => ['action' => ['/finance-deduction/update?id='.$key]],
+                                ];
+                            }
                         ],
                         [
 //                                'label' => 'type',
@@ -1000,6 +1016,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $deductionList,
                         'columns' => $deductionColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -1045,41 +1062,49 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'label' => 'system_revenue',
                             'attribute' => 'end_date',
                             'value' => 'deduction.end_date',
+                            'format' => 'datetime',
                         ],
                         [
                             // 'label' => 'system_revenue',
                             'attribute' => 'deduction_revenue',
                             'value' => 'deduction.deduction_revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'system_revenue',
                             'attribute' => 'deduction_cost',
                             'value' => 'deduction.deduction_cost',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'billable_cost',
                             'attribute' => 'system_cost',
                             'value' => 'deduction.cost',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'billable_cost',
                             'attribute' => 'system_revenue',
                             'value' => 'deduction.revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'billable_cost',
                             'attribute' => 'billable_cost',
                             'value' => 'billable_cost',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'billable_cost',
                             'attribute' => 'billable_cost',
                             'value' => 'billable_cost',
+                            'pageSummary' => true,
                         ],
                         [
 //                             'label' => 'billable_revenue',
                             'attribute' => 'billable_revenue',
                             'value' => 'billable_revenue',
+                            'pageSummary' => true,
                         ],
                         [
 //                             'label' => 'billable_margin',
@@ -1090,6 +1115,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 //                             'label' => 'compensation',
                             'attribute' => 'compensation',
                             'value' => 'compensation',
+                            'pageSummary' => true,
                         ],
                         [
 //                                    'label' => 'final_margin',
@@ -1126,6 +1152,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $compensationList,
                         'pjax' => true,
+                        'showPageSummary' => true,
                         'columns' => $compensationColumns,
                     ]); ?>
                 </div>
@@ -1178,6 +1205,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $costList,
                         'columns' => $costColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -1197,11 +1225,13 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'label' => 'cost',
                             'attribute' => 'cost',
                             'value' => 'cost',
+                            'pageSummary' => true,
                         ],
                         [
                             // 'label' => 'cost',
                             'attribute' => 'revenue',
                             'value' => 'revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'note',
@@ -1229,6 +1259,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <?= GridView::widget([
                         'dataProvider' => $subCostList,
                         'columns' => $subCostColumns,
+                        'showPageSummary' => true,
                     ]); ?>
                 </div>
             </div>
@@ -1249,6 +1280,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             // 'label' => 'prepayment',
                             'attribute' => 'prepayment',
                             'value' => 'prepayment',
+                            'pageSummary' => true,
                         ],
                         //[
                         // 'label' => 'om',

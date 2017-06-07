@@ -5,9 +5,11 @@ namespace backend\controllers;
 use backend\models\FinanceAddCostSearch;
 use backend\models\FinanceChannelPrepaymentSearch;
 use backend\models\FinanceChannelCampaignBillTermSearch;
+use backend\models\FinanceCompensation;
 use backend\models\FinanceCompensationSearch;
 use backend\models\FinanceDeduction;
 use backend\models\FinanceDeductionSearch;
+use backend\models\FinancePending;
 use backend\models\FinancePendingSearch;
 use backend\models\FinanceSubCostSearch;
 use backend\models\UploadForm;
@@ -151,10 +153,20 @@ class FinanceChannelBillTermController extends Controller
             switch ($model->status)
             {
                 case 3:
-                    $model->status = 1;
+                    $compensation =  FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id,'channel_id' => $model->channel_id]);
+                    $model->payable -= $model->compensation;
+                    FinanceCompensation::deleteAll(['deduction_id' => $compensation->id]);
+
+                    $model->compensation = 0;
+                    $model->status = 1;//对于reject的单子，一律设为pending状态
                     break;
                 case 5:
-                    $model->status = 1;
+                    $compensation =  FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id,'channel_id' => $model->channel_id]);
+                    $model->payable -= $model->compensation;
+                    FinanceCompensation::deleteAll(['deduction_id' => $compensation->id]);
+
+                    $model->compensation = 0;
+                    $model->status = 1;//对于reject的单子，一律设为pending状态
                     break;
                 default:
                     $model->status = $model->status;
