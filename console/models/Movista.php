@@ -176,6 +176,9 @@ class Movista
 //        var_dump($all);
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
+                if($item->is_manual){
+                    continue;
+                }
                 $item->status = 2;
                 if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
