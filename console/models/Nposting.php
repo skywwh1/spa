@@ -80,6 +80,7 @@ class Nposting
             $camp->platform = $model->platform;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
+            $camp->traffic_source="non-incent,no adult";
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             if (empty($camp->preview_link)) {
                 if ($camp->platform == 'android') {
