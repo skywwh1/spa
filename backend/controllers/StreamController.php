@@ -424,24 +424,24 @@ class StreamController extends Controller
     {
         $code = 200;
         //1.token 限制
-        $token = $model->auth_token;
-        $adt = ViewAdvertiserAuthToken::findOne(['auth_token' => $token]);
-        if ($adt === null) {
-            $code = 400;
-            return $code;
-        }
-        //2.click uuid 限制
-        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
-        if ($clickuuid === null) {
-            $code = 401;
-            return $code;
-        }
-        //3 channel
-        $channel = Channel::findIdentity($model->channel_id);
-        if ($channel === null) {
-            $code = 502;
-            return $code;
-        }
+//        $token = $model->auth_token;
+//        $adt = ViewAdvertiserAuthToken::findOne(['auth_token' => $token]);
+//        if ($adt === null) {
+//            $code = 400;
+//            return $code;
+//        }
+//        //2.click uuid 限制
+//        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
+//        if ($clickuuid === null) {
+//            $code = 401;
+//            return $code;
+//        }
+//        //3 channel
+//        $channel = Channel::findIdentity($model->channel_id);
+//        if ($channel === null) {
+//            $code = 502;
+//            return $code;
+//        }
         return $code;
     }
 
