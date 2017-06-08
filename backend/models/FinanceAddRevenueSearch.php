@@ -43,8 +43,6 @@ class FinanceAddRevenueSearch extends FinanceAddRevenue
     public function search($params)
     {
         $query = FinanceAddRevenue::find();
-        $query->alias("far");
-
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -59,12 +57,6 @@ class FinanceAddRevenueSearch extends FinanceAddRevenue
             return $dataProvider;
         }
 
-        $query->select([
-            'far.*',
-            'fab.cost',
-        ]);
-
-        $query->leftJoin('finance_advertiser_bill_term fab','fab.bill_id = far.advertiser_bill_id');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,

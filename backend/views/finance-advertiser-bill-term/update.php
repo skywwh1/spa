@@ -354,8 +354,8 @@ $this->params['breadcrumbs'][] = 'Update';
                         ],
                         [
                             // 'label' => 'time_zone',
-                            'attribute' => 'campaign.name',
-//                                'value' => 'time_zone',
+                            'attribute' => 'campaign_name',
+                            'value' => 'campaign.name',
                         ],
                         [
                             'label' => 'Channel',
@@ -494,9 +494,13 @@ $this->params['breadcrumbs'][] = 'Update';
                             'label' => 'ADV',
                             'value' => 'bill.adv.username',
                         ],
+//                        [
+//                            'label' => 'BD',
+//                            'value' => 'bill.adv.bd0.username',
+//                        ],
                         [
-                            'label' => 'BD',
-                            'value' => 'bill.adv.bd0.username',
+                            'label' => 'OM',
+                            'value' => 'channel.om0.username',
                         ],
                     ];
                     echo ExportMenu::widget([
@@ -814,6 +818,12 @@ $this->params['breadcrumbs'][] = 'Update';
                             // 'label' => 'campaign_id',
                             'attribute' => 'campaign_id',
                             'value' => 'campaign_id',
+                        ],
+                        [
+                            'label' => 'Campaign Name',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign.campaign_name'
+//                                'value' => 'campaign_id',
                         ],
                         [
                             // 'label' => 'channel_id',

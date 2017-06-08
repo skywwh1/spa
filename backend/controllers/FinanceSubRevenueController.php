@@ -4,8 +4,8 @@ namespace backend\controllers;
 
 use backend\models\FinanceAdvertiserBillTerm;
 use Yii;
-use backend\models\FinancesubRevenue;
-use backend\models\FinancesubRevenueSearch;
+use backend\models\FinanceSubRevenue;
+use backend\models\FinanceSubRevenueSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;

@@ -12,13 +12,14 @@ use backend\models\FinanceChannelCampaignBillTerm;
  */
 class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTerm
 {
+    public $campaign_name;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'time_zone', 'daily_cap', 'cap', 'note',], 'safe'],
+            [['bill_id', 'time_zone', 'daily_cap', 'cap', 'note','campaign_name'], 'safe'],
             [['channel_id', 'campaign_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time', 'update_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
@@ -155,8 +156,10 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
 
         $query->leftJoin("finance_pending fp",'fp.channel_bill_id = fcb.bill_id and fp.campaign_id = fcb.campaign_id');
         $query->leftJoin("finance_deduction fd",'fd.channel_bill_id = fcb.bill_id and fd.campaign_id = fcb.campaign_id');
+        $query->leftJoin("campaign camp",'camp.id = fcb.campaign_id');
 
         $query->andFilterWhere(['like', 'fcb.time_zone', $this->time_zone])
+            ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['<>', 'fcb.cost', 0]);
 
 //        var_dump($query->createCommand()->sql);

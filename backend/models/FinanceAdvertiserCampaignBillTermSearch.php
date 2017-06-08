@@ -13,13 +13,14 @@ use backend\models\FinanceAdvertiserCampaignBillTerm;
 class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignBillTerm
 {
     public $channel_name;
+    public $campaign_name;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'time_zone', 'daily_cap', 'cap','channel_name'], 'safe'],
+            [['bill_id', 'time_zone', 'daily_cap', 'cap','channel_name','campaign_name'], 'safe'],
             [['adv_id', 'campaign_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time', 'update_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
@@ -67,7 +68,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
             'fp.cost pending_cost',
             'fd.deduction_cost',
             'fd.deduction_revenue',
-            'c.username channel_name'
+            'c.username channel_name',
         ]);
 
         // grid filtering conditions
@@ -96,12 +97,14 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
         $query->leftJoin("finance_pending fp",'fp.adv_bill_id = fab.bill_id and fp.campaign_id = fab.campaign_id');
         $query->leftJoin("finance_deduction fd",'fd.adv_bill_id = fab.bill_id and fd.campaign_id = fab.campaign_id');
         $query->leftJoin("channel c",'c.id = fab.channel_id');
+        $query->leftJoin("campaign camp",'camp.id = fab.campaign_id');
 
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'fab.time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
             ->andFilterWhere(['<>', 'fab.revenue', 0])
             ->andFilterWhere(['like', 'c.username', $this->channel_name])
+            ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'cap', $this->cap]);
 
         return $dataProvider;

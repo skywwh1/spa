@@ -17,13 +17,13 @@ use Yii;
  * @property string $note
  * @property integer $create_time
  * @property integer $update_time
+ * @property string $cost
  *
  * @property FinanceAdvertiserBillTerm $advertiserBill
  * @property Advertiser $advertiser
  */
 class FinanceAddRevenue extends \yii\db\ActiveRecord
 {
-    public $cost;
     /**
      * @inheritdoc
      */
@@ -41,6 +41,7 @@ class FinanceAddRevenue extends \yii\db\ActiveRecord
             [['advertiser_bill_id', 'advertiser_id', 'revenue'], 'required'],
             [['advertiser_id', 'create_time', 'update_time'], 'integer'],
             [['revenue'], 'number'],
+            [['cost'], 'number'],
             [['note'], 'string'],
             [['advertiser_bill_id', 'om'], 'string', 'max' => 255],
             [['timezone'], 'string', 'max' => 100],
@@ -60,6 +61,7 @@ class FinanceAddRevenue extends \yii\db\ActiveRecord
             'advertiser_id' => 'Advertiser ID',
             'timezone' => 'Timezone',
             'revenue' => 'Revenue',
+            'cost' => 'Cost',
             'om' => 'Om',
             'note' => 'Note',
             'create_time' => 'Create Time',

@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ]); ?>
 
 <?= $form->field($model, 'cost')->textInput(['maxlength' => true]) ?>
+<?= $form->field($model, 'revenue')->textInput(['maxlength' => true]) ?>
 <?= $form->field($model, 'note')->textarea(['rows' => 6]) ?>
 <?= $form->field($model, 'channel_bill_id')->hiddenInput()->label(false) ?>
 
