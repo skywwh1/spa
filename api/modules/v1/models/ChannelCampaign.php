@@ -35,9 +35,15 @@ class ChannelCampaign extends Deliver
                 return \ModelsUtil::getCampaignStatus($model->status);
             },
             'Created Time' => function ($model) {
+                if (empty($model->create_time)) {
+                    return '';
+                }
                 return date("Y-m-d H:i:s", $model->create_time);
             },
             'End Time' => function ($model) {
+                if (empty($model->end_time)) {
+                    return '';
+                }
                 return date("Y-m-d H:i:s", $model->end_time);
             },
             'Preview Link' => function ($model) {
