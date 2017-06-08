@@ -28,6 +28,7 @@ use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
+use common\models\LogClick2;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\RedirectLog;
@@ -166,7 +167,10 @@ class CountController extends Controller
         if (isset($feeds)) {
             foreach ($feeds as $item) {
                 $logClick = LogClick::findByClickUuid($item->click_id);
-                if (isset($logClick)) {
+                if(empty($logClick)){
+                    $logClick = LogClick2::findByClickUuid($item->click_id);
+                }
+                if (!empty($logClick)) {
                     $camp = Campaign::findById($logClick->campaign_id);
                     if (empty($camp)) {
                         $this->echoMessage('cannot found the campaign -' . $logClick->campaign_id);
