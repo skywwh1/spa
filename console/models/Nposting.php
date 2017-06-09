@@ -47,7 +47,7 @@ class Nposting
 //        $all = Campaign::findAllByAdv($apiModel->adv_id);
 //        $liveCamps = array();
         foreach ($apiCampaigns as $model) {
-            echo $model->campaign_id . "\n";
+            echo $model->campaign_id . "status " . $model->status . "\n";
             $model->adv_id = $apiModel->adv_id;
             if (!$model->save()) {
                 var_dump($model->getErrors());
@@ -92,9 +92,13 @@ class Nposting
                 }
             }
             $camp->category = $model->category;
+            echo $model->campaign_id . "status " . $model->status . "\n";
             if ($model->status == 'live') {
+                echo $model->status . "\n";
+                $camp->promote_end = null;
                 $camp->status = 1;
             } else {
+                echo $model->status . "\n";
                 $camp->status = 2;
             }
             $camp->open_type = 1;

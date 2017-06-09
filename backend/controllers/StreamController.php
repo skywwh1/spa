@@ -430,18 +430,18 @@ class StreamController extends Controller
             $code = 400;
             return $code;
         }
-        //2.click uuid 限制
-        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
-        if ($clickuuid === null) {
-            $code = 401;
-            return $code;
-        }
-        //3 channel
-        $channel = Channel::findIdentity($model->channel_id);
-        if ($channel === null) {
-            $code = 502;
-            return $code;
-        }
+//        //2.click uuid 限制
+//        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
+//        if ($clickuuid === null) {
+//            $code = 401;
+//            return $code;
+//        }
+//        //3 channel
+//        $channel = Channel::findIdentity($model->channel_id);
+//        if ($channel === null) {
+//            $code = 502;
+//            return $code;
+//        }
         return $code;
     }
 
