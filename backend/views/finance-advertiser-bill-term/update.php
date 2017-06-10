@@ -219,6 +219,10 @@ $this->params['breadcrumbs'][] = 'Update';
                                 'value' => 'final_revenue',
                             ],
                             [
+                                'label' => 'Final Cost',
+                                'attribute' => 'cost',
+                            ],
+                            [
                                 'label' => 'Sub Revenue',
                                 'attribute' => 'adjust_revenue',
                                 'value' => 'adjust_revenue',
@@ -231,7 +235,10 @@ $this->params['breadcrumbs'][] = 'Update';
                             ],
                             [
                                 'attribute' => 'actual_margin',
-                                'value' => 'actual_margin',
+//                                'value' => 'actual_margin',
+                                  'value' => function ($model) {
+                                    return $model->receivable == 0 ? 0 : round((($model->receivable - $model->cost) / $model->receivable)*100, 2).'%';
+                                },
                             ],
                             [
                                 'attribute' => 'received_amount',

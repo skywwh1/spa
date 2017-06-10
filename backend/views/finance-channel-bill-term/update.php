@@ -235,9 +235,16 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                                 }
                             ],
                             [
+                                'label' => 'Final Revenue',
+                                'attribute' => 'revenue',
+                            ],
+                            [
 //                                'label' => 'actual_margin',
                                 'attribute' => 'actual_margin',
-                                'value' => 'actual_margin',
+//                                'value' => 'actual_margin',
+                                'value' => function ($model) {
+                                    return $model->revenue == 0 ? 0 : round((($model->revenue - $model->payable) / $model->revenue)*100, 2).'%';
+                                },
                             ],
                             [
 //                                'label' => 'paid_amount',
