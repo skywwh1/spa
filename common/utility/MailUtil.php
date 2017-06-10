@@ -272,9 +272,9 @@ class MailUtil
         $mail = Yii::$app->mailer->compose('good_campaign', ['campaigns' => $campaigns,'channel' =>$channel ]);
 //        $mail->setTo("2539131080@qq.com");
         $mail->setTo($channel->email);
-        if (isset($channel->om0)) {
-            $mail->setCc($channel->om0->email);
-        }
+//        if (isset($channel->om0)) {
+//            $mail->setCc($channel->om0->email);
+//        }
 
         $mail->setSubject('Good Offers Recommendation - SuperADS');
         $isSend = 0;

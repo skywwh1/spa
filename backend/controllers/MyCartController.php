@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use common\models\Campaign;
+use common\models\User;
 use Yii;
 use common\models\MyCart;
 use common\models\MyCartSearch;
@@ -236,9 +237,12 @@ class MyCartController extends Controller
         }
 //        $my_carts = MyCart::find()->where(['id' => $keys])->all();
         $user_name = yii::$app->user->identity->username;
-        $channel = Channel::findByUsername($user_name);
+//        var_dump($user_name);
+//        die();
+//        $channel = Channel::findByUsername($user_name);
+        $user = User::findOne(['username' => $user_name ]);
         $campaigns = Campaign::find()->where(['id' => $keys])->all();
-        if(MailUtil::sendGoodOffers($campaigns,$channel)){
+        if(MailUtil::sendGoodOffers($campaigns,$user)){
             $this->asJson("send email success!");
         }else{
             $this->asJson("send email fail!");
