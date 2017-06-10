@@ -18,9 +18,12 @@ use yii\helpers\ArrayHelper;
  * @property integer $id
  * @property integer $campaign_id
  * @property string $creative_link
- * @property string creative_type
+ * @property string $creative_type
+ *
+ * @property Campaign $campaign
  */
-class CampaignCreativeLink extends \yii\db\ActiveRecord{
+class CampaignCreativeLink extends \yii\db\ActiveRecord
+{
     /**
      * @inheritdoc
      */
@@ -37,7 +40,8 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
         return [
 //            [['creative_link',], 'required'],
             [['campaign_id'], 'integer'],
-            [['creative_link','creative_type'], 'string', 'max' => 255],
+            [['creative_link', 'creative_type'], 'string', 'max' => 255],
+            [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
         ];
     }
 
@@ -48,7 +52,7 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
     {
         return [
             'id' => 'ID',
-            'campaign_id' => 'Campagin ID',
+            'campaign_id' => 'Campaign ID',
             'creative_link' => 'Creative Link',
             'creative_type' => 'Creative Type',
         ];
@@ -69,20 +73,21 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
         $temp = array();
         if (!empty($data)) {
             foreach ($data as $k) {
-                $temp[$k->domain.'-'.$k->country_regions] = $k->domain.'-'.$k->country_regions;
+                $temp[$k->domain . '-' . $k->country_regions] = $k->domain . '-' . $k->country_regions;
             }
         }
         return $temp;
     }
 
-    public function updateCreativeLink($creative_link,$id){
+    public function updateCreativeLink($creative_link, $id)
+    {
 
-        if (!empty($id)){
-            if(strstr($creative_link,',')){
-                $creative_link = explode(',',$creative_link);
+        if (!empty($id)) {
+            if (strstr($creative_link, ',')) {
+                $creative_link = explode(',', $creative_link);
                 foreach ($creative_link as $name) {
-                    $aLink = CampaignCreativeLink::find()->where(['creative_link' => $name,'campaign_id' => $id])->one();
-                    $aLinkCount = CampaignCreativeLink::find()->where(['creative_link' => $name,'campaign_id' => $id])->count();
+                    $aLink = CampaignCreativeLink::find()->where(['creative_link' => $name, 'campaign_id' => $id])->one();
+                    $aLinkCount = CampaignCreativeLink::find()->where(['creative_link' => $name, 'campaign_id' => $id])->count();
 
                     if (!$aLinkCount) {
                         $link = new CampaignCreativeLink();
@@ -92,9 +97,9 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
                     }
                 }
             }
-        }else{
-            if(strstr($creative_link,',')){
-                $creative_link = explode(',',$creative_link);
+        } else {
+            if (strstr($creative_link, ',')) {
+                $creative_link = explode(',', $creative_link);
                 $link = new CampaignCreativeLink();
                 $link->campaign_id = $id;
                 $link->creative_link = $creative_link;
@@ -125,7 +130,8 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
      * @param array $arr 数组
      * @return object
      */
-    public static function array_to_object($arr) {
+    public static function array_to_object($arr)
+    {
         if (gettype($arr) != 'array') {
             return;
         }
@@ -144,7 +150,8 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
      * @param object $obj 对象
      * @return array
      */
-    public static function object_to_array($obj) {
+    public static function object_to_array($obj)
+    {
         $obj = (array)$obj;
         foreach ($obj as $k => $v) {
             if (gettype($v) == 'resource') {
@@ -160,7 +167,7 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
 
     public static function getCampaignCreativeLinksById($campaignId)
     {
-        $data =  CampaignCreativeLink::find()->where(['campaign_id' => $campaignId])->all();
+        $data = CampaignCreativeLink::find()->where(['campaign_id' => $campaignId])->all();
 //        $out = [];
 //        foreach ($data as $d) {
 //            $out[] = ['value' => $d];
@@ -168,24 +175,25 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
         return $data;
     }
 
-    public static function updateCreativeLinks($oldModelsLink,$modelsLink,$campaign_id){
-        if (!empty($oldModelsLink)){
+    public static function updateCreativeLinks($oldModelsLink, $modelsLink, $campaign_id)
+    {
+        if (!empty($oldModelsLink)) {
             $oldHouseIDs = ArrayHelper::map($oldModelsLink, 'id', 'id');
             $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsLink, 'id', 'id')));
-            if (! empty($deletedHouseIDs)) {
+            if (!empty($deletedHouseIDs)) {
                 CampaignCreativeLink::deleteAll(['id' => $deletedHouseIDs]);
             }
         }
 
         foreach ($modelsLink as $modelLink) {
-            if (!empty($modelLink)&&isset($modelLink->id)){
+            if (!empty($modelLink) && isset($modelLink->id)) {
                 $ccl = CampaignCreativeLink::findOne($modelLink->id);
             }
-            if (!empty($ccl)){
+            if (!empty($ccl)) {
                 $ccl->creative_link = $modelLink->creative_link;
                 $ccl->creative_type = $modelLink->creative_type;
-            }else{
-                if(empty( $modelLink->creative_link)){
+            } else {
+                if (empty($modelLink->creative_link)) {
                     continue;
                 }
                 $ccl = new CampaignCreativeLink();
@@ -194,19 +202,25 @@ class CampaignCreativeLink extends \yii\db\ActiveRecord{
                 $ccl->creative_type = $modelLink->creative_type;
             }
 
-            if (! ($flag = $ccl->save(false))) {
+            if (!($flag = $ccl->save(false))) {
                 break;
             }
         }
         return $flag;
     }
 
-    public static function getCreativeLinkValue($creativeLink){
-        if ($creativeLink ==1){
+    public static function getCreativeLinkValue($creativeLink)
+    {
+        if ($creativeLink == 1) {
             $creativeLink = "banner";
-        }else if($creativeLink ==2){
+        } else if ($creativeLink == 2) {
             $creativeLink = "video";
         }
         return $creativeLink;
+    }
+
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
     }
 }

@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attributes' => [
                         'id',
                         'username',
+                        'auth_token',
 //            'team',
 //            'firstname',
 //            'lastname',

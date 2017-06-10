@@ -400,8 +400,8 @@ class StreamController extends Controller
         }
         $model->ip = $clientIpAddress;
         $model->ip_long = ip2long($model->ip);
-        $model->event_name = isset($data['event_name']) ? $data['event_name'] : null;
-        $model->event_value = isset($data['event_value']) ? $data['event_value'] : null;
+        $model->event_name = isset($data['event_name']) ? $data['event_name'] : 0;
+        $model->event_value = isset($data['event_value']) ? $data['event_value'] : 0;
 
         if (!$model->validate()) {
 //            $this->asJson($model->getErrors());
@@ -430,18 +430,18 @@ class StreamController extends Controller
             $code = 400;
             return $code;
         }
-        //2.click uuid 限制
-        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
-        if ($clickuuid === null) {
-            $code = 401;
-            return $code;
-        }
-        //3 channel
-        $channel = Channel::findIdentity($model->channel_id);
-        if ($channel === null) {
-            $code = 502;
-            return $code;
-        }
+//        //2.click uuid 限制
+//        $clickuuid = ViewClickLog::findOne(['click_uuid' => $model->click_uuid]);
+//        if ($clickuuid === null) {
+//            $code = 401;
+//            return $code;
+//        }
+//        //3 channel
+//        $channel = Channel::findIdentity($model->channel_id);
+//        if ($channel === null) {
+//            $code = 502;
+//            return $code;
+//        }
         return $code;
     }
 

@@ -44,17 +44,51 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+
+        $query = Campaign::find();
+        $query->alias('c');
+        $query->andFilterWhere(['c.status' => 1,
+            'c.pricing_mode' => 'cpa',
+        ]);
+
+        $cams = $query->all();
+        var_dump($query->createCommand()->sql);
+        echo strtotime('2017/03/01');
+
+        foreach ($cams as $item) {
+            $deliver = Deliver::findOne(['campaign_id' => $item->id, 'channel_id' => 188]);
+            if (empty($deliver)) {
+                $deliver = new Deliver();
+                $deliver->campaign_id = $item->id;
+                $deliver->campaign_uuid = $item->campaign_uuid;
+                $deliver->channel_id = 188;
+               $deliver->adv_price = $item->adv_price;
+               $deliver->pricing_mode = $item->pricing_mode;
+               $deliver->pay_out = $item->adv_price;
+               $deliver->daily_cap = $item->daily_cap;
+               $deliver->discount = 40;
+               $deliver->creator = 3;
+               $deliver->track_url = '/stream/track?pl=others&ch_id=188&cp_uid='.$item->campaign_uuid;
+               $deliver->kpi = $item->kpi;
+               $deliver->note = $item->note;
+               $deliver->others = $item->others;
+               $deliver->is_send_create = 1;
+               if(!$deliver->save()){
+                   var_dump($deliver->errors);
+               }
+            }
+        }
+        die();
         $aa = new Mundo();
         $aa->getApiCampaign();
 
-date_default_timezone_set('Etc/GMT-8');
-echo strtotime('2017/05/17');
-echo date('Y-m-d H:i:s',1495036800);
+        date_default_timezone_set('Etc/GMT-8');
+        echo strtotime('2017/05/17');
+        echo date('Y-m-d H:i:s', 1495036800);
 //      $aa = new StatsUtil();
 //      $aa->statsClicksHourly(time(),time());
 //        }
         die();
-
 
 
 //        $start = date('Y-m-d H:00', time());
@@ -63,11 +97,11 @@ echo date('Y-m-d H:i:s',1495036800);
 //        $start = date('Y-m-d H:00', time());
 //        echo $start . "\n";
         $first_day_str = date('Y-m-d H:00', strtotime('first day of this month'));
-        echo $first_day_str."\n";
+        echo $first_day_str . "\n";
         die();
         $last_day_str = date('Y-m-d H:00', strtotime('last day of last month'));
 //        echo date('Y-m-d', strtotime('last day of last month'));
-                $timezone = 'Etc/GMT-8';
+        $timezone = 'Etc/GMT-8';
 //        echo date('Y-m-d H:00', time())."\n";
 
         strtotime($first_day_str);

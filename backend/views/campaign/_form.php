@@ -303,6 +303,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <?= $form->field($model, 'adv_link')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'ip_blacklist')->textarea(['maxlength' => true]) ?>
+            <?= $form->field($model, 'is_manual')->dropDownList(ModelsUtil::user_status) ?>
 
             <div class="form-group">
                 <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -313,6 +314,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>
 </div>
 <?php ActiveForm::end(); ?>
-<?php $this->registerJsFile('@web/js/campaign.js',
+<?php $this->registerJsFile('@web/js/campaign-form.js',
     ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>

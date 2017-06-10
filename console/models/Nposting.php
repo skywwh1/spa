@@ -33,9 +33,9 @@ class Nposting
         if (isset($response)) {
             $response = json_decode($response);
             $data = $response->$data_key->lists;
-            $allCamps = $this->getAllCampaigns($data);
+//            $allCamps = $this->getAllCampaigns($data);
 //            var_dump($data);
-            $apiCams = ApiUtil::genApiCampaigns($apiModel, $allCamps);
+            $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);
             $this->transferApiModel($apiModel, $apiCams);
         }
 
@@ -44,9 +44,10 @@ class Nposting
     private function transferApiModel($apiModel, $apiCampaigns)
     {
         ApiCampaign::deleteAll(['adv_id' => $apiModel->adv_id]);
-        $all = Campaign::findAllByAdv($apiModel->adv_id);
+//        $all = Campaign::findAllByAdv($apiModel->adv_id);
 //        $liveCamps = array();
         foreach ($apiCampaigns as $model) {
+            echo $model->campaign_id . "status " . $model->status . "\n";
             $model->adv_id = $apiModel->adv_id;
             if (!$model->save()) {
                 var_dump($model->getErrors());
@@ -80,6 +81,7 @@ class Nposting
             $camp->platform = $model->platform;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
+            $camp->traffic_source = "non-incent,no adult";
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             if (empty($camp->preview_link)) {
                 if ($camp->platform == 'android') {
@@ -90,9 +92,13 @@ class Nposting
                 }
             }
             $camp->category = $model->category;
+            echo $model->campaign_id . "status " . $model->status . "\n";
             if ($model->status == 'live') {
+                echo $model->status . "\n";
+                $camp->promote_end = null;
                 $camp->status = 1;
             } else {
+                echo $model->status . "\n";
                 $camp->status = 2;
             }
             $camp->open_type = 1;
@@ -103,6 +109,7 @@ class Nposting
             if ($camp->save()) {
                 //  Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
             } else {
+                var_dump($model->campaign_id . $camp->campaign_name);
                 var_dump($camp->getErrors());
             }
 //            $liveCamps[] = $camp->campaign_uuid;

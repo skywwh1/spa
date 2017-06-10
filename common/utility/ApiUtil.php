@@ -183,6 +183,9 @@ class ApiUtil
     {
         foreach ($allAdvCampaigns as $item) {
             if (!in_array($item->campaign_uuid, $liveCampaignUuids)) {
+                if($item->is_manual){
+                    continue;
+                }
                 $item->status = 2;
                 if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
