@@ -12,6 +12,7 @@ use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
+use common\models\LogClick3;
 use common\models\LogEvent;
 use common\models\RedirectLog;
 use common\models\Stream;
@@ -246,12 +247,12 @@ class StreamController extends Controller
         /**
          * test link
          */
-        $cache = Yii::$app->cache;
-        $test = $cache->get($model->ch_id . '');
-        if ($test !== false) {
-            $cache->set($model->ch_id, $model, 300);
-        }
-        //2.ip 限制
+//        $cache = Yii::$app->cache;
+//        $test = $cache->get($model->ch_id . '');
+//        if ($test !== false) {
+//            $cache->set($model->ch_id, $model, 300);
+//        }
+//        //2.ip 限制
         $target = $campaign->target_geo;
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
             $Info = \Yii::createObject([
@@ -274,7 +275,7 @@ class StreamController extends Controller
         $model->is_count = 1;
 //        $model->save();
 
-        $click = new LogClick();
+        $click = new LogClick3();
         $click->tx_id = empty($model->id) ? 0 : $model->id;
         $click->click_uuid = $model->click_uuid;
         $click->click_id = $model->click_id;
