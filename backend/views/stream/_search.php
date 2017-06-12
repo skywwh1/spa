@@ -27,7 +27,6 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'pl') ?>
 
-    <?php // echo $form->field($model, 'tx_id') ?>
 
     <?php // echo $form->field($model, 'all_parameters') ?>
 

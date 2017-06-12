@@ -19,7 +19,7 @@ class TestSearch extends Stream
     {
         return [
             [['id', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
         ];
     }
 

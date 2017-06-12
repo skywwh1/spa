@@ -8,7 +8,6 @@ use Yii;
  * This is the model class for table "log_click".
  *
  * @property integer $id
- * @property integer $tx_id
  * @property string $click_uuid
  * @property string $click_id
  * @property integer $channel_id
@@ -49,7 +48,7 @@ class LogClick2 extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid'], 'required'],
-            [['tx_id', 'channel_id', 'campaign_id', 'ip_long', 'click_time', 'create_time'], 'safe'],
+            [['channel_id', 'campaign_id', 'ip_long', 'click_time', 'create_time'], 'safe'],
             [['adv_price', 'pay_out', 'discount'], 'safe'],
             [['click_uuid', 'click_id', 'campaign_uuid', 'daily_cap', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'safe'],
             [['click_uuid'], 'unique'],
@@ -63,7 +62,6 @@ class LogClick2 extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'tx_id' => 'Tx ID',
             'click_uuid' => 'Click Uuid',
             'click_id' => 'Click ID',
             'channel_id' => 'Channel ID',

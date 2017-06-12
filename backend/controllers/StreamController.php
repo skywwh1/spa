@@ -7,12 +7,10 @@ use backend\models\ViewAdvertiserAuthToken;
 use backend\models\ViewClickLog;
 use backend\models\ViewFeedLog;
 use common\models\Campaign;
-use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
-use common\models\LogClick3;
 use common\models\LogEvent;
 use common\models\RedirectLog;
 use common\models\Stream;
@@ -187,8 +185,8 @@ class StreamController extends Controller
         $paras = array(
             'click_id' => $model->click_uuid,
             'ch_id' => $model->ch_id,
-            'idfa' => $model->idfa,
-            'gaid' => $model->gaid,
+            'idfa' => $model->idfa === 0 ? '' : $model->idfa,
+            'gaid' => $model->gaid === 0 ? '' : $model->gaid,
             'site' => $model->site,
             'ch_subid' => $model->ch_subid
         );
@@ -275,8 +273,7 @@ class StreamController extends Controller
         $model->is_count = 1;
 //        $model->save();
 
-        $click = new LogClick3();
-        $click->tx_id = empty($model->id) ? 0 : $model->id;
+        $click = new LogClick();
         $click->click_uuid = $model->click_uuid;
         $click->click_id = $model->click_id;
         $click->channel_id = $model->ch_id;

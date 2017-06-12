@@ -56,7 +56,7 @@ class Stream extends \yii\db\ActiveRecord
             [['click_uuid', 'cp_uid', 'ch_id'], 'required'],
             [['adv_price', 'pay_out', 'discount'], 'number'],
             [['ip_long', 'post_status', 'post_time', 'is_count', 'create_time'], 'integer'],
-            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'tx_id', 'daily_cap', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
+            [['click_uuid', 'click_id', 'cp_uid', 'ch_id', 'pl', 'daily_cap', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type', 'post_link'], 'safe'],
             [['click_uuid'], 'unique'],
         ];
     }
@@ -73,7 +73,6 @@ class Stream extends \yii\db\ActiveRecord
             'cp_uid' => 'Campaign UUID',
             'ch_id' => 'Ch ID',
             'pl' => 'Pl',
-            'tx_id' => 'Tx ID',
             'ch_subid' => 'Ch Subid',
             'gaid' => 'Gaid',
             'idfa' => 'Idfa',
@@ -140,7 +139,7 @@ class Stream extends \yii\db\ActiveRecord
     public static function insertClicks()
     {
 
-        $sql = 'INSERT INTO log_click (tx_id,click_uuid,click_id,channel_id,campaign_id,campaign_uuid,pl,ch_subid,gaid,idfa,site,adv_price,pay_out,discount,daily_cap,all_parameters,ip,ip_long,redirect,browser,browser_type,click_time,create_time) SELECT fc.id,fc.click_uuid,fc.click_id,fc.ch_id,ca.id camid,fc.cp_uid,fc.pl,fc.ch_subid,fc.gaid,fc.idfa,fc.site,fc.adv_price,fc.pay_out,fc.discount,fc.daily_cap,fc.all_parameters,fc.ip,fc.ip_long,fc.redirect,fc.browser,fc.browser_type,fc.create_time,fc.create_time FROM feedback_channel_click_log fc LEFT JOIN campaign ca ON fc.cp_uid = ca.campaign_uuid where fc.is_count=0 order by fc.create_time desc limit 10000';
+        $sql = 'INSERT INTO log_click (click_uuid,click_id,channel_id,campaign_id,campaign_uuid,pl,ch_subid,gaid,idfa,site,adv_price,pay_out,discount,daily_cap,all_parameters,ip,ip_long,redirect,browser,browser_type,click_time,create_time) SELECT fc.id,fc.click_uuid,fc.click_id,fc.ch_id,ca.id camid,fc.cp_uid,fc.pl,fc.ch_subid,fc.gaid,fc.idfa,fc.site,fc.adv_price,fc.pay_out,fc.discount,fc.daily_cap,fc.all_parameters,fc.ip,fc.ip_long,fc.redirect,fc.browser,fc.browser_type,fc.create_time,fc.create_time FROM feedback_channel_click_log fc LEFT JOIN campaign ca ON fc.cp_uid = ca.campaign_uuid where fc.is_count=0 order by fc.create_time desc limit 10000';
         Yii::$app->db->createCommand($sql)->execute();
 
     }
