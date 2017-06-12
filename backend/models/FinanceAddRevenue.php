@@ -92,6 +92,9 @@ class FinanceAddRevenue extends \yii\db\ActiveRecord
             $bill->add_revenue = $bill->add_revenue + $this->revenue;
             $bill->final_revenue = $bill->final_revenue + $this->revenue;
             $bill->receivable = $bill->receivable + $this->revenue;
+//            Actual margin = （Receivable -Final Cost)/ Receivable
+            $bill->cost = $bill->cost + $this->cost;
+//            $bill->actual_margin = 1 - $bill->cost/$bill->receivable;
             $bill->save();
         }
 

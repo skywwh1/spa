@@ -37,11 +37,8 @@ use yii\helpers\Url;
 
     <h4>Dear <?php
 //        $channel = $campaign->channel;
-        if (!empty($channel->contacts)) {
-            echo Html::encode($channel->contacts);
-        } else {
-            echo Html::encode($channel->username);
-        } ?>:</h4>
+        echo Html::encode($channel->username);
+        ?>:</h4>
 
     <p>&nbsp;&nbsp; &nbsp;Good day! </p>
 

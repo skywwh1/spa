@@ -335,7 +335,10 @@ class FinanceDeductionController extends Controller
             if ($deduction->save()) {
                 $save = true;
                 $model->id = $deduction->id;
-
+                $financePending = FinancePending::getPendingBeforeDeduction($channel_bill_id,$adv_bill_id,$model->campaign_id,$channel->id);
+                if (!empty($financePending)){
+                    FinancePending::confirmPending($financePending->id);
+                }
             } else {
                 var_dump($deduction->getErrors());
                 die();
