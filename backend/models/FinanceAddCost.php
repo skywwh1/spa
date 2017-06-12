@@ -99,4 +99,17 @@ class FinanceAddCost extends \yii\db\ActiveRecord
         }
         parent::afterSave($insert, $changedAttributes);
     }
+
+    public  function beforeSave($insert){
+        if(parent::beforeSave($insert)){
+            if($insert){
+                $this->create_time = time();
+                $this->update_time = time();
+            }else{
+                $this->update_time = time();
+            }
+            return true;
+        }
+        return false;
+    }
 }

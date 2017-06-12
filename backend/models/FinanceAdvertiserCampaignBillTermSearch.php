@@ -94,8 +94,8 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
             'fab.update_time' => $this->update_time,
         ]);
 
-        $query->leftJoin("finance_pending fp",'fp.adv_bill_id = fab.bill_id and fp.campaign_id = fab.campaign_id');
-        $query->leftJoin("finance_deduction fd",'fd.adv_bill_id = fab.bill_id and fd.campaign_id = fab.campaign_id');
+        $query->leftJoin("finance_pending fp",'fp.adv_bill_id = fab.bill_id and fp.campaign_id = fab.campaign_id and fp.channel_id = fab.channel_id');
+        $query->leftJoin("finance_deduction fd",'fd.adv_bill_id = fab.bill_id and fd.campaign_id = fab.campaign_id and fd.channel_id = fab.channel_id');
         $query->leftJoin("channel c",'c.id = fab.channel_id');
         $query->leftJoin("campaign camp",'camp.id = fab.campaign_id');
 

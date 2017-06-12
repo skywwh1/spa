@@ -323,4 +323,18 @@ class FinancePending extends \yii\db\ActiveRecord
         $financePending->save();
     }
 
+    /**
+     * @param $channel_bill_id
+     * @param $adv_bill_id
+     * @param $campaign_id
+     * @param $channel_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function getPendingBeforeDeduction($channel_bill_id,$adv_bill_id,$campaign_id,$channel_id)
+    {
+        return static::find()->andFilterWhere(['channel_bill_id' => $channel_bill_id])->andFilterWhere(['adv_bill_id' => $adv_bill_id])
+            ->andFilterWhere(['campaign_id' => $campaign_id])->andFilterWhere(['channel_id' => $channel_id])
+            ->andFilterWhere(['status' => 0])->one();
+    }
+
 }
