@@ -38,7 +38,7 @@ class LogClick2 extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'log_click';
+        return 'log_click_2';
     }
 
     /**
