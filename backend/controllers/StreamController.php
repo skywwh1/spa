@@ -7,7 +7,6 @@ use backend\models\ViewAdvertiserAuthToken;
 use backend\models\ViewClickLog;
 use backend\models\ViewFeedLog;
 use common\models\Campaign;
-use common\models\Channel;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
@@ -186,8 +185,8 @@ class StreamController extends Controller
         $paras = array(
             'click_id' => $model->click_uuid,
             'ch_id' => $model->ch_id,
-            'idfa' => $model->idfa,
-            'gaid' => $model->gaid,
+            'idfa' => $model->idfa === 0 ? '' : $model->idfa,
+            'gaid' => $model->gaid === 0 ? '' : $model->gaid,
             'site' => $model->site,
             'ch_subid' => $model->ch_subid
         );
@@ -246,12 +245,12 @@ class StreamController extends Controller
         /**
          * test link
          */
-        $cache = Yii::$app->cache;
-        $test = $cache->get($model->ch_id . '');
-        if ($test !== false) {
-            $cache->set($model->ch_id, $model, 300);
-        }
-        //2.ip 限制
+//        $cache = Yii::$app->cache;
+//        $test = $cache->get($model->ch_id . '');
+//        if ($test !== false) {
+//            $cache->set($model->ch_id, $model, 300);
+//        }
+//        //2.ip 限制
         $target = $campaign->target_geo;
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
             $Info = \Yii::createObject([
@@ -275,7 +274,6 @@ class StreamController extends Controller
 //        $model->save();
 
         $click = new LogClick();
-        $click->tx_id = empty($model->id) ? 0 : $model->id;
         $click->click_uuid = $model->click_uuid;
         $click->click_id = $model->click_id;
         $click->channel_id = $model->ch_id;

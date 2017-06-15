@@ -31,7 +31,7 @@ use Yii;
  * @property integer $click_time
  * @property integer $create_time
  */
-class LogClick extends \yii\db\ActiveRecord
+class LogClick3 extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
@@ -43,8 +43,9 @@ class LogClick extends \yii\db\ActiveRecord
 
     public static function getDb()
     {
-        return Yii::$app->get('db2');
+        return Yii::$app->get('db3');
     }
+
 
     /**
      * @inheritdoc

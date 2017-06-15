@@ -50,7 +50,7 @@ class LogClick3 extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid'], 'required'],
-            [['tx_id', 'channel_id', 'campaign_id', 'ip_long', 'redirect_campaign_id', 'click_time', 'create_time'], 'integer'],
+            [['channel_id', 'campaign_id', 'ip_long', 'redirect_campaign_id', 'click_time', 'create_time'], 'integer'],
             [['adv_price', 'pay_out', 'discount'], 'number'],
             [['click_uuid', 'click_id', 'campaign_uuid', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'redirect_to', 'browser', 'browser_type'], 'string', 'max' => 255],
             [['daily_cap'], 'string', 'max' => 100],
@@ -64,7 +64,6 @@ class LogClick3 extends \yii\db\ActiveRecord
     {
         return [
             'click_uuid' => 'Click Uuid',
-            'tx_id' => 'Tx ID',
             'click_id' => 'Click ID',
             'channel_id' => 'Channel ID',
             'campaign_id' => 'Campaign ID',

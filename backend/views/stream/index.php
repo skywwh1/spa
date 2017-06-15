@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'cp_uid',
             'ch.username',
             // 'pl',
-            // 'tx_id',
             // 'all_parameters',
             // 'ip',
             // 'redirect',

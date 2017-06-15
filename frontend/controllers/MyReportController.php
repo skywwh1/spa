@@ -45,20 +45,20 @@ class MyReportController extends Controller
         ];
     }
 
-    /**
-     * Lists all Deliver models.
-     * @return mixed
-     */
-    public function actionIndex()
-    {
-        $searchModel = new MyReportSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+//    /**
+//     * Lists all Deliver models.
+//     * @return mixed
+//     */
+//    public function actionIndex()
+//    {
+//        $searchModel = new MyReportSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        return $this->render('index', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//        ]);
+//    }
 
     /**
      * Lists all Deliver models.

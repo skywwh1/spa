@@ -18,6 +18,8 @@ use common\models\Config;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
+use common\models\LogClick2;
+use common\models\LogClick3;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
@@ -34,6 +36,7 @@ use HttpException;
 use HttpRequest;
 use linslin\yii2\curl\Curl;
 use yii\console\Controller;
+use yii\db\Query;
 
 /**
  * Class TestController
@@ -45,39 +48,19 @@ class TestController extends Controller
     public function actionTmd()
     {
 
-        $query = Campaign::find();
-        $query->alias('c');
-        $query->andFilterWhere(['c.status' => 1,
-            'c.pricing_mode' => 'cpa',
-        ]);
+        $now = time();
+        echo date('Y-m-d\TH:i:s\Z', $now) . "\n";
 
-        $cams = $query->all();
-        var_dump($query->createCommand()->sql);
-        echo strtotime('2017/03/01');
+        $query = new Query();
+        $query->select('count(click_uuid)');
+        $query->from('log_click');
 
-        foreach ($cams as $item) {
-            $deliver = Deliver::findOne(['campaign_id' => $item->id, 'channel_id' => 188]);
-            if (empty($deliver)) {
-                $deliver = new Deliver();
-                $deliver->campaign_id = $item->id;
-                $deliver->campaign_uuid = $item->campaign_uuid;
-                $deliver->channel_id = 188;
-               $deliver->adv_price = $item->adv_price;
-               $deliver->pricing_mode = $item->pricing_mode;
-               $deliver->pay_out = $item->adv_price;
-               $deliver->daily_cap = $item->daily_cap;
-               $deliver->discount = 40;
-               $deliver->creator = 3;
-               $deliver->track_url = '/stream/track?pl=others&ch_id=188&cp_uid='.$item->campaign_uuid;
-               $deliver->kpi = $item->kpi;
-               $deliver->note = $item->note;
-               $deliver->others = $item->others;
-               $deliver->is_send_create = 1;
-               if(!$deliver->save()){
-                   var_dump($deliver->errors);
-               }
-            }
-        }
+
+
+        $command = $query->createCommand(\Yii::$app->db2);
+        var_dump($command->queryAll());
+        die();
+        echo date('Y-m-d\TH:i:s\Z', (time() - $now)) . "\n";
         die();
         $aa = new Mundo();
         $aa->getApiCampaign();

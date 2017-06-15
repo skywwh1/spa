@@ -20,7 +20,6 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'cp_uid')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'ch_id')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'pl')->textInput(['maxlength' => true]) ?>
-    <?= $form->field($model, 'tx_id')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'all_parameters')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'ip')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'redirect')->textInput(['maxlength' => true]) ?>
