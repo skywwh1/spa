@@ -173,6 +173,7 @@ class MyCartController extends Controller
         $my_cart->tag = $model->tag;
         $my_cart->traffic_source = $model->traffic_source;
         $my_cart->preview_link = $model->preview_link;
+        $my_cart->creator = yii::$app->user->identity->username;
 
         if ($my_cart->save()) {
             return 'add to my cart success!';
