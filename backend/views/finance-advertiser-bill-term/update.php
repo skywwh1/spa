@@ -338,14 +338,16 @@ $this->params['breadcrumbs'][] = 'Update';
                             'header' => 'Action',
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
+                                     $model = (object)$model;
+                                    $bill = \backend\models\FinanceAdvertiserBillTerm::findOne(['bill_id' => $model->bill_id]);
                                         return '<div class="dropdown">
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                       <span class="caret"></span></button>
                                       <ul class="dropdown-menu">
-                                      <li><a data-view="0" data-title="Add Pending" data-url="/finance-pending/add-adv-by-adv?adv_name=' . $model->bill->adv->username . '&period='.$model->bill->period.'&channel_name='.$model->channel_name.'">Add Pending</a></li>
-                                      <li><a data-view="0" data-title="Add Discount" data-url="/finance-deduction/add-discount-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$model->bill->period.'&channel_name='.$model->channel_name.'">Add Discount</a></li>
-                                      <li><a data-view="0" data-title="Add Install Deduction" data-url="/finance-deduction/add-install-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$model->bill->period.'&channel_name='.$model->channel_name.'">Add Install Deduction</a></li>
-                                      <li><a data-view="0" data-title="Add Fine" data-url="/finance-deduction/add-fine-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$model->bill->period.'&channel_name='.$model->channel_name.'">Add Fine</a></li>
+                                      <li><a data-view="0" data-title="Add Pending" data-url="/finance-pending/add-adv-by-adv?adv_name=' . $bill->adv->username . '&period='.$bill->period.'&channel_name='.$model->channel_name.'">Add Pending</a></li>
+                                      <li><a data-view="0" data-title="Add Discount" data-url="/finance-deduction/add-discount-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$bill->period.'&channel_name='.$model->channel_name.'">Add Discount</a></li>
+                                      <li><a data-view="0" data-title="Add Install Deduction" data-url="/finance-deduction/add-install-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$bill->period.'&channel_name='.$model->channel_name.'">Add Install Deduction</a></li>
+                                      <li><a data-view="0" data-title="Add Fine" data-url="/finance-deduction/add-fine-by-adv?campaign_id=' . $model->campaign_id . '&pending_id='.$model->pending_id.'&period='.$bill->period.'&channel_name='.$model->channel_name.'">Add Fine</a></li>
                                       </ul></div>';
                                 },
                             ],
@@ -353,6 +355,11 @@ $this->params['breadcrumbs'][] = 'Update';
                         [
                             // 'label' => 'bill_id',
                             'attribute' => 'bill.period',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                $bill = \backend\models\FinanceAdvertiserBillTerm::findOne(['bill_id' => $model->bill_id]);
+                                return $bill->period;
+                            },
                         ],
                         [
                             // 'label' => 'campaign_id',
@@ -362,7 +369,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         [
                             // 'label' => 'time_zone',
                             'attribute' => 'campaign_name',
-                            'value' => 'campaign.name',
+                            'value' => 'campaign_name',
                         ],
                         [
                             'label' => 'Channel',
@@ -463,6 +470,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'label' => 'Margin',
                             'attribute' => 'redirect_revenue',
                             'value' => function ($model) {
+                                $model = (object)$model;
                                 return $model->revenue == 0 ? 0.00 : round((($model->revenue - $model->cost) / $model->revenue), 2);
                             },
                             'filter' => false,
@@ -472,6 +480,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'attribute' => 'pending_cost',
 //                            'value' => 'pending_cost',
                             'value' => function ($model) {
+                                $model = (object)$model;
                                 return $model->deduction_cost > 0 ? 0.00 : $model->pending_cost;
                             },
                             'pageSummary' => true,
@@ -481,6 +490,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'attribute' => 'pending_revenue',
 //                            'value' => 'pending_revenue',
                             'value' => function ($model) {
+                                $model = (object)$model;
                                 return $model->deduction_cost > 0 ? 0.00 : $model->pending_revenue;
                             },
                             'pageSummary' => true,
@@ -499,7 +509,12 @@ $this->params['breadcrumbs'][] = 'Update';
                         ],
                         [
                             'label' => 'ADV',
-                            'value' => 'bill.adv.username',
+//                            'value' => 'bill.adv.username',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                $adv = \common\models\Advertiser::find()->select('username')->andFilterWhere(['id' => $model->adv_id])->column();
+                                return $adv[0];
+                            }
                         ],
 //                        [
 //                            'label' => 'BD',
@@ -507,7 +522,11 @@ $this->params['breadcrumbs'][] = 'Update';
 //                        ],
                         [
                             'label' => 'OM',
-                            'value' => 'channel.om0.username',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                $channel = \common\models\Channel::findOne(['id' => $model->channel_id]);
+                                return $channel->om0->username;
+                            }
                         ],
                     ];
                     echo ExportMenu::widget([

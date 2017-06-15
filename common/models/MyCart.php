@@ -19,6 +19,7 @@ use Yii;
  * @property integer $direct
  * @property integer $advertiser
  * @property string $preview_link
+ * @property string $creator
  *
  * @property Advertiser $advertiser0
  * @property Campaign $campaign

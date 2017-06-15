@@ -47,9 +47,6 @@ class MyCartSearch extends MyCart
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-//            'pagination' => [
-//                'defaultPageSize' => 5,
-//            ]
         ]);
 
         $this->load($params);
@@ -74,7 +71,9 @@ class MyCartSearch extends MyCart
             ->andFilterWhere(['like', 'platform', $this->platform])
             ->andFilterWhere(['like', 'payout', $this->payout])
             ->andFilterWhere(['like', 'daily_cap', $this->daily_cap])
+            ->andFilterWhere(['like', 'creator', yii::$app->user->identity->username])
             ->andFilterWhere(['like', 'traffic_source', $this->traffic_source]);
+
 
         return $dataProvider;
     }

@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\FinanceAdvertiserCampaignBillTerm;
+use yii\db\Query;
 
 /**
  * FinanceAdvertiserCampaignBillTermSearch represents the model behind the search form about `backend\models\FinanceAdvertiserCampaignBillTerm`.
@@ -44,8 +45,9 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
      */
     public function search($params)
     {
-        $query = FinanceAdvertiserCampaignBillTerm::find();
-        $query->alias("fab");
+//        $query = FinanceAdvertiserCampaignBillTerm::find();
+        $query = new Query();
+//        $query->alias("fab");
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -69,6 +71,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
             'fd.deduction_cost',
             'fd.deduction_revenue',
             'c.username channel_name',
+            'camp.campaign_name campaign_name'
         ]);
 
         // grid filtering conditions
@@ -93,7 +96,7 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
             'fab.create_time' => $this->create_time,
             'fab.update_time' => $this->update_time,
         ]);
-
+        $query->from("finance_advertiser_campaign_bill_term fab");
         $query->leftJoin("finance_pending fp",'fp.adv_bill_id = fab.bill_id and fp.campaign_id = fab.campaign_id and fp.channel_id = fab.channel_id');
         $query->leftJoin("finance_deduction fd",'fd.adv_bill_id = fab.bill_id and fd.campaign_id = fab.campaign_id and fd.channel_id = fab.channel_id');
         $query->leftJoin("channel c",'c.id = fab.channel_id');
@@ -107,6 +110,9 @@ class FinanceAdvertiserCampaignBillTermSearch extends FinanceAdvertiserCampaignB
             ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'cap', $this->cap]);
 
+//        var_dump($query->createCommand()->sql);
+//        var_dump($this->channel_name);
+//        die();
         return $dataProvider;
     }
 }

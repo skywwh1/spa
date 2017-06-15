@@ -883,7 +883,6 @@ class CountController extends Controller
                         if (!$bill_campaign->save()) {
                             var_dump($bill_campaign->getErrors());
                         }
-
                     }
                 }
                 var_dump(date("Y-m-d H:i:s",$item->start_time), date("Y-m-d H:i:s",$item->end_time), $item->adv_id);
@@ -910,7 +909,75 @@ class CountController extends Controller
                 var_dump($item->getErrors());
             }
         }
+
     }
+
+    public function actionGen($date){
+        //每个月2号建立一个预账单，
+        //查找周期为month的广告主：
+        $first_day = strtotime($date);
+        $last_day = strtotime("$date 1 month -1 day");
+//        $ads = Advertiser::findAll(['payment_term' => 30,'id']);
+        $ads = Advertiser::getNewAdv($first_day,$last_day);
+        foreach ($ads as $ad) {
+            $timezone = $ad->timezone;
+            var_dump($first_day);
+            if (empty($timezone)) {
+                $timezone = 'Etc/GMT-8';
+            }
+            //当前时区的凌晨转为0时区
+            $start_date = new DateTime(date('Y-m-d H:00',$first_day), new DateTimeZone($timezone));
+            $end_date = new DateTime(date('Y-m-d H:00', $last_day), new DateTimeZone($timezone));
+            $start_time = $start_date->getTimestamp();
+            $end_time = $end_date->getTimestamp() + 3600 * 24;
+            $bill_id = $ad->id . '_' . $start_date->format('Ym');
+            $pre_bill = FinanceAdvertiserBillTerm::findOne(['bill_id' => $bill_id]);
+            if (empty($pre_bill)) {
+                $pre_bill = new FinanceAdvertiserBillTerm();
+                $pre_bill->start_time = $start_time;
+                $pre_bill->end_time = $end_time;
+                $pre_bill->adv_id = $ad->id;
+                $pre_bill->invoice_id = 'spa-' . $ad->id . '-' . substr($first_day, 0, 7);
+                $pre_bill->time_zone = $timezone;
+                $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                $pre_bill->bill_id = $ad->id . '_' . $start_date->format('Ym');
+                $pre_bill->save();
+                var_dump($pre_bill->getErrors());
+            }
+        }
+
+        //每个月2号建立一个预账单，
+        //查找周期为month的广告主：
+//        $channels = Channel::findAll(['payment_term' => 30]);
+        $channels = Channel::getNewChannel($first_day,$last_day);
+        foreach ($channels as $channel) {
+            $timezone = $channel->timezone;
+            if (empty($timezone)) {
+                $timezone = 'Etc/GMT-8';
+            }
+            //当前时区的凌晨转为0时区
+            $start_date = new DateTime(date('Y-m-d H:00', strtotime($first_day)), new DateTimeZone($timezone));
+            $end_date = new DateTime(date('Y-m-d H:00', strtotime($last_day)), new DateTimeZone($timezone));
+            $start_time = $start_date->getTimestamp();
+            $end_time = $end_date->getTimestamp() + 3600 * 24;
+            $bill_id = $channel->id . '_' . $start_date->format('Ym');
+//            var_dump($bill_id);
+            $pre_bill = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+            if (empty($pre_bill)) {
+                var_dump($bill_id);
+                $pre_bill = new FinanceChannelBillTerm();
+                $pre_bill->start_time = $start_time;
+                $pre_bill->end_time = $end_time;
+                $pre_bill->channel_id = $channel->id;
+                $pre_bill->invoice_id = 'spa-' . $channel->id . '-' . substr($first_day, 0, 7);
+                $pre_bill->time_zone = $timezone;
+                $pre_bill->period = $start_date->format('Y.m.d') . '-' . $end_date->format('Y.m.d');
+                $pre_bill->bill_id = $channel->id . '_' . $start_date->format('Ym');
+                $pre_bill->save();
+            }
+        }
+    }
+
 
     public function actionStatsChannelByMonth($date)
     {

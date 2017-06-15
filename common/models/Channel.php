@@ -356,4 +356,8 @@ class Channel extends ActiveRecord implements IdentityInterface
     {
         return static::findOne(['username' => $username]);
     }
+
+    public static function getNewChannel($first_day,$last_day){
+        return static::find()->andFilterWhere(['payment_term' => 30])->andFilterWhere(['>', 'created_time', $first_day])->andFilterWhere(['<', 'created_time', $last_day])->all();
+    }
 }

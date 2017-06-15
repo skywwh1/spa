@@ -13,6 +13,7 @@ use common\models\Channel;
 use common\models\Deliver;
 use common\models\LogAutoCheck;
 use common\models\SendMailLog;
+use common\models\User;
 use Yii;
 
 class MailUtil
@@ -317,4 +318,35 @@ class MailUtil
             return false;
         }
     }
+
+    public static function sendQualityOffers($channel,$campaign,$subChannels,$dynamic_cols,$col_len,$date_range)
+    {
+
+//        $user_id = Yii::$app->user->id;
+        $mail = Yii::$app->mailer->compose('channel_quality', ['channel' =>$channel,'campaign' => $campaign,
+            'subChannels' =>$subChannels,'columnName' =>$dynamic_cols,'cols' => $col_len,'date_range' =>$date_range ]);
+        $user_name = yii::$app->user->identity->username;
+        $user = User::findOne(['username' => $user_name ]);
+//        $mail->setTo("2539131080@qq.com");
+//        $mail->setTo($channel->email);
+        $mail->setTo($user->email);
+//        $mail->setTo($channel->email);
+//        if (isset($channel->om0)) {
+//            $mail->setCc($channel->om0->email);
+//        }
+
+        $mail->setSubject('Channel Quality Report- SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'send channel quality', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
