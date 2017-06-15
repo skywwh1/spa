@@ -157,7 +157,7 @@ class MyCartController extends Controller
     {
         $model = Campaign::findOne($campaign_id);
 
-        $my_cart = MyCart::find()->where(['campaign_id' => $campaign_id])->one();
+        $my_cart = MyCart::find()->where(['campaign_id' => $campaign_id])->andFilterWhere(['creator' => yii::$app->user->identity->username])->one();
         if (!empty($my_cart)) {
             return 'you have added to my cart already!';
         }
