@@ -33,12 +33,13 @@ use Yii;
  */
 class LogClick2 extends \yii\db\ActiveRecord
 {
+
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'log_click_2';
+        return 'log_click';
     }
 
     /**

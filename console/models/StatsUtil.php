@@ -903,8 +903,8 @@ class StatsUtil
             'fc.channel_id',
             'timestamp']);
         $query->orderBy('timestamp desc');
-
-        $command = $query->createCommand();
+        //使用第二个数据库
+        $command = $query->createCommand(Yii::$app->db2->slave);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
@@ -994,7 +994,8 @@ class StatsUtil
             'timestamp']);
         $query->orderBy('timestamp desc');
 
-        $command = $query->createCommand();
+        //使用第二个数据库
+        $command = $query->createCommand(Yii::$app->db2->slave);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
