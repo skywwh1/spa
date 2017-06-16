@@ -303,10 +303,10 @@ class CampaignController extends Controller
     {
         $logFeed = LogFeed::findOne(['click_uuid' => $click_uuid]);
         $logClick = LogClick::findByClickUuid($click_uuid);
-        if(empty($logClick)){
+        if (empty($logClick)) {
             $logClick = LogClick2::findByClickUuid($click_uuid);
         }
-        if(empty($logClick)){
+        if (empty($logClick)) {
             $this->echoMessage('can`t found click_uuid');
         }
         $sts = Deliver::findIdentity($logClick->campaign_id, $logClick->channel_id);
@@ -325,6 +325,8 @@ class CampaignController extends Controller
         if ($post->save() == false) {
             $this->echoMessage('save log post error');
             var_dump($post->getErrors());
+        } else {
+            $this->echoMessage('save success ' . $click_uuid);
         }
     }
 
