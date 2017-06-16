@@ -1,10 +1,15 @@
 <?php
+
 namespace console\controllers;
 
 use common\models\Campaign;
 use common\models\CampaignCreativeLink;
 use common\models\CampaignStsUpdate;
 use common\models\Deliver;
+use common\models\LogClick;
+use common\models\LogClick2;
+use common\models\LogFeed;
+use common\models\LogPost;
 use common\utility\MailUtil;
 use yii\console\Controller;
 
@@ -90,7 +95,7 @@ class CampaignController extends Controller
                 $camp = Campaign::findOne($item->campaign_id);
                 if (isset($camp)) {
                     $this->echoMessage('campaign update geo ' . $item->campaign_id);
-                    $camp ->target_geo = $item->value;
+                    $camp->target_geo = $item->value;
                     $camp->save();
                 }
                 $item->is_effected = 1;
@@ -104,9 +109,9 @@ class CampaignController extends Controller
                 $camp = Campaign::findOne($item->campaign_id);
                 $old_creative_link = CampaignCreativeLink::getCampaignCreativeLinksById($item->campaign_id);
                 $new_creative_link = json_decode($item->value);
-                if(!empty($new_creative_link)){
-                    $flag = CampaignCreativeLink::updateCreativeLinks($old_creative_link,$new_creative_link,$item->campaign_id);
-                    if($flag){
+                if (!empty($new_creative_link)) {
+                    $flag = CampaignCreativeLink::updateCreativeLinks($old_creative_link, $new_creative_link, $item->campaign_id);
+                    if ($flag) {
                         $this->echoMessage('campaign update creative link ' . $item->campaign_id);
                         $item->is_effected = 1;
                         $item->save();
@@ -147,7 +152,7 @@ class CampaignController extends Controller
                                 $d->effect_time = $item->effect_time;
                                 $payout[$camp->id][] = $d;
                             }
-                        }else if ($item->name == 'update-geo') {
+                        } else if ($item->name == 'update-geo') {
                             foreach ($delivers as $d) {
                                 $d->oldValue = $item->old_value;
                                 $d->newValue = $item->value;
@@ -155,18 +160,18 @@ class CampaignController extends Controller
                                 $d->target_geo = $item->target_geo;
                                 $updateGeo[$camp->id][] = $d;
                             }
-                        }else if ($item->name == 'update-creative') {
+                        } else if ($item->name == 'update-creative') {
                             foreach ($delivers as $d) {
                                 $d->oldValue = $item->old_value;
                                 $new_links = json_decode($item->value);
                                 $str = array();
-                                foreach ($new_links as $link){
+                                foreach ($new_links as $link) {
                                     $creative_type = CampaignCreativeLink::getCreativeLinkValue($link->creative_type);
-                                    if(!empty($link->creative_type) && !empty($link->creative_link)){
-                                        array_push($str,$creative_type.':'.$link->creative_link);
+                                    if (!empty($link->creative_type) && !empty($link->creative_link)) {
+                                        array_push($str, $creative_type . ':' . $link->creative_link);
                                     }
                                 }
-                                $d->newValue = implode(";",$str);
+                                $d->newValue = implode(";", $str);
                                 $d->effect_time = $item->effect_time;
                                 $d->creative_link = $item->creative_link;
                                 $updateCreativeLink[$camp->id][] = $d;
@@ -294,4 +299,48 @@ class CampaignController extends Controller
     }
 
 
+    public function actionPost($click_uuid)
+    {
+        $logFeed = LogFeed::findOne(['click_uuid' => $click_uuid]);
+        $logClick = LogClick::findByClickUuid($click_uuid);
+        if(empty($logClick)){
+            $logClick = LogClick2::findByClickUuid($click_uuid);
+        }
+        if(empty($logClick)){
+            $this->echoMessage('can`t found click_uuid');
+        }
+        $sts = Deliver::findIdentity($logClick->campaign_id, $logClick->channel_id);
+        $post = new LogPost();
+        $post->click_uuid = $logFeed->click_uuid;
+        $post->click_id = $logFeed->click_id;
+        $post->channel_id = $logFeed->channel_id;
+        $post->campaign_id = $logFeed->campaign_id;
+        $post->pay_out = $logClick->pay_out;
+        $post->discount = $logClick->discount;
+        $post->daily_cap = $logClick->daily_cap;
+        $post->ch_subid = empty($logClick->ch_subid) ? '0' : $logClick->ch_subid;
+        $post->post_link = $this->genPostLink($sts->channel->post_back, $logClick->all_parameters);
+        //* 0:need to post, 1.posted
+        $post->post_status = 0;
+        if ($post->save() == false) {
+            $this->echoMessage('save log post error');
+            var_dump($post->getErrors());
+        }
+    }
+
+    private function genPostLink($postback, $allParams)
+    {
+        if (!empty($allParams)) {
+            $params = explode('&', $allParams);
+            foreach ($params as $item) {
+                $param = explode('=', $item);
+                $k = '{' . $param[0] . '}';
+                $v = $param[1];
+                $postback = str_replace($k, $v, $postback);
+            }
+        }
+
+        $this->echoMessage("generate url: " . $postback);
+        return $postback;
+    }
 }
