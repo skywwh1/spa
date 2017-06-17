@@ -51,14 +51,20 @@ class TestController extends Controller
         $now = time();
         echo date('Y-m-d\TH:i:s\Z', $now) . "\n";
 
-        $query = new Query();
-        $query->select('count(click_uuid)');
-        $query->from('log_click');
+//        $query = new Query();
+//        $query->select('*');
+//        $query->from('log_click');
+//        $query->where(['click_uuid'=>'59434bff139e459434bff13a86399162']);
+//        $query->limit(10);
+//        $query->orderBy('create_time desc');
+//
+//
+//
+//        $command = $query->createCommand(\Yii::$app->db2);
+//        var_dump($command->queryAll());
 
-
-
-        $command = $query->createCommand(\Yii::$app->db2);
-        var_dump($command->queryAll());
+        $rows = \Yii::$app->db->createCommand("select * from log_click where click_uuid='5942a8bf346665942a8bf34708328179'");
+        var_dump($rows->queryAll());
         die();
         echo date('Y-m-d\TH:i:s\Z', (time() - $now)) . "\n";
         die();

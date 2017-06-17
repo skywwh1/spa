@@ -34,7 +34,7 @@ class LogEvent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_uuid', 'auth_token', 'channel_id', 'event_name'], 'required'],
+            [['click_uuid', 'auth_token', 'channel_id', 'event_name'], 'safe'],
             [['channel_id', 'create_time', 'update_time', 'ip_long'], 'integer'],
             [['click_uuid', 'auth_token', 'event_name', 'event_value', 'ip'], 'string', 'max' => 255],
         ];
