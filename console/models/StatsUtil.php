@@ -773,16 +773,16 @@ class StatsUtil
                                     }
                                 }
 
-                                if (empty($check)){
+                                if (empty($check)) {
                                     $check = new LogAutoCheck();
-                                }else{
+                                } else {
                                     continue;
                                 }
 //                                var_dump($sts->channel->username);
                                 $check->campaign_id = $camp->id;
                                 $check->channel_id = $sts->channel_id;
                                 $check->campaign_name = $camp->campaign_name;
-                                $check->channel_name = (empty($sts->channel)?null:$sts->channel->username);
+                                $check->channel_name = (empty($sts->channel) ? null : $sts->channel->username);
                                 $check->match_cvr = $cvr;
                                 $check->match_install = $log->match_installs;
                                 $check->type = 1;
@@ -822,7 +822,8 @@ class StatsUtil
      * @param $start_time
      * @return int
      */
-    public function getBeforeTwoHours($start_time){
+    public function getBeforeTwoHours($start_time)
+    {
         $datetime = new \DateTime();
         $datetime->setTimestamp($start_time);
         echo $datetime->format('Y-m-d H:i:s');
@@ -864,7 +865,7 @@ class StatsUtil
                         $check->save();
                         echo "deliver pause-" . $log->campaign_id . "-" . $log->channel_id . PHP_EOL;
                     } else if ($cvr < 1.5) {
-                        echo "deliver discount-" . $log->campaign_id . "-" . $log->channel_id  . PHP_EOL;
+                        echo "deliver discount-" . $log->campaign_id . "-" . $log->channel_id . PHP_EOL;
                         $check->action = '99%discount';
                         $check->save();
                     }
@@ -890,7 +891,9 @@ class StatsUtil
             'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
             'count(*) clicks',
-            'count(distinct(fc.ip_long)) uclicks'
+            'count(distinct(fc.ip_long)) uclicks',
+            'avg(adv_price) adv_price',
+            'avg(pay_out) pay_out'
         ];
         $query = new Query();
         $query->select($select);
@@ -904,62 +907,33 @@ class StatsUtil
             'timestamp']);
         $query->orderBy('timestamp desc');
         //使用第二个数据库
-        $command = $query->createCommand(Yii::$app->db2->slave);
+        $command = $query->createCommand(Yii::$app->db2);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
         var_dump($rows);
+        if (!empty($rows)) {
+            $rows = json_decode(json_encode($rows));
+        } else {
+            return;
+        }
         foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            $uclicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-                if ($k == 'uclicks') {
-                    $uclicks = $v;
-                }
-            }
-            $hourly = CampaignLogHourly::findIdentity($campaign_id, $channel_id, $timestamp);
+
+            $hourly = CampaignLogHourly::findIdentity($item->campaign_id, $item->channel_id, $item->timestamp);
             if (empty($hourly)) {
                 $hourly = new CampaignLogHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->clicks = $clicks;
-                $hourly->unique_clicks = $uclicks;
+                $hourly->channel_id = $item->channel_id;
+                $hourly->campaign_id = $item->campaign_id;
+                $hourly->time = $item->timestamp;
+                $hourly->time_format = $item->time;
+                $hourly->clicks = $item->clicks;
+                $hourly->unique_clicks = $item->uclicks;
             } else {
-                $hourly->clicks += $clicks;
-                $hourly->unique_clicks += $uclicks;
+                $hourly->clicks += $item->clicks;
+                $hourly->unique_clicks += $item->uclicks;
             }
-            if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
-                $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
-                if (!empty($sts)) {
-                    if ($hourly->pay_out == 0) {
-                        $hourly->pay_out = $sts->pay_out;
-                    }
-                    if ($hourly->adv_price == 0) {
-                        $hourly->adv_price = $sts->campaign->adv_price;
-                    }
-                }
-            }
+            $hourly->pay_out = $item->pay_out;
+            $hourly->adv_price = $item->adv_price;
             echo $hourly->campaign_id . '-' . $hourly->channel_id . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
             if (!$hourly->save()) {
                 var_dump($hourly->getErrors());
@@ -979,13 +953,16 @@ class StatsUtil
             'FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00") time',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(' . $timestamp_select . ',"%Y-%m-%d %H:00")) timestamp',
             'count(*) clicks',
-            'count(distinct(fc.ip_long)) uclicks'
+            'count(distinct(fc.ip_long)) uclicks',
+            'avg(adv_price) adv_price',
+            'avg(pay_out) pay_out'
         ];
         $query = new Query();
         $query->select($select);
         $query->from($from);
         $query->where(['>=', $timestamp_select, $start_time]);
         $query->andWhere(['<', $timestamp_select, $end_time]);
+        $query->andWhere(['<>', 'fc.ch_subid', '0']);
 
 
         $query->groupBy(['fc.campaign_id',
@@ -995,68 +972,35 @@ class StatsUtil
         $query->orderBy('timestamp desc');
 
         //使用第二个数据库
-        $command = $query->createCommand(Yii::$app->db2->slave);
+        $command = $query->createCommand(Yii::$app->db2);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
-        var_dump($rows);
+
+        if (!empty($rows)) {
+            $rows = json_decode(json_encode($rows));
+        } else {
+            return;
+        }
         foreach ($rows as $item) {
-            $channel_id = '';
-            $campaign_id = '';
-            $sub_channel_id = '';
-            $timestamp = '';
-            $time = '';
-            $clicks = '';
-            $uclicks = '';
-            foreach ($item as $k => $v) {
-                if ($k == 'channel_id') {
-                    $channel_id = $v;
-                }
-                if ($k == 'campaign_id') {
-                    $campaign_id = $v;
-                }
-                if ($k == 'ch_subid') {
-                    $sub_channel_id = $v;
-                }
-                if ($k == 'timestamp') {
-                    $timestamp = $v;
-                }
-                if ($k == 'time') {
-                    $time = $v;
-                }
-                if ($k == 'clicks') {
-                    $clicks = $v;
-                }
-                if ($k == 'uclicks') {
-                    $uclicks = $v;
-                }
-            }
-            $hourly = CampaignLogSubChannelHourly::findIdentity($campaign_id, $channel_id, $sub_channel_id, $timestamp);
+            $hourly = CampaignLogSubChannelHourly::findIdentity($item->campaign_id, $item->channel_id,$item->ch_subid, $item->timestamp);
             if (empty($hourly)) {
                 $hourly = new CampaignLogSubChannelHourly();
-                $hourly->channel_id = $channel_id;
-                $hourly->campaign_id = $campaign_id;
-                $hourly->sub_channel = $sub_channel_id;
-                $hourly->time = $timestamp;
-                $hourly->time_format = $time;
-                $hourly->clicks = $clicks;
-                $hourly->unique_clicks = $uclicks;
+                $hourly->channel_id = $item->channel_id;
+                $hourly->campaign_id = $item->campaign_id;
+                $hourly->time = $item->timestamp;
+                $hourly->time_format = $item->time;
+                $hourly->sub_channel = $item->ch_subid;
+                $hourly->clicks =$item->clicks;
+                $hourly->unique_clicks =$item->uclicks;
             } else {
-                $hourly->clicks += $clicks;
-                $hourly->unique_clicks += $uclicks;
+                $hourly->clicks += $item->clicks;
+                $hourly->unique_clicks += $item->uclicks;
             }
-            if ($hourly->pay_out == 0 || $hourly->adv_price == 0) {
-                $sts = Deliver::findIdentity($hourly->campaign_id, $hourly->channel_id);
-                if (!empty($sts)) {
-                    if ($hourly->pay_out == 0) {
-                        $hourly->pay_out = $sts->pay_out;
-                    }
-                    if ($hourly->adv_price == 0) {
-                        $hourly->adv_price = $sts->campaign->adv_price;
-                    }
-                }
-            }
-            echo $hourly->campaign_id . '-' . $hourly->channel_id .$hourly->sub_channel. '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
+
+            $hourly->pay_out = $item->pay_out;
+            $hourly->adv_price = $item->adv_price;
+            echo $hourly->campaign_id . '-' . $hourly->channel_id . $hourly->sub_channel . '-' . $hourly->time_format . '-' . $hourly->clicks . '-' . $hourly->unique_clicks . "\n";
             if (!$hourly->save()) {
                 var_dump($hourly->getErrors());
             }

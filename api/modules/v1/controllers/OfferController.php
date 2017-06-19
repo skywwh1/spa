@@ -68,6 +68,7 @@ class OfferController extends ActiveController
 
         ]);
         $query->where(['channel_id' => \Yii::$app->user->getId()]);
+        $query->andWhere(['status' => 1]);
         $query->orderBy('create_time DESC');
         return $dataProvider;
     }
