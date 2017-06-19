@@ -77,9 +77,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'is_effected',
                 'value' => function ($model) {
-                    return ModelsUtil::getRedirectStatus($model->is_effected);
+                    return ModelsUtil::getPausedStatus($model->is_effected);
                 },
-                'filter' => ModelsUtil::redirect_status,
+                'filter' => ModelsUtil::pause_status,
             ],
             //[
                 // 'label' => 'name',
