@@ -49,8 +49,14 @@ class TestController extends Controller
     {
 
         $now = time();
-        echo date('Y-m-d\TH:i:s\Z', $now) . "\n";
+        $hourly = date('Y-m-d H:00', 1497855300);
+        $aa = strtotime('20170601');
+        $hourly_aa = date('Y-m-d H:i', $aa);
+        echo $hourly . "\n";
+        echo $aa. "\n";
+        echo $hourly_aa. "\n";
 
+        die();
 //        $query = new Query();
 //        $query->select('*');
 //        $query->from('log_click');

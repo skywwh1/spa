@@ -11,6 +11,7 @@ use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
+use common\models\LogClickCount;
 use common\models\LogEvent;
 use common\models\RedirectLog;
 use common\models\Stream;
@@ -98,7 +99,8 @@ class StreamController extends Controller
 
     public function actionTrack()
     {
-        $model = new Stream();
+        $click = new LogClick();
+
         $data = Yii::$app->request->getQueryParams();
         $allParameters = '';
         if (!empty($data)) {
@@ -108,17 +110,18 @@ class StreamController extends Controller
             $allParameters = chop($allParameters, '&');
         }
         if (!empty($allParameters)) {
-            $model->all_parameters = $allParameters;
+            $click->all_parameters = $allParameters;
+
         }
-        $model->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000);
-        $model->click_id = isset($data['click_id']) ? $data['click_id'] : 0;
-        $model->ch_id = isset($data['ch_id']) ? $data['ch_id'] : 0;
-        $model->pl = isset($data['pl']) ? $data['pl'] : 0;
-        $model->cp_uid = isset($data['cp_uid']) ? $data['cp_uid'] : 0;
-        $model->ch_subid = isset($data['ch_subid']) ? $data['ch_subid'] : 0;
-        $model->gaid = isset($data['gaid']) ? $data['gaid'] : 0;
-        $model->idfa = isset($data['idfa']) ? $data['idfa'] : 0;
-        $model->site = isset($data['site']) ? $data['site'] : 0;
+        $click->click_uuid = uniqid() . uniqid() . mt_rand(1, 1000000);
+        $click->click_id = isset($data['click_id']) ? $data['click_id'] : 0;
+        $click->channel_id = isset($data['ch_id']) ? $data['ch_id'] : 0;
+        $click->pl = isset($data['pl']) ? $data['pl'] : 0;
+        $click->campaign_uuid = isset($data['cp_uid']) ? $data['cp_uid'] : 0;
+        $click->ch_subid = isset($data['ch_subid']) ? $data['ch_subid'] : 0;
+        $click->gaid = isset($data['gaid']) ? $data['gaid'] : 0;
+        $click->idfa = isset($data['idfa']) ? $data['idfa'] : 0;
+        $click->site = isset($data['site']) ? $data['site'] : 0;
 //        $clientIpAddress = Yii::$app->request->getUserIP();
         if (isset($_SERVER['HTTP_X_FORWARDED_FOR']) && $_SERVER['HTTP_X_FORWARDED_FOR']) {
             $clientIpAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -129,12 +132,14 @@ class StreamController extends Controller
         } else {
             $clientIpAddress = $_SERVER['REMOTE_ADDR'];
         }
-        $model->ip = $clientIpAddress;
-        $code = $this->restrictionTrack($model);
+        $click->ip = $clientIpAddress;
+        $click->ip_long = ip2long($click->ip);
+        $code = $this->restrictionTrack($click);
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
-        return $this->redirect($model->redirect);
+        $click->save();
+        return $this->redirect($click->redirect);
     }
 
     public function actionFeed()
@@ -175,20 +180,20 @@ class StreamController extends Controller
     /**
      * 替换广告组的参数，目前只有 click_id 和ch_id
      * @param Campaign $camp
-     * @param Stream $model
+     * @param LogClick $click
      * @return string
      * @internal param $click_uuid
      * @internal param $ch_id
      */
-    private function genAdvLink($camp, $model)
+    private function genAdvLink($camp, $click)
     {
         $paras = array(
-            'click_id' => $model->click_uuid,
-            'ch_id' => $model->ch_id,
-            'idfa' => $model->idfa === 0 ? '' : $model->idfa,
-            'gaid' => $model->gaid === 0 ? '' : $model->gaid,
-            'site' => $model->site,
-            'ch_subid' => $model->ch_subid
+            'click_id' => $click->click_uuid,
+            'ch_id' => $click->channel_id,
+            'idfa' => $click->idfa === 0 ? '' : $click->idfa,
+            'gaid' => $click->gaid === 0 ? '' : $click->gaid,
+            'site' => $click->site,
+            'ch_subid' => $click->ch_subid
         );
 
         $link = $camp->adv_link;
@@ -207,31 +212,27 @@ class StreamController extends Controller
             $post_param = str_replace('{site}', $paras['site'], $post_param);
             $link .= $post_param;
         } else {
-            $link .= 'click_id=' . $model->click_uuid; //默认
+            $link .= 'click_id=' . $click->click_uuid; //默认
         }
 
         return $link;
     }
 
     /**
-     * @param Stream $model
+     * @param LogClick $click
      * @return int
      * @throws \yii\base\InvalidConfigException
      * @internal param Campaign $campaign
      * @internal param Deliver $deliver
      */
-    private function restrictionTrack(&$model)
+    private function restrictionTrack(&$click)
     {
-        //1.参数 click id，ch_id
-//        $code = 200;
-        if (!$model->validate() && $model->hasErrors()) {
-            return 404;
-        }
-        $campaign = Campaign::findByUuid($model->cp_uid);
+
+        $campaign = Campaign::findByUuid($click->campaign_uuid);
         if ($campaign === null) {
             return 500;
         }
-        $deliver = Deliver::findIdentity($campaign->id, $model->ch_id);
+        $deliver = Deliver::findIdentity($campaign->id, $click->channel_id);
         if ($deliver === null) {
             return 500;
         }
@@ -255,7 +256,7 @@ class StreamController extends Controller
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
             $Info = \Yii::createObject([
                 'class' => '\rmrevin\yii\geoip\HostInfo',
-                'host' => $model->ip, // some host or ip
+                'host' => $click->ip, // some host or ip
             ]);
             $geo = $Info->getCountryCode();   // US
             if (strpos($target, $geo) === false) {
@@ -264,49 +265,29 @@ class StreamController extends Controller
         }
 
         //正常0
-        $model->adv_price = $campaign->adv_price;
-        $model->pay_out = $deliver->pay_out;
-        $model->daily_cap = $deliver->daily_cap;
-        $model->discount = $deliver->discount;
-        $link = $this->genAdvLink($campaign, $model);
-        $model->redirect = $link;
-        $model->is_count = 1;
-//        $model->save();
-
-        $click = new LogClick();
-        $click->click_uuid = $model->click_uuid;
-        $click->click_id = $model->click_id;
-        $click->channel_id = $model->ch_id;
         $click->campaign_id = $campaign->id;
-        $click->campaign_uuid = $model->cp_uid;
-        $click->pl = $model->pl;
-        $click->ch_subid = $model->ch_subid;
-        $click->gaid = $model->gaid;
-        $click->idfa = $model->idfa;
-        $click->site = $model->site;
-        $click->adv_price = $model->adv_price;
-        $click->pay_out = $model->pay_out;
-        $click->discount = $model->discount;
-        $click->daily_cap = $model->daily_cap;
-        $click->all_parameters = $model->all_parameters;
-        $click->ip = $model->ip;
-        $click->ip_long = ip2long($click->ip);
-        $click->redirect = $model->redirect;
-        $click->browser = empty($model->browser) ? 0 : $model->browser;
-        $click->browser_type = empty($model->browser_type) ? 0 : $model->browser_type;
+        $click->adv_price = $campaign->adv_price;
+        $click->pay_out = $deliver->pay_out;
+        $click->daily_cap = $deliver->daily_cap;
+        $click->discount = $deliver->discount;
+        $link = $this->genAdvLink($campaign, $click);
+        $click->redirect = $link;
         $click->click_time = time();
-        $click->save();
+
+        if (!$click->validate() && $click->hasErrors()) {
+            return 404;
+        }
 
         //是否导量
         if ($deliver->is_redirect) {
-            $redirect = RedirectLog::findIsActive($campaign->id, $model->ch_id);
+            $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
             if (isset($redirect)) {
                 $redirectCam = $redirect->campaignIdNew;
-                $redirectLink = $this->genAdvLink($redirectCam, $model);
-                $model->redirect = $redirectLink;
+                $redirectLink = $this->genAdvLink($redirectCam, $click);
+                $click->redirect = $redirectLink;
             }
         }
-
+        $this->countClick($click);
 
         return 200;
     }
@@ -443,5 +424,20 @@ class StreamController extends Controller
         return $code;
     }
 
+    /**
+     * @param LogClick $logClick
+     */
+    private function countClick($logClick)
+    {
+        $hourly_str = date('Y-m-d H:00', $logClick->click_time);
+        $hourly = strtotime($hourly_str);
+        $clickCount = LogClickCount::findCampaignClick($logClick->campaign_id, $logClick->channel_id, $hourly);
+        $clickCount->clicks += 1;
+        $ip = LogClick::findOne(['campaign_id' => $logClick->campaign_id, 'channel_id' => $logClick->channel_id, 'ip_long' => $logClick->ip_long]);
+        if (empty($ip)) {
+            $clickCount->unique_clicks += 1;
+        }
+        $clickCount->save();
+    }
 
 }
