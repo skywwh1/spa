@@ -153,6 +153,7 @@ class MiDirect
                 for ($i = 2; $i <= $totalPage; $i++) {
                     $url = str_replace('{page}', $i, $old_url);
                     $url = $this->signUrl($url, $data->key);
+                    echo "url " . $url . "\n";
                     $curl = new Curl();
                     $response = $curl->get($url);
                     $response = json_decode($response);
