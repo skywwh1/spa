@@ -120,6 +120,8 @@ AdminAsset::register($this);
                                 Log</a></li>
                         <li><a href="/campaign-sts-update/index" data-menu="campaign-sts-update-index"><i class="fa fa-circle-o"></i>Payout Log
                                 </a></li>
+                        <li><a href="/campaign-sub-channel-log/index" data-menu="campaign-sub-channel-log-index"><i class="fa fa-circle-o"></i>Sub Pause
+                                Log</a></li>
                     </ul>
                 </li>
                 <li class="treeview">
