@@ -7,6 +7,8 @@ use backend\models\ViewAdvertiserAuthToken;
 use backend\models\ViewClickLog;
 use backend\models\ViewFeedLog;
 use common\models\Campaign;
+use common\models\CampaignSubChannelLog;
+use common\models\CampaignSubChannelLogRedirect;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
@@ -242,6 +244,14 @@ class StreamController extends Controller
         if ($campaign->status !== 1) {
             return 403;
         }
+
+        //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
+        if (!empty($model->ch_subid)){
+            $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $model->ch_id,'sub_channel' => $model->ch_subid]);
+            if (!empty($sub_channel)){
+                return 405;
+            }
+        }
         /**
          * test link
          */
@@ -307,7 +317,16 @@ class StreamController extends Controller
             }
         }
 
+        //子渠道是否导量
+        if (!empty($model->ch_subid)){
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $model->ch_id,$model->ch_subid);
 
+            if (!empty($sub_redirect)){
+                $redirectCam = $sub_redirect->campaignIdNew;
+                $redirectLink = $this->genAdvLink($redirectCam, $model);
+                $model->redirect = $redirectLink;
+            }
+        }
         return 200;
     }
 
@@ -357,6 +376,7 @@ class StreamController extends Controller
             402 => 'IP address not allow',
             403 => 'Campaign paused',
             404 => 'Missing parameters',
+            405 => 'Publisher paused',
             500 => 'Can`t found the campaign',
             501 => 'Your country is not allow!',
         );

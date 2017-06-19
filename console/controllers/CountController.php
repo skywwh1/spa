@@ -23,6 +23,7 @@ use backend\models\FinancePending;
 use backend\models\LogClick3;
 use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\CampaignSubChannelLogRedirect;
 use common\models\Channel;
 use common\models\Config;
 use common\models\Deliver;
@@ -194,6 +195,13 @@ class CountController extends Controller
                             $logFeed->adv_price = $redirect->campaignIdNew->adv_price;
                         }
                     }
+                    if (!empty($logClick->ch_subid)){
+                        $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($logClick->campaign_id, $logClick->channel_id,$logClick->ch_subid);
+                        if (isset($sub_redirect)) {
+                            $logFeed->adv_price = $sub_redirect->campaignIdNew->adv_price;
+                        }
+                    }
+
                     $logFeed->feed_time = $item->create_time;
                     $logFeed->is_redirect = $sts->is_redirect;
                     if ($logFeed->save() == false) {
@@ -201,7 +209,7 @@ class CountController extends Controller
                         var_dump($logFeed->getErrors());
                     } else {
                         //更新post 扣量
-                        if ($this->isNeedPost($sts)) {
+                        if ($this->isNeedPost($sts,$logClick->ch_subid)) {
                             $post = new LogPost();
                             $post->click_uuid = $logFeed->click_uuid;
                             $post->click_id = $logFeed->click_id;
@@ -235,9 +243,30 @@ class CountController extends Controller
      * @param Deliver $sts
      * @return bool
      */
-    private function isNeedPost(&$sts)
+    private function isNeedPost(&$sts,$ch_subid)
     {
         $needPost = false;
+
+        if (!empty($ch_subid)){
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($sts->campaign_id, $sts->channel_id,$ch_subid);
+            if (isset($sub_redirect)) {
+                $standard = 100 - $sub_redirect->discount;
+                $numerator = $sub_redirect->discount_numerator + 1;//分子
+                $denominator = $sub_redirect->discount_denominator + 1;//扣量基数
+                $percent = ($numerator / $denominator) * 100;
+                if ($percent < $standard) {
+                    $needPost = true;
+                    $sub_redirect->discount_numerator = $numerator;
+                }
+                $sub_redirect->discount_denominator = $denominator;
+                if ($sub_redirect->discount_denominator >= 10) {
+                    $sub_redirect->discount_denominator = 0;
+                    $sub_redirect->discount_numerator = 0;
+                }
+                $sub_redirect->save();
+            }
+        }
+
         if ($sts->is_redirect) {
             $redirect = RedirectLog::findIsActive($sts->campaign_id, $sts->channel_id);
             $standard = 100 - $redirect->discount;

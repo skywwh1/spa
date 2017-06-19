@@ -349,4 +349,33 @@ class MailUtil
         }
     }
 
+    /**
+     * @param $sts
+     * @return bool
+     */
+    public static function pauseSubChannel($sts)
+    {
+        $channel = Channel::findIdentity($sts->channel_id);
+        $mail = Yii::$app->mailer->compose('pause_sub_channel', ['sub_log' => $sts]);
+        $mail->setTo($channel->email);
+//        $mail->setTo("2539131080@qq.com");
+        $cc = array($channel->om0->email);
+        if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
+            $cc = array_merge($cc, explode(';', $channel->cc_email));
+        }
+        $mail->setCc($cc);
+        $mail->setSubject('Pausing Sub Publisher - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'pause sub publisher', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }

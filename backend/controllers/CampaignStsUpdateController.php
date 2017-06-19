@@ -4,7 +4,9 @@ namespace backend\controllers;
 
 use common\models\Campaign;
 use common\models\CampaignCreativeLink;
+use common\models\CampaignSubChannelLog;
 use common\models\Deliver;
+use common\utility\MailUtil;
 use Yii;
 use common\models\CampaignStsUpdate;
 use common\models\CampaignStsUpdateSearch;
@@ -45,6 +47,7 @@ class CampaignStsUpdateController extends Controller
                             'update-geo',
                             'index',
                             'update-creative',
+                            'sub-pause',
 //                            'view',
 //                            'delete',
 //                            'testlink',
@@ -398,6 +401,37 @@ class CampaignStsUpdateController extends Controller
                 'modelsLink' => (empty($modelsLinkOld)) ? [new CampaignCreativeLink] : $modelsLinkOld
             ]);
         }
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @return string|\yii\web\Response
+     */
+    public function actionSubPause($campaign_id, $channel_id)
+    {
+        $this->layout = false;
+        $model = new CampaignSubChannelLog();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->name = 'sub-pause';
+            $model->creator = Yii::$app->user->id;
+            $model->is_effected = 0;//默认不生效
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
+
+            if ($model->is_send == 1){
+                MailUtil::pauseSubChannel($model);
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            return $this->renderAjax('sub_pause', [
+                'model' => $model,
+            ]);
+        }
+
     }
 
 }
