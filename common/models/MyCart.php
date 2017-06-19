@@ -95,12 +95,13 @@ class MyCart extends \yii\db\ActiveRecord
     {
         $query = new Query();
         $rows = $query
-            ->select(['b.campaign_uuid'])
+            ->select(['CONCAT(b.id,"-",b.campaign_uuid) campaign_uuid','b.id as campaign_id'])
             ->from('my_cart a ')
             ->leftJoin('campaign b','a.campaign_id = b.id')
             ->where(['a.id' => $keys])
             ->all();
-
+//        $data = static::find()->select(['id', 'CONCAT(id,"-",campaign_uuid) campaign_uuid'])->where(['like', 'campaign_uuid', $uuid])->orWhere(['like', 'id', $uuid])->andWhere(['status' => 1])->limit(20)->all();
+//        $out['results'] = array_values($data);
         return $rows;
     }
 }
