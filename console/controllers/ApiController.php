@@ -28,8 +28,8 @@ class ApiController extends Controller
         $headWay = new HeadWay();
         $headWay->getApiCampaign();
 
-        $vista = new Movista();
-        $vista->getApiCampaign();
+//        $vista = new Movista();
+//        $vista->getApiCampaign();
 
 //        $yeah = new Yeahmobi();
 //        $yeah->getApiCampaign();
