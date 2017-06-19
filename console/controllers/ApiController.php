@@ -40,8 +40,8 @@ class ApiController extends Controller
 //        $yeah = new Mi();
 //        $yeah->getApiCampaign();
 
-        $yeah = new MiDirect();
-        $yeah->getApiCampaign();
+//        $yeah = new MiDirect();
+//        $yeah->getApiCampaign();
 
 //        $yeah = new Yeahmobi2();
 //        $yeah->getApiCampaign();
