@@ -13,7 +13,7 @@ use common\models\ApplyCampaign;
 class ApplyCampaignSearch extends ApplyCampaign
 {
     public function attributes(){
-        return array_merge(parent::attributes(),['channelName','campaignName','om']);
+        return array_merge(parent::attributes(),['channelName','campaignName','om','advertiser']);
     }
     /**
      * @inheritdoc
@@ -22,7 +22,7 @@ class ApplyCampaignSearch extends ApplyCampaign
     {
         return [
             [['campaign_id', 'channel_id', 'status', 'create_time'], 'integer'],
-            [['channelName','campaignName','om'], 'safe'],
+            [['channelName','campaignName','om','advertiser'], 'safe'],
         ];
     }
 
@@ -75,6 +75,8 @@ class ApplyCampaignSearch extends ApplyCampaign
 
         $query->join('INNER JOIN','campaign','apply_campaign.campaign_id = campaign.id');
         $query->andFilterWhere(['like','campaign.campaign_name',$this->campaignName]);
+        $query->join('left JOIN','advertiser','campaign.advertiser = advertiser.id');
+        $query->andFilterWhere(['like','advertiser.username',$this->advertiser]);
 
         $query->orderBy('create_time DESC');
 

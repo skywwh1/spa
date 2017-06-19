@@ -34,8 +34,10 @@ Modal::end(); ?>
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],
 
-                            //  'campaign.campaign_name',
+                            // 'campaign.campaign_name',
                             //'channel.username',
+                            'campaign_id',
+                            ['attribute' => 'advertiser',  'value' => 'campaign.advertiser0.username' ],
                             ['attribute' => 'campaignName',  'value' => 'campaign.campaign_name' ],
                             ['attribute' => 'channelName',  'value' => 'channel.username' ],
                             [

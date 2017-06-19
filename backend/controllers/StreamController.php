@@ -7,6 +7,8 @@ use backend\models\ViewAdvertiserAuthToken;
 use backend\models\ViewClickLog;
 use backend\models\ViewFeedLog;
 use common\models\Campaign;
+use common\models\CampaignSubChannelLog;
+use common\models\CampaignSubChannelLogRedirect;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\IpTable;
@@ -243,6 +245,14 @@ class StreamController extends Controller
         if ($campaign->status !== 1) {
             return 403;
         }
+
+        //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
+        if (!empty($click->ch_subid)) {
+            $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $click->channel_id, 'sub_channel' => $click->ch_subid]);
+            if (!empty($sub_channel)) {
+                return 405;
+            }
+        }
         /**
          * test link
          */
@@ -283,6 +293,17 @@ class StreamController extends Controller
             $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
             if (isset($redirect)) {
                 $redirectCam = $redirect->campaignIdNew;
+                $redirectLink = $this->genAdvLink($redirectCam, $click);
+                $click->redirect = $redirectLink;
+            }
+        }
+
+        //子渠道是否导量
+        if (!empty($click->ch_subid)) {
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
+
+            if (!empty($sub_redirect)) {
+                $redirectCam = $sub_redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
             }
@@ -338,6 +359,7 @@ class StreamController extends Controller
             402 => 'IP address not allow',
             403 => 'Campaign paused',
             404 => 'Missing parameters',
+            405 => 'Publisher paused',
             500 => 'Can`t found the campaign',
             501 => 'Your country is not allow!',
         );

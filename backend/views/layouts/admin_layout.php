@@ -44,6 +44,21 @@ AdminAsset::register($this);
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <?php
+                            $data = \common\models\ApplyCampaign::find()->leftJoin('channel','apply_campaign.channel_id = channel.id')->andFilterWhere(['channel.om' =>yii::$app->user->id])->andFilterWhere(['apply_campaign.status' => 1])->all();
+                            $count = count($data);
+                             echo '<span class="label label-warning">'.$count.'</span>';
+                            ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php
+                            echo '<li class="header">You have '. $count.' applying offers</li>';
+                            ?>
+                        </ul>
+                    </li>
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -100,6 +115,8 @@ AdminAsset::register($this);
                         <li><a href="/deliver/index" data-menu="deliver_index"><i class="fa fa-circle-o"></i>S2S Log</a>
                         </li>
                         <li><a href="/redirect-log/index" data-menu="redirect-log-index"><i class="fa fa-circle-o"></i>Redirect
+                                Log</a></li>
+                        <li><a href="/campaign-sub-channel-log-redirect/index" data-menu="campaign-sub-channel-log-redirect-index"><i class="fa fa-circle-o"></i>Sub Redirect
                                 Log</a></li>
                         <li><a href="/campaign-sts-update/index" data-menu="campaign-sts-update-index"><i class="fa fa-circle-o"></i>Payout Log
                                 </a></li>
@@ -207,6 +224,8 @@ AdminAsset::register($this);
                                 Installs</a></li>
                         <li><a href="/log-post/index" data-menu="log-post-index"><i class="fa fa-circle-o"></i> Installs</a>
                         </li>
+                        <li><a href="/channel-quality-report/index" data-menu="channel-quality-report-index"><i class="fa fa-circle-o"></i>
+                                Channel Quality Reports</a></li>
                     </ul>
                 </li>
 

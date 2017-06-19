@@ -10,6 +10,8 @@ use common\models\ChannelBlack;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
+use common\models\MyCart;
+use common\models\MyCartSearch;
 use common\models\Stream;
 use linslin\yii2\curl\Curl;
 use Yii;
@@ -51,6 +53,7 @@ class DeliverController extends Controller
                             'pause',
                             'go-create',
                             'second',
+                            'sts',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -96,7 +99,22 @@ class DeliverController extends Controller
      */
     public function actionCreate()
     {
+        $my_cart = new MyCartSearch();
+        if ($my_cart->load(Yii::$app->request->post())){
+            $campaign_uuid = MyCart::getSelectCampaign($my_cart->campaign_uuid);
+            $array = [];
+            foreach($campaign_uuid as $item){
+                $array[] = $item['campaign_uuid'];
+            }
+            $model = new StsForm();
+            var_dump($array);
+            $model->campaign_uuid = $array;
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }
         $model = new StsForm();
+
         if ($model->load(Yii::$app->request->post())) {
             $delivers = [];
             $blackChannels = [];
@@ -180,29 +198,29 @@ class DeliverController extends Controller
     public function actionGoCreate()
     {
         $model = new StsForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $delivers = [];
-            foreach ($model->campaign_uuid as $campaign_id) {
-                foreach ($model->channel as $channel_id) {
-                    $deliver = new Deliver();
-                    $deliver->campaign_id = $campaign_id;
-                    $deliver->channel_id = $channel_id;
-                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
-                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
-                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
-                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
-                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
-                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
-                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
-                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
-                    $delivers[] = $deliver;
-                }
-            }
-
-            return  $this->render('second', [
-                'delivers' => $delivers,
-            ]);
-        }
+//        if ($model->load(Yii::$app->request->post())) {
+//            $delivers = [];
+//            foreach ($model->campaign_uuid as $campaign_id) {
+//                foreach ($model->channel as $channel_id) {
+//                    $deliver = new Deliver();
+//                    $deliver->campaign_id = $campaign_id;
+//                    $deliver->channel_id = $channel_id;
+//                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+//                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+//                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+//                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+//                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+//                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+//                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+//                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+//                    $delivers[] = $deliver;
+//                }
+//            }
+//
+//            return  $this->render('second', [
+//                'delivers' => $delivers,
+//            ]);
+//        }
         return $this->render('create', [
             'model' => $model,
         ]);
@@ -405,5 +423,29 @@ class DeliverController extends Controller
         return $this->render('test_link', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Select  MyCart columns.
+     * @return mixed
+     */
+    public function actionSts($keylist)
+    {
+        if (isset($keylist)) {
+            $campaign_uuid = MyCart::getSelectCampaign($keylist);
+            $array = [];
+            foreach($campaign_uuid as $item){
+                $array[] = $item['campaign_uuid'];
+            }
+            $model = new StsForm();
+            var_dump($array);
+            $model->campaign_uuid = $array;
+//            var_dump($model->campaign_uuid);
+            return $this->render('create', [
+                'model' => $model,
+            ]);
+        }else{
+            var_dump('please select first!');
+        }
     }
 }

@@ -63,6 +63,23 @@ $columns = [
 //        'pageSummary' => 'Page Total',
 //    ],
     [
+        'class' => 'kartik\grid\ActionColumn',
+        'template' => '{all}',
+        'header' => 'Action',
+        'buttons' => [
+            'all' => function ($url, $model, $key) use ($searchModel){
+                $model = (object)$model;
+                return '<div class="dropdown">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+          <span class="caret"></span></button>
+          <ul class="dropdown-menu">
+          <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
+          </ul>
+        </div>';
+            },
+        ],
+    ],
+    [
         'label' => 'Channel',
         'attribute' => 'channel_name',
         'value' => 'channel_name',

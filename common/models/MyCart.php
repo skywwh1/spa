@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\db\Query;
 
 /**
  * This is the model class for table "mycart".
@@ -84,5 +85,22 @@ class MyCart extends \yii\db\ActiveRecord
     public function getCampaign()
     {
         return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @param $keys
+     * @return mixed
+     */
+    public static function getSelectCampaign($keys)
+    {
+        $query = new Query();
+        $rows = $query
+            ->select(['b.campaign_uuid'])
+            ->from('my_cart a ')
+            ->leftJoin('campaign b','a.campaign_id = b.id')
+            ->where(['a.id' => $keys])
+            ->all();
+
+        return $rows;
     }
 }

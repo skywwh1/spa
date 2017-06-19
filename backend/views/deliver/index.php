@@ -39,10 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                       <li><a data-view="0" data-url="/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/sub-pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Paused</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Cap</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Payout</a></li>
                                       <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sub-channel-log-redirect/create?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Redirect</a></li>
                                       </ul>
                                     </div>';
                                 },
