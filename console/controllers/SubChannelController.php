@@ -21,7 +21,7 @@ use yii\console\Controller;
  * Date: 1/15/2017
  * Time: 3:39 PM
  */
-class CampaignController extends Controller
+class SubChannelController extends Controller
 {
 
     public function actionUpdate()
