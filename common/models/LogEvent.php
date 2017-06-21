@@ -75,14 +75,12 @@ class LogEvent extends \yii\db\ActiveRecord
 
     /**
      * @param $start
-     * @param $end
      * @return LogEvent[]
      */
-    public static function findByTime($start, $end)
+    public static function findByTime($start)
     {
         $records = static::find()
             ->where(['>=', 'create_time', $start])
-            ->andWhere(['<', 'create_time', $end])
             ->andWhere(['is_count' => 0])
             ->all();
         return $records;

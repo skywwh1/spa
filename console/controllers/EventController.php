@@ -28,29 +28,20 @@ class EventController extends Controller
     {
 
         $start = Config::findLastEventHourly();
-        $end = $start;
-        $now = time();
-        while ($end < $now) {
-            $end = $end + 900;
-            if ($end > $now) {
-                $end = $now;
-            }
-            echo 'start event hourly ' . $start . "\n";
-            echo 'end event hourly ' . $end . "\n";
-            echo date('Y-m-d H:i:s', $end) . "\n";
-            $this->statistic($start, $end);
+        $end = time();
+        echo 'start event hourly ' . $start . "\n";
+        echo 'end event hourly ' . $end . "\n";
+        echo date('Y-m-d H:i:s', $end) . "\n";
+        $this->statistic($start);
 
-            $start = $end;
-        }
-        //统计子渠道：
-
-        Config::updateLastEventHourly($now);
+        Config::updateLastEventHourly($end);
     }
 
-    private function statistic($start, $end)
+    private function statistic($start)
     {
-        $events = LogEvent::findByTime($start, $end);
+        $events = LogEvent::findByTime($start);
         foreach ($events as $item) {
+            $this->echoMessage('event: ' . $item->click_uuid);
             $logClick = LogClick::findByClickUuid($item->click_uuid);
             if (empty($logClick)) {
                 $logClick = LogClick2::findByClickUuid($item->click_uuid);
@@ -58,7 +49,7 @@ class EventController extends Controller
             if (!empty($logClick)) {
                 $time_str = date('Y-m-d H:00', $item->create_time);
                 $time = strtotime($time_str);
-
+                $this->echoMessage('hourly ' . $time_str);
                 $hourly = LogEventHourly::findOne(['campaign_id' => $logClick->campaign_id, 'channel_id' => $logClick->channel_id, 'time' => $time, 'event' => $item->event_name]);
                 if (empty($hourly)) {
                     $hourly = new LogEventHourly();
