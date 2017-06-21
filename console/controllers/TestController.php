@@ -23,6 +23,7 @@ use common\models\LogClick3;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
+use console\models\Affle;
 use console\models\Glispa;
 use console\models\Mi;
 use console\models\Movista;
@@ -48,15 +49,17 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $aa = new Affle();
+        $aa->getApiCampaign();
 
-        $redis = Yii::$app->redis;
+/*        $redis = Yii::$app->redis;
 //        $result = $redis->executeCommand('hmset', ['test_collection', 'key1', 'val1', 'key2', 'val2']);
         $result = $redis->executeCommand('hmset', ['aa', 'bb', 'val1', 'key2', 'val2']);
 //        var_dump($result);
         $var2 = Yii::$app->redis->keys("*");
         $source = Yii::$app->redis->hgetall('aa');
         var_dump($var2);
-        var_dump($source);
+        var_dump($source);*/
         die();
 
         $now = time();
