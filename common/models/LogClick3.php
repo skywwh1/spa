@@ -38,13 +38,13 @@ class LogClick3 extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'log_click';
+        return 'log_click_2';
     }
 
-    public static function getDb()
-    {
-        return Yii::$app->get('db3');
-    }
+//    public static function getDb()
+//    {
+//        return Yii::$app->get('db3');
+//    }
 
 
     /**

@@ -12,6 +12,7 @@ namespace console\controllers;
 use common\models\Config;
 use common\models\LogClick;
 use common\models\LogClick2;
+use common\models\LogClick3;
 use common\models\LogEvent;
 use common\models\LogEventHourly;
 use yii\console\Controller;
@@ -40,11 +41,15 @@ class EventController extends Controller
     private function statistic($start)
     {
         $events = LogEvent::findByTime($start);
+        $this->echoMessage('total event: ' . count($events));
         foreach ($events as $item) {
             $this->echoMessage('event: ' . $item->click_uuid);
             $logClick = LogClick::findByClickUuid($item->click_uuid);
             if (empty($logClick)) {
                 $logClick = LogClick2::findByClickUuid($item->click_uuid);
+            }
+            if (empty($logClick)) {
+                $logClick = LogClick3::findByClickUuid($item->click_uuid);
             }
             if (!empty($logClick)) {
                 $time_str = date('Y-m-d H:00', $item->create_time);
