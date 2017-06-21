@@ -137,7 +137,7 @@ class Affle
                 $creatives = '';
                 if(isset($item->creatives)){
                     foreach ($item->creatives as $creative){
-                        $creatives.=$creative->creativeURL;
+                        $creatives.=$creative->creativeURL.';';
                     }
                 }
                 $item->creatives = $creatives;
