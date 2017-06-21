@@ -35,6 +35,7 @@ use DateTimeZone;
 use HttpException;
 use HttpRequest;
 use linslin\yii2\curl\Curl;
+use Yii;
 use yii\console\Controller;
 use yii\db\Query;
 
@@ -47,6 +48,16 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+
+        $redis = Yii::$app->redis;
+//        $result = $redis->executeCommand('hmset', ['test_collection', 'key1', 'val1', 'key2', 'val2']);
+        $result = $redis->executeCommand('hmset', ['aa', 'bb', 'val1', 'key2', 'val2']);
+//        var_dump($result);
+        $var2 = Yii::$app->redis->keys("*");
+        $source = Yii::$app->redis->hgetall('aa');
+        var_dump($var2);
+        var_dump($source);
+        die();
 
         $now = time();
         $hourly = date('Y-m-d H:00', 1497855300);
