@@ -12,7 +12,8 @@ use Yii;
  * @property integer $channel_id
  * @property integer $time
  * @property string $event
- * @property integer $event_total
+ * @property integer $match_total
+ * @property integer $total
  * @property integer $create_time
  */
 class LogEventHourly extends \yii\db\ActiveRecord
@@ -31,7 +32,7 @@ class LogEventHourly extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'time', 'event_total', 'create_time'], 'integer'],
+            [['campaign_id', 'channel_id', 'time', 'match_total', 'total', 'create_time'], 'integer'],
             [['event'], 'string', 'max' => 11],
             [['campaign_id', 'channel_id', 'time', 'event'], 'unique', 'targetAttribute' => ['campaign_id', 'channel_id', 'time', 'event'], 'message' => 'The combination of Campaign ID, Channel ID, Time and Event has already been taken.'],
         ];
@@ -48,8 +49,17 @@ class LogEventHourly extends \yii\db\ActiveRecord
             'channel_id' => 'Channel ID',
             'time' => 'Time',
             'event' => 'Event',
-            'event_total' => 'Event Total',
+            'match_total' => 'Match Total',
+            'total' => 'Total',
             'create_time' => 'Create Time',
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+        }
+        return parent::beforeSave($insert);
     }
 }

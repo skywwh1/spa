@@ -130,6 +130,7 @@ use common\models\Platform;
 
 
                     <?= $form->field($model, 'post_back')->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($model, 'event_post_back')->textInput(['maxlength' => true]) ?>
 
                     <?= $form->field($model, 'os')->checkboxList(
                         Platform::find()

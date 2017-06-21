@@ -9,12 +9,15 @@
 namespace console\controllers;
 
 
+use common\models\Channel;
 use common\models\Config;
 use common\models\LogClick;
 use common\models\LogClick2;
 use common\models\LogClick3;
 use common\models\LogEvent;
 use common\models\LogEventHourly;
+use common\models\LogEventPost;
+use common\models\LogPost;
 use yii\console\Controller;
 use yii\db\Query;
 
@@ -63,11 +66,28 @@ class EventController extends Controller
                     $hourly->time = $time;
                     $hourly->event = $item->event_name;
                 }
-                $hourly->event_total += 1;
+                $hourly->match_total += 1;
+                $post = LogPost::findOne(['click_uuid' => $item->click_uuid]);
+                if (!empty($post)) {
+                    $hourly->total += 1;
+                    $channel = Channel::findIdentity($logClick->channel_id);
+                    if (!empty($channel->event_post_back)) {
+                        $eventPost = new LogEventPost();
+                        $eventPost->click_uuid = $item->click_uuid;
+                        $eventPost->click_id = $post->click_id;
+                        $eventPost->campaign_id = $post->campaign_id;
+                        $eventPost->channel_id = $post->channel_id;
+                        $eventPost->event_name = $item->event_name;
+                        $eventPost->event_value = $item->event_value;
+                        $eventPost->post_link = $this->genEvenLink($channel->event_post_back, $eventPost);
+                        if (!$eventPost->save()) {
+                            var_dump($eventPost->errors);
+                        }
+                    }
+                }
                 if (!$hourly->save()) {
                     var_dump($hourly->errors);
                 }
-
                 $item->is_count = 1;
                 $item->save();
             } else {
@@ -80,5 +100,18 @@ class EventController extends Controller
     private function echoMessage($str)
     {
         echo " \t $str \n";
+    }
+
+    /**
+     * @param string $url
+     * @param LogEventPost $item
+     * @return string
+     */
+    private function genEvenLink($url, $item)
+    {
+        $postback = str_replace('{click_id}', $item->click_id, $url);
+        $postback = str_replace('{event_name}', $item->event_name, $postback);
+        $postback = str_replace('{event_value}', $item->event_value, $postback);
+        return $postback;
     }
 }
