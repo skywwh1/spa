@@ -272,6 +272,10 @@ class ModelsUtil
         'others' => 'Others',
     );
 
+    const pause_status = array(
+        '0' => 'active',
+        '1' => 'closed',
+    );
     public static function getPayableStatus($k)
     {
         return static::getValue(static::payable_status, $k);
@@ -416,4 +420,10 @@ class ModelsUtil
     {
         return static::getValue(static::platform_new, $k);
     }
+
+    public static function getPausedStatus($k)
+    {
+        return static::getValue(static::pause_status, $k);
+    }
+
 }

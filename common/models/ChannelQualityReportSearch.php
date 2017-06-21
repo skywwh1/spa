@@ -94,9 +94,9 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-//        if(empty($this->campaign_id) && empty($this->channel_name)){
-//            return null;
-//        }
+        if(empty($this->campaign_id) && empty($this->channel_id)){
+            return null;
+        }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -139,6 +139,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['<>', 'clh.installs', 0])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
