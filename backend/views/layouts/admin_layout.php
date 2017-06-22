@@ -222,6 +222,8 @@ AdminAsset::register($this);
                         <?php } ?>
                         <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign
                                 Reports</a></li>
+                        <li><a href="/event-report/index" data-menu="event-report-index"><i class="fa fa-circle-o"></i> Event
+                                Reports</a></li>
                         <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match
                                 Installs</a></li>
                         <li><a href="/log-post/index" data-menu="log-post-index"><i class="fa fa-circle-o"></i> Installs</a>
