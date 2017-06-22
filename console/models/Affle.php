@@ -75,10 +75,6 @@ class Affle
             $camp->preview_link = $model->preview_link;
             $camp->note = $model->note;
             $camp->category = $model->category;
-            $camp->kpi = $model->conversion_flow . ':' . $model->status;
-            if ($model->conversion_flow == 'None') {
-                $camp->kpi = 'Day 2 RR > 30%';
-            }
             $camp->status = 1;
             $camp->open_type = 1;
 
