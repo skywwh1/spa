@@ -305,6 +305,11 @@ $columns = [
         'attribute' => 'bd',
         'value' => 'bd',
     ],
+    [
+        'label' => 'PM',
+        'attribute' => 'pm',
+        'value' => 'pm',
+    ],
 ];
 if (!empty($searchModel->type)) {
     array_unshift($columns, $time_row);
@@ -466,7 +471,7 @@ if (!empty($dataProvider)) {
                                 ExportMenu::FORMAT_EXCEL_X => false,
                                 ExportMenu::FORMAT_HTML => false,
                             ],
-                            ]);
+                        ]);
                         ?>
                         <?php echo GridView::widget([
                             'dataProvider' => $dataProvider,

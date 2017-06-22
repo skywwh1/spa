@@ -10,6 +10,7 @@ class ReportAdvHourly extends CampaignLogHourly
     public $channel_name;
     public $adv_name;
     public $bd;
+    public $pm;
 
     public $cvr;
     public $cost;
