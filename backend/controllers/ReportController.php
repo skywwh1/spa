@@ -142,7 +142,7 @@ class ReportController extends Controller
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
         $searchModel->type = 2;
-        $dataProvider = $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
         if (!empty(Yii::$app->request->queryParams)) {
             $searchModel->load(Yii::$app->request->queryParams);
             $type = $searchModel->type;

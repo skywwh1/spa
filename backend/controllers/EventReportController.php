@@ -2,6 +2,8 @@
 
 namespace backend\controllers;
 
+use DateTime;
+use DateTimeZone;
 use Yii;
 use common\models\LogEventHourly;
 use common\models\EventReportSearch;
@@ -36,11 +38,33 @@ class EventReportController extends Controller
     public function actionIndex()
     {
         $searchModel = new EventReportSearch();
+//        $searchModel->time_zone = 'Etc/GMT-8';
+//        $date = new DateTime();
+//        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+//        $date->setTimestamp(time());
+//        $date->format('Y-m-d');
+//        $searchModel->start = $date->format('Y-m-d');
+//        $searchModel->end = $date->format('Y-m-d');
+//        $searchModel->type = 2;
+//        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+//        if (!empty(Yii::$app->request->queryParams)) {
+//            $searchModel->load(Yii::$app->request->queryParams);
+//            $type = $searchModel->type;
+//
+//            if ($type == 1) {
+//                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+//            } else if ($type == 2) {
+//                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+//            } else {
+//                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
+//            }
+//        }
+//        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+//            'summary' => $summary,
         ]);
     }
 
@@ -56,69 +80,5 @@ class EventReportController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new LogEventHourly model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new LogEventHourly();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Updates an existing LogEventHourly model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
-    }
-
-    /**
-     * Deletes an existing LogEventHourly model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the LogEventHourly model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return LogEventHourly the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = LogEventHourly::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 }

@@ -77,8 +77,7 @@ class AdvertiserController extends Controller
     {
         $model = new Advertiser();
         if ($model->load(Yii::$app->request->post())) {
-            $user = User::findByUsername($model->bd);
-            $model->bd = isset($user) ? $user->id : null;
+            $this->beforeSave($model);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -99,7 +98,7 @@ class AdvertiserController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->bd = User::findByUsername($model->bd)->id;
+           $this->beforeSave($model);
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -141,5 +140,17 @@ class AdvertiserController extends Controller
     public function actionGet_bd($bd)
     {
         return \JsonUtil::toTypeHeadJson(User::getBDList($bd));
+    }
+
+    /**
+     * @param Advertiser $model
+     */
+    private function beforeSave(&$model)
+    {
+        $user = User::findByUsername($model->bd);
+        $model->bd = isset($user) ? $user->id : null;
+        $user = User::findByUsername($model->pm);
+        $model->pm = isset($user) ? $user->id : null;
+
     }
 }

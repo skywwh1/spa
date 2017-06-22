@@ -36,7 +36,19 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'swift')->textInput(['maxlength' => true]) ?>
 
             <?= $form->field($model, 'account_nu_iban')->textInput(['maxlength' => true]) ?>
-            <?= $form->field($model, 'pm')->textInput(['maxlength' => true, 'readonly' => true]) ?>
+            <?= $form->field($model, 'pm')->widget(Typeahead::classname(), [
+                'pluginOptions' => ['highlight' => true],
+                'options' => ['value' => isset($model->pm) ? $model->pm0->username : '',],
+                'dataset' => [
+                    [
+                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                        'display' => 'value',
+                        'remote' => [
+                            'url' => Url::to(['advertiser/get_bd']) . '?bd=%QUERY',
+                            'wildcard' => '%QUERY'
+                        ]
+                    ]],
+            ]) ?>
             <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
                 'pluginOptions' => ['highlight' => true],
                 'options' => ['value' => isset($model->bd) ? $model->bd0->username : '',],
