@@ -189,7 +189,7 @@ class MailUtil
         if (!empty($pms) ){
             $to = array_merge($to, $pms);
         }
-        $mail->setTo($to);
+        $mail->setTo(array_unique($to));
         $mail->setSubject('Anticheat - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
