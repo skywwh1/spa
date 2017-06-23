@@ -7,6 +7,7 @@ use frontend\models\ChannelRegister;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\db\ActiveRecord;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\IdentityInterface;
 
@@ -362,5 +363,19 @@ class Channel extends ActiveRecord implements IdentityInterface
 
     public static function getNewChannel($first_day,$last_day){
         return static::find()->andFilterWhere(['payment_term' => 30])->andFilterWhere(['>', 'created_time', $first_day])->andFilterWhere(['<', 'created_time', $last_day])->all();
+    }
+
+    public static function getChannelByIds($ids)
+    {
+        $data = static::find()->select('id,username')->where(['in', 'id', $ids])->all();
+        $userArray = ArrayHelper::map($data,'username', 'id');
+        return $userArray;
+    }
+
+    public static function getUserEmailByChannel($ids)
+    {
+        $user_ids = static::find()->select('om')->where(['in', 'id', $ids])->column();
+        $emails = User::getUserEmailList($user_ids);
+        return $emails;
     }
 }
