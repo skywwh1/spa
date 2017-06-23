@@ -208,4 +208,24 @@ class Advertiser extends \yii\db\ActiveRecord
     public static function getNewAdv($first_day,$last_day){
         return static::find()->andFilterWhere(['payment_term' => 30])->andFilterWhere(['>', 'created_time', $first_day])->andFilterWhere(['<', 'created_time', $last_day])->all();
     }
+
+    public static function getUserEmailByCampaign($ids)
+    {
+        $user_ids = static::find()->select('bd')->where(['in', 'id', $ids])->column();
+        $emails = [];
+        if (empty($emails)){
+            $emails = User::getUserEmailList($user_ids);
+        }
+        return $emails;
+    }
+
+    public static function getPMEmailByCampaign($ids)
+    {
+        $user_ids = static::find()->select('pm')->where(['in', 'id', $ids])->column();
+        $emails = [];
+        if (!empty($user_ids)){
+            $emails = User::getUserEmailList($user_ids);
+        }
+        return $emails;
+    }
 }
