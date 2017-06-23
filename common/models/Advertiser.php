@@ -58,6 +58,7 @@ use Yii;
  * @property string $account_nu_iban
  * @property string $invoice_title
  *
+ * @property User $pm0
  * @property User $bd0
  * @property Campaign[] $campaigns
  */
@@ -94,6 +95,7 @@ class Advertiser extends \yii\db\ActiveRecord
             ['cc_email', 'email'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
+            [['pm'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['pm' => 'id']],
             [['bd'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['bd' => 'id']],
             [['bd'], 'required', 'message' => 'Can not found BD'],
         ];
@@ -155,6 +157,14 @@ class Advertiser extends \yii\db\ActiveRecord
             'swift' => 'Swift',
             'account_nu_iban' => 'Account Number/Iban',
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getPm0()
+    {
+        return $this->hasOne(User::className(), ['id' => 'pm']);
     }
 
     /**

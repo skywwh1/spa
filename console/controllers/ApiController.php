@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use console\models\Affle;
 use console\models\Glispa;
 use console\models\HeadWay;
 use console\models\Mi;
@@ -108,5 +109,9 @@ class ApiController extends Controller
         $yeah = new Mundo();
         $yeah->getApiCampaign();
     }
-
+    public function actionGetAffle()
+    {
+        $yeah = new Affle();
+        $yeah->getApiCampaign();
+    }
 }

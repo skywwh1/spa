@@ -20,7 +20,7 @@ class ReportAdvSearch extends ReportAdvHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name', 'bd'], 'safe'],
+            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name', 'bd', 'pm'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -41,7 +41,7 @@ class ReportAdvSearch extends ReportAdvHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'sort' =>[
+            'sort' => [
                 'attributes' => [
                     'campaign_id' => [
                         'asc' => ['clh.campaign_id' => SORT_ASC],
@@ -143,12 +143,14 @@ class ReportAdvSearch extends ReportAdvHourly
             'cam.daily_cap cap',
             'ad.username adv_name',
             'u.username bd',
+            'u2.username pm',
 
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -164,17 +166,20 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'u2.username', $this->pm])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else if (\Yii::$app->user->can('pm')) {
+            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
         } else {
             $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
         }
 
 
-        if ($dataProvider->getSort()->getOrders()==null){
+        if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         }
 
@@ -192,7 +197,7 @@ class ReportAdvSearch extends ReportAdvHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
-            'sort' =>[
+            'sort' => [
                 'attributes' => [
                     'campaign_id' => [
                         'asc' => ['clh.campaign_id' => SORT_ASC],
@@ -287,7 +292,8 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.revenue) revenue',
             'SUM(clh.redirect_cost) redirect_cost',
             'SUM(clh.redirect_revenue) redirect_revenue',
-            'u.username om',
+            'u.username bd',
+            'u2.username pm',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
             'ad.username adv_name',
@@ -297,6 +303,8 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -310,13 +318,15 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'u2.username', $this->pm])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else if (\Yii::$app->user->can('pm')) {
+            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
         } else {
             $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
-
         }
         $query->groupBy([
             'clh.campaign_id',
@@ -324,7 +334,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'timestamp',
         ]);
 
-        if ($dataProvider->getSort()->getOrders()==null){
+        if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         }
         return $dataProvider;
@@ -374,6 +384,8 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -387,11 +399,14 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'u2.username', $this->pm])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else if (\Yii::$app->user->can('pm')) {
+            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
         } else {
             $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
         }
@@ -409,7 +424,7 @@ class ReportAdvSearch extends ReportAdvHourly
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
-            'sort' =>[
+            'sort' => [
                 'attributes' => [
                     'campaign_id' => [
                         'asc' => ['clh.campaign_id' => SORT_ASC],
@@ -468,7 +483,8 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.revenue) revenue',
             'SUM(clh.redirect_cost) redirect_cost',
             'SUM(clh.redirect_revenue) redirect_revenue',
-            'u.username om',
+            'u.username bd',
+            'u2.username pm',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
             'ad.username adv_name',
@@ -478,6 +494,8 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -491,20 +509,22 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'u2.username', $this->pm])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else if (\Yii::$app->user->can('pm')) {
+            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
         } else {
             $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
-
         }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
         ]);
 
-        if ($dataProvider->getSort()->getOrders()==null){
+        if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC,]);
         }
         return $dataProvider;

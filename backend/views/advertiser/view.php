@@ -39,6 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'account_nu_iban',
                             // 'bd',
                             [
+                                'attribute' => 'pm',
+                                'value' => $model->pm0->username,
+                            ],
+                            [
                                 'attribute' => 'bd',
                                 'value' => $model->bd0->username,
                             ],

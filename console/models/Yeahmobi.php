@@ -67,7 +67,9 @@ class Yeahmobi
             $camp->platform = $model->platform;
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
-            $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
+            if (empty($camp->now_payout)) {
+                $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
+            }
             $daily_cap = $model->daily_cap;
             if ($daily_cap == -1 || $daily_cap === 0) {
                 $daily_cap = 'open';

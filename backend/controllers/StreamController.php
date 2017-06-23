@@ -308,7 +308,7 @@ class StreamController extends Controller
                 $click->redirect = $redirectLink;
             }
         }
-        $this->countClick($click);
+//        $this->countClick($click);
 
         return 200;
     }
@@ -405,8 +405,8 @@ class StreamController extends Controller
         $model->event_value = isset($data['event_value']) ? $data['event_value'] : 0;
 
         if (!$model->validate()) {
-//            $this->asJson($model->getErrors());
-            $this->asJson(['status' => 'Missing Parameter']);
+            $this->asJson($model->getErrors());
+//            $this->asJson(['status' => 'Missing Parameter']);
         } else {
             if ($this->restrictionEvent($model) != 200) {
                 $this->asJson($this->_getAdvCodeMessage($this->restrictionEvent($model)));

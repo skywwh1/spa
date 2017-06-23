@@ -105,6 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                            'value' => ModelsUtil::getPricingMode($model->pricing_mode)
 //                        ],
                         'post_back',
+                        'event_post_back',
                         'total_revenue',
                         'payable',
                         'paid',

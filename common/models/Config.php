@@ -125,4 +125,23 @@ class Config extends \yii\db\ActiveRecord
         $config->value = $time;
         return $config->save();
     }
+
+    public static function findLastEventHourly()
+    {
+        $name = 'last_statics_event_hourly';
+        $config = static::findOne(['name' => $name]);
+        return isset($config) ? $config->value : time();
+    }
+
+    public static function updateLastEventHourly($time)
+    {
+        $name = 'last_statics_event_hourly';
+        $config = static::findOne(['name' => $name]);
+        if ($config == null) {
+            $config = new Config();
+            $config->name = $name;
+        }
+        $config->value = $time;
+        return $config->save();
+    }
 }

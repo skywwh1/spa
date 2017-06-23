@@ -62,6 +62,7 @@ use yii\web\IdentityInterface;
  * @property string $traffic_source
  * @property string $pricing_mode
  * @property string $post_back
+ * @property string $event_post_back
  * @property integer $total_revenue
  * @property integer $payable
  * @property string $paid
@@ -119,6 +120,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
             [['om'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['om' => 'id']],
             ['om', 'required', 'message' => 'OM does not exist'],
+            ['event_post_back', 'url'],
         ];
     }
 
@@ -177,6 +179,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             'traffic_source' => 'Traffic Source',
             'pricing_mode' => 'Pricing Mode',
             'post_back' => 'Postback',
+            'event_post_back' => 'Event Post Back',
             'total_revenue' => 'Total Revenue',
             'payable' => 'Payable',
             'paid' => 'Paid',
