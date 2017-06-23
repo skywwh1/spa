@@ -330,4 +330,15 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
         //->andWhere(["type"=>7])
         return static::find()->select("username")->where(["like", "username", $username])->column();
     }
+
+    public static function getUsername()
+    {
+        return \Yii::$app->user->identity->username;
+    }
+
+    public static function getUserEmailList($ids)
+    {
+        //->andWhere(["type"=>9])
+        return static::find()->select("email")->andFilterWhere(["in", "id", $ids])->column();
+    }
 }
