@@ -85,6 +85,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => ModelsUtil::campaign_status
                         ],
+                        [
+                            'attribute' => 'is_redirect',
+                            'value' => function ($model) {
+                                return ModelsUtil::getStatus($model->is_redirect);
+                            },
+                            'filter' => ModelsUtil::status,
+                        ],
                         'create_time:datetime',
                         // 'update_time:datetime',
                         // 'track_url:url',
