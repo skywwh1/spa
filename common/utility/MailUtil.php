@@ -175,21 +175,21 @@ class MailUtil
     public static function autoCheckCvr($checks)
     {
         $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
-        $channel_ids = array_unique(array_column($checks, 'channel_id'));
-        $campaign_ids = array_unique(array_column($checks, 'campaign_id'));
-        $oms = Channel::getUserEmailByChannel($channel_ids);
-        $bds = Advertiser::getUserEmailByCampaign($campaign_ids);
-        $pms =  Advertiser::getPMEmailByCampaign($campaign_ids);
+//        $channel_ids = array_unique(array_column($checks, 'channel_id'));
+//        $campaign_ids = array_unique(array_column($checks, 'campaign_id'));
+//        $oms = Channel::getUserEmailByChannel($channel_ids);
+//        $bds = Advertiser::getUserEmailByCampaign($campaign_ids);
+//        $pms =  Advertiser::getPMEmailByCampaign($campaign_ids);
 
-//        $mail->setTo('operations@superads.cn');
-        $to = $oms;
-        if (!empty($bds) ){
-            $to = array_merge($to, $bds);
-        }
-        if (!empty($pms) ){
-            $to = array_merge($to, $pms);
-        }
-        $mail->setTo(array_unique($to));
+        $mail->setTo('operations@superads.cn');
+//        $to = $oms;
+//        if (!empty($bds) ){
+//            $to = array_merge($to, $bds);
+//        }
+//        if (!empty($pms) ){
+//            $to = array_merge($to, $pms);
+//        }
+//        $mail->setTo(array_unique($to));
         $mail->setSubject('Anticheat - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
