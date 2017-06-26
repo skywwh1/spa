@@ -12,6 +12,7 @@ use common\models\Campaign;
  */
 class CampaignSearch extends Campaign
 {
+    public $ids;
     /**
      * @inheritdoc
      */
@@ -132,7 +133,8 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['<>', 'advertiser', 35])
             ->andFilterWhere(['<>', 'advertiser', 36])
             ->andFilterWhere(['<>', 'advertiser', 28])
-            ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist]);
+            ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist])
+            ->andFilterWhere(['in', 'c.id', $this->ids]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy('create_time DESC');

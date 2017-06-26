@@ -88,9 +88,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         ExportMenu::FORMAT_HTML => false,
                     ],
                 ]); ?>
+                <p>
+                    <button type="button" id = 'selectButton' class="btn btn-primary">Select</button>
+                </p>
+                <?php $form = \kartik\form\ActiveForm::begin(['id' => 'deliver-form']); ?>
+                <?= $form->field($searchModel, 'ids')->hiddenInput()->label(false) ?>
+                <?php \kartik\form\ActiveForm::end(); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
+                    'id' => 'grid',
                     'containerOptions' => ['style' => 'overflow: auto'], // only set when $responsive = false
 //                    'headerRowOptions' => ['class' => 'kartik-sheet-style'],
 //                    'filterRowOptions' => ['class' => 'kartik-sheet-style'],
@@ -145,6 +152,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </div>';
                                 },
                             ],
+                        ],
+                        [
+                            'class' => 'yii\grid\CheckboxColumn',
+                            'header' => Html::checkBox('selection_all', false, [
+                                'class' => 'select-on-check-all',
+                                'label' => 'Select',
+                            ]),
                         ],
                         [
                             'attribute' => 'tag',

@@ -37,4 +37,11 @@ $(document).on("click", "#finish-recommend-channel-btn", function (e) {
     return false;
 });
 
-
+$(document).on("click", "#selectButton", function (e) {
+    var keys = $('#grid').yiiGridView('getSelectedRows');
+    var form = $('#deliver-form');
+    form.attr({"action":'/campaign/selected'});
+    $('#campaignsearch-ids').val(keys);
+    form.submit();
+    return false;
+});

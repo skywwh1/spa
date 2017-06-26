@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\CampaignLogSubChannelHourly;
 use common\models\ReportSubChannelSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -24,6 +25,22 @@ class CampaignLogSubChannelHourlyController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'columns',
+                            'email',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

@@ -93,21 +93,35 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return ModelsUtil::getRedirectStatus($model->status);
                                 },
-                                'filter' => ModelsUtil::redirect_status
+                                'filter' => ModelsUtil::redirect_status,
+                                'contentOptions' => function ($model) {
+                                    if ($model->status == 0 || time()>$model->end_time ) {
+                                        return ['class' => 'bg-danger'];
+                                    }else if ($model->status == 1) {
+                                        return ['class' => 'bg-green'];
+                                    }
+                                }
                             ],
                             [
-                                'label' => 'create_time',
                                 'attribute' => 'create_time',
-                                'value' => 'create_time',
-                                'format' => 'datetime',
-                                'filter' => false
+                                'value' => function ($model) {
+                                    return gmdate('Y-m-d H:i',$model->create_time + 3600*8);
+                                },
+                                'filter' => false,
                             ],
                             [
-                                'label' => 'end_time',
+                                'attribute' => 'start_time',
+                                'value' => function ($model) {
+                                    return gmdate('Y-m-d H:i',$model->start_time + 3600*8);
+                                },
+                                'filter' => false,
+                            ],
+                            [
                                 'attribute' => 'end_time',
-                                'value' => 'end_time',
-                                'format' => 'datetime',
-                                'filter' => false
+                                'value' => function ($model) {
+                                    return gmdate('Y-m-d H:i',$model->end_time + 3600*8);
+                                },
+                                'filter' => false,
                             ],
                             //[
                             // 'label' => 'update_time',

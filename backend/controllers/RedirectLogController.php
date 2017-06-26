@@ -55,7 +55,6 @@ class RedirectLogController extends Controller
     {
         $searchModel = new RedirectLogSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -92,6 +91,8 @@ class RedirectLogController extends Controller
             $model->channel_id = $channel_id;
         }
         if (Yii::$app->getRequest()->isPost && $model->load(Yii::$app->request->post())) {
+            $model->start_time = strtotime($model->start_time)-8*3600;
+            $model->end_time = strtotime($model->end_time)-8*3600;
             if ($model->save()) {
                 $sts = Deliver::findIdentity($campaign_id, $channel_id);
                 if ($model->status == '1') {
@@ -169,6 +170,8 @@ class RedirectLogController extends Controller
         $model = new RedirectLog();
         $request = \Yii::$app->getRequest();
         if ($request->isPost && $model->load($request->post())) {
+            $model->start_time = strtotime($model->start_time);
+            $model->end_time = strtotime($model->end_time);
             \Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }

@@ -17,6 +17,7 @@ use common\models\Channel;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -38,6 +39,16 @@ class FinanceChannelBillTermController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'validate','edit','retreat','flow','upload'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

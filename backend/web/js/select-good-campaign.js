@@ -46,8 +46,7 @@ $(document).ready(function(){
         //form.attr({"action":url});
         //form.submit();
         form.attr({"action":'/deliver/create'});
-        $('#mycartsearch-campaign_uuid').val(keys);
-        //form.data( {keylist: keys});
+        $('#mycartsearch-ids').val(keys);
         form.submit();
         return false;
     });

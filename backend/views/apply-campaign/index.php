@@ -2,9 +2,12 @@
 
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\Url;
 use yii\widgets\Pjax;
+use yii\widgets\ActiveForm;
+
+/* @var $form yii\widgets\ActiveForm */
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ApplyCampaignSearch */
@@ -13,25 +16,27 @@ use yii\widgets\Pjax;
 $this->title = 'Applying Offers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<?php Modal::begin([
-    'id' => 'campaign-detail-modal',
-]);
-echo '<div id="campaign-detail-content"></div>';
-Modal::end(); ?>
     <div id="nav-menu" data-menu="apply-campaign-index"></div>
     <div class="row">
     <div class="apply-campaign-index">
-
-        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
         <div class="col-lg-12">
             <div class="box box-info table-responsive">
                 <div class="box-body">
+                    <p>
+                        <button type="button" id = 'stsButton' class="btn btn-primary">S2S</button>
+                    </p>
                     <?php Pjax::begin(); ?>    <?= GridView::widget([
                         'id' => 'applying_list',
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
+                            [
+                                'class' => 'yii\grid\CheckboxColumn',
+                                'header' => Html::checkBox('selection_all', false, [
+                                    'class' => 'select-on-check-all',
+                                    'label' => 'Select',
+                                ]),
+                            ],
                             ['class' => 'yii\grid\SerialColumn'],
 
                             // 'campaign.campaign_name',
@@ -112,6 +117,11 @@ Modal::end(); ?>
             </div>
         </div>
     </div>
+<?php Modal::begin([
+    'id' => 'campaign-detail-modal',
+]);
+echo '<div id="campaign-detail-content"></div>';
+Modal::end(); ?>
 <?php $this->registerJsFile('@web/js/apply-campaign.js',
     ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>

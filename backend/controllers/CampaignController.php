@@ -7,11 +7,14 @@ use common\models\Category;
 use common\models\Mycart;
 use common\models\ChannelSearch;
 use common\models\CampaignCreativeLink;
+use common\models\User;
+use common\utility\MailUtil;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
 use yii\db\Query;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -58,6 +61,9 @@ class CampaignController extends Controller
                             'cpa-index',
                             'mundo-index',
                             'recommend',
+                            'selected',
+                            'export-email',
+                            'add-cart-batch'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -479,4 +485,71 @@ class CampaignController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /**
+     * @return string
+     */
+    public function actionSelected()
+    {
+        $searchModel = new CampaignSearch();
+        if (isset($_POST['CampaignSearch']['ids'])) {
+            $searchModel->ids = explode(",",$_POST['CampaignSearch']['ids']);
+        }
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        return $this->render('detail', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'keys' => $searchModel->ids,
+        ]);
+    }
+
+    public function actionExportEmail(){
+        if (isset($_POST['keylist'])) {
+            $keys = $_POST['keylist'];
+        }
+        $user_name = yii::$app->user->identity->username;
+        $user = User::findOne(['username' => $user_name ]);
+        $campaigns = Campaign::find()->where(['id' => $keys])->all();
+        if(MailUtil::sendGoodOffers($campaigns,$user)){
+            $this->asJson("send email success!");
+        }else{
+            $this->asJson("send email fail!");
+        }
+    }
+
+    /**
+     * 批量加入MyCart
+     * @return string
+     */
+    public function actionAddCartBatch()
+    {
+        if (isset($_POST['keylist'])) {
+            $keys = $_POST['keylist'];
+            $models = Campaign::getCampaignsByIds($keys);
+
+            foreach ($models as $model){
+                $my_cart = MyCart::find()->where(['campaign_id' => $model->id])->andFilterWhere(['creator' => yii::$app->user->identity->username])->one();
+                if (!empty($my_cart)) {
+                    return 'you have added '.$model->campaign_name.' to my cart already!';
+                }
+                $my_cart = new Mycart();
+                $my_cart->target_geo = $model->target_geo;
+                $my_cart->advertiser = $model->advertiser;
+                $my_cart->campaign_id = $model->id;
+                $my_cart->campaign_name = $model->campaign_name;
+                $my_cart->daily_cap = $model->daily_cap;
+                $my_cart->direct = $model->direct;
+                $my_cart->payout = $model->now_payout;
+                $my_cart->platform = $model->platform;
+                $my_cart->tag = $model->tag;
+                $my_cart->traffic_source = $model->traffic_source;
+                $my_cart->preview_link = $model->preview_link;
+                $my_cart->creator = yii::$app->user->identity->username;
+                $my_cart->save();
+            }
+            return 'add to my cart success!';
+        }
+        return 'add to my cart failed!';
+    }
+
 }

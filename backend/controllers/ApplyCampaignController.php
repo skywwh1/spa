@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\StsForm;
 use common\models\Deliver;
 use Yii;
 use common\models\Campaign;

@@ -4,7 +4,10 @@ namespace backend\controllers;
 
 use backend\models\StsForm;
 use backend\models\TestLinkForm;
+use common\models\ApplyCampaign;
+use common\models\ApplyCampaignSearch;
 use common\models\Campaign;
+use common\models\CampaignSearch;
 use common\models\CampaignStsUpdate;
 use common\models\ChannelBlack;
 use common\models\Channel;
@@ -17,6 +20,7 @@ use linslin\yii2\curl\Curl;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -27,6 +31,7 @@ use yii\helpers\Json;
  */
 class DeliverController extends Controller
 {
+    public $enableCsrfValidation = false;
     /**
      * @inheritdoc
      */
@@ -71,6 +76,10 @@ class DeliverController extends Controller
     {
         $searchModel = new DeliverSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $data = $dataProvider->getModels();
+        foreach($data as $item){
+            $item->create_time =  $item->create_time+28800;
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -100,21 +109,43 @@ class DeliverController extends Controller
     public function actionCreate()
     {
         $my_cart = new MyCartSearch();
-        if ($my_cart->load(Yii::$app->request->post())){
-            $campaign_uuid = MyCart::getSelectCampaign($my_cart->campaign_uuid);
-            $array = [];
-            foreach($campaign_uuid as $item){
-                $array[] = $item['campaign_uuid'];
+        $campaign_search = new CampaignSearch();
+        $apply_search = new ApplyCampaignSearch();
+        //1、处理从MyCart,CampaignList,ApplyOffers这里直接S2S的事件
+        if ($my_cart->load(Yii::$app->request->post())
+            || $campaign_search->load(Yii::$app->request->post())
+            || isset($_POST['ids'])){
+
+            $campaign_search->campaign_uuid = empty($campaign_search->campaign_uuid)?"":explode(",",$campaign_search->campaign_uuid);//campaign_id
+            $my_cart->ids = empty($my_cart->ids)?"":explode(",",$my_cart->ids);//mycart id
+
+            if (isset($_POST['ids'])){
+                $ids = Json::decode($_POST['ids']);
+                $apply_search->campaign_id = array_unique(array_column($ids, 'campaign_id'));
+                $apply_search->channel_id = array_unique(array_column($ids,'channel_id'));
             }
-            $model = new StsForm();
-            var_dump($array);
-            $model->campaign_uuid = $array;
+
+            $campaign_ids = [];
+            if (!empty( $campaign_search->campaign_uuid)){
+                $campaign_ids = $campaign_search->campaign_uuid;
+            }
+             if (!empty($apply_search->campaign_id)){
+                $campaign_ids = $apply_search->campaign_id;
+            }
+
+            $campaign_uuid = Campaign::getSelectCampaign($my_cart->ids,$campaign_ids);
+            $form = new StsForm();
+            $form->campaign_uuid = $campaign_uuid;
+            if (!empty($apply_search->channel_id)){
+                $form->channel = Channel::getChannelByIds($apply_search->channel_id);
+            }
             return $this->render('create', [
-                'model' => $model,
+                'model' => $form,
             ]);
         }
         $model = new StsForm();
 
+        //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
         if ($model->load(Yii::$app->request->post())) {
             $delivers = [];
             $blackChannels = [];
@@ -161,24 +192,20 @@ class DeliverController extends Controller
                 }
             }
 
-            $data = array();
             $return_msg = array();
             if (!empty($blackChannels)){
                 foreach ($blackChannels as $black_channel) {
                     // $black_channel[0]不为空
                     if(is_array($black_channel[0]) && isset($black_channel[0])){
                         if ( $black_channel[0]['action_type'] == 0){
-//                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].' ,'.$black_channel['channel_name'].' channels are labeled as Notice black channels!';
                             $str = 'Are you sure to S2S?Note:'.$black_channel[0]['note'];
                         }else{
-//                            $str = 'Target geos for '.$black_channel[0]['geo'].',advertisers for '.$black_channel['advertiser_name'].', '.$black_channel['channel_name'].' channels are labeled as No S2S black channels!';
                             $str = 'Cannot S2S!!!Note:'.$black_channel[0]['note'];
                         }
                     }
                     $return_msg[] = $str;
                 }
                 $return_msg = implode(";",$return_msg);
-//                return $return_msg;
             }
             return $this->render('second', [
                 'delivers' => $delivers,
