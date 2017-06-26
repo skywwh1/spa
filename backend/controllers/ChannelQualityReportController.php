@@ -59,9 +59,6 @@ class ChannelQualityReportController extends Controller
      */
     public function actionIndex()
     {
-        $cols = [];
-        $dynamic_cols = [];
-
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->read_only = false;
         $searchModel->time_zone = 'Etc/GMT-8';
@@ -72,31 +69,39 @@ class ChannelQualityReportController extends Controller
         $date->format('Y-m-d');
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
-        if (!empty(Yii::$app->request->queryParams)) {
-            $searchModel->load(Yii::$app->request->queryParams);
-            $type = $searchModel->type;
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-            $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
 
-            $models = empty($dataProvider)?null:$dataProvider->getModels();
-            $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
-            if (!empty($models) && !(empty($columns)) ){
-                foreach($models as $model){
-                    foreach ($columns as $column){
-                        if ($model['campaign_id'] == $column->campaign_id
-                            && $model['channel_id'] == $column->channel_id
-                            && $model['sub_channel'] == $column->sub_channel
-                            && $model['timestamp'] == $column->time) {
-                            $model['column_name'][$column->name] = $column->value;
-                            $cols[$column->name] = $column->value;
-                        }
+        $models = empty($dataProvider)?null:$dataProvider->getModels();
+        $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
+
+        $cols = [];
+        $dynamic_cols = [];
+//        var_dump(count($columns));
+//        var_dump(count($models));
+//        die();
+        if (!empty($models) && !(empty($columns)) ){
+            foreach($models as $model){
+                foreach ($columns as $column){
+                    if ($model['campaign_id'] == $column->campaign_id
+                        && $model['channel_id'] == $column->channel_id
+                        && $model['sub_channel'] == $column->sub_channel
+                        && $model['timestamp'] == $column->time) {
+                        $model['column_name'][$column->name] = $column->value;
+                        $cols[$column->name] = $column->value;
+//                        $model['column_name']['campaign_id'] = $column->campaign_id;
+//                        $model['column_name']['channel_id'] = $column->channel_id;
+//                        $model['column_name']['sub_channel'] = $column->sub_channel;
+//                        $model['column_name']['timestamp'] = $column->time;
                     }
-                    if (!empty($model['column_name'])){
-                        $dynamic_cols[] = $model['column_name'];
-                    }
+                }
+                if (!empty($model['column_name'])){
+                    $dynamic_cols[] = $model['column_name'];
                 }
             }
         }
+//        var_dump($dynamic_cols);
+//        die();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
