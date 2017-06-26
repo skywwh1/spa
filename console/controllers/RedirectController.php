@@ -7,6 +7,7 @@ namespace console\controllers;
  * Time: 9:41
  */
 
+use common\models\Deliver;
 use yii\console\Controller;
 use common\models\RedirectLog;
 
@@ -26,6 +27,9 @@ class RedirectController extends Controller
             foreach ( $models as $item){
                 $item->status = 1;
                 $item->save();
+                $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                $sts->is_redirect = 1;
+                $sts->save();
             }
         }
     }
