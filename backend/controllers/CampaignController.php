@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use common\models\Advertiser;
 use common\models\Category;
-use common\models\Mycart;
+use common\models\MyCart;
 use common\models\ChannelSearch;
 use common\models\CampaignCreativeLink;
 use common\models\User;
