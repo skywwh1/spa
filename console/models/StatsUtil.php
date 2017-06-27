@@ -911,7 +911,6 @@ class StatsUtil
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
-        var_dump($rows);
         if (!empty($rows)) {
             $rows = json_decode(json_encode($rows));
         } else {

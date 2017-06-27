@@ -15,7 +15,6 @@ use common\models\IpTable;
 use common\models\LogClick;
 use common\models\LogClickCount;
 use common\models\LogEvent;
-use common\models\LogSpaMapping;
 use common\models\RedirectLog;
 use common\models\Stream;
 use common\models\StreamSearch;
@@ -141,6 +140,7 @@ class StreamController extends Controller
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
+        $click->save();
         return $this->redirect($click->redirect);
     }
 
@@ -287,33 +287,27 @@ class StreamController extends Controller
         if (!$click->validate() && $click->hasErrors()) {
             return 404;
         }
-        $click->save();
-        $map = LogSpaMapping::findOne(['spa_campaign_id' => $click->campaign_id]);
-        if (empty($map)) {
-            //是否导量
-            if ($deliver->is_redirect) {
-                $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
-                if (isset($redirect)) {
-                    $redirectCam = $redirect->campaignIdNew;
-                    $redirectLink = $this->genAdvLink($redirectCam, $click);
-                    $click->redirect = $redirectLink;
-                }
-            }
 
-            //子渠道是否导量
-            if (!empty($click->ch_subid)) {
-                $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
-
-                if (!empty($sub_redirect)) {
-                    $redirectCam = $sub_redirect->campaignIdNew;
-                    $redirectLink = $this->genAdvLink($redirectCam, $click);
-                    $click->redirect = $redirectLink;
-                }
+        //是否导量
+        if ($deliver->is_redirect) {
+            $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
+            if (isset($redirect)) {
+                $redirectCam = $redirect->campaignIdNew;
+                $redirectLink = $this->genAdvLink($redirectCam, $click);
+                $click->redirect = $redirectLink;
             }
-        } else {
-            $click->redirect = "http://stream.traffic.red/track/pub?de=" . $map->tr_de_id . '&click_id=' . $click->click_uuid;
         }
 
+        //子渠道是否导量
+        if (!empty($click->ch_subid)) {
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
+
+            if (!empty($sub_redirect)) {
+                $redirectCam = $sub_redirect->campaignIdNew;
+                $redirectLink = $this->genAdvLink($redirectCam, $click);
+                $click->redirect = $redirectLink;
+            }
+        }
 //        $this->countClick($click);
 
         return 200;

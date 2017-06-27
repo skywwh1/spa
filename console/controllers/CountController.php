@@ -419,11 +419,8 @@ class CountController extends Controller
             //sub channel;
             $stats->statsSubClicksHourly($start, $end);
             $start = $end;
+            Config::updateLastStatsClickHourly($end);
         }
-        //统计子渠道：
-
-        Config::updateLastStatsClickHourly($now);
-
     }
 
     public function actionStatsDaily()
