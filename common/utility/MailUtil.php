@@ -402,7 +402,7 @@ class MailUtil
     {
         $mail = Yii::$app->mailer->compose('check_clicks', ['checks' => $checks]);
         $mail->setTo('operations@superads.cn');
-        $mail->setSubject('Anticheat - SuperADS');
+        $mail->setSubject('Low CR Anticheat - SuperADS');
         $mail->send();
     }
 }
