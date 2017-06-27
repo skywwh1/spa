@@ -94,13 +94,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ModelsUtil::getRedirectStatus($model->status);
                                 },
                                 'filter' => ModelsUtil::redirect_status,
-                                'contentOptions' => function ($model) {
-                                    if ($model->status == 0 || time()>$model->end_time ) {
-                                        return ['class' => 'bg-danger'];
-                                    }else if ($model->status == 1) {
-                                        return ['class' => 'bg-green'];
-                                    }
-                                }
+//                                'contentOptions' => function ($model) {
+//                                    if ($model->status == 0 || time()>$model->end_time ) {
+//                                        return ['class' => 'bg-danger'];
+//                                    }else if ($model->status == 1) {
+//                                        return ['class' => 'bg-green'];
+//                                    }
+//                                }
                             ],
                             [
                                 'attribute' => 'create_time',

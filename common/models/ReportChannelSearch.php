@@ -141,10 +141,12 @@ class ReportChannelSearch extends ReportChannelHourly
             'cam.daily_cap cap',
             'clh.daily_cap',
             'u.username om',
+            'adv.username adv'
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -293,12 +295,13 @@ class ReportChannelSearch extends ReportChannelHourly
             'u.username om',
             'cam.daily_cap cap',
             'clh.daily_cap',
-
+            'adv.username adv'
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,
@@ -371,12 +374,13 @@ class ReportChannelSearch extends ReportChannelHourly
             'SUM(clh.redirect_match_installs) redirect_match_installs',
             'SUM(clh.redirect_cost) redirect_cost',
             'SUM(clh.redirect_revenue) redirect_revenue',
-
+            'adv.username adv'
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -470,12 +474,14 @@ class ReportChannelSearch extends ReportChannelHourly
             'u.username om',
             'cam.daily_cap cap',
             'clh.daily_cap',
-
+            'adv.username adv'
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,

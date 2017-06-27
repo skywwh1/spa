@@ -26,7 +26,7 @@ use kartik\datetime\DateTimePicker;
             echo '<label class="control-label">Start Date</label>';
             echo DateTimePicker::widget([
                 'name' => 'RedirectLog[start_time]',
-                'value' => isset($model->start_time) ? date('Y-m-d H:i',$model->start_time + 8*3600) : date('Y-m-d H:i',time() + 8*3600),
+                'value' => isset($model->start_time) ? gmdate('Y-m-d H:i',$model->start_time + 8*3600) : gmdate('Y-m-d H:i',time() + 8*3600),
                 'pluginOptions' => [
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd hh:ii',
@@ -36,7 +36,7 @@ use kartik\datetime\DateTimePicker;
             echo '<label class="control-label">End Date</label>';
             echo DateTimePicker::widget([
                 'name' => 'RedirectLog[end_time]',
-                'value' => isset($model->end_time) ? date('Y-m-d H:i',$model->end_time + 8*3600)  : date('Y-m-d H:i',time() + 8*3600),
+                'value' => isset($model->end_time) ? gmdate('Y-m-d H:i',$model->end_time + 8*3600)  : gmdate('Y-m-d H:i',time() + 8*3600),
                 'pluginOptions' => [
                     'autoclose' => true,
                     'format' => 'yyyy-mm-dd hh:ii',

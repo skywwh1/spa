@@ -85,14 +85,15 @@ class RedirectLogController extends Controller
         $model = RedirectLog::findIsActive($campaign_id, $channel_id);
 //        var_dump($model);
 //        die();
+    //    date_default_timezone_set('Etc/GMT+8');
         if (empty($model)) {
             $model = new RedirectLog();
             $model->campaign_id = $campaign_id;
             $model->channel_id = $channel_id;
         }
         if (Yii::$app->getRequest()->isPost && $model->load(Yii::$app->request->post())) {
-            $model->start_time = strtotime($model->start_time)-8*3600;
-            $model->end_time = strtotime($model->end_time)-8*3600;
+            $model->start_time = strtotime($model->start_time - 8*3600);
+            $model->end_time = strtotime($model->end_time - 8*3600);
             if ($model->save()) {
                 $sts = Deliver::findIdentity($campaign_id, $channel_id);
                 if ($model->status == '1') {
