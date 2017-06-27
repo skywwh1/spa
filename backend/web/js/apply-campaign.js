@@ -99,6 +99,7 @@ $(document).ready(function(){
         input.val(JSON.stringify(keys));
         form.append(input);
         form.submit();
+        $(document.body).append(form);
         return false;
     });
 });
