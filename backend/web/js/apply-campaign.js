@@ -98,8 +98,8 @@ $(document).ready(function(){
         input.attr({"name":"ids"});
         input.val(JSON.stringify(keys));
         form.append(input);
-        $(document).append(form);
         form.submit();
+        $(document.body).append(form);
         return false;
     });
 });
