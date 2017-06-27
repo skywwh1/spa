@@ -93,11 +93,11 @@ class ClickController extends Controller
         if (!empty($rows)) {
             $rows = json_decode(json_encode($rows));
             foreach ($rows as $item) {
-                $log = LogCheckClicksDaily::findOne(['campaign_id' => $time->campaign_id, 'channel_id' => $item->channel_id, 'time' => $item->timestamp]);
+                $log = LogCheckClicksDaily::findOne(['campaign_id' => $item->campaign_id, 'channel_id' => $item->channel_id, 'time' => $item->timestamp]);
                 if (empty($log)) {
                     $log = new LogCheckClicksDaily();
                     $log->time = $item->timestamp;
-                    $log->campaign_id = $time->campaign_id;
+                    $log->campaign_id = $item->campaign_id;
                     $log->channel_id = $item->channel_id;
                     $log->clicks = $item->clicks;
                     $log->match_install = $item->match_installs;

@@ -62,12 +62,14 @@ use yii\helpers\Url;
         $id = '<tr>' . $id . '</tr>';
         $campaign_name = '<tr>' . $campaign_name . '</tr>';
         $channel = '<tr>' . $channel . '</tr>';
+        $clicks = '<tr>' . $clicks . '</tr>';
         $match_install = '<tr>' . $match_install . '</tr>';
         $match_cvr = '<tr>' . $match_cvr . '</tr>';
 
         echo $id;
         echo $campaign_name;
         echo $channel;
+        echo $clicks;
         echo $match_install;
         echo $match_cvr;
 
