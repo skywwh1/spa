@@ -99,6 +99,7 @@ class ClickController extends Controller
                     $log->time = $item->timestamp;
                     $log->campaign_id = $item->campaign_id;
                     $log->channel_id = $item->channel_id;
+                    $log->revenue = $item->revenue;
                     $log->clicks = $item->clicks;
                     $log->match_install = $item->match_installs;
                     $log->match_cvr = $item->cvr;

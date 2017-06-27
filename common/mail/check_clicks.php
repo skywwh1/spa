@@ -49,6 +49,7 @@ use yii\helpers\Url;
         $clicks = '<td> Clicks</td>';
         $match_install = '<td> Match Install</td>';
         $match_cvr = '<td>Match CVR</td>';
+        $revenue = '<td>Revenue</td>';
 
         foreach ($checks as $check) {
             $id .= '<td>' . Html::encode($check->campaign_id) . '</td>';
@@ -57,6 +58,7 @@ use yii\helpers\Url;
             $clicks .= '<td>' . Html::encode($check->clicks) . '</td>';
             $match_install .= '<td>' . Html::encode($check->match_install) . '</td>';
             $match_cvr .= '<td>' . Html::encode($check->match_cvr) . '</td>';
+            $revenue .= '<td>' . Html::encode($check->revenue) . '</td>';
         }
 
         $id = '<tr>' . $id . '</tr>';
@@ -65,6 +67,7 @@ use yii\helpers\Url;
         $clicks = '<tr>' . $clicks . '</tr>';
         $match_install = '<tr>' . $match_install . '</tr>';
         $match_cvr = '<tr>' . $match_cvr . '</tr>';
+        $revenue = '<tr>' . $revenue . '</tr>';
 
         echo $id;
         echo $campaign_name;
@@ -72,6 +75,7 @@ use yii\helpers\Url;
         echo $clicks;
         echo $match_install;
         echo $match_cvr;
+        echo $revenue;
 
         ?>
         </tbody>

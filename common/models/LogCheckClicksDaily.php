@@ -13,6 +13,7 @@ use Yii;
  * @property integer $clicks
  * @property integer $match_install
  * @property string $match_cvr
+ * @property string $revenue
  * @property integer $is_send
  * @property integer $time
  * @property integer $create_time
@@ -38,6 +39,7 @@ class LogCheckClicksDaily extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'channel_id', 'time'], 'required'],
             [['campaign_id', 'channel_id', 'clicks', 'match_install', 'is_send', 'time', 'create_time'], 'integer'],
+            [['revenue'], 'number'],
             [['match_cvr'], 'string', 'max' => 255],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
@@ -56,6 +58,7 @@ class LogCheckClicksDaily extends \yii\db\ActiveRecord
             'clicks' => 'Clicks',
             'match_install' => 'Match Install',
             'match_cvr' => 'Match Cvr',
+            'revenue' => 'Revenue',
             'is_send' => 'Is Send',
             'time' => 'Time',
             'create_time' => 'Create Time',
