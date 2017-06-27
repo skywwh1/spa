@@ -96,7 +96,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'effect_time',
                 'attribute' => 'effect_time',
                 'value' => function ($model) {
-                   return date('Y-m-d h:i',$model->effect_time);
+                    return gmdate('Y-m-d H:i',$model->effect_time + 8*3600);
                 },
                 'filter' => false,
             ],
@@ -105,7 +105,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'create_time',
                 'attribute' => 'create_time',
                 'value' => function ($model) {
-                    return date('Y-m-d h:i',$model->create_time);
+                    return gmdate('Y-m-d H:i',$model->create_time + 8*3600);
                 },
                 'filter' => false,
             ],

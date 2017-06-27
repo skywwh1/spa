@@ -75,36 +75,30 @@ $(document).on('click', '#campaignRejectButton', function () {
         });
     }
 });
-
-//$(document).on('click', '#apply-btn', function () {
-//    var url = '/apply-campaign/deliver-create?campaign_id=' + $('#deliver-campaign_id').val() + '&channel_id=' + $('#deliver-channel_id').val();
-//
-//    $.get(url, function(result){
-//        //$("div").html(result);
-//        if(result.indexOf("Cannot")>0){
-//            console.log(result);
-//            alert(result);
-//        }else{
-//            $('#campaign-detail-modal').modal('hide');
-//        }
-//    });
-    //$.ajax({
-    //    async: true,
-    //    url: '/apply-campaign/deliver-create?campaign_id=' + $('#deliver-campaign_id').val() + '&channel_id=' + $('#deliver-channel_id').val(),
-    //    type: 'post',
-    //    success: function (response) {
-    //        //alert(response);
-    //        if(response.indexOf("Cannot")>0){
-    //            alert(response);
-    //        }else{
-    //
-    //        }
-    //    }
-    //});
-    //$.post(url, function(result){
-    //    console.log(result);
-    //    if(result.indexOf("Cannot")>0){
-    //        alert(result);
-    //    }
-    //});
-//});
+$.extend({
+    StandardPost:function(url,args){
+        var form = $("<form method='post'></form>"),
+            input;
+        form.attr({"action":url});
+        $.each(args,function(key,value){
+            input = $("<input type='hidden'>");
+            input.attr({"name":key});
+            input.val(value);
+            form.append(input);
+        });
+        form.submit();
+    }
+});
+$(document).ready(function(){
+    $('#stsButton').click(function(e){
+        var keys = $('#applying_list').yiiGridView('getSelectedRows');
+        var form = $("<form method='post'></form>"),input;
+        form.attr({"action":'/deliver/create'});
+        input = $("<input type='hidden'>");
+        input.attr({"name":"ids"});
+        input.val(JSON.stringify(keys));
+        form.append(input);
+        form.submit();
+        return false;
+    });
+});

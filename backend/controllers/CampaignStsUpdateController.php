@@ -70,7 +70,11 @@ class CampaignStsUpdateController extends Controller
     {
         $searchModel = new CampaignStsUpdateSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+//        $data = $dataProvider->getModels();
+//        foreach($data as $item){
+//            $item->create_time =  $item->create_time+28800;
+//            $item->effect_time =  $item->effect_time+28800;
+//        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -85,6 +85,8 @@ $columns = [
         'value' => 'channel_name',
         'filter' => false,
     ],
+//    'campaign.advertiser0.username',
+    'adv',
     [
         'label' => 'Campaign ID',
         'attribute' => 'campaign_id',

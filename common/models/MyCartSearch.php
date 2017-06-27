@@ -12,7 +12,7 @@ use common\models\MyCart;
  */
 class MyCartSearch extends MyCart
 {
-    public $campaign_uuid;
+    public $ids;
     /**
      * @inheritdoc
      */
@@ -20,7 +20,7 @@ class MyCartSearch extends MyCart
     {
         return [
             [['id', 'campaign_id', 'tag', 'direct', 'advertiser'], 'integer'],
-            [['campaign_name', 'target_geo', 'platform', 'payout', 'daily_cap', 'traffic_source','preview_link','campaign_uuid'], 'safe'],
+            [['campaign_name', 'target_geo', 'platform', 'payout', 'daily_cap', 'traffic_source','preview_link','ids'], 'safe'],
         ];
     }
 

@@ -3,6 +3,8 @@ use common\models\TrafficSource;
 use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
+use kartik\form\ActiveForm;
+
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\MyCartSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -19,11 +21,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="my-cart-index">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
                 <p>
                     <button type="button" id = 'selectButton' class="btn btn-primary">Select</button>
                     <button type="button" id = 'deleteButton' class="btn btn-primary">Delete</button>
+                    <button type="button" id = 'stsButton' class="btn btn-primary">S2S</button>
                 </p>
+                    <?php $form = \kartik\form\ActiveForm::begin(['id' => 'deliver-form']); ?>
+                    <?= $form->field($searchModel, 'ids')->hiddenInput()->label(false) ?>
+                    <?php ActiveForm::end(); ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,

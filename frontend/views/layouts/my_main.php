@@ -122,6 +122,9 @@ SbAppAsset::register($this);
                                 <a href="/account/payment" data-menu="channel-payment">Payment</a>
                             </li>
                             <li>
+                                <a href="/account/profile" data-menu="channel-profile">Profile</a>
+                            </li>
+                            <li>
                                 <a href="#">Setting</a>
                             </li>
 

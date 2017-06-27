@@ -6,6 +6,7 @@
 use backend\assets\AdminAsset;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
+use common\models\ChannelUpdate;
 use common\widgets\Alert;
 
 AdminAsset::register($this);
@@ -44,11 +45,38 @@ AdminAsset::register($this);
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <?php
+                            $data = ChannelUpdate::getRecentChannel();
+                            $column = array_unique(array_column($data,'id'));
+                            $count = count($column);
+                            $column = empty($column)?"":implode(",",$column);
+                            echo '<span class="label label-success">'.$count.'</span>';
+                            ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <?php
+                            echo '<li class="header">The following channels: '.$column.' have been changed.</li>';
+                            if (Yii::$app->user->can('admin')) {
+                                echo '<li class="footer"><a href="/channel/index">Click here for more detail.</a></li>';
+                            }else{
+                                echo '<li class="footer"><a href="/channel/my-channels">Click here for more detail.</a></li>';
+                            }
+                            ?>
+                        </ul>
+                    </li>
                     <li class="dropdown notifications-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <?php
-                            $data = \common\models\ApplyCampaign::find()->leftJoin('channel','apply_campaign.channel_id = channel.id')->andFilterWhere(['channel.om' =>yii::$app->user->id])->andFilterWhere(['apply_campaign.status' => 1])->all();
+                            $beginTheDayBefore=mktime(0,0,0,date('m'),date('d')-2,date('Y'));
+                            $data = \common\models\ApplyCampaign::find()
+                                ->leftJoin('channel','apply_campaign.channel_id = channel.id')
+                                ->andFilterWhere(['>','apply_campaign.create_time',$beginTheDayBefore])
+                                ->andFilterWhere(['channel.om' =>yii::$app->user->id])
+                                ->andFilterWhere(['apply_campaign.status' => 1])->all();
                             $count = count($data);
                              echo '<span class="label label-warning">'.$count.'</span>';
                             ?>
@@ -62,7 +90,8 @@ AdminAsset::register($this);
                     <!-- User Account: style can be found in dropdown.less -->
                     <li class="dropdown user user-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <span class="hidden-xs"><?= Yii::$app->user->identity->username ?></span>
+
+                            <span class="hidden-xs"><?= \common\models\User::getUsername() ?></span>
                         </a>
                         <ul class="dropdown-menu">
                             <!-- Menu Footer-->

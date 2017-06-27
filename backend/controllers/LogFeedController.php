@@ -5,9 +5,12 @@ namespace backend\controllers;
 use Yii;
 use common\models\LogFeed;
 use common\models\LogFeedSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use DateTime;
+use DateTimeZone;
 
 /**
  * LogFeedController implements the CRUD actions for LogFeed model.
@@ -20,6 +23,21 @@ class LogFeedController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'create',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -37,6 +55,10 @@ class LogFeedController extends Controller
     {
         $searchModel = new LogFeedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $data = $dataProvider->getModels();
+        foreach($data as $item){
+            $item->feed_time =  $item->feed_time+28800;
+        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

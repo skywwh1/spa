@@ -16,6 +16,7 @@ class PaymentForm extends Model
     public $bank_address;
     public $swift;
     public $account_nu_iban;
+    public $channel_id;
     /**
      * @var Channel
      */
@@ -28,7 +29,7 @@ class PaymentForm extends Model
     {
         return [
             [['payment_way', 'beneficiary_name'], 'safe'],
-            [['bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban'], 'safe'],
+            [['bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban','channel_id'], 'safe'],
         ];
     }
 

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\LogPost;
 use common\models\LogPostSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,21 @@ class LogPostController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'create',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -37,7 +53,10 @@ class LogPostController extends Controller
     {
         $searchModel = new LogPostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $data = $dataProvider->getModels();
+        foreach($data as $item){
+            $item->post_time =  $item->post_time+28800;
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

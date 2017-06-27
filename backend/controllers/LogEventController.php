@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\LogEvent;
 use common\models\LogEventSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -20,6 +21,21 @@ class LogEventController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'create',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

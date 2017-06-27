@@ -16,7 +16,7 @@ class StsForm extends Model
 
     public $campaign_uuid;
     public $channel;
-    public $campaign_id;
+    public $campaign;
 
     public function rules()
     {

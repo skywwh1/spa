@@ -333,7 +333,7 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
 
     public static function getUsername()
     {
-        return \Yii::$app->user->identity->username;
+        return empty(\Yii::$app->user->identity->username)?"":\Yii::$app->user->identity->username;
     }
 
     public static function getUserEmailList($ids)

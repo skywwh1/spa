@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'bd',
                             [
                                 'attribute' => 'pm',
-                                'value' => $model->pm0->username,
+                                'value' => empty($model->pm0)?"":$model->pm0->username,
                             ],
                             [
                                 'attribute' => 'bd',

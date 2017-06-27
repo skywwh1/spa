@@ -8,6 +8,7 @@ use backend\models\FinancePendingForm;
 use Yii;
 use backend\models\FinanceCompensation;
 use backend\models\FinanceCompensationSearch;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -25,6 +26,22 @@ class FinanceCompensationController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'view',
+                            'update',
+                            'delete',
+                            'create',
+                            'validate',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

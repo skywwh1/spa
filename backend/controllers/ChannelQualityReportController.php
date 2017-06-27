@@ -11,6 +11,7 @@ use DateTime;
 use DateTimeZone;
 use common\models\ChannelQualityReport;
 use common\models\ChannelQualityReportSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -27,6 +28,22 @@ class ChannelQualityReportController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['index',
+                            'quality',
+                            'update',
+                            'delete',
+                            'columns',
+                            'email',
+                        ],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -167,7 +184,7 @@ class ChannelQualityReportController extends Controller
                 $model->time = $time;
                 $model->name = $name;
             }
-            $model->value = $_POST[$name];
+            $model->value = $_POST[str_replace(' ', '_', $name)];
             $model->save();
             $out = Json::encode(['message' => 'successifully saved']);
             echo $out;

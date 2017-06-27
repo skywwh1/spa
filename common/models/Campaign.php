@@ -371,4 +371,31 @@ class Campaign extends \yii\db\ActiveRecord
         return $this->hasMany(CampaignCreativeLink::className(), ['campaign_id' => 'id']);
     }
 
+    /**
+     * @param $keys
+     * @param $campaign_ids
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getSelectCampaign($keys,$campaign_ids)
+    {
+        if (empty($campaign_ids)){
+            $campaign_ids = MyCart::find()->select(['campaign_id'])->where(['in', 'id', $keys])->asArray();
+        }
+        $rows = static::find()
+            ->select(['id','CONCAT(id,"-",campaign_uuid) campaign_uuid'])
+            ->where(['in', 'id', $campaign_ids])
+            ->all();
+        $uuidArray = ArrayHelper::map($rows, 'id','campaign_uuid');
+        return $uuidArray;
+    }
+
+    /**
+     * @param $ids
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getCampaignsByIds($ids)
+    {
+        $data = static::find()->where(['in', 'id', $ids])->all();
+        return $data;
+    }
 }

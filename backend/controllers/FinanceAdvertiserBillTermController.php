@@ -13,6 +13,7 @@ use common\models\Advertiser;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
+use yii\filters\AccessControl;
 use yii\helpers\Json;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -33,6 +34,16 @@ class FinanceAdvertiserBillTermController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'edit','retreat','flow'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

@@ -12,6 +12,7 @@ use common\models\ApplyCampaign;
  */
 class ApplyCampaignSearch extends ApplyCampaign
 {
+    public $ids;
     public function attributes(){
         return array_merge(parent::attributes(),['channelName','campaignName','om','advertiser']);
     }
@@ -22,7 +23,7 @@ class ApplyCampaignSearch extends ApplyCampaign
     {
         return [
             [['campaign_id', 'channel_id', 'status', 'create_time'], 'integer'],
-            [['channelName','campaignName','om','advertiser'], 'safe'],
+            [['channelName','campaignName','om','advertiser','ids'], 'safe'],
         ];
     }
 

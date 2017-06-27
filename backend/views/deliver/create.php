@@ -12,7 +12,8 @@ use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Deliver */
-
+/* @var $campaign_uuid array */
+/* @var $keys array */
 $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'Delivers', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -44,66 +45,109 @@ $this->params['breadcrumbs'][] = $this->title;
                 //                        ]
                 //                    ]],
                 //            ])
-                echo $form->field($model, 'campaign_uuid')->widget(Select2::classname(), [
-//                'initValueText' => $cityDesc, // set the initial display text
-                    'size' => Select2::MEDIUM,
-                    'options' => [
-                        'multiple' => true,
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'minimumInputLength' => 1,
-                        'language' => [
-                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                if ($model->campaign_uuid){
+                    echo $form->field($model, 'campaign_uuid')->widget(Select2::classname(), [
+                        'size' => Select2::MEDIUM,
+                        'options' => [
+                            'multiple' => true,
                         ],
-                        'ajax' => [
-                            'url' => Url::to('/campaign/get_campaign_uuid_multiple'),
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {uuid:params.term}; }')
-                        ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(campaign) { return campaign.campaign_uuid; }'),
-                        'templateSelection' => new JsExpression('function (campaign) { return campaign.campaign_uuid; }'),
-                    ],
-                    ])->label("Campaign ID-UUID");
-                ?>
+                        'readonly' => true,
+                        'model' => $model,
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 1,
+                            'language' => [
+                                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                            ],
+                            'ajax' => [
+                                'url' => Url::to('/campaign/get_campaign_uuid_multiple'),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {uuid:params.term}; }')
+                            ],
 
-                <?php
-                //            $form->field($model, 'channel')->widget(Typeahead::classname(), [
-                //                'options' => ['placeholder' => 'Channel'],
-                //                'pluginOptions' => ['highlight' => true],
-                //                'dataset' => [
-                //                    [
-                //                        'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                //                        'display' => 'value',
-                //                        'remote' => [
-                //                            'url' => Url::to(['channel/get_channel_name']) . '?name=%QUERY',
-                //                            'wildcard' => '%QUERY'
-                //                        ]
-                //                    ]],
-                //            ])
-                echo $form->field($model, 'channel')->widget(Select2::classname(), [
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(campaign) { return campaign.text; }'),
+                            'templateSelection' => new JsExpression('function (campaign) { return campaign.id; }'),
+                        ],
+                    ])->label("Campaign ID-UUID");
+                }else{
+                    echo $form->field($model, 'campaign_uuid')->widget(Select2::classname(), [
 //                'initValueText' => $cityDesc, // set the initial display text
-                    'size' => Select2::MEDIUM,
-                    'options' => [
-                        'multiple' => true,
-                    ],
-                    'pluginOptions' => [
-                        'allowClear' => true,
-                        'minimumInputLength' => 1,
-                        'language' => [
-                            'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                        'size' => Select2::MEDIUM,
+                        'options' => [
+                            'multiple' => true,
                         ],
-                        'ajax' => [
-                            'url' => Url::to('/channel/get_channel_multiple'),
-                            'dataType' => 'json',
-                            'data' => new JsExpression('function(params) { return {name:params.term}; }')
+//                        'initValueText' => $campaign_uuid,
+//                        'value' => $keys,
+                        'pluginOptions' => [
+                            'allowClear' => true,
+                            'minimumInputLength' => 1,
+                            'language' => [
+                                'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                            ],
+                            'ajax' => [
+                                'url' => Url::to('/campaign/get_campaign_uuid_multiple'),
+                                'dataType' => 'json',
+                                'data' => new JsExpression('function(params) { return {uuid:params.term}; }')
+                            ],
+
+                            'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                            'templateResult' => new JsExpression('function(campaign) { return campaign.campaign_uuid; }'),
+                            'templateSelection' => new JsExpression('function (campaign) { return campaign.campaign_uuid; }'),
                         ],
-                        'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                        'templateResult' => new JsExpression('function(channel) { return channel.username; }'),
-                        'templateSelection' => new JsExpression('function (channel) { return channel.username; }'),
-                    ],
-                ]);
+                    ])->label("Campaign ID-UUID");
+                }
+
+                ?>
+                <?php
+                    if ($model->channel){
+                        echo $form->field($model, 'channel')->widget(Select2::classname(), [
+                    //                'initValueText' => $cityDesc, // set the initial display text
+                            'size' => Select2::MEDIUM,
+                            'options' => [
+                                'multiple' => true,
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'minimumInputLength' => 1,
+                                'language' => [
+                                    'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                                ],
+                                'ajax' => [
+                                    'url' => Url::to('/channel/get_channel_multiple'),
+                                    'dataType' => 'json',
+                                    'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                                ],
+                                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                'templateResult' => new JsExpression('function(channel) { return channel.text; }'),
+                                'templateSelection' => new JsExpression('function (channel) { return channel.text; }'),
+                            ],
+                        ]);
+                    }else{
+                        echo $form->field($model, 'channel')->widget(Select2::classname(), [
+                            //                'initValueText' => $cityDesc, // set the initial display text
+                            'size' => Select2::MEDIUM,
+                            'options' => [
+                                'multiple' => true,
+                            ],
+                            'pluginOptions' => [
+                                'allowClear' => true,
+                                'minimumInputLength' => 1,
+                                'language' => [
+                                    'errorLoading' => new JsExpression("function () { return 'Waiting for results...'; }"),
+                                ],
+                                'ajax' => [
+                                    'url' => Url::to('/channel/get_channel_multiple'),
+                                    'dataType' => 'json',
+                                    'data' => new JsExpression('function(params) { return {name:params.term}; }')
+                                ],
+                                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                                'templateResult' => new JsExpression('function(channel) { return channel.username; }'),
+                                'templateSelection' => new JsExpression('function (channel) { return channel.username; }'),
+                            ],
+                        ]);
+                    }
+
                 ?>
                 <?= $form->field($model, 'step')->hiddenInput(['value' => 1])->label(false) ?>
 

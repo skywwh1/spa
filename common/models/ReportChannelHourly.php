@@ -21,6 +21,7 @@ class ReportChannelHourly extends CampaignLogHourly
     public $start;
     public $end;
     public $timestamp;
+    public $adv;
 
     public function attributeLabels()
     {
