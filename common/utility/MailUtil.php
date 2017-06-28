@@ -14,6 +14,7 @@ use common\models\Campaign;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\LogAutoCheck;
+use common\models\LogCheckClicksDaily;
 use common\models\SendMailLog;
 use common\models\User;
 use Yii;
@@ -394,4 +395,14 @@ class MailUtil
         }
     }
 
+    /**
+     * @param LogCheckClicksDaily[] $checks
+     */
+    public static function checkClicks($checks)
+    {
+        $mail = Yii::$app->mailer->compose('check_clicks', ['checks' => $checks]);
+        $mail->setTo('operations@superads.cn');
+        $mail->setSubject('Low CR Anticheat - SuperADS');
+        $mail->send();
+    }
 }

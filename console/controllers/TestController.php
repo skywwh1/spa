@@ -49,8 +49,43 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $aa = new Affle();
-        $aa->getApiCampaign();
+//        date('Y-m-d', time());
+
+        $time = strtotime(date('Y-m-d', time()));
+        echo $time."\n";
+        $query = new Query();
+        $query->select([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'SUM(clh.revenue)/SUM(clh.clicks) cvr'
+        ]);
+        $query->from('campaign_log_hourly clh');
+
+        $query->andFilterWhere(['>=', 'time', $time]);
+        $query->andFilterWhere(['<', 'time', $time + 24 * 3600]);
+
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'timestamp',
+        ]);
+        $query->having(['>', 'clicks', 10000]);
+
+        echo $query->createCommand()->sql;
+
 
 /*        $redis = Yii::$app->redis;
 //        $result = $redis->executeCommand('hmset', ['test_collection', 'key1', 'val1', 'key2', 'val2']);
