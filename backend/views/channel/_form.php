@@ -186,7 +186,7 @@ use common\models\Platform;
                             'templateSelection' => new JsExpression('function (campaign) { return campaign.text; }'),
                         ],
                     ]); ?>
-
+                    <?= $form->field($model, 'level')->dropDownList(ModelsUtil::channel_level) ?>
                     <?= $form->field($model, 'recommended')->dropDownList(ModelsUtil::status) ?>
 
                     <div class="form-group">

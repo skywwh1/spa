@@ -250,4 +250,13 @@ class ChannelSearch extends Channel
         }
         return $dataProvider;
     }
+
+    public function searchSearch($params)
+    {
+        $this->load($params);
+        if(!empty($this->id) || !empty($this->username)){
+            return $this->search();
+        }
+        return null;
+    }
 }

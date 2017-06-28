@@ -120,6 +120,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'recommended',
                             'value' => ModelsUtil::getStatus($model->recommended)
                         ],
+                        [
+                            'attribute' => 'level',
+                            'value' => ModelsUtil::getChannelLevel($model->level)
+                        ],
                     ],
                 ]) ?>
 

@@ -276,6 +276,17 @@ class ModelsUtil
         '0' => 'active',
         '1' => 'closed',
     );
+    const channel_level = array(
+        '0' => 'New',
+        '1' => 'A',
+        '2' => 'B',
+        '3' => 'C',
+        '4' => 'D',
+    );
+    public static function getChannelLevel($k)
+    {
+        return static::getValue(static::channel_level, $k);
+    }
     public static function getPayableStatus($k)
     {
         return static::getValue(static::payable_status, $k);
