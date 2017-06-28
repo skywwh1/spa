@@ -72,6 +72,7 @@ use yii\web\IdentityInterface;
  * @property string $os
  * @property integer recommended
  * @property string $discount
+ * @property integer $level
  *
  * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
@@ -85,6 +86,7 @@ class Channel extends ActiveRecord implements IdentityInterface
 {
     public $om_name;
     public $master_channel_name;
+
     /**
      * @inheritdoc
      */
@@ -102,7 +104,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['payment_way', 'payment_term'], 'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
-            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable', 'payment_term','recommended'], 'integer'],
+            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable', 'payment_term', 'recommended', 'level'], 'integer'],
             [['pricing_mode', 'username', 'firstname', 'lastname', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'company', 'address', 'post_back', 'paid'], 'string', 'max' => 255],
@@ -115,7 +117,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['email'], 'email'],
             [['discount'], 'number'],
-            [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo','os'], 'safe'],
+            [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo', 'os'], 'safe'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
@@ -190,6 +192,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             'recommended' => 'Recommended',
             'om_name' => 'OM',
             'discount' => 'Discount',
+            'level' => 'Level',
             'master_channel_name' => 'Master Channel',
         ];
     }
@@ -361,14 +364,15 @@ class Channel extends ActiveRecord implements IdentityInterface
         return static::findOne(['username' => $username]);
     }
 
-    public static function getNewChannel($first_day,$last_day){
+    public static function getNewChannel($first_day, $last_day)
+    {
         return static::find()->andFilterWhere(['payment_term' => 30])->andFilterWhere(['>', 'created_time', $first_day])->andFilterWhere(['<', 'created_time', $last_day])->all();
     }
 
     public static function getChannelByIds($ids)
     {
         $data = static::find()->select('id,username')->where(['in', 'id', $ids])->all();
-        $userArray = ArrayHelper::map($data,'username', 'id');
+        $userArray = ArrayHelper::map($data, 'username', 'id');
         return $userArray;
     }
 
