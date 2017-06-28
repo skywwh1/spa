@@ -39,7 +39,7 @@ class RedirectController extends Controller
             ->all();
         if (isset($models)) {
             foreach ( $models as $item){
-                $item->status = 0;
+                $item->status = 2;
                 $item->save();
                 $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
                 $sts->is_redirect = 0;
