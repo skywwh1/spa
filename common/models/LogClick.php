@@ -26,6 +26,7 @@ use Yii;
  * @property string $ip
  * @property integer $ip_long
  * @property string $redirect
+ * @property integer $redirect_campaign_id
  * @property string $browser
  * @property string $browser_type
  * @property integer $click_time
@@ -52,7 +53,7 @@ class LogClick extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid'], 'required'],
+            [['click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid','redirect_campaign_id'], 'required'],
             [['channel_id', 'campaign_id', 'ip_long', 'click_time', 'create_time'], 'safe'],
             [['adv_price', 'pay_out', 'discount'], 'safe'],
             [['click_uuid', 'click_id', 'campaign_uuid', 'daily_cap', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'safe'],
@@ -85,6 +86,7 @@ class LogClick extends \yii\db\ActiveRecord
             'ip' => 'Ip',
             'ip_long' => 'Ip Long',
             'redirect' => 'Redirect',
+            'redirect_campaign_id' => 'Redirect Campaign ID',
             'browser' => 'Browser',
             'browser_type' => 'Browser Type',
             'click_time' => 'Click Time',

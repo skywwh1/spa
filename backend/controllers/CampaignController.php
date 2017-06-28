@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\StsForm;
 use common\models\Advertiser;
 use common\models\Category;
 use common\models\MyCart;
@@ -456,6 +457,7 @@ class CampaignController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'campaign' => $cam,
+            'model'=>new StsForm(),
         ]);
     }
 

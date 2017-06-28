@@ -246,13 +246,6 @@ class StreamController extends Controller
             return 403;
         }
 
-        //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
-        if (!empty($click->ch_subid)) {
-            $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $click->channel_id, 'sub_channel' => $click->ch_subid]);
-            if (!empty($sub_channel)) {
-                return 405;
-            }
-        }
         /**
          * test link
          */
@@ -295,17 +288,25 @@ class StreamController extends Controller
                 $redirectCam = $redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
+                $click->redirect_campaign_id = $redirect->campaignIdNew;
+                return 200;
             }
         }
 
         //子渠道是否导量
         if (!empty($click->ch_subid)) {
-            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
+            //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
+            $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $click->channel_id, 'sub_channel' => $click->ch_subid]);
+            if (!empty($sub_channel)) {
+                return 405;
+            }
 
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
             if (!empty($sub_redirect)) {
                 $redirectCam = $sub_redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
+                $click->redirect_campaign_id = $sub_redirect->campaignIdNew;
             }
         }
 //        $this->countClick($click);

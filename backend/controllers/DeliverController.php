@@ -32,6 +32,7 @@ use yii\helpers\Json;
 class DeliverController extends Controller
 {
     public $enableCsrfValidation = false;
+
     /**
      * @inheritdoc
      */
@@ -57,6 +58,7 @@ class DeliverController extends Controller
                             'sts-create',
                             'pause',
                             'second',
+                            'recommend-create',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -75,8 +77,8 @@ class DeliverController extends Controller
         $searchModel = new DeliverSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $data = $dataProvider->getModels();
-        foreach($data as $item){
-            $item->create_time =  $item->create_time+28800;
+        foreach ($data as $item) {
+            $item->create_time = $item->create_time + 28800;
         }
 
         return $this->render('index', [
@@ -112,29 +114,30 @@ class DeliverController extends Controller
         //1、处理从MyCart,CampaignList,ApplyOffers这里直接S2S的事件
         if ($my_cart->load(Yii::$app->request->post())
             || $campaign_search->load(Yii::$app->request->post())
-            || isset($_POST['ids'])){
+            || isset($_POST['ids'])
+        ) {
 
-            $campaign_search->campaign_uuid = empty($campaign_search->campaign_uuid)?"":explode(",",$campaign_search->campaign_uuid);//campaign_id
-            $my_cart->ids = empty($my_cart->ids)?"":explode(",",$my_cart->ids);//mycart id
+            $campaign_search->campaign_uuid = empty($campaign_search->campaign_uuid) ? "" : explode(",", $campaign_search->campaign_uuid);//campaign_id
+            $my_cart->ids = empty($my_cart->ids) ? "" : explode(",", $my_cart->ids);//mycart id
 
-            if (isset($_POST['ids'])){
+            if (isset($_POST['ids'])) {
                 $ids = Json::decode($_POST['ids']);
                 $apply_search->campaign_id = array_unique(array_column($ids, 'campaign_id'));
-                $apply_search->channel_id = array_unique(array_column($ids,'channel_id'));
+                $apply_search->channel_id = array_unique(array_column($ids, 'channel_id'));
             }
 
             $campaign_ids = [];
-            if (!empty( $campaign_search->campaign_uuid)){
+            if (!empty($campaign_search->campaign_uuid)) {
                 $campaign_ids = $campaign_search->campaign_uuid;
             }
-             if (!empty($apply_search->campaign_id)){
+            if (!empty($apply_search->campaign_id)) {
                 $campaign_ids = $apply_search->campaign_id;
             }
 
-            $campaign_uuid = Campaign::getSelectCampaign($my_cart->ids,$campaign_ids);
+            $campaign_uuid = Campaign::getSelectCampaign($my_cart->ids, $campaign_ids);
             $form = new StsForm();
             $form->campaign_uuid = $campaign_uuid;
-            if (!empty($apply_search->channel_id)){
+            if (!empty($apply_search->channel_id)) {
                 $form->channel = Channel::getChannelByIds($apply_search->channel_id);
             }
             return $this->render('create', [
@@ -150,13 +153,13 @@ class DeliverController extends Controller
             foreach ($model->campaign_uuid as $campaign_id) {
                 $camp = Campaign::findOne($campaign_id);
                 if (!empty($camp->target_geo)) {
-                    $targetGeos = explode(",",$camp->target_geo);
+                    $targetGeos = explode(",", $camp->target_geo);
                 }
                 /**
                  * 1、首先根据campaign_id获得target_geo，advertiser
                  * 2、根据channel_id，target_geo，advertiser查询channel_black的是否有该
                  * 3、如果这条记录的
-                */
+                 */
                 foreach ($model->channel as $channel_id) {
                     $deliver = new Deliver();
                     $deliver->campaign_id = $campaign_id;
@@ -169,10 +172,10 @@ class DeliverController extends Controller
                     $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
                     $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
                     $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
-                    $deliver->discount = isset($deliver->channel)?$deliver->channel->discount:30;
+                    $deliver->discount = isset($deliver->channel) ? $deliver->channel->discount : 30;
                     $delivers[] = $deliver;
 
-                    if (!empty($targetGeos)){
+                    if (!empty($targetGeos)) {
                         foreach ($targetGeos as $geo) {
                             $channel_black_list = ChannelBlack::find()
                                 ->where(['channel_id' => $channel_id])
@@ -180,10 +183,10 @@ class DeliverController extends Controller
                                 ->andFilterWhere(['like', 'geo', $geo])
                                 ->asArray()
                                 ->all();
-                            if (!empty($channel_black_list)){
-                                $channel_black_list['advertiser_name'] =  $camp->advertiser0->username;
+                            if (!empty($channel_black_list)) {
+                                $channel_black_list['advertiser_name'] = $camp->advertiser0->username;
                                 $channel_black_list['channel_name'] = $deliver->channel->username;
-                                array_push($blackChannels,$channel_black_list);
+                                array_push($blackChannels, $channel_black_list);
                             }
                         }
                     }
@@ -191,23 +194,23 @@ class DeliverController extends Controller
             }
 
             $return_msg = array();
-            if (!empty($blackChannels)){
+            if (!empty($blackChannels)) {
                 foreach ($blackChannels as $black_channel) {
                     // $black_channel[0]不为空
-                    if(is_array($black_channel[0]) && isset($black_channel[0])){
-                        if ( $black_channel[0]['action_type'] == 0){
-                            $str = 'Are you sure to S2S?Note:'.$black_channel[0]['note'];
-                        }else{
-                            $str = 'Cannot S2S!!!Note:'.$black_channel[0]['note'];
+                    if (is_array($black_channel[0]) && isset($black_channel[0])) {
+                        if ($black_channel[0]['action_type'] == 0) {
+                            $str = 'Are you sure to S2S?Note:' . $black_channel[0]['note'];
+                        } else {
+                            $str = 'Cannot S2S!!!Note:' . $black_channel[0]['note'];
                         }
                     }
                     $return_msg[] = $str;
                 }
-                $return_msg = implode(";",$return_msg);
+                $return_msg = implode(";", $return_msg);
             }
             return $this->render('second', [
                 'delivers' => $delivers,
-                'returnMsg' => empty($return_msg)?null:$return_msg
+                'returnMsg' => empty($return_msg) ? null : $return_msg
             ]);
         }
         return $this->render('create', [
@@ -376,5 +379,42 @@ class DeliverController extends Controller
         return $this->render('test_link', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * Creates a new Deliver model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionRecommendCreate()
+    {
+
+        $model = new StsForm();
+
+        //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
+        if ($model->load(Yii::$app->request->post())) {
+            $delivers = [];
+            $channels = explode(',', $model->channel);
+            foreach ($channels as $channel_id) {
+                $deliver = new Deliver();
+                $deliver->campaign_id = $model->campaign_uuid;
+                $deliver->channel_id = $channel_id;
+                $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+                $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                $deliver->discount = isset($deliver->channel) ? $deliver->channel->discount : 30;
+                $delivers[] = $deliver;
+            }
+            return $this->render('second', [
+                'delivers' => $delivers,
+                'returnMsg' => empty($return_msg) ? null : $return_msg
+            ]);
+        }
+
     }
 }
