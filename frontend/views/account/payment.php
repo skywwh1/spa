@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\Channel */
+/* @var $model frontend\models\PaymentForm */
 
 $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-
 
     <div class="col-lg-8">
         <div class="panel panel-default">

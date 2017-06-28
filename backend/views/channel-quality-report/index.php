@@ -37,7 +37,7 @@ if (!empty($dataProvider)) {
                         echo Html::a('<span class="glyphicon glyphicon-plus"></span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
-                                'data-url' => 'columns?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end,
+                                'data-url' => 'columns?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
                                 'data-view' => 0,
                                 'data-pjax' => 0,
                             ]);
@@ -45,7 +45,7 @@ if (!empty($dataProvider)) {
                         echo Html::a('<span class="btn btn-primary">Email</span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
-                                'data-url' => 'email?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end,
+                                'data-url' => 'email?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
                                 'data-view' => 0,
                                 'data-pjax' => 0,
                             ]);
@@ -54,6 +54,7 @@ if (!empty($dataProvider)) {
                     </p>
                     <?php
                     $columns = [
+                        'timestamp',
                         [
                             'attribute' => 'campaign_id',
                             'value' => 'campaign_id',
@@ -73,18 +74,6 @@ if (!empty($dataProvider)) {
                             // 'label' => 'sub_channel',
                             'attribute' => 'sub_channel',
                             'value' => 'sub_channel',
-                            'filter' => false,
-                        ],
-                        [
-                            'attribute' => 'timestamp',
-                            'value'=> function($model){
-                                return  date('Y-m-d',$model['timestamp']);
-                            },
-                            'filter' => false,
-                        ],
-                        [
-                            'attribute' => 'time',
-                            'value' => 'timestamp',
                             'filter' => false,
                         ],
                         [
@@ -139,7 +128,7 @@ if (!empty($dataProvider)) {
                                 'value'=> function ($model,$key,$index) use ($name,$columnName){
                                     $model = (object)$model;
 //                                $datas = $dataProvider->getModels();
-//                                var_dump($datas);
+//                                var_dump($model);
                                     if (!empty($columnName[$index])){
                                         return $columnName[$index][$name];
                                     }else{

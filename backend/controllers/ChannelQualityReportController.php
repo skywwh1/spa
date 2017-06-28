@@ -69,8 +69,23 @@ class ChannelQualityReportController extends Controller
         $date->format('Y-m-d');
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+//        var_dump($searchModel->type);
+//        die();
+        $searchModel->load(Yii::$app->request->queryParams);
+        switch($searchModel->type){
+            case 1:
+                $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+            case 2:
+                $dataProvider = $searchModel->monthSearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+            default:
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+        }
 
         $models = empty($dataProvider)?null:$dataProvider->getModels();
         $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
@@ -241,10 +256,11 @@ class ChannelQualityReportController extends Controller
      * @param $channel_id
      * @param $start
      * @param $end
+     * @param $type
      * @return string|\yii\web\Response
      */
     //创建的时候增加camp
-    public function actionColumns($campaign_id,$channel_id,$start,$end)
+    public function actionColumns($campaign_id,$channel_id,$start,$end,$type)
     {
         $model = new QualityDynamicColumn();
         $model->channel_id = $channel_id;
@@ -261,7 +277,17 @@ class ChannelQualityReportController extends Controller
             $searchModel->end = $end;
             $searchModel->time_zone = 'Etc/GMT-8';
 
-            $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            switch($type){
+                case 1:
+                    $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
+                    break;
+                case 2:
+                    $dataProvider = $searchModel->monthSearch(Yii::$app->request->queryParams);
+                    break;
+                default:
+                    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                    break;
+            }
 
             $models = empty($dataProvider)?null:$dataProvider->getModels();
             if (!empty($models)){
@@ -288,15 +314,28 @@ class ChannelQualityReportController extends Controller
         }
     }
 
-    public function actionEmail($campaign_id,$channel_id,$start,$end){
+    public function actionEmail($campaign_id,$channel_id,$start,$end,$type){
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->time_zone = 'Etc/GMT-8';
         $searchModel->campaign_id = $campaign_id;
         $searchModel->channel_id = $channel_id;
         $searchModel->start = $start;
         $searchModel->end = $end;
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+
+        switch($type){
+            case 1:
+                $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+            case 2:
+                $dataProvider = $searchModel->monthSearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+            default:
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
+                break;
+        }
 
         $models = empty($dataProvider)?null:$dataProvider->getModels();
         $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
