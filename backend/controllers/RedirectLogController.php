@@ -93,7 +93,11 @@ class RedirectLogController extends Controller
         }
         if (Yii::$app->getRequest()->isPost && $model->load(Yii::$app->request->post())) {
             $model->start_time = strtotime($model->start_time) - 8*3600;
-            $model->end_time = strtotime($model->end_time) - 8*3600;
+            if (!empty($model->end_time)){
+                $model->end_time = strtotime($model->end_time) - 8*3600;
+            }else{
+                $model->end_time = 0;
+            }
 
             if ($model->save()) {
                 $sts = Deliver::findIdentity($campaign_id, $channel_id);

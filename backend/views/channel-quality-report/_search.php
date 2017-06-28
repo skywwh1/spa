@@ -35,6 +35,11 @@ use yii\widgets\ActiveForm;
                     ?>
                 </div>
                 <div class='col-lg-2'>
+                    <button type="button" id = 'weekButton' class="btn btn-primary">Last Week</button>
+                    <button type="button" id = 'monthButton' class="btn btn-primary">Last Month</button>
+                    <?= $form->field($model, 'type')->hiddenInput()->label(false) ?>
+                </div>
+                <div class='col-lg-2'>
                     <?= $form->field($model, 'campaign_id')->textInput() ?>
                 </div>
                 <div class='col-lg-2'>

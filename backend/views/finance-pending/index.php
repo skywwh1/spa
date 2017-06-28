@@ -304,11 +304,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'value' => 'note:ntext',
                                 // ],
                                 [
-                                    'label' => 'create_time',
                                     'attribute' => 'create_time',
-                                     'value' => 'create_time',
-                                    'format' => 'datetime',
-                                 ],
+                                    'value' => function ($model) {
+                                        return gmdate('Y-m-d H:i',$model->create_time + 8*3600);
+                                    },
+                                    'filter' => false,
+                                ],
                                 //[
                                 // 'label' => 'update_time',
                                 // 'attribute' => 'update_time',

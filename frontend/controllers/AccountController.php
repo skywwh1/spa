@@ -51,11 +51,13 @@ class AccountController extends Controller
         $old_attr = [];
         array_push($old_attr,$model->beneficiary_name,$model->bank_country,$model->bank_name,
             $model->bank_address,$model->swift,$model->account_nu_iban);
-        if ($model->load(Yii::$app->request->post()) && $model->update()) {
+
+        if ( $model->load(Yii::$app->request->post()) && $model->update()) {
             $new_attr = [];
             array_push($new_attr,$model->beneficiary_name,$model->bank_country,$model->bank_name,
                 $model->bank_address,$model->swift,$model->account_nu_iban);
-            if(count(array_diff($old_attr,$new_attr))>0){
+            $diff = array_merge(array_diff($new_attr, $old_attr), array_diff($old_attr, $new_attr));
+            if(count($diff)>0){
                 $channel_update = new ChannelUpdate();
                 $channel_update->channel_id = $model->channel_id;
                 $channel_update->create_time = time();

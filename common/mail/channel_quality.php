@@ -58,8 +58,9 @@ use yii\helpers\Url;
         <thead>
             <tr>
                 <?php
+                    $time = '<th> Time</th>';
                     $channel_name = '<th> Channel Name</th>';
-                    $sub_channel = '<th> SubChannel</th>';
+                    $sub_channel = '<th> Subid</th>';
                     $click = '<th> Clicks</th>';
                     $unique_click = '<th>Unique Clicks</th>';
                     $install = '<th> Installs</th>';
@@ -70,6 +71,7 @@ use yii\helpers\Url;
         </thead>
         <tbody>
         <?php
+          echo $time;
           echo $channel_name;
           echo $sub_channel;
           echo $click;
@@ -82,6 +84,7 @@ use yii\helpers\Url;
 
         $index = 0;
         foreach ($subChannels as $item) {
+            $time = '<td>' . Html::encode($item['timestamp']) . '</td>';
             $channel_names = '<td>' . Html::encode($item['channel_name']) . '</td>';
             $sub_channels = '<td>' . Html::encode($item['sub_channel']) . '</td>';
             $clicks = '<td>' . Html::encode($item['clicks']) . '</td>';
@@ -93,7 +96,7 @@ use yii\helpers\Url;
                 $cvrs = '<td>' .'0%' . '</td>';
             }
 //            $row = '<tr>' .$ids.$campaign_names.$channel_names.$sub_channels.$clicks.$unique_clicks.$installs.$cvrs.'</tr>';
-            $row = '<tr>' .$channel_names.$sub_channels.$clicks.$unique_clicks.$installs.$cvrs;
+            $row = '<tr>' .$time.$channel_names.$sub_channels.$clicks.$unique_clicks.$installs.$cvrs;
 
             foreach ($cols as $key=>$value){
                 if (!empty($columnName[$index])){

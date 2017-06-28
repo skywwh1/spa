@@ -25,5 +25,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <p> <?php echo  empty($model->om0->email)?'':'Email : '.$model->om0->email;?></p>
         <p> <?php echo empty($model->om0->skype)?'':'Skype : '.$model->om0->skype;?></p>
         <p> <?php echo empty($model->om0->weixin)?'':'Wechat : '.$model->om0->weixin;?></p>
+        <p> <?php echo  empty($model->om0->email)?'':'QQ : '.$model->om0->qq;?></p>
         <p> pls contact with it if you need~</p>
 </div>

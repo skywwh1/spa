@@ -108,7 +108,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             'clh.campaign_id',
             'clh.channel_id',
             'clh.sub_channel',
-            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'DATE_FORMAT(clh.time_format, "%Y%m%d") AS timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
@@ -197,6 +197,180 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             $query->orderBy(['time' => SORT_DESC]);
         }
 
+        return $dataProvider;
+    }
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function monthSearch($params)
+    {
+        $query = new Query();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        if(empty($this->campaign_id) && empty($this->channel_id)){
+            return null;
+        }
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+        $query->select([
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+            'DATE_FORMAT(clh.time_format, "%Y%m") AS timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'u.username om',
+            'cam.daily_cap cap',
+            'clh.daily_cap',
+        ]);
+        $query->from('campaign_log_sub_channel_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'clh.campaign_id' => $this->campaign_id,
+            'clh.channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
+            'ch.username' => $this->channel_name,
+        ]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['<>', 'clh.installs', 0])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+            'timestamp',
+        ]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
+//        var_dump($start).PHP_EOL;
+//        var_dump($end).PHP_EOL;
+//        var_dump($query->createCommand()->sql);
+//        die();
+        return $dataProvider;
+    }
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function weekSearch($params)
+    {
+        $query = new Query();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        if(empty($this->campaign_id) && empty($this->channel_id)){
+            return null;
+        }
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+        $query->select([
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+            'DATE_FORMAT(clh.time_format, "%Y%u") AS timestamp',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.redirect_installs) redirect_installs',
+            'SUM(clh.redirect_match_installs) redirect_match_installs',
+            'AVG(clh.pay_out) pay_out',
+            'AVG(clh.adv_price) adv_price',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+            'SUM(clh.redirect_cost) redirect_cost',
+            'SUM(clh.redirect_revenue) redirect_revenue',
+            'u.username om',
+            'cam.daily_cap cap',
+            'clh.daily_cap',
+        ]);
+        $query->from('campaign_log_sub_channel_hourly clh');
+        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('user u', 'ch.om = u.id');
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'clh.campaign_id' => $this->campaign_id,
+            'clh.channel_id' => $this->channel_id,
+            'sub_channel' => $this->sub_channel,
+            'ch.username' => $this->channel_name,
+        ]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['<>', 'clh.installs', 0])
+            ->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else {
+            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+        }
+        $query->groupBy([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.sub_channel',
+            'timestamp',
+        ]);
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+        }
+//        var_dump($start).PHP_EOL;
+//        var_dump($end).PHP_EOL;
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 
