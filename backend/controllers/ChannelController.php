@@ -56,7 +56,8 @@ class ChannelController extends Controller
                             'om-edit',
                             'recommend',
                             'get-recommend',
-                            'send-recommend'
+                            'send-recommend',
+                            'search-channel',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -355,4 +356,22 @@ class ChannelController extends Controller
         }
     }
 
+    /**
+     * Lists all Channel models.
+     * @return mixed
+     */
+    public function actionSearchChannel()
+    {
+        $searchModel = new ChannelSearch();
+        $dataProvider = null;
+        if(!empty(Yii::$app->request->queryParams)){
+
+            $dataProvider = $searchModel->searchSearch(Yii::$app->request->queryParams);
+        }
+
+        return $this->render('search_channel', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }

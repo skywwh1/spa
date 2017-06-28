@@ -218,6 +218,8 @@ AdminAsset::register($this);
                                     Channel
                                     List</a></li>
                         <?php } ?>
+                        <li><a href="/channel/search-channel" data-menu="search_channel"><i class="fa fa-circle-o"></i> Search
+                                Channels</a></li>
                         <li><a href="/channel/my-channels" data-menu="my_channels"><i class="fa fa-circle-o"></i> My
                                 Channels</a></li>
                         <li><a href="/channel/applying" data-menu="applicants"><i class="fa fa-circle-o"></i> Applicant
