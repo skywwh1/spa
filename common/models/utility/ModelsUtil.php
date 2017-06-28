@@ -181,6 +181,7 @@ class ModelsUtil
     const redirect_status = array(
         '0' => 'closed',
         '1' => 'active',
+        '2' => 'closed'
     );
 
     const  deduction_type = array(
