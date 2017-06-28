@@ -179,7 +179,7 @@ class ModelsUtil
     );
 
     const redirect_status = array(
-        '0' => 'closed',
+        '0' => 'init',
         '1' => 'active',
         '2' => 'closed'
     );
