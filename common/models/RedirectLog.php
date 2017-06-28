@@ -118,7 +118,7 @@ class RedirectLog extends \yii\db\ActiveRecord
             $this->creator = Yii::$app->user->id;
         } else {
             $this->update_time = time();
-//            if ($this->status == 0) {
+//            if ($this->status == 0 ){
 //                $this->end_time = time();
 //            }
         }

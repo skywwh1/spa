@@ -20,7 +20,7 @@ use kartik\datetime\DateTimePicker;
         <?= $form->field($model, 'channel_id')->textInput(['readonly' => true]) ?>
         <?= $form->field($model, 'campaign_id_new')->textInput(['readonly' => isset($model->campaign_id_new) ? true : false]) ?>
         <?= $form->field($model, 'discount')->textInput(['maxlength' => true]) ?>
-        <?= $form->field($model, 'status')->hiddenInput(['value' => 0])->label(false) ?>
+        <?= $form->field($model, 'status')->hiddenInput(['value' => isset($model->campaign_id_new) ? 0 : 2])->label(false) ?>
         <div class="form-group field-financededuction-start_date">
             <?php
             echo '<label class="control-label">Start Date</label>';

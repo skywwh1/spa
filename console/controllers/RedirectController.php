@@ -19,6 +19,7 @@ class RedirectController extends Controller
      */
     public function actionRedirectStatus()
     {
+        //将开始时间小于当前时间的数据导量，则
         $models = RedirectLog::find()->where(['status' => 0,])
             ->andWhere(['<','start_time',time()])
             ->andWhere(['or',['end_time' => 0],['>','end_time',time()]])
@@ -29,6 +30,19 @@ class RedirectController extends Controller
                 $item->save();
                 $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
                 $sts->is_redirect = 1;
+                $sts->save();
+            }
+        }
+
+        $models = RedirectLog::find()->where(['status' => 1,])
+            ->andWhere(['<','end_time',time()])
+            ->all();
+        if (isset($models)) {
+            foreach ( $models as $item){
+                $item->status = 0;
+                $item->save();
+                $sts = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                $sts->is_redirect = 0;
                 $sts->save();
             }
         }

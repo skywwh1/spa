@@ -55,7 +55,7 @@ $(document).on('beforeSubmit', 'form#approve-form', function () {
     });
     return false;
 }).on('submit', function (e) {
-    e.preventDefault();
+    //e.preventDefault();
 });
 
 $(document).on('click', '#campaignRejectButton', function () {
@@ -98,8 +98,8 @@ $(document).ready(function(){
         input.attr({"name":"ids"});
         input.val(JSON.stringify(keys));
         form.append(input);
-        form.submit();
         $(document.body).append(form);
+        form.submit();
         return false;
     });
 });

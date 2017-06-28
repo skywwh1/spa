@@ -56,9 +56,7 @@ class DeliverController extends Controller
                             'testlink',
                             'sts-create',
                             'pause',
-                            'go-create',
                             'second',
-                            'sts',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -210,78 +208,6 @@ class DeliverController extends Controller
             return $this->render('second', [
                 'delivers' => $delivers,
                 'returnMsg' => empty($return_msg)?null:$return_msg
-            ]);
-        }
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Creates a new Deliver model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionGoCreate()
-    {
-        $model = new StsForm();
-//        if ($model->load(Yii::$app->request->post())) {
-//            $delivers = [];
-//            foreach ($model->campaign_uuid as $campaign_id) {
-//                foreach ($model->channel as $channel_id) {
-//                    $deliver = new Deliver();
-//                    $deliver->campaign_id = $campaign_id;
-//                    $deliver->channel_id = $channel_id;
-//                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
-//                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
-//                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
-//                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
-//                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
-//                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
-//                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
-//                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
-//                    $delivers[] = $deliver;
-//                }
-//            }
-//
-//            return  $this->render('second', [
-//                'delivers' => $delivers,
-//            ]);
-//        }
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
-     * Creates a new Deliver model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionGetCreate()
-    {
-        $model = new StsForm();
-        if ($model->load(Yii::$app->request->post())) {
-            $delivers = [];
-            foreach ($model->campaign_uuid as $campaign_id) {
-                foreach ($model->channel as $channel_id) {
-                    $deliver = new Deliver();
-                    $deliver->campaign_id = $campaign_id;
-                    $deliver->channel_id = $channel_id;
-                    $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
-                    $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
-                    $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
-                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
-                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
-                    $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
-                    $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
-                    $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
-                    $delivers[] = $deliver;
-                }
-            }
-
-            return  $this->render('second', [
-                'delivers' => $delivers,
             ]);
         }
         return $this->render('create', [
@@ -450,29 +376,5 @@ class DeliverController extends Controller
         return $this->render('test_link', [
             'model' => $model,
         ]);
-    }
-
-    /**
-     * Select  MyCart columns.
-     * @return mixed
-     */
-    public function actionSts($keylist)
-    {
-        if (isset($keylist)) {
-            $campaign_uuid = MyCart::getSelectCampaign($keylist);
-            $array = [];
-            foreach($campaign_uuid as $item){
-                $array[] = $item['campaign_uuid'];
-            }
-            $model = new StsForm();
-            var_dump($array);
-            $model->campaign_uuid = $array;
-//            var_dump($model->campaign_uuid);
-            return $this->render('create', [
-                'model' => $model,
-            ]);
-        }else{
-            var_dump('please select first!');
-        }
     }
 }
