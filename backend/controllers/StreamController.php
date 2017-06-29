@@ -280,7 +280,6 @@ class StreamController extends Controller
         if (!$click->validate() && $click->hasErrors()) {
             return 404;
         }
-
         //是否导量
         if ($deliver->is_redirect) {
             $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
