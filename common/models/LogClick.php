@@ -53,9 +53,9 @@ class LogClick extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid','redirect_campaign_id'], 'required'],
+            [['click_uuid', 'channel_id', 'campaign_id', 'campaign_uuid'], 'required'],
             [['channel_id', 'campaign_id', 'ip_long', 'click_time', 'create_time'], 'safe'],
-            [['adv_price', 'pay_out', 'discount'], 'safe'],
+            [['adv_price', 'pay_out', 'discount', 'redirect_campaign_id'], 'safe'],
             [['click_uuid', 'click_id', 'campaign_uuid', 'daily_cap', 'pl', 'ch_subid', 'gaid', 'idfa', 'site', 'all_parameters', 'ip', 'redirect', 'browser', 'browser_type'], 'safe'],
             [['click_uuid'], 'unique'],
         ];
