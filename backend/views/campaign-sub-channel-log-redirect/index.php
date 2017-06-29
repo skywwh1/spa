@@ -104,18 +104,18 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => ModelsUtil::redirect_status
                         ],
                         [
-                            'label' => 'create_time',
                             'attribute' => 'create_time',
-                            'value' => 'create_time',
-                            'format' => 'datetime',
-                            'filter' => false
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->create_time + 3600*8);
+                            },
+                            'filter' => false,
                         ],
                         [
-                            'label' => 'end_time',
                             'attribute' => 'end_time',
-                            'value' => 'end_time',
-                            'format' => 'datetime',
-                            'filter' => false
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->end_time + 3600*8);
+                            },
+                            'filter' => false,
                         ],
                         //[
                         // 'label' => 'update_time',
