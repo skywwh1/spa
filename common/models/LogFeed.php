@@ -31,6 +31,9 @@ class LogFeed extends \yii\db\ActiveRecord
     public $campaign_name;
     public $channel_name;
     public $campaign_uuid;
+    public $bd;
+    public $om;
+    public $pm;
 
     /**
      * @inheritdoc

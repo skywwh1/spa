@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ActionColumn',
-                        'template' => '{diy}',
+                        'template' => '{diy}{delete}',
                         'buttons' => [
                             // 自定义按钮
                             'diy' => function ($url, $model, $key) {

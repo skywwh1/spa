@@ -405,4 +405,28 @@ class MailUtil
         $mail->setSubject('Low CR Anticheat - SuperADS');
         $mail->send();
     }
+
+    /**
+     * @param LogAutoCheck[] $checks
+     */
+    public static function autoCheckSubCvr($checks)
+    {
+        $mail = Yii::$app->mailer->compose('auto_check_sub', ['checks' => $checks]);
+
+        $mail->setTo('operations@superads.cn');
+        //$mail->setTo('2539131080@qq.com');
+        $mail->setSubject('Sub Chid Anticheat - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheckSub', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            foreach ($checks as $check) {
+                $check->is_send = 1;
+                $check->save();
+            }
+        }
+    }
 }

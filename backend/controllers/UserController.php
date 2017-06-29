@@ -42,6 +42,7 @@ class UserController extends Controller
                             'reset-password',
                             'resetpwd',
                             'privilege',
+                            'profile',
                         ],
                         'allow' => true,
                         'roles' => ['admin'],
@@ -234,5 +235,25 @@ class UserController extends Controller
         return $this->render('privilege',['id'=>$id,'AuthAssignmentArray'=>$AuthAssignmentsArray,
             'allPrivilegesArray'=>$allPrivilegesArray]);
 
+    }
+
+    /**
+     * Updates an existing User model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionProfile()
+    {
+        $id = Yii::$app->user->id;
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['/site/info']);
+        } else {
+            return $this->render('profile', [
+                'model' => $model,
+            ]);
+        }
     }
 }

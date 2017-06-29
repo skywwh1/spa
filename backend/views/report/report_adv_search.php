@@ -19,48 +19,76 @@ use yii\widgets\ActiveForm;
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
-                <div class="col-lg-4">
-                    <?php
-                    echo '<label class="control-label">Date</label>';
-                    echo DatePicker::widget([
-                        'name' => 'ReportAdvSearch[start]',
-                        'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
-                        'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'ReportAdvSearch[end]',
-                        'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
-                        'pluginOptions' => [
-                            'autoclose' => true,
-                            'format' => 'yyyy-mm-dd'
-                        ]
-                    ]);
-                    ?>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?php
+                        echo '<label class="control-label">Date</label>';
+                        echo DatePicker::widget([
+                            'name' => 'ReportAdvSearch[start]',
+                            'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                            'type' => DatePicker::TYPE_RANGE,
+                            'name2' => 'ReportAdvSearch[end]',
+                            'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm-dd'
+                            ]
+                        ]);
+                        ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone, ['value' => !empty($model->time_zone) ? $model->time_zone : 'Etc/GMT-8']) ?>
+                    </div>
+                    <div class="col-lg-3">
+                        <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+    //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-adv']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'type')->dropDownList([
+                            2 => 'Daily',
+                            1 => 'Hourly',
+                        ], ['prompt' => '--- select ---']) ?>
+                    </div>
                 </div>
-                <div class="col-lg-2">
-                    <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone, ['value' => !empty($model->time_zone) ? $model->time_zone : 'Etc/GMT-8']) ?>
-                </div>
-                <div class="col-lg-3">
-                    <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
-                        'pluginOptions' => ['highlight' => true],
+
+                <div class="row">
+
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'campaign_id')->textInput() ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'campaign_name')->textInput() ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
 //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
-                        'dataset' => [
-                            [
-                                'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
-                                'display' => 'value',
-                                'remote' => [
-                                    'url' => Url::to(['util/get-adv']) . '?name=%QUERY',
-                                    'wildcard' => '%QUERY'
-                                ]
-                            ]],
-                    ]) ?>
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+
+                    </div>
 
                 </div>
-                <div class="col-lg-2">
-                    <?= $form->field($model, 'type')->dropDownList([
-                        2 => 'Daily',
-                        1 => 'Hourly',
-                    ], ['prompt' => '--- select ---']) ?>
-                </div>
-
             </div>
             <!-- /.box-body -->
 

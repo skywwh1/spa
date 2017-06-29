@@ -62,6 +62,9 @@ class Deliver extends \yii\db\ActiveRecord
     public $campaign_name;
     public $target_geo;
     public $creative_link;
+    public $bd;
+    public $om;
+    public $pm;
 
     /**
      * @inheritdoc
@@ -83,7 +86,7 @@ class Deliver extends \yii\db\ActiveRecord
             ['discount', 'number', 'max' => 99, 'min' => 0],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
             [['track_url'], 'string', 'max' => 255],
-            [['channel0', 'daily_cap', 'note'], 'safe'],
+            [['channel0', 'daily_cap', 'note','bd','om','pm'], 'safe'],
             [['kpi', 'note', 'others'], 'string'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],

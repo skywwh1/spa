@@ -144,4 +144,23 @@ class Config extends \yii\db\ActiveRecord
         $config->value = $time;
         return $config->save();
     }
+
+    public static function findLastCheckSubCvr()
+    {
+        $name = 'last_check_sub_cvr';
+        $config = static::findOne(['name' => $name]);
+        return isset($config) ? $config->value : 0;
+    }
+
+    public static function updateLastCheckSubCvr($time)
+    {
+        $name = 'last_check_sub_cvr';
+        $config = static::findOne(['name' => $name]);
+        if ($config == null) {
+            $config = new Config();
+            $config->name = $name;
+        }
+        $config->value = $time;
+        return $config->save();
+    }
 }

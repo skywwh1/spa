@@ -75,12 +75,13 @@ $columns = [
         'template' => '{all}',
         'header' => 'Action',
         'buttons' => [
-            'all' => function ($url, $model, $key) {
+            'all' => function ($url, $model, $key) use ($searchModel) {
                 $model = (object)$model;
                 return '<div class="dropdown">
               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
+              <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
               <li><a data-view="0" data-url="/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View</a></li>
               <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
               <li><a data-view="0" data-url="/campaign-sts-update/sub-pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Paused</a></li>
@@ -104,7 +105,7 @@ $columns = [
         'label' => 'Campaign ID',
         'attribute' => 'campaign_id',
         'value' => 'campaign_id',
-//        'filter' => false,
+        'filter' => false,
     ],
     [
         'class' => '\kartik\grid\DataColumn',
@@ -119,11 +120,13 @@ $columns = [
         },
         'width' => '60px',
         'format' => 'raw',
+        'filter' => false,
     ],
     [
         'label' => 'Channel',
         'attribute' => 'channel_name',
         'value' => 'channel_name',
+        'filter' => false,
     ],
 
 

@@ -26,16 +26,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <?= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
 
-                                <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
-
-                                <?= $form->field($model, 'skype')->textInput(['maxlength' => true]) ?>
-
-                                <?= $form->field($model, 'qq')->textInput(['maxlength' => true]) ?>
-
-                                <?= $form->field($model, 'weixin')->textInput(['maxlength' => true]) ?>
-
-                                <?= $form->field($model, 'phone1')->textInput(['maxlength' => true]) ?>
-
                             </div>
                         </div>
                         <div class="form-group">

@@ -96,6 +96,27 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'update_time:datetime',
                         // 'track_url:url',
                         // 'note',
+                        'om',
+                        'bd',
+                        'pm',
+//                        [
+//                            'label' => 'OM',
+//                            'value' => function($model){
+//                                return $model->channel->om0->username;
+//                            }
+//                        ],
+//                        [
+//                            'label' => 'BD',
+//                            'value' => function($model){
+//                                return $model->campaign->advertiser0->bd0->username;
+//                            }
+//                        ],
+//                        [
+//                            'label' => 'PM',
+//                            'value' => function($model){
+//                                return empty($model->campaign->advertiser0->pm0)?"":$model->campaign->advertiser0->pm0->username;
+//                            }
+//                        ],
                     ],
                 ]); ?>
             </div>
