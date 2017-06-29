@@ -36,6 +36,7 @@ class RedirectController extends Controller
 
         $models = RedirectLog::find()->where(['status' => 1,])
             ->andWhere(['<','end_time',time()])
+            ->andWhere(['>','end_time',0])
             ->all();
         if (isset($models)) {
             foreach ( $models as $item){

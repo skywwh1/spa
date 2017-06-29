@@ -734,7 +734,6 @@ class CountController extends Controller
     {
 //      final_revenue = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue
 //      receivable = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue-adjustRevenue
-//      history revenue
         //pending
         $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
         if (!empty($pends)) {
@@ -863,6 +862,17 @@ class CountController extends Controller
         $stats->checkCvr($start);
         $stats->checkCap();
         Config::updateLastCheckCvr($end);
+
+    }
+
+    public function actionCheckSubCvr()
+    {
+        $start = Config::findLastCheckSubCvr();
+        $end = time();
+        // 检查subchid cvr
+        $stats = new StatsUtil();
+        $stats->checkSubCvr($start);
+        Config::updateLastCheckSubCvr($end);
 
     }
 

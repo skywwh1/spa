@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'columns' => [
                     [
                         'class' => 'kartik\grid\ActionColumn',
-                        'template' => '{diy}',
+                        'template' => '{diy}{delete}',
                         'buttons' => [
                             // 自定义按钮
                             'diy' => function ($url, $model, $key) {
@@ -91,7 +91,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'attribute' => 'is_effected',
                 // 'value' => 'is_effected',
            // ],
-                    'effect_time:datetime',
+                    [
+                        'attribute' => 'effect_time',
+                        'value' => function ($model) {
+                            return gmdate('Y-m-d H:i',$model->effect_time + 3600*8);
+                        },
+                        'filter' => false,
+                    ],
             //[ 
                 // 'label' => 'create_time',
                 // 'attribute' => 'create_time',

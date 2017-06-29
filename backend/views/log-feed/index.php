@@ -79,6 +79,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'ip',
 //             'adv_price',
                             'feed_time:datetime',
+                            'om',
+                            'bd',
+                            'pm',
 //             'is_post',
 //             'create_time:datetime',
 

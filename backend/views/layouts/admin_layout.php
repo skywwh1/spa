@@ -13,7 +13,7 @@ AdminAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="<?= Yii::$app->language ?>">
+<html lang="<?= Yii::$app->language ?>" xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -97,7 +97,11 @@ AdminAsset::register($this);
                             <!-- Menu Footer-->
                             <li class="user-footer">
                                 <div class="pull-left">
-                                    <a href="/user/reset-password" class="btn btn-default btn-flat">Profile</a>
+                                    <span><a href="/user/reset-password" class="btn btn-default btn-flat">Reset Pwd</a></span>
+                                    <span>	&nbsp;	&nbsp;</span>
+                                    <span>
+                                        <a href="/user/profile" class="btn btn-default btn-flat">Profile</a>
+                                    </span>
                                 </div>
                                 <div class="pull-right">
                                     <?php $aa = '<a>' .

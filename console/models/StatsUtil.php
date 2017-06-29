@@ -17,6 +17,7 @@ use common\models\CampaignLogSubChannelHourly;
 use common\models\Config;
 use common\models\Deliver;
 use common\models\LogAutoCheck;
+use common\models\LogAutoCheckSub;
 use common\models\LogFeedHourly;
 use common\utility\MailUtil;
 use Yii;
@@ -1005,4 +1006,62 @@ class StatsUtil
             }
         }
     }
+
+    /**
+     * @param $start_time
+     */
+    public function checkSubCvr($start_time)
+    {
+        echo "Check Sub CVR" . PHP_EOL;
+        if ($start_time > 0) {
+            $start_time = $this->getBeforeTwoHours($start_time);
+        }
+
+        $logs = CampaignLogSubChannelHourly::find()->where(['>=', 'time', $start_time])->all();//查询上次检测之后的数据
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                if ($log->match_installs > 10) {
+                    // match cvr > 10
+                    $camp = Campaign::findById($log->campaign_id);
+                    if (!empty($camp)) {
+                        $traffic_source = $camp->traffic_source;
+                        echo $traffic_source . PHP_EOL;
+                        if (strpos($traffic_source, 'incent') !== 0) { // non-incent
+                            echo "camp-" . $camp->id . PHP_EOL;
+                            if ($log->clicks == 0) {
+                                continue;
+                            }
+                            $cvr = ($log->match_installs / $log->clicks) * 100;
+                            if ($cvr > 1.5) {
+                                $check = LogAutoCheckSub::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $log->channel_id,'sub_chid' => $log->sub_channel])
+                                    ->andFilterWhere(['>', 'match_cvr', 1.5])->andWhere(['>', 'create_time', strtotime('today')])->one();
+                            }
+
+                            if (empty($check)) {
+                                $check = new LogAutoCheckSub();
+                            } else {
+                                continue;
+                            }
+                            $check->campaign_id = $camp->id;
+                            $check->channel_id = $log->channel_id;
+                            $check->campaign_name = $camp->campaign_name;
+                            $check->channel_name = (empty($log->channel) ? null : $log->channel->username);
+                            $check->match_cvr = $cvr;
+                            $check->match_install = $log->match_installs;
+                            $check->type = 1;
+                            $check->sub_chid = $log->sub_channel;
+                            $check->save();
+                        }
+                    }
+                }
+            }
+        }
+
+        // send mail
+        $sendings = LogAutoCheckSub::findAll(['is_send' => 0, 'type' => 1]);
+        if (!empty($sendings)) {
+            MailUtil::autoCheckSubCvr($sendings);
+        }
+    }
+
 }

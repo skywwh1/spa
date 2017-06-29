@@ -20,7 +20,7 @@ class LogFeedSearch extends LogFeed
     public function rules()
     {
         return [
-            [['id', 'channel_id', 'campaign_id', 'feed_time', 'is_post', 'create_time'], 'safe'],
+            [['id', 'channel_id', 'campaign_id', 'feed_time', 'is_post', 'create_time','bd','om','pm'], 'safe'],
             [['auth_token', 'click_uuid', 'click_id', 'ch_subid', 'all_parameters', 'ip', 'campaign_uuid', 'advertiser_name','campaign_name'], 'safe'],
             [['adv_price'], 'number'],
         ];
@@ -60,10 +60,14 @@ class LogFeedSearch extends LogFeed
             // $query->where('0=1');
             return $dataProvider;
         }
-        $query->select(['feed.*', 'adv.username advertiser_name','ca.campaign_name campaign_name']);
+        $query->select(['feed.*', 'adv.username advertiser_name','ca.campaign_name campaign_name','u3.username om', 'u.username bd','u2.username pm']);
         $query->joinWith('channel ch');
         $query->joinWith('campaign ca');
         $query->leftJoin('advertiser adv', 'ca.advertiser = adv.id');
+        $query->leftJoin('user u', 'adv.bd = u.id');
+        $query->leftJoin('user u2', 'adv.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
+
         // grid filtering conditions
         $query->andFilterWhere([
             'feed.id' => $this->id,
@@ -84,10 +88,24 @@ class LogFeedSearch extends LogFeed
             ->andFilterWhere(['like', 'ch.username', $this->channel_id])
             ->andFilterWhere(['like', 'feed.all_parameters', $this->all_parameters])
             ->andFilterWhere(['like', 'adv.username', $this->advertiser_name])
+            ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'u2.username', $this->pm])
+            ->andFilterWhere(['like', 'u3.username', $this->om])
             ->andFilterWhere(['like', 'feed.ip', $this->ip]);
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            }else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')){
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+
         $query->orderBy('feed.feed_time desc');
-//                var_dump($query->createCommand()->sql);
-//        die();
         return $dataProvider;
     }
 }
