@@ -1,6 +1,5 @@
-$(document).on("click", "a[data-view=0]", function (e) {
+$(document).on("click", "a[data-view=0]", function (result) {
     $('#campaign-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
-
 });
 
 $('#campaign-modal').on('hidden.bs.modal', function () {
@@ -43,5 +42,14 @@ $(document).on("click", "#selectButton", function (e) {
     form.attr({"action":'/campaign/selected'});
     $('#campaignsearch-ids').val(keys);
     form.submit();
+    return false;
+});
+
+$(document).on("click", "a[data-view=2]", function (result) {
+    var url = $(this).attr('data-url');
+    $.post(url, function(result){
+        $('#campaign-detail-content').append(result+'<br>');
+        $('#campaign-modal').modal('show');
+    });
     return false;
 });
