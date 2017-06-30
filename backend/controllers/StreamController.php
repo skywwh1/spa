@@ -280,6 +280,7 @@ class StreamController extends Controller
         if (!$click->validate() && $click->hasErrors()) {
             return 404;
         }
+
         //是否导量
         if ($deliver->is_redirect) {
             $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
@@ -287,7 +288,7 @@ class StreamController extends Controller
                 $redirectCam = $redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
-                $click->redirect_campaign_id = $redirect->campaignIdNew;
+                $click->redirect_campaign_id = $redirect->campaignIdNew->id;
                 return 200;
             }
         }
@@ -305,7 +306,7 @@ class StreamController extends Controller
                 $redirectCam = $sub_redirect->campaignIdNew;
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
-                $click->redirect_campaign_id = $sub_redirect->campaignIdNew;
+                $click->redirect_campaign_id = $sub_redirect->campaignIdNew->id;
             }
         }
 //        $this->countClick($click);
