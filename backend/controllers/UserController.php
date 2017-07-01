@@ -47,6 +47,11 @@ class UserController extends Controller
                         'allow' => true,
                         'roles' => ['admin'],
                     ],
+                    [
+                        'allow' => true,
+                        'actions' => [ 'reset-password','profile',],
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];

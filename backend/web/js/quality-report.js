@@ -63,3 +63,45 @@ $(document).on("click", "#monthButton", function (e) {
     $('input[name="ChannelQualityReportSearch[type]"]').val(2);
     return false;
 });
+
+
+$('#submit-button').on('click', function () {
+    $('.kv-editable-form').each(function () {
+        $(this).submit();
+    });
+});
+$('.kv-editable-form').each(function () {
+    var form = $(this);
+    $('body').on('beforeSubmit', 'form#' + form.attr('id'), function () {
+        // form = $(this);
+        // return false if form still have some validation errors
+        if (form.find('.has-error').length) {
+            return false;
+        }
+        // submit form
+        $.ajax({
+            url: form.attr('action'),
+            type: 'post',
+            data: form.serialize(),
+            success: function (response) {
+                $('#campaign-detail-content').append('save success!');
+                $('#campaign-detail-modal').modal('show');
+            }
+        });
+        return false;
+    }).on('submit', function (e) {
+        //e.preventDefault();
+    });
+});
+$('#notice-button').on('click', function () {
+    $.ajax({
+        url: 'channel-quality-report/notice?',
+        type: 'post',
+        data: form.serialize(),
+        success: function (response) {
+            $('#campaign-detail-content').append('save success!');
+            $('#campaign-detail-modal').modal('show');
+        }
+    });
+    return false;
+});

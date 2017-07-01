@@ -38,18 +38,41 @@ SbAppAsset::register($this);
         <!-- /.navbar-header -->
 
         <ul class="nav navbar-top-links navbar-right">
+<!--            <li class="dropdown notifications-menu">-->
+<!--                <a href="#" class="dropdown-toggle" data-toggle="dropdown" >-->
+<!--                    <i class="fa fa-bell-o"></i>-->
+<!--                    --><?php
+//                    $beginTheDayBefore=mktime(0,0,0,date('m'),date('d'),date('Y'));
+//                    $data = \common\models\QualityAutoCheck::find()
+//                        ->andFilterWhere(['>','create_time',$beginTheDayBefore])
+//                        ->andFilterWhere(['channel_id' =>yii::$app->user->id])
+//                        ->andFilterWhere(['is_send' =>0])
+//                        ->all();
+//                    $count = count($data);
+//                    if ($count>0){
+//                        echo '<span class="label label-warning">'.$count.'</span>';
+//                    }
+//                    ?>
+<!--                </a>-->
+<!--                <ul class="dropdown-menu">-->
+<!--                    --><?php
+//                    echo ' <a href="/channel-quality-report/index" data-menu="channel-quality">You have new quality report</a>';
+//                    ?>
+<!--                </ul>-->
+<!--            </li>-->
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     Welcome <?= Yii::$app->user->identity->username?> <i class="fa fa-user fa-fw"></i> <i class="fa fa-caret-down"></i>
                 </a>
                 <ul class="dropdown-menu dropdown-user">
-<!--                    <li><a href="#"><i class="fa fa-user fa-fw"></i> User Profile</a>
+                 <li>
+                     <a href="/site/reset-password-new" class="fa fa-user fa-fl">User Profile</a>
                     </li>
-                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                    </li>
-                    <li class="divider"></li>
--->
-                    <li>
+<!--                    <li><a href="#"><i class="fa fa-gear fa-fw"></i> Settings</a>-->
+<!--                    </li>-->
+<!--                    <li class="divider"></li>-->
+<!---->
+<!--                    <li>-->
                         <?php
                         echo Html::beginForm(['/site/logout'], 'post', ['id' => 'logout-form']);
                         echo Html::endForm();

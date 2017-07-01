@@ -94,7 +94,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        if(empty($this->campaign_id) && empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_id)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -143,11 +143,11 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->om]);
-        } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
@@ -196,7 +196,8 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['time' => SORT_DESC]);
         }
-
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 
@@ -217,7 +218,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        if(empty($this->campaign_id) && empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_id)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -266,11 +267,11 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->om]);
-        } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',
@@ -280,6 +281,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
+//        var_dump(Yii::$app->user->id);
 //        var_dump($start).PHP_EOL;
 //        var_dump($end).PHP_EOL;
 //        var_dump($query->createCommand()->sql);
@@ -304,7 +306,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        if(empty($this->campaign_id) && empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_id)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -353,11 +355,11 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-        if (\Yii::$app->user->can('admin')) {
-            $query->andFilterWhere(['like', 'u.username', $this->om]);
-        } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-        }
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         $query->groupBy([
             'clh.campaign_id',
             'clh.channel_id',

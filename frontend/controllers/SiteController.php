@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use common\models\Channel;
 use frontend\models\ChannelSignupForm;
 use frontend\models\LoginForm;
 use frontend\models\SignupForm;
@@ -317,5 +318,24 @@ class SiteController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    /**
+     * @return string|\yii\web\Response
+     */
+    public function actionResetPasswordNew()
+    {
+        $user_id = Yii::$app->user->id;
+        $model = Channel::findIdentity($user_id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+         return $this->redirect('/camp-log/index');
+        } else {
+            $model->password_hash = null;
+            return $this->render('resetPassword', [
+                'model' => $model,
+            ]);
+        }
+
     }
 }

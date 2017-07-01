@@ -4,6 +4,8 @@ namespace backend\controllers;
 
 use common\models\Campaign;
 use common\models\Channel;
+use common\models\LogAutoCheckSub;
+use common\models\QualityAutoCheck;
 use common\models\QualityDynamicColumn;
 use common\utility\MailUtil;
 use Yii;
@@ -187,9 +189,10 @@ class ChannelQualityReportController extends Controller
 //        $model = $this->findModel($campaign_id, $channel_id, $sub_channel, $time);
 //        var_dump($campaign_id, $channel_id, $sub_channel, $time,$name);
 //        die();
+
         $model = QualityDynamicColumn::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel, 'time' => $time,'name' => $name]);
 
-        if (Yii::$app->request->post('hasEditable')) {
+        if (Yii::$app->request->post('hasEditable') == 0) {
             $out = Json::encode([ 'message' => '']);
             if (empty($model)){
                 $model = new QualityDynamicColumn();
@@ -201,19 +204,12 @@ class ChannelQualityReportController extends Controller
             }
             $model->value = $_POST[str_replace(' ', '_', $name)];
             $model->save();
+
             $out = Json::encode(['message' => 'successifully saved']);
             echo $out;
             return;
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'campaign_id' => $model->campaign_id, 'channel_id' => $model->channel_id, 'sub_channel' => $model->sub_channel, 'time' => $model->time]);
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
-        }
     }
 
     /**
@@ -363,9 +359,26 @@ class ChannelQualityReportController extends Controller
         $date_range = $start.'~'.$end;
 
         if(MailUtil::sendQualityOffers($channel,$campaign,$models,$dynamic_cols,$cols,$date_range)){
+            $this->actionNotice($campaign_id,$channel_id);//发送邮件成功则提醒渠道看质量报告
             $this->asJson("send email success!");
         }else{
             $this->asJson("send email fail!");
         }
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     */
+    private function actionNotice($campaign_id,$channel_id){
+        $campaign = Campaign::findOne(['id' => $campaign_id ]);
+        $channel = Channel::findOne($channel_id);
+        $auto_check = new QualityAutoCheck();
+        $auto_check->campaign_id = $campaign_id;
+        $auto_check->campaign_name = $campaign->campaign_name;
+        $auto_check->channel_id = $channel_id;
+        $auto_check->channel_name = $channel->username;
+        $auto_check->is_send = 0;
+        $auto_check->save();
     }
 }
