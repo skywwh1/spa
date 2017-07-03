@@ -78,7 +78,7 @@ class MiDirect
             }
             $camp->category = $model->category;
             $camp->status = 1;
-            $camp->open_type = 1;
+            $camp->open_type = 0;
             $camp->tag = 2;
             if (empty($camp->traffic_source)) {
                 $camp->traffic_source = 'non-incent,no adult';

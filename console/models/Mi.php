@@ -82,7 +82,7 @@ class Mi
             }
             $camp->category = $model->category;
             $camp->status = 1;
-            $camp->open_type = 1;
+            $camp->open_type = 0;
             $camp->tag = 1;
 
             $camp->advertiser = $apiModel->adv_id;
