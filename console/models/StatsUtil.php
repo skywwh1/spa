@@ -1014,12 +1014,22 @@ class StatsUtil
     {
         echo "Check Sub CVR" . PHP_EOL;
         if ($start_time > 0) {
-            $start_time = $this->getBeforeTwoHours($start_time);
+//            $start_time = $this->getBeforeTwoHours($start_time);
+            $datetime = new \DateTime();
+            $datetime->setTimestamp($start_time);
+            echo $datetime->format('Y-m-d H:i:s');
+
+            $interval = new \DateInterval('P6DT1H');
+            $datetime->sub($interval);
+
+            echo $datetime->format('Y-m-d H:i:s');
+            $start_time = $datetime->getTimestamp();
         }
 
-        $logs = CampaignLogSubChannelHourly::find()->where(['>=', 'time', $start_time])->all();//查询上次检测之后的数据
+        $logs = CampaignLogSubChannelHourly::find()->where(['>=', 'time', $start_time])->asArray()->all();//查询上次检测之后的数据
         if (!empty($logs)) {
             foreach ($logs as $log) {
+                $log = (object)$log;
                 if ($log->match_installs > 10) {
                     // match cvr > 10
                     $camp = Campaign::findById($log->campaign_id);

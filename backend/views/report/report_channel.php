@@ -5,6 +5,7 @@
 use common\models\Campaign;
 use kartik\grid\GridView;
 use yii\helpers\Html;
+use yii\bootstrap\Modal;
 use kartik\export\ExportMenu;
 
 /* @var $searchModel common\models\ReportChannelSearch */
@@ -70,12 +71,20 @@ $columns = [
             'all' => function ($url, $model, $key) use ($searchModel){
                 $model = (object)$model;
                 return '<div class="dropdown">
-          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-          <span class="caret"></span></button>
-          <ul class="dropdown-menu">
-          <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
-          </ul>
-        </div>';
+              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+              <span class="caret"></span></button>
+              <ul class="dropdown-menu">
+              <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
+              <li><a data-view="0" data-url="/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View</a></li>
+              <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
+              <li><a data-view="0" data-url="/campaign-sts-update/sub-pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Paused</a></li>
+              <li><a data-view="0" data-url="/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Cap</a></li>
+              <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>
+              <li><a data-view="0" data-url="/campaign-sts-update/update-payout?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Payout</a></li>
+              <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
+              <li><a data-view="0" data-url="/campaign-sub-channel-log-redirect/create?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Redirect</a></li>
+              </ul>
+            </div>';
             },
         ],
     ],
@@ -490,3 +499,22 @@ if (!empty($dataProvider)) {
         </div>
     </div>
 <?php } ?>
+<?php
+$this->registerJsFile(
+    '@web/js/deliver.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>
+<?php Modal::begin([
+    'id' => 'deliver-modal',
+    'size' => 'modal-md',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="deliver-detail-content"></div>';
+
+Modal::end(); ?>
