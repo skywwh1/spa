@@ -525,7 +525,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             'value' => function ($model) {
                                 $model = (object)$model;
                                 $channel = \common\models\Channel::findOne(['id' => $model->channel_id]);
-                                return $channel->om0->username;
+                                return empty($channel->om0)?"":$channel->om0->username;
                             }
                         ],
                     ];
