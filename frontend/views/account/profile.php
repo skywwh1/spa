@@ -10,11 +10,11 @@ $this->title = $model->id;
 $this->params['breadcrumbs'][] = ['label' => 'Channels', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="channel-payment"></div>
+<div id="nav-menu" data-menu="channel-profile"></div>
 
 <div class="row">
     <div class="col-lg-12">
-        <h4 class="page-header">Payment</h4>
+        <h4 class="page-header">Profile</h4>
     </div>
     <!-- /.col-lg-12 -->
 </div>
