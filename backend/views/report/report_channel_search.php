@@ -19,6 +19,7 @@ use yii\widgets\ActiveForm;
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
+                <div class="row">
                 <div class="col-lg-4">
                     <?php
                     echo '<label class="control-label">Date</label>';
@@ -60,8 +61,35 @@ use yii\widgets\ActiveForm;
                         1 => 'Hourly',
                     ], ['prompt' => '--- Select ---']) ?>
                 </div>
+                </div>
+                <div class="row">
 
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'campaign_id')->textInput() ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'campaign_name')->textInput() ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'adv')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-adv']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+
+                    </div>
+
+                </div>
             </div>
+
             <!-- /.box-body -->
 
             <div class="box-footer">

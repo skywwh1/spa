@@ -95,12 +95,16 @@ $columns = [
         'filter' => false,
     ],
 //    'campaign.advertiser0.username',
-    'adv',
+    [
+        'attribute' => 'adv',
+        'value' => 'adv',
+        'filter' => false,
+    ],
     [
         'label' => 'Campaign ID',
         'attribute' => 'campaign_id',
         'value' => 'campaign_id',
-//        'filter' => false,
+        'filter' => false,
     ],
     [
         'class' => '\kartik\grid\DataColumn',
@@ -115,6 +119,7 @@ $columns = [
         },
         'width' => '60px',
         'format' => 'raw',
+        'filter' => false,
     ],
     [
         // 'label' => 'clicks',
