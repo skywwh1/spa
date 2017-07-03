@@ -232,6 +232,11 @@ AdminAsset::register($this);
                                 Channel</a></li>
                         <li><a href="/channel-black/index" data-menu="channel-black-index"><i class="fa fa-circle-o"></i> Channel
                                 BlackList</a></li>
+                        <li><a href="/channel-sub-blacklist/index" data-menu="channel-sub-blacklist-index"><i class="fa fa-circle-o"></i> Sub Channel
+                                BlackList</a></li>
+                        <li><a href="/channel-sub-whitelist/index" data-menu="channel-sub-whitelist-index"><i class="fa fa-circle-o"></i> Sub Channel
+                                WhiteList</a></li>
+
                     </ul>
                 </li>
 
