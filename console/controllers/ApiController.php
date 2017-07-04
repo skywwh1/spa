@@ -54,6 +54,9 @@ class ApiController extends Controller
         $yeah = new Mundo();
         $yeah->getApiCampaign();
 
+        $yeah = new Taptica();
+        $yeah->getApiCampaign();
+
     }
 
     public function actionGetHeadway()
