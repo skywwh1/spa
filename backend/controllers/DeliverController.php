@@ -13,6 +13,8 @@ use common\models\ChannelBlack;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\DeliverSearch;
+use common\models\LogAutoCheck;
+use common\models\LogAutoCheckSub;
 use common\models\MyCart;
 use common\models\MyCartSearch;
 use common\models\Stream;
@@ -59,6 +61,7 @@ class DeliverController extends Controller
                             'pause',
                             'second',
                             'recommend-create',
+                            'low-cvr'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -416,5 +419,15 @@ class DeliverController extends Controller
             ]);
         }
 
+    }
+
+    /**
+     * @return string
+     */
+    public function actionLowCvr(){
+        $data =  LogAutoCheck::findAll(['is_send' => 0, 'type' => 1]);
+        return $this->render('low_cvr', [
+            'checks' => $data,
+        ]);
     }
 }

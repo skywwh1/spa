@@ -84,11 +84,11 @@ class Channel extends \yii\db\ActiveRecord implements IdentityInterface
         return [
             [['username', 'created_time', 'updated_time', 'email'], 'required'],
             [['type', 'pm', 'om', 'master_channel', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable'], 'integer'],
-            [['note'], 'string'],
+            [['note','cc_email',], 'string'],
             [['username', 'firstname', 'lastname', 'settlement_type', 'payment_way', 'payment_term', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone', 'traffic_source', 'pricing_mode'], 'string', 'max' => 100],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'company', 'address', 'post_back', 'paid', 'strong_geo', 'strong_category'], 'string', 'max' => 255],
-            [['email', 'cc_email', 'wechat', 'skype'], 'string', 'max' => 50],
+            [['email', 'wechat', 'skype'], 'string', 'max' => 50],
             [['country'], 'string', 'max' => 10],
             [['city'], 'string', 'max' => 120],
             [['phone1', 'phone2'], 'string', 'max' => 20],
