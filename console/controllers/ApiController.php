@@ -17,6 +17,7 @@ use console\models\MiDirect;
 use console\models\Movista;
 use console\models\Mundo;
 use console\models\Nposting;
+use console\models\Taptica;
 use console\models\Yeahmobi;
 use console\models\Yeahmobi2;
 use yii\console\Controller;
@@ -112,6 +113,12 @@ class ApiController extends Controller
     public function actionGetAffle()
     {
         $yeah = new Affle();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetTaptica()
+    {
+        $yeah = new Taptica();
         $yeah->getApiCampaign();
     }
 }
