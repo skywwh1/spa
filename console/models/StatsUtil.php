@@ -1014,19 +1014,20 @@ class StatsUtil
     {
         echo "Check Sub CVR" . PHP_EOL;
         if ($start_time > 0) {
-//            $start_time = $this->getBeforeTwoHours($start_time);
+            $start_time = $this->getBeforeTwoHours($start_time);
+        }else{
             $datetime = new \DateTime();
-            $datetime->setTimestamp($start_time);
-            echo $datetime->format('Y-m-d H:i:s');
+            $datetime->setTimestamp(time());
 
-            $interval = new \DateInterval('P6DT1H');
+            $interval = new \DateInterval('P0DT2H');
             $datetime->sub($interval);
 
-            echo $datetime->format('Y-m-d H:i:s');
             $start_time = $datetime->getTimestamp();
         }
 
-        $logs = CampaignLogSubChannelHourly::find()->where(['>=', 'time', $start_time])->asArray()->all();//查询上次检测之后的数据
+        $logs = CampaignLogSubChannelHourly::find()->andFilterWhere(['>=', 'time', $start_time])->andFilterWhere(['>', 'match_installs', 10])->asArray()->all();//查询上次检测之后的数据
+//        var_dump(CampaignLogSubChannelHourly::find()->andFilterWhere(['>=', 'time', $start_time])->andFilterWhere(['>', 'match_installs', 10])->createCommand()->sql);
+//        die();
         if (!empty($logs)) {
             foreach ($logs as $log) {
                 $log = (object)$log;
