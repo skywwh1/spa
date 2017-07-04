@@ -11,6 +11,8 @@ use common\models\CampaignSearch;
 use common\models\CampaignStsUpdate;
 use common\models\ChannelBlack;
 use common\models\Channel;
+use common\models\ChannelSubBlacklist;
+use common\models\ChannelSubWhitelist;
 use common\models\Deliver;
 use common\models\DeliverSearch;
 use common\models\MyCart;
@@ -173,6 +175,7 @@ class DeliverController extends Controller
                     $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
                     $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
                     $deliver->discount = isset($deliver->channel) ? $deliver->channel->discount : 30;
+                    $this->findBlackWhitelist($deliver);
                     $delivers[] = $deliver;
 
                     if (!empty($targetGeos)) {
@@ -416,5 +419,26 @@ class DeliverController extends Controller
             ]);
         }
 
+    }
+
+    /**
+     * @param Deliver $model
+     */
+    public function findBlackWhitelist(&$model)
+    {
+        $model->blacklist = 'Sub Channel Blacklist: ';
+        $model->whitelist = 'Sub Channel Whitelist: ';
+
+        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
+        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
+//        var_dump($black);
+//        die();
+        if(!empty($black)){
+            $model->blacklist .= implode(',',$black);
+        }
+
+        if(!empty($white)){
+            $model->whitelist .= implode(',',$white);
+        }
     }
 }

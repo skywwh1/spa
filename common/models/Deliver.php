@@ -65,6 +65,9 @@ class Deliver extends \yii\db\ActiveRecord
     public $bd;
     public $om;
     public $pm;
+    public $is_wblist;
+    public $blacklist;
+    public $whitelist;
 
     /**
      * @inheritdoc
@@ -138,6 +141,7 @@ class Deliver extends \yii\db\ActiveRecord
             'is_send_create' => 'If Notify',
             'is_manual' => 'Is Manual',
             'channel0' => 'Channel',
+            'is_wblist'=>'Blacklist or Whitelist'
         ];
     }
 
