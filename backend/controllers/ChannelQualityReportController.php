@@ -202,7 +202,8 @@ class ChannelQualityReportController extends Controller
                 $model->time = $time;
                 $model->name = $name;
             }
-            $model->value = $_POST[str_replace(' ', '_', $name)];
+//            $model->value = $_POST[str_replace(' ', '_', $name)];
+            $model->value = $name;
             $model->save();
 
             $out = Json::encode(['message' => 'successifully saved']);

@@ -22,7 +22,7 @@ $('.sts_form').each(function () {
             type: 'post',
             data: form.serialize(),
             success: function (response) {
-                $('#campaign-detail-content').append(response.Success+'<br>');
+                $('#campaign-detail-content').append(response.Success + '<br>');
                 $('#campaign-detail-modal').modal('show');
             }
         });
@@ -37,7 +37,18 @@ $('#campaign-detail-modal').on('hidden.bs.modal', function (e) {
     $(location).attr('href', '/deliver/create');
 })
 
-//$(document).ready(function($returnMsg){
-//    $('#black-channel-content').append($returnMsg+'<br>');
-//    $('#black-channel-modal').modal('show');
-//});
+// $(document).ready(function($returnMsg){
+//   alert(888);
+// });
+
+$('select[id="deliver-is_wblist"]').change(function () {
+    if ($('select[id="deliver-is_wblist"]').val() == 1) {
+        var aa = $('#deliver-blacklist').val();
+        $('#deliver-others').val(aa);
+    } else if ($('select[id="deliver-is_wblist"]').val() == 2) {
+        var aa = $('#deliver-whitelist').val();
+        $('#deliver-others').val(aa);
+    } else {
+        $('#deliver-others').val('');
+    }
+});

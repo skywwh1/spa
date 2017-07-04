@@ -12,7 +12,7 @@ $this->title = 'Create S2S';
 $this->params['breadcrumbs'][] = ['label' => 'S2s', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="STS"></div>
+    <div id="nav-menu" data-menu="STS"></div>
 <?php
 if (!is_null($returnMsg)) {
 //    echo "<script> var returnMsg = \"$returnMsg\";</script>" ;
@@ -67,9 +67,9 @@ if (!is_null($delivers)) {
                     <?= $form->field($deliver, 'daily_cap')->textInput() ?>
 
                     <?php
-                    if(empty($deliver->discount)){
+                    if (empty($deliver->discount)) {
                         echo $form->field($deliver, 'discount')->textInput(['value' => 30]);
-                    }else{
+                    } else {
                         echo $form->field($deliver, 'discount')->textInput();
                     }
                     ?>
@@ -78,6 +78,11 @@ if (!is_null($delivers)) {
                         '0' => 'Yes',
                         '1' => 'No',
                     ]) ?>
+                    <?= $form->field($deliver, 'is_wblist')->dropDownList([
+                        '0' => '-- select --',
+                        '1' => 'Black List',
+                        '2' => 'White List'
+                    ]) ?>
                     <?= $form->field($deliver, 'kpi')->textarea(['rows' => 1]) ?>
                     <?= $form->field($deliver, 'note')->textarea() ?>
                     <?= $form->field($deliver, 'others')->textarea(['rows' => 1]) ?>
@@ -85,6 +90,8 @@ if (!is_null($delivers)) {
                     <?= $form->field($deliver, 'step')->hiddenInput(['value' => 2])->label(false) ?>
                     <?= $form->field($deliver, 'campaign_id')->hiddenInput()->label(false) ?>
                     <?= $form->field($deliver, 'channel_id')->hiddenInput()->label(false) ?>
+                    <?= Html::activeHiddenInput($deliver,'blacklist')?>
+                    <?= Html::activeHiddenInput($deliver,'whitelist')?>
                     <?php ActiveForm::end(); ?>
 
                 </div>
@@ -112,15 +119,15 @@ if (!is_null($delivers)) {
 echo '<div id="campaign-detail-content"></div>';
 
 Modal::end(); ?>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box">
-            <div class="box-footer">
-                <button type="button" class="btn btn-primary" id="submit-button">Submit</button>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-footer">
+                    <button type="button" class="btn btn-primary" id="submit-button">Submit</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 <?php Modal::begin([
     'id' => 'black-channel-modal',
     'size' => 'modal-lg',
