@@ -192,24 +192,22 @@ class ChannelQualityReportController extends Controller
 
         $model = QualityDynamicColumn::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel, 'time' => $time,'name' => $name]);
 
-        if (Yii::$app->request->post('hasEditable') == 0) {
-            $out = Json::encode([ 'message' => '']);
-            if (empty($model)){
-                $model = new QualityDynamicColumn();
-                $model->campaign_id = $campaign_id;
-                $model->channel_id = $channel_id;
-                $model->sub_channel = $sub_channel;
-                $model->time = $time;
-                $model->name = $name;
-            }
-//            $model->value = $_POST[str_replace(' ', '_', $name)];
-            $model->value = $name;
-            $model->save();
-
-            $out = Json::encode(['message' => 'successifully saved']);
-            echo $out;
-            return;
+        $out = Json::encode([ 'message' => '']);
+        if (empty($model)){
+            $model = new QualityDynamicColumn();
+            $model->campaign_id = $campaign_id;
+            $model->channel_id = $channel_id;
+            $model->sub_channel = $sub_channel;
+            $model->time = $time;
+            $model->name = $name;
         }
+//            $model->value = $_POST[str_replace(' ', '_', $name)];
+        $model->value =  $_POST[$name];
+        $model->save();
+
+        $out = Json::encode(['message' => 'successifully saved']);
+        echo $out;
+        return;
 
     }
 
