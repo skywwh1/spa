@@ -137,6 +137,9 @@ class Taptica
                     }
                     $item->SupportedCountriesV2 = $aa;
                 }
+                if($item->SupportedCountriesV2 == 'ww,'){
+                    $item->SupportedCountriesV2 = 'Global';
+                }
                 $newOffers[]=$item;
                 $creatives = '';
                 if(isset($item->Creatives)){
