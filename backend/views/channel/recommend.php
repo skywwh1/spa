@@ -1,7 +1,7 @@
 <?php
 
 use common\models\TrafficSource;
-use kartik\export\ExportMenu;
+use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
@@ -10,6 +10,7 @@ use yii\helpers\Html;
 /* @var $searchModel common\models\CampaignSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $channel_id int */
+/* @var $model backend\models\StsForm */
 
 $this->title = 'Recommend List';
 $this->params['breadcrumbs'][] = $this->title;
@@ -19,8 +20,16 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-lg-12">
         <div class="box box-info">
             <div class="box-body">
-
+                <?php $form = ActiveForm::begin([
+                    'action' => ['/deliver/recommend-channel'],
+                    'method' => 'post',
+                    'id'=>'recommend-form'
+                ]); ?>
+                <?= Html::activeHiddenInput($model, 'campaign_uuid') ?>
+                <?= Html::activeHiddenInput($model, 'channel',['value' => $channel_id]) ?>
+                <?php ActiveForm::end(); ?>
                 <?= Html::button('Select', ['class' => 'btn btn-primary', 'id' => 'recommend-channel-btn', 'data-url' => '/channel/get-recommend?id=' . $channel_id]) ?>
+                <?= Html::button('S2S', ['class' => 'btn btn-primary', 'id' => 's2s_button'])?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'id' => 'recommend-channel-grid',

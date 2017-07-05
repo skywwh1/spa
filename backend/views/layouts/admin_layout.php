@@ -8,6 +8,7 @@ use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 use common\models\ChannelUpdate;
 use common\widgets\Alert;
+use common\utility\TimeZoneUtil;
 
 AdminAsset::register($this);
 ?>
@@ -45,6 +46,49 @@ AdminAsset::register($this);
 
             <div class="navbar-custom-menu">
                 <ul class="nav navbar-nav">
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <?php
+                            $beginTheDayBefore=mktime(0,0,0,date('m'),date('d')-2,date('Y'));
+                            $data = \common\models\ApplyCampaign::find()
+                                ->leftJoin('channel','apply_campaign.channel_id = channel.id')
+                                ->andFilterWhere(['>','apply_campaign.create_time',$beginTheDayBefore])
+                                ->andFilterWhere(['channel.om' =>yii::$app->user->id])
+                                ->andFilterWhere(['apply_campaign.status' => 1])->all();
+                            $count1 = count($data);
+
+                            $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
+                            $data2 = \common\models\LogCheckClicksDaily::find()->where(['>=','time',$beginTheDay])->all();
+                            $count2 = count($data2);
+                            $count = $count1+ $count2;
+                            echo '<span id= "lov-cvr" class="label label-warning"> '. $count.' </span>';
+                            ?>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have some notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <a href="/apply-campaign/index">
+                                            <?php
+                                            echo '<i class="fa fa-users text-aqua"></i> '. $count1.' applying offers';
+                                            ?>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/deliver/low-cvr">
+                                            <?php
+                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count2.' Low CVR antiCheat';
+                                            ?>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
                     <li class="dropdown messages-menu">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-envelope-o"></i>
@@ -64,26 +108,6 @@ AdminAsset::register($this);
                             }else{
                                 echo '<li class="footer"><a href="/channel/my-channels">Click here for more detail.</a></li>';
                             }
-                            ?>
-                        </ul>
-                    </li>
-                    <li class="dropdown notifications-menu">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="fa fa-bell-o"></i>
-                            <?php
-                            $beginTheDayBefore=mktime(0,0,0,date('m'),date('d')-2,date('Y'));
-                            $data = \common\models\ApplyCampaign::find()
-                                ->leftJoin('channel','apply_campaign.channel_id = channel.id')
-                                ->andFilterWhere(['>','apply_campaign.create_time',$beginTheDayBefore])
-                                ->andFilterWhere(['channel.om' =>yii::$app->user->id])
-                                ->andFilterWhere(['apply_campaign.status' => 1])->all();
-                            $count = count($data);
-                             echo '<span class="label label-warning">'.$count.'</span>';
-                            ?>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <?php
-                            echo '<li class="header">You have '. $count.' applying offers</li>';
                             ?>
                         </ul>
                     </li>
@@ -285,14 +309,11 @@ AdminAsset::register($this);
                                         class="fa fa-circle-o"></i> Pending List</a></li>
                         <li><a href="/finance-deduction/index" data-menu="finance-deduction-index"><i
                                         class="fa fa-circle-o"></i> Deduction List</a></li>
+                        <li><a href="/finance-compensation/index" data-menu="finance-compensation-index"><i class="fa fa-circle-o"></i> Compensation List</a>
                         </li>
-                        <li><a href="/finance-compensation/index" data-menu="finance-compensation-index"><i class="fa fa-circle-o"></i> Compensation List</a></li>
+                        <li><a href="/finance-advertiser-bill-term/index" data-menu="finance-advertiser-bill-month-index"><i class="fa fa-circle-o"></i> Advertiser Receivable</a>
                         </li>
-                        </li>
-                        <li><a href="/finance-advertiser-bill-term/index" data-menu="finance-advertiser-bill-month-index"><i class="fa fa-circle-o"></i> Advertiser Receivable</a></li>
-                        </li>
-                        </li>
-                        <li><a href="/finance-channel-bill-term/index" data-menu="finance-channel-bill-term-index"><i class="fa fa-circle-o"></i> Channel Payable</a></li>
+                        <li><a href="/finance-channel-bill-term/index" data-menu="finance-channel-bill-term-index"><i class="fa fa-circle-o"></i> Channel Payable</a>
                         </li>
                     </ul>
                 </li>
@@ -341,6 +362,26 @@ AdminAsset::register($this);
         </div>
         <strong>Copyright &copy;</strong>Superads 2017
     </footer>
+    <script src='http://cdn.bootcss.com/socket.io/1.3.7/socket.io.js'></script>
+    <script>
+        // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip
+        var socket = io('http://192.168.56.10:2120');
+        // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数
+        uid = 123;
+        // socket连接后以uid登录
+        socket.on('connect', function(){
+            socket.emit('login', uid);
+        });
+        // 后端推送来消息时
+        socket.on('new_msg', function(msg){
+            console.log("收到消息："+msg);
+            $('#lov-cvr').css('class','');
+        });
+        // 后端推送来在线数据时
+        socket.on('update_online_count', function(online_stat){
+            console.log(online_stat);
+        });
+    </script>
 </div>
 <?php $this->endBody() ?>
 </body>

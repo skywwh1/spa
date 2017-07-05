@@ -18,6 +18,7 @@ use common\models\DeliverSearch;
 use common\models\MyCart;
 use common\models\MyCartSearch;
 use common\models\Stream;
+use common\models\LogCheckClicksDaily;
 use linslin\yii2\curl\Curl;
 use Yii;
 use yii\filters\AccessControl;
@@ -61,6 +62,8 @@ class DeliverController extends Controller
                             'pause',
                             'second',
                             'recommend-create',
+                            'low-cvr',
+                            'recommend-channel',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -442,5 +445,56 @@ class DeliverController extends Controller
         if(!empty($white)){
             $model->whitelist .= implode(',',$white);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function actionLowCvr(){
+        $searchModel = new DeliverSearch();
+        $dataProvider = $searchModel->lowCvrSearch();
+
+        return $this->render('low_cvr', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Creates a new Deliver model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionRecommendChannel()
+    {
+
+        $model = new StsForm();
+
+        //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
+        if ($model->load(Yii::$app->request->post())) {
+            $delivers = [];
+
+            $campaign_uuids = explode(',', $model->campaign_uuid);
+            foreach ($campaign_uuids as $campaign_id) {
+                $deliver = new Deliver();
+                $deliver->campaign_id = $campaign_id;
+                $deliver->channel_id = $model->channel;
+                $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+                $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                $deliver->discount = isset($deliver->channel) ? $deliver->channel->discount : 30;
+                $delivers[] = $deliver;
+            }
+
+            return $this->render('second', [
+                'delivers' => $delivers,
+                'returnMsg' => empty($return_msg) ? null : $return_msg
+            ]);
+        }
+
     }
 }

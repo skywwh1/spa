@@ -53,3 +53,13 @@ $(document).on("click", "a[data-view=2]", function (result) {
     });
     return false;
 });
+$(document).on("click", "#s2s_button", function (e) {
+    var keys = $('#recommend-channel-grid').yiiGridView('getSelectedRows');
+    if (keys == ''){
+        return;
+    }
+    var form = $('#recommend-form');
+    $(':input[name="StsForm[campaign_uuid]"]').val(keys);
+    form.submit();
+    return false;
+});

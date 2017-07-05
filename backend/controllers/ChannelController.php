@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\StsForm;
 use common\models\Campaign;
 use common\models\CampaignSearch;
 use common\models\Deliver;
@@ -325,6 +326,7 @@ class ChannelController extends Controller
             'searchModel' => $campaignSearch,
             'dataProvider' => $dataProvider,
             'channel_id' => $id,
+            'model'=>new StsForm()
         ]);
     }
 
