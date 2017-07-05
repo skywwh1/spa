@@ -61,6 +61,12 @@ class ChannelCampaign extends Deliver
             'Traffic Source' => function ($model) {
                 return $model->campaign->traffic_source;
             },
+            'Icon' => function ($model){
+                return $model->campaign->icon;
+            },
+            'Category'=> function ($model){
+                return $model->campaign->category;
+            },
             'Notes' => function ($model) {
                 return $model->kpi . $model->note . $model->others;
             },

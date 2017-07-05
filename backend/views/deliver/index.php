@@ -97,6 +97,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'update_time:datetime',
                         // 'track_url:url',
                         // 'note',
+                        'redirect_time:datetime',
                         'om',
                         'bd',
                         'pm',

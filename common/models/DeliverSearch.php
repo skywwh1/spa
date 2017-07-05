@@ -14,6 +14,7 @@ use common\models\Deliver;
 class DeliverSearch extends Deliver
 {
     public $channel_name;
+
     /**
      * @inheritdoc
      */
@@ -21,7 +22,7 @@ class DeliverSearch extends Deliver
     {
         return [
             [['daily_cap', 'status', 'creator', 'end_time', 'create_time', 'is_run', 'is_redirect', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
-            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note', 'campaign_name','channel_name','bd','om','pm'], 'safe'],
+            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note', 'campaign_name', 'channel_name', 'bd', 'om', 'pm'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -65,12 +66,13 @@ class DeliverSearch extends Deliver
         $query->leftJoin('user u', 'adv.bd = u.id');
         $query->leftJoin('user u2', 'adv.pm = u2.id');
         $query->leftJoin('user u3', 'ch.om = u3.id');
+        $query->leftJoin('campaign_channel_log_redirect re', 're.campaign_id = de.campaign_id and re.channel_id=de.channel_id and re.status=1');
 
-        $query->select("de.*, u3.username om, u.username bd,u2.username pm");
+        $query->select("de.*, u3.username om, u.username bd,u2.username pm,re.create_time redirect_time");
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
+            'de.campaign_id' => $this->campaign_id,
+            'de.channel_id' => $this->channel_id,
             'adv_price' => $this->adv_price,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
@@ -115,15 +117,16 @@ class DeliverSearch extends Deliver
         } else {
             if (\Yii::$app->user->can('pm')) {
                 $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
-            }else if (\Yii::$app->user->can('om')) {
+            } else if (\Yii::$app->user->can('om')) {
                 $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-            } else if (\Yii::$app->user->can('bd')){
+            } else if (\Yii::$app->user->can('bd')) {
                 $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
             }
         }
 
         $query->orderBy('create_time desc');
-
+//        var_dump($query->createCommand()->sql);
+//        die();
         return $dataProvider;
     }
 
