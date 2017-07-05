@@ -70,8 +70,8 @@ class DeliverSearch extends Deliver
         $query->select("de.*, u3.username om, u.username bd,u2.username pm,re.create_time redirect_time");
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
+            'de.campaign_id' => $this->campaign_id,
+            'de.channel_id' => $this->channel_id,
             'adv_price' => $this->adv_price,
             'pay_out' => $this->pay_out,
             'daily_cap' => $this->daily_cap,
