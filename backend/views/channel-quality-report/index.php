@@ -154,7 +154,7 @@ if (!empty($dataProvider)) {
                                         'asPopover' => false,
                                         'name'=>$name,
                                         'inputType' => Editable::INPUT_TEXTAREA,
-                                        'formOptions' => ['action' => ['/channel-quality-report/update?campaign_id='.$campaign_id.'&channel_id='.$channel_id.'&sub_channel='.$sub_channel.'&time='.$time.'&name='.$name]],
+                                        'formOptions' => ['action' => ['/channel-quality-report/update?campaign_id='.$campaign_id.'&channel_id='.$channel_id.'&sub_channel='.$sub_channel.'&time='.$time.'&name='.urlencode($name)]],
                                     ];
                                 }
                             ];
