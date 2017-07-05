@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\utility\TimeZoneUtil;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -122,6 +123,26 @@ class DeliverSearch extends Deliver
         }
 
         $query->orderBy('create_time desc');
+
+        return $dataProvider;
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function lowCvrSearch()
+    {
+        $query = LogCheckClicksDaily::find();
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
+
+        $query->where(['>=','time',$beginTheDay])->all();
 
         return $dataProvider;
     }
