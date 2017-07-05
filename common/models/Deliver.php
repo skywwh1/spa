@@ -68,6 +68,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $is_wblist;
     public $blacklist;
     public $whitelist;
+    public $redirect_time;
 
     /**
      * @inheritdoc
@@ -141,7 +142,8 @@ class Deliver extends \yii\db\ActiveRecord
             'is_send_create' => 'If Notify',
             'is_manual' => 'Is Manual',
             'channel0' => 'Channel',
-            'is_wblist'=>'Blacklist or Whitelist'
+            'is_wblist'=>'Blacklist or Whitelist',
+            'redirect_time'=>'Redirect time'
         ];
     }
 
