@@ -425,7 +425,6 @@ class DeliverController extends Controller
     }
 
 
-
     /**
      * @param Deliver $model
      */
@@ -434,23 +433,28 @@ class DeliverController extends Controller
         $model->blacklist = 'Sub Channel Blacklist: ';
         $model->whitelist = 'Sub Channel Whitelist: ';
 
-        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andFilterWhere(['like','geo',$model->campaign->target_geo])->orFilterWhere(['like','os',$model->campaign->platform])->asArray()->all();
-        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andFilterWhere(['like','geo',$model->campaign->target_geo])->orFilterWhere(['like','os',$model->campaign->platform])->asArray()->all();
+        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->asArray()->all();
+        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->asArray()->all();
 //        var_dump($black);
 //        die();
-        if(!empty($black)){
-            $model->blacklist .= implode(',',$black);
+        if (!empty($black)) {
+            foreach ($black as $item) {
+                $model->blacklist .= $item->sub_channel;
+            }
         }
 
-        if(!empty($white)){
-            $model->whitelist .= implode(',',$white);
+        if (!empty($white)) {
+            foreach ($white as $item) {
+                $model->whitelist .= $item->sub_channel;
+            }
         }
     }
 
     /**
      * @return string
      */
-    public function actionLowCvr(){
+    public function actionLowCvr()
+    {
         $searchModel = new DeliverSearch();
         $dataProvider = $searchModel->lowCvrSearch();
 
