@@ -168,7 +168,7 @@ class DeliverController extends Controller
                 foreach ($model->channel as $channel_id) {
                     $deliver = new Deliver();
                     $deliver->campaign_id = $campaign_id;
-                    $deliver->channel_id = $channel_id;e(['like','geo',$model->campaign->target_g
+                    $deliver->channel_id = $channel_id;
                     $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
                     $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
                     $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
