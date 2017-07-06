@@ -433,19 +433,19 @@ class DeliverController extends Controller
         $model->blacklist = 'Sub Channel Blacklist: ';
         $model->whitelist = 'Sub Channel Whitelist: ';
 
-        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->asArray()->all();
-        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->asArray()->all();
+        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->column();
+        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->column();
 //        var_dump($black);
 //        die();
         if (!empty($black)) {
             foreach ($black as $item) {
-                $model->blacklist .= $item->sub_channel;
+                $model->blacklist .= $item;
             }
         }
 
         if (!empty($white)) {
             foreach ($white as $item) {
-                $model->whitelist .= $item->sub_channel;
+                $model->whitelist .= $item;
             }
         }
     }
