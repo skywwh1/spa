@@ -57,7 +57,7 @@ class Taptica
                 $camp->campaign_name = $model->campaign_name;
             }
 
-            $camp->pricing_mode = $model->pricing_mode;
+            $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
@@ -144,7 +144,7 @@ class Taptica
                         foreach ($geo as $g) {
                             $aa .= $g->country . ',';
                         }
-                        $item->SupportedCountriesV2 = $aa;
+                        $item->SupportedCountriesV2 = rtrim($aa,',');
                     }
                     if ($item->SupportedCountriesV2 == 'ww,') {
                         $item->SupportedCountriesV2 = 'Global';
