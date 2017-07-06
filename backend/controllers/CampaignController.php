@@ -65,7 +65,7 @@ class CampaignController extends Controller
                             'selected',
                             'export-email',
                             'add-cart-batch',
-                            'mobair_index'
+                            'mobair-index'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
