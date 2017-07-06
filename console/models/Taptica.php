@@ -118,41 +118,50 @@ class Taptica
      */
     private function getAllCampaigns($apiModel)
     {
-        $url = $apiModel->url;
-        $curl = new Curl();
-        echo "url " . $url . "\n";
-        $response = $curl->get($url);
-        $response = json_decode($response);
+//        $url = $apiModel->url;
+//        $curl = new Curl();
+//        echo "url " . $url . "\n";
+//        $response = $curl->get($url);
+//        $response = json_decode($response);
 //        var_dump($response->Data);
 //        die();
-        $apiOffers = $response->Data;
         $newOffers = [];
-        if(!empty($apiOffers)){
-            foreach ($apiOffers as $item){
-                $geo = $item->SupportedCountriesV2;
-                if(!empty($geo)){
-                    $aa = '';
-                    foreach ($geo as $g){
-                        $aa .= $g->country.',';
+        $urls = [
+            'https://api.taptica.com/v2/bulk?token=ewpDjpkbIHHpAkmPSBLbvg%3d%3d&platforms=Android&version=2&format=json',
+            'https://api.taptica.com/v2/bulk?token=ewpDjpkbIHHpAkmPSBLbvg%3d%3d&platforms=iPhone&version=2&format=json',
+        ];
+        foreach ($urls as $url) {
+            $curl = new Curl();
+            echo "url " . $url . "\n";
+            $response = $curl->get($url);
+            $response = json_decode($response);
+            $apiOffers = $response->Data;
+            if (!empty($apiOffers)) {
+                foreach ($apiOffers as $item) {
+                    $geo = $item->SupportedCountriesV2;
+                    if (!empty($geo)) {
+                        $aa = '';
+                        foreach ($geo as $g) {
+                            $aa .= $g->country . ',';
+                        }
+                        $item->SupportedCountriesV2 = $aa;
                     }
-                    $item->SupportedCountriesV2 = $aa;
-                }
-                if($item->SupportedCountriesV2 == 'ww,'){
-                    $item->SupportedCountriesV2 = 'Global';
-                }
-                $newOffers[]=$item;
-                $creatives = '';
-                if(isset($item->Creatives)){
-                    foreach ($item->Creatives as $creative){
-                        $creatives.=$creative->CreativeLink.';';
+                    if ($item->SupportedCountriesV2 == 'ww,') {
+                        $item->SupportedCountriesV2 = 'Global';
                     }
+                    $newOffers[] = $item;
+                    $creatives = '';
+                    if (isset($item->Creatives)) {
+                        foreach ($item->Creatives as $creative) {
+                            $creatives .= $creative->CreativeLink . ';';
+                        }
+                    }
+                    $item->Creatives = $creatives;
                 }
-                $item->Creatives = $creatives;
             }
         }
         return $newOffers;
     }
-
 
 
 }
