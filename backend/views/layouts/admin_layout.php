@@ -198,6 +198,8 @@ AdminAsset::register($this);
                                 List</a></li>
                         <li><a href="/campaign/mundo-index" data-menu="mundo_api"><i class="fa fa-circle-o"></i> Mundo
                                 List</a></li>
+                        <li><a href="/campaign/mobair-index" data-menu="clickdealer_api"><i class="fa fa-circle-o"></i> clickdealer
+                                List</a></li>
                         <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create
                                 Offer</a></li>
                         <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i

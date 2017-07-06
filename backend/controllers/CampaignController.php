@@ -132,6 +132,21 @@ class CampaignController extends Controller
      * Lists all Campaign models.
      * @return mixed
      */
+    public function actionMobairIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->mobairSearch(Yii::$app->request->queryParams);
+
+        return $this->render('mobair_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
     public function actionCpaIndex()
     {
         $searchModel = new CampaignSearch();
