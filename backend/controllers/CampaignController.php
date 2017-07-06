@@ -64,7 +64,8 @@ class CampaignController extends Controller
                             'recommend',
                             'selected',
                             'export-email',
-                            'add-cart-batch'
+                            'add-cart-batch',
+                            'mobair_index'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
