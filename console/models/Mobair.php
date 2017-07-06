@@ -123,6 +123,7 @@ class Mobair
         $response = json_decode($response);
 //        var_dump($response->data);
 //        die();
+        $apiOffers = $response->ads;
         $newOffers = [];
         if(!empty($apiOffers)){
             foreach ($apiOffers as $item){
@@ -130,7 +131,7 @@ class Mobair
                 $newOffers[]=$item;
                 $creatives = '';
                 if(isset($item->creatives)){
-                    foreach ($item->Creatives as $creative){
+                    foreach ($item->creatives as $creative){
                         $files = $creative->files;
                         if(!empty($files)){
                             foreach ($files as $file){

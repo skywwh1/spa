@@ -168,7 +168,7 @@ class DeliverController extends Controller
                 foreach ($model->channel as $channel_id) {
                     $deliver = new Deliver();
                     $deliver->campaign_id = $campaign_id;
-                    $deliver->channel_id = $channel_id;
+                    $deliver->channel_id = $channel_id;e(['like','geo',$model->campaign->target_g
                     $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
                     $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
                     $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
@@ -434,8 +434,8 @@ class DeliverController extends Controller
         $model->blacklist = 'Sub Channel Blacklist: ';
         $model->whitelist = 'Sub Channel Whitelist: ';
 
-        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
-        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
+        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andFilterWhere(['like','geo',$model->campaign->target_geo])->orFilterWhere(['like','os',$model->campaign->platform])->all();
+        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andFilterWhere(['like','geo',$model->campaign->target_geo])->orFilterWhere(['like','os',$model->campaign->platform])->all();
 //        var_dump($black);
 //        die();
         if(!empty($black)){
