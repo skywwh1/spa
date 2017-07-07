@@ -88,7 +88,7 @@ class ApiController extends Controller
     public function actionGetNposting()
     {
         $yeah = new Nposting();
-        $yeah->getApiCampaign();
+      //  $yeah->getApiCampaign();
     }
 
     public function actionGetMi()

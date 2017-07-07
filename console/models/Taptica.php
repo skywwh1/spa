@@ -71,13 +71,13 @@ class Taptica
             $camp->adv_link = str_replace('&s1={Sub_ID}&s2={Clickid}&s3={Sub3}&s4={Sub4}&s5={Sub5}&udid={GAID/IDFA}', '', $adv_link);
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
-            if(strpos($camp->platform,'Android')){
+            if (strpos($camp->platform, 'Android') === true) {
                 $camp->platform = 'android';
             }
-            if(strpos($camp->platform,'IPhone')){
+            if (strpos($camp->platform, 'IPhone') === true) {
                 $camp->platform = 'ios';
             }
-            $camp->traffic_source='non-incent,no adult';
+            $camp->traffic_source = 'non-incent,no adult';
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
@@ -151,7 +151,7 @@ class Taptica
                         foreach ($geo as $g) {
                             $aa .= $g->country . ',';
                         }
-                        $item->SupportedCountriesV2 = rtrim($aa,',');
+                        $item->SupportedCountriesV2 = rtrim($aa, ',');
                     }
                     if ($item->SupportedCountriesV2 == 'ww') {
                         $item->SupportedCountriesV2 = 'Global';
