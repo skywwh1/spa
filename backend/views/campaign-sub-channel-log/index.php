@@ -75,6 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                  'value' => 'sub_channel',
             ],
             [
+                'label' => 'status',
                 'attribute' => 'is_effected',
                 'value' => function ($model) {
                     return ModelsUtil::getPausedStatus($model->is_effected);

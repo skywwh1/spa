@@ -37,7 +37,7 @@ if (!empty($dataProvider)) {
                         echo Html::a('<span class="glyphicon glyphicon-plus"></span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
-                                'data-url' => 'columns?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
+                                'data-url' => 'columns?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_name.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
                                 'data-view' => 0,
                                 'data-pjax' => 0,
                             ]);
@@ -45,18 +45,18 @@ if (!empty($dataProvider)) {
                         echo Html::a('<span class="btn btn-primary">Email</span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
-                                'data-url' => 'email?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
+                                'data-url' => 'email?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_name.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
                                 'data-view' => 0,
                                 'data-pjax' => 0,
                             ]);
                         echo PHP_EOL;
-                        echo Html::a('<span class="btn btn-primary">Notice</span>', null,
-                            [
-                                'title' => Yii::t('yii', 'Notice'),
-                                'data-url' => 'notice?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id,
-                                'data-view' => 0,
-                                'data-pjax' => 0,
-                            ]);
+//                        echo Html::a('<span class="btn btn-primary">Notice</span>', null,
+//                            [
+//                                'title' => Yii::t('yii', 'Notice'),
+//                                'data-url' => 'notice?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id,
+//                                'data-view' => 0,
+//                                'data-pjax' => 0,
+//                            ]);
                         ?>
                         <button type="button" class="btn btn-primary" id="submit-button">Batch Save</button>
                     </p>

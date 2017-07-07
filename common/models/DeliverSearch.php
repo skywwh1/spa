@@ -145,8 +145,21 @@ class DeliverSearch extends Deliver
         // grid filtering conditions
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
 
+        $query->joinWith('channel ch');
+        $query->leftJoin('advertiser adv', 'cp.advertiser = adv.id');
         $query->where(['>=','time',$beginTheDay])->all();
 
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
         return $dataProvider;
     }
 }

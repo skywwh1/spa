@@ -78,7 +78,7 @@ class Advertiser extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['username', 'post_parameter', 'email'], 'required'],
+            [['username', 'post_parameter', 'email','pm'], 'required'],
             [['payment_term', 'status', 'status', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
             [['username', 'firstname', 'lastname', 'system', 'alipay', 'timezone','beneficiary_name'], 'string', 'max' => 100],

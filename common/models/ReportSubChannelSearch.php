@@ -163,6 +163,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -170,18 +171,28 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'sub_channel' => $this->sub_channel,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
-            'ch.username' => $this->channel_name,
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//
+//        }
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->om]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
+            }else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')){
+                $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
+            }
         }
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
@@ -317,6 +328,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,
@@ -324,7 +336,6 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'sub_channel' => $this->sub_channel,
             'clh.pay_out' => $this->pay_out,
             'clh.adv_price' => $this->adv_price,
-            'ch.username' => $this->channel_name,
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
@@ -332,10 +343,21 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->om]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
+            }else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')){
+                $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
+            }
         }
         $query->groupBy([
             'clh.campaign_id',
@@ -399,6 +421,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -406,7 +429,6 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'sub_channel' => $this->sub_channel,
             'pay_out' => $this->pay_out,
             'adv_price' => $this->adv_price,
-            'ch.username' => $this->channel_name,
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
@@ -414,10 +436,21 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->om]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
+            }else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')){
+                $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
+            }
         }
         return $dataProvider;
     }
@@ -507,6 +540,7 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,
@@ -514,7 +548,6 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             'sub_channel' => $this->sub_channel,
             'clh.pay_out' => $this->pay_out,
             'clh.adv_price' => $this->adv_price,
-            'ch.username' => $this->channel_name,
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
@@ -522,10 +555,21 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->om]);
+//        } else {
+//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+//        }
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->om]);
         } else {
-            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
+            }else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')){
+                $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
+            }
         }
         $query->groupBy([
             'clh.campaign_id',

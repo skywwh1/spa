@@ -250,16 +250,17 @@ class ChannelQualityReportController extends Controller
 
     /**
      * @param $campaign_id
-     * @param $channel_id
+     * @param $channel_name
      * @param $start
      * @param $end
      * @param $type
      * @return string|\yii\web\Response
      */
     //创建的时候增加camp
-    public function actionColumns($campaign_id,$channel_id,$start,$end,$type)
+    public function actionColumns($campaign_id,$channel_name,$start,$end,$type)
     {
         $model = new QualityDynamicColumn();
+        $channel_id = Channel::findByUsername($channel_name)->id;
         $model->channel_id = $channel_id;
         $model->campaign_id = $campaign_id;
 
@@ -311,10 +312,11 @@ class ChannelQualityReportController extends Controller
         }
     }
 
-    public function actionEmail($campaign_id,$channel_id,$start,$end,$type){
+    public function actionEmail($campaign_id,$channel_name,$start,$end,$type){
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->time_zone = 'Etc/GMT-8';
         $searchModel->campaign_id = $campaign_id;
+        $channel_id = Channel::findByUsername($channel_name)->id;
         $searchModel->channel_id = $channel_id;
         $searchModel->start = $start;
         $searchModel->end = $end;
