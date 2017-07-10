@@ -145,7 +145,43 @@ class DeliverSearch extends Deliver
         // grid filtering conditions
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
 
+        $query->joinWith('channel ch');
+        $query->joinWith('campaign camp');
+        $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
         $query->where(['>=','time',$beginTheDay])->all();
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+        return $dataProvider;
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function deliverNewSearch()
+    {
+        $query = Deliver::find();
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
+
+        $query->joinWith('channel ch');
+        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username]);
+        $query->andFilterWhere(['>','create_time',$beginTheDay])->all();
 
         return $dataProvider;
     }

@@ -14,6 +14,7 @@ class FinancePendingSearch extends FinancePending
 {
     public $month;
     public $channel_name;
+    public $campaign_name;
     /**
      * @inheritdoc
      */
@@ -21,7 +22,7 @@ class FinancePendingSearch extends FinancePending
     {
         return [
             [['id', 'adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
-            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note','month','channel_name'], 'safe'],
+            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note','month','channel_name','campaign_name'], 'safe'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
         ];
     }
@@ -82,6 +83,7 @@ class FinancePendingSearch extends FinancePending
         ]);
 
         $query->leftJoin('channel ch', 'fp.channel_id = ch.id');
+        $query->leftJoin('campaign camp', 'fp.campaign_id = camp.id');
 
         $query->andFilterWhere(['like', 'adv_bill_id', $this->adv_bill_id])
             ->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
@@ -90,6 +92,7 @@ class FinancePendingSearch extends FinancePending
             ->andFilterWhere(['like', 'bd', $this->bd])
             ->andFilterWhere(['like', 'fp.om', $this->om])
             ->andFilterWhere(['like', 'note', $this->note])
+            ->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'adv_bill_id', $this->month])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
         $query->orderBy(['fp.id' => SORT_DESC]);

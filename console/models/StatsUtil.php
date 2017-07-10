@@ -1025,12 +1025,10 @@ class StatsUtil
             $start_time = $datetime->getTimestamp();
         }
 
-        $logs = CampaignLogSubChannelHourly::find()->andFilterWhere(['>=', 'time', $start_time])->andFilterWhere(['>', 'match_installs', 10])->asArray()->all();//查询上次检测之后的数据
-//        var_dump(CampaignLogSubChannelHourly::find()->andFilterWhere(['>=', 'time', $start_time])->andFilterWhere(['>', 'match_installs', 10])->createCommand()->sql);
-//        die();
+        $logs = CampaignLogSubChannelHourly::find()->andFilterWhere(['>=', 'time', $start_time])->andFilterWhere(['>', 'match_installs', 10])->all();//查询上次检测之后的数据
         if (!empty($logs)) {
             foreach ($logs as $log) {
-                $log = (object)$log;
+//                $log = (object)$log;
                 if ($log->match_installs > 10) {
                     // match cvr > 10
                     $camp = Campaign::findById($log->campaign_id);

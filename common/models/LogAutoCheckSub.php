@@ -42,7 +42,7 @@ class LogAutoCheckSub extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'channel_id'], 'required'],
             [['campaign_id', 'channel_id', 'match_install', 'installs', 'daily_cap', 'is_send', 'type', 'update_time', 'create_time'], 'integer'],
-            [['campaign_name', 'channel_name', 'sub_chid', 'om_email', 'match_cvr', 'action'], 'string', 'max' => 255],
+            [['campaign_name', 'channel_name', 'sub_chid', 'om_email', 'action'], 'string', 'max' => 255],
         ];
     }
 
@@ -70,4 +70,16 @@ class LogAutoCheckSub extends \yii\db\ActiveRecord
             'create_time' => 'Create Time',
         ];
     }
+
+    public function beforeSave($insert)
+    {
+        if ($insert) {
+            $this->create_time = time();
+            $this->update_time = time();
+        } else {
+            $this->update_time = time();
+        }
+        return parent::beforeSave($insert);
+    }
+
 }

@@ -16,6 +16,7 @@ use Yii;
  */
 class QualityDynamicColumn extends \yii\db\ActiveRecord
 {
+    public $channel_name;
     /**
      * @inheritdoc
      */

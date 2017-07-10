@@ -38,6 +38,7 @@ class RedirectLogController extends Controller
                             'index',
                             'create',
                             'validate',
+                            'detail'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -182,5 +183,23 @@ class RedirectLogController extends Controller
             \Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @return string
+     */
+    public function actionDetail($campaign_id, $channel_id)
+    {
+        $model = RedirectLog::findLastRedirect($campaign_id, $channel_id);
+        if (empty($model)) {
+            $model = new RedirectLog();
+            $model->campaign_id = $campaign_id;
+            $model->channel_id = $channel_id;
+        }
+        return $this->renderAjax('detail', [
+            'model' => $model,
+        ]);
     }
 }

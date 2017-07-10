@@ -18,6 +18,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
     public $column_name;
     public $column_value;
     public $read_only;
+    public $channel_name;
     /**
      * @inheritdoc
      */
@@ -25,7 +26,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'create_time'], 'integer'],
-            [['sub_channel', 'daily_cap', 'type', 'start', 'end', 'time_zone', 'om'], 'safe'],
+            [['sub_channel', 'daily_cap', 'type', 'start', 'end', 'time_zone', 'om','channel_name'], 'safe'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue'], 'number'],
         ];
     }
@@ -93,8 +94,10 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -218,7 +221,10 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -306,7 +312,10 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));

@@ -2,6 +2,8 @@
 
 namespace common\models;
 
+use common\utility\MailUtil;
+use common\utility\TimeZoneUtil;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -127,6 +129,63 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(["effect_time" => SORT_DESC]);
         }
+        return $dataProvider;
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function campaignUpdateSearch()
+    {
+        $query = CampaignStsUpdate::find();
+        $query->alias('csu');
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $query->Select([
+            'csu.id',
+            'campaign_id',
+            'cam.campaign_name campaign_name',
+            'name',
+            'value',
+            'old_value',
+            'csu.type',
+            'is_effected',
+            'effect_time',
+            'csu.create_time'
+        ]);
+
+        $query->leftJoin('channel ch', 'csu.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'csu.campaign_id = cam.id');
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'type' => $this->type,
+            'is_send' => $this->is_send,
+            'send_time' => $this->send_time,
+            'is_effected' => $this->is_effected,
+            'effect_time' => $this->effect_time,
+            'name' => $this->name
+        ]);
+
+        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+        $query->andFilterWhere(['like', 'value', $this->value])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['>', 'csu.create_time', $beginThisDay]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(["effect_time" => SORT_DESC]);
+        }
+//        var_dump($query->createCommand()->sql);
+//        var_dump($beginThisDay);
+//        var_dump($this->channel_name);
+//        die();
         return $dataProvider;
     }
 }

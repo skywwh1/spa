@@ -3,6 +3,7 @@
 namespace common\models;
 
 use common\utility\MailUtil;
+use common\utility\TimeZoneUtil;
 use phpDocumentor\Reflection\Types\Integer;
 use Yii;
 use yii\db\Query;
@@ -271,6 +272,20 @@ class Deliver extends \yii\db\ActiveRecord
     public static function findAllRunChannel($campaign_id)
     {
         return static::find()->where(['campaign_id' => $campaign_id])->all();
+    }
+
+    /**
+     * 获取今天创建的单子
+     * @return int|string
+     */
+    public static function getTodayDeliver()
+    {
+        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+        $count = Deliver::find()->joinWith('channel ch')
+            ->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
+            ->andFilterWhere(['>', 'create_time', $beginThisDay])
+            ->count();
+        return $count;
     }
 
 }

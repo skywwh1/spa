@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use common\utility\TimeZoneUtil;
 use Yii;
 
 /**
@@ -131,5 +132,27 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
         return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-creative'])
             ->andWhere(['<', 'effect_time', time()])
             ->all();
+    }
+
+    /**
+     * @param $name
+     * @return int|string
+     */
+    public static function getCampaignUpdate($name)
+    {
+        $query = CampaignStsUpdate::find();
+        $query->alias('csu');
+        $query->leftJoin('channel ch', 'csu.channel_id = ch.id');
+
+        $query->andFilterWhere([
+            'name' => $name
+        ]);
+
+        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+        $query->andFilterWhere(['like', 'ch.username', Yii::$app->user->identity->username])
+            ->andFilterWhere(['>', 'csu.create_time', $beginThisDay]);
+        $data = $query->count();
+
+        return $data;
     }
 }

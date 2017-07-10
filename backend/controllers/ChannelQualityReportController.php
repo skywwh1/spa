@@ -71,8 +71,7 @@ class ChannelQualityReportController extends Controller
         $date->format('Y-m-d');
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
-//        var_dump($searchModel->type);
-//        die();
+
         $searchModel->load(Yii::$app->request->queryParams);
         switch($searchModel->type){
             case 1:
@@ -133,6 +132,7 @@ class ChannelQualityReportController extends Controller
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->campaign_id = $campaign;
         $searchModel->channel_id = $channel;
+        $searchModel->channel_name = Channel::findOne($channel)->username;
         $searchModel->time_zone = $timeZone;
         $searchModel->read_only = true;
 
@@ -251,15 +251,17 @@ class ChannelQualityReportController extends Controller
     /**
      * @param $campaign_id
      * @param $channel_id
+     * @param $channel_name
      * @param $start
      * @param $end
      * @param $type
      * @return string|\yii\web\Response
      */
     //创建的时候增加camp
-    public function actionColumns($campaign_id,$channel_id,$start,$end,$type)
+    public function actionColumns($campaign_id,$channel_id,$channel_name,$start,$end,$type)
     {
         $model = new QualityDynamicColumn();
+        $channel_id = empty($channel_id)?Channel::findByUsername($channel_name)->id:$channel_id;//id/name必有一个不为Null
         $model->channel_id = $channel_id;
         $model->campaign_id = $campaign_id;
 
@@ -270,6 +272,7 @@ class ChannelQualityReportController extends Controller
             $searchModel = new ChannelQualityReportSearch();
             $searchModel->campaign_id = $campaign_id;
             $searchModel->channel_id = $channel_id;
+            $searchModel->channel_name = $channel_name;
             $searchModel->start = $start;
             $searchModel->end = $end;
             $searchModel->time_zone = 'Etc/GMT-8';
@@ -311,11 +314,13 @@ class ChannelQualityReportController extends Controller
         }
     }
 
-    public function actionEmail($campaign_id,$channel_id,$start,$end,$type){
+    public function actionEmail($campaign_id,$channel_id,$channel_name,$start,$end,$type){
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->time_zone = 'Etc/GMT-8';
         $searchModel->campaign_id = $campaign_id;
+        $channel_id = empty($channel_id)?Channel::findByUsername($channel_name)->id:$channel_id;
         $searchModel->channel_id = $channel_id;
+        $searchModel->channel_name = $channel_name;
         $searchModel->start = $start;
         $searchModel->end = $end;
 
