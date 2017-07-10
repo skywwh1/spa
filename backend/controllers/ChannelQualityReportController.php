@@ -133,6 +133,7 @@ class ChannelQualityReportController extends Controller
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->campaign_id = $campaign;
         $searchModel->channel_id = $channel;
+        $searchModel->channel_name = Channel::findOne($channel)->username;
         $searchModel->time_zone = $timeZone;
         $searchModel->read_only = true;
 

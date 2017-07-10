@@ -4,7 +4,9 @@ namespace frontend\controllers;
 
 use common\models\ApplyCampaign;
 use common\models\Campaign;
+use common\models\CampaignStsUpdateSearch;
 use common\models\Deliver;
+use common\models\DeliverSearch;
 use frontend\models\AllCampaignSearch;
 use frontend\models\CampaignChannelLog;
 use frontend\models\CampaignChannelLogSearch;
@@ -39,6 +41,8 @@ class CampLogController extends Controller
                             'view',
                             'campaign-view',
                             'apply',
+                            'campaign-update',
+                            'deliver-new',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -193,5 +197,33 @@ class CampLogController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         }
         return null;
+    }
+
+    /**
+     * @param $name
+     * @return string
+     */
+    public function actionCampaignUpdate($name){
+        $searchModel = new CampaignStsUpdateSearch();
+        $searchModel->name = $name;
+        $searchModel->channel_name = Yii::$app->user->identity->username;
+        $dataProvider = $searchModel->campaignUpdateSearch();
+
+        return $this->render('campaign_update', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionDeliverNew(){
+        $searchModel = new DeliverSearch();
+        $searchModel->channel_name = Yii::$app->user->identity->username;
+        $dataProvider = $searchModel->deliverNewSearch();
+
+        return $this->render('deliver_new', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 }

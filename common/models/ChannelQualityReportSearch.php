@@ -95,9 +95,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        $channel_id = Channel::findByUsername($this->channel_name)->id;
-        $this->channel_id = $channel_id;
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -221,9 +219,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        $channel_id = Channel::findByUsername($this->channel_name)->id;
-        $this->channel_id = $channel_id;
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
@@ -311,10 +307,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
-        $channel_id = Channel::findByUsername($this->channel_name)->id;
-        $this->channel_id = $channel_id;
-
-        if(empty($this->campaign_id) || empty($this->channel_id)){
+        if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
