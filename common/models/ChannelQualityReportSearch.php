@@ -94,7 +94,9 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
-
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
         if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
@@ -219,6 +221,9 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
         if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
@@ -307,6 +312,9 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             return $dataProvider;
         }
 
+        if (empty($this->channel_name) && !empty($this->channel_id)){
+            $this->channel_name = Channel::findOne($this->channel_id)->username;
+        }
         if(empty($this->campaign_id) || empty($this->channel_name)){
             return null;
         }
