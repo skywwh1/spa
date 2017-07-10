@@ -146,7 +146,7 @@ class DeliverSearch extends Deliver
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
 
         $query->joinWith('channel ch');
-        $query->leftJoin('advertiser adv', 'cp.advertiser = adv.id');
+        $query->leftJoin('advertiser adv', 'ch.advertiser = adv.id');
         $query->where(['>=','time',$beginTheDay])->all();
 
         if (\Yii::$app->user->can('admin')) {
