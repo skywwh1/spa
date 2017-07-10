@@ -298,7 +298,10 @@ class CampaignController extends Controller
         echo " \t $str \n";
     }
 
-
+    /**
+     * 给渠道postback
+     * @param $click_uuid
+     */
     public function actionPost($click_uuid)
     {
         $logFeed = LogFeed::findOne(['click_uuid' => $click_uuid]);

@@ -17,16 +17,14 @@ use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 
-class Taptica
+class Mobair
 {
 
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 14]);
+        $apiModel = AdvertiserApi::findOne(['id' => 15]);
         $allCamps = $this->getAllCampaigns($apiModel);
 
-//        var_dump($allCamps);
-//        die();
         if (!empty($allCamps)) {
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $allCamps);
             $this->transferApiModel($apiModel, $apiCams);
@@ -57,7 +55,7 @@ class Taptica
                 $camp->campaign_name = $model->campaign_name;
             }
 
-            $camp->pricing_mode = 'cpi';
+            $camp->pricing_mode = $model->pricing_mode;
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
@@ -68,16 +66,9 @@ class Taptica
             $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
             $camp->target_geo = $model->target_geo;
             $adv_link = $model->adv_link;
-            $camp->adv_link = str_replace('&s1={Sub_ID}&s2={Clickid}&s3={Sub3}&s4={Sub4}&s5={Sub5}&udid={GAID/IDFA}', '', $adv_link);
+            $camp->adv_link = str_replace('&cid=[cid]&data1=[data1]&data2=[data2]&data3=[data3]&data4=[data4]&affsub1=[affsub1]&device_id=[device_id]&gaid=[gaid]&idfa=[idfa]', '', $adv_link);
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
-            if (strpos($camp->platform, 'Android') === true) {
-                $camp->platform = 'android';
-            }
-            if (strpos($camp->platform, 'IPhone') === true) {
-                $camp->platform = 'ios';
-            }
-            $camp->traffic_source = 'non-incent,no adult';
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
@@ -116,7 +107,7 @@ class Taptica
                 }
             }
         }
-        var_dump('update all Taptica');
+        var_dump('update all Affle');
     }
 
     /**
@@ -125,50 +116,36 @@ class Taptica
      */
     private function getAllCampaigns($apiModel)
     {
-//        $url = $apiModel->url;
-//        $curl = new Curl();
-//        echo "url " . $url . "\n";
-//        $response = $curl->get($url);
-//        $response = json_decode($response);
-//        var_dump($response->Data);
+        $url = $apiModel->url;
+        $curl = new Curl();
+        echo "url " . $url . "\n";
+        $response = $curl->get($url);
+        $response = json_decode($response);
+//        var_dump($response->data);
 //        die();
+        $apiOffers = $response->ads;
         $newOffers = [];
-        $urls = [
-            'https://api.taptica.com/v2/bulk?token=ewpDjpkbIHHpAkmPSBLbvg%3d%3d&platforms=Android&version=2&format=json',
-            'https://api.taptica.com/v2/bulk?token=ewpDjpkbIHHpAkmPSBLbvg%3d%3d&platforms=iPhone&version=2&format=json',
-        ];
-        foreach ($urls as $url) {
-            $curl = new Curl();
-            echo "url " . $url . "\n";
-            $response = $curl->get($url);
-            $response = json_decode($response);
-            $apiOffers = $response->Data;
-            if (!empty($apiOffers)) {
-                foreach ($apiOffers as $item) {
-                    $geo = $item->SupportedCountriesV2;
-                    if (!empty($geo)) {
-                        $aa = '';
-                        foreach ($geo as $g) {
-                            $aa .= $g->country . ',';
-                        }
-                        $item->SupportedCountriesV2 = rtrim($aa, ',');
-                    }
-                    if ($item->SupportedCountriesV2 == 'ww') {
-                        $item->SupportedCountriesV2 = 'Global';
-                    }
-                    $newOffers[] = $item;
-                    $creatives = '';
-                    if (isset($item->Creatives)) {
-                        foreach ($item->Creatives as $creative) {
-                            $creatives .= $creative->CreativeLink . ';';
+        if(!empty($apiOffers)){
+            foreach ($apiOffers as $item){
+
+                $newOffers[]=$item;
+                $creatives = '';
+                if(isset($item->creatives)){
+                    foreach ($item->creatives as $creative){
+                        $files = $creative->files;
+                        if(!empty($files)){
+                            foreach ($files as $file){
+                                $creatives.=$file->url.';';
+                            }
                         }
                     }
-                    $item->Creatives = $creatives;
                 }
+                $item->creatives = $creatives;
             }
         }
         return $newOffers;
     }
+
 
 
 }

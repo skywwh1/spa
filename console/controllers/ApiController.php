@@ -14,6 +14,7 @@ use console\models\Glispa;
 use console\models\HeadWay;
 use console\models\Mi;
 use console\models\MiDirect;
+use console\models\Mobair;
 use console\models\Movista;
 use console\models\Mundo;
 use console\models\Nposting;
@@ -87,7 +88,7 @@ class ApiController extends Controller
     public function actionGetNposting()
     {
         $yeah = new Nposting();
-        $yeah->getApiCampaign();
+      //  $yeah->getApiCampaign();
     }
 
     public function actionGetMi()
@@ -122,6 +123,12 @@ class ApiController extends Controller
     public function actionGetTaptica()
     {
         $yeah = new Taptica();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetMobair()
+    {
+        $yeah = new Mobair();
         $yeah->getApiCampaign();
     }
 }

@@ -64,7 +64,8 @@ class CampaignController extends Controller
                             'recommend',
                             'selected',
                             'export-email',
-                            'add-cart-batch'
+                            'add-cart-batch',
+                            'mobair-index'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -123,6 +124,21 @@ class CampaignController extends Controller
         $dataProvider = $searchModel->mundoSearch(Yii::$app->request->queryParams);
 
         return $this->render('mundo_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionMobairIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->mobairSearch(Yii::$app->request->queryParams);
+
+        return $this->render('mobair_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

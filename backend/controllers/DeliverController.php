@@ -425,7 +425,6 @@ class DeliverController extends Controller
     }
 
 
-
     /**
      * @param Deliver $model
      */
@@ -434,23 +433,28 @@ class DeliverController extends Controller
         $model->blacklist = 'Sub Channel Blacklist: ';
         $model->whitelist = 'Sub Channel Whitelist: ';
 
-        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
-        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id'=>$model->channel_id])->andWhere(['like','geo',$model->campaign->target_geo])->orWhere(['like','os',$model->campaign->platform])->all();
+        $black = ChannelSubBlacklist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->column();
+        $white = ChannelSubWhitelist::find()->select('sub_channel')->where(['channel_id' => $model->channel_id])->andFilterWhere(['like', 'geo', $model->campaign->target_geo])->orFilterWhere(['like', 'os', $model->campaign->platform])->column();
 //        var_dump($black);
 //        die();
-        if(!empty($black)){
-            $model->blacklist .= implode(',',$black);
+        if (!empty($black)) {
+            foreach ($black as $item) {
+                $model->blacklist .= $item;
+            }
         }
 
-        if(!empty($white)){
-            $model->whitelist .= implode(',',$white);
+        if (!empty($white)) {
+            foreach ($white as $item) {
+                $model->whitelist .= $item;
+            }
         }
     }
 
     /**
      * @return string
      */
-    public function actionLowCvr(){
+    public function actionLowCvr()
+    {
         $searchModel = new DeliverSearch();
         $dataProvider = $searchModel->lowCvrSearch();
 
