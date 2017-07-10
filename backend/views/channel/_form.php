@@ -83,6 +83,10 @@ use common\models\Platform;
                        }
                     ?>
 
+                    <?= $form->field($model, 'daily_cap')->textInput(['maxlength' => true]) ?>
+
+                    <?= $form->field($model, 'pay_out')->textInput(['maxlength' => true]) ?>
+
                     <?= $form->field($model, 'note')->textarea(['maxlength' => true]) ?>
 
                     <?= $form->field($model, 'contacts')->textInput(['maxlength' => true]) ?>
