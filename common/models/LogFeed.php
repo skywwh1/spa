@@ -21,6 +21,7 @@ use Yii;
  * @property integer $feed_time
  * @property integer $is_post
  * @property integer $is_redirect
+ * @property integer $click_time
  * @property integer $create_time
  * @property Campaign $campaign
  * @property Channel $channel
@@ -50,7 +51,7 @@ class LogFeed extends \yii\db\ActiveRecord
     {
         return [
             [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
-            [['channel_id', 'campaign_id', 'ip_long', 'feed_time', 'is_post', 'create_time', 'is_redirect'], 'integer'],
+            [['channel_id', 'campaign_id', 'ip_long', 'feed_time', 'is_post', 'click_time', 'create_time', 'is_redirect'], 'integer'],
             [['all_parameters'], 'safe'],
             [['adv_price'], 'safe'],
             [['auth_token'], 'string', 'max' => 32],
@@ -79,6 +80,7 @@ class LogFeed extends \yii\db\ActiveRecord
             'feed_time' => 'Feed Time',
             'is_post' => 'Is Post',
             'is_redirect' => 'Is Redirect',
+            'click_time' => 'Click Time',
             'create_time' => 'Create Time',
         ];
     }

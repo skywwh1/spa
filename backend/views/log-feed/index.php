@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?php // echo $this->render('_search', ['model' => $searchModel]);
                     $columns = [
-                         ['class' => 'yii\grid\SerialColumn'],
+                        ['class' => 'yii\grid\SerialColumn'],
 
 //                    'id',
 //            'auth_token',
@@ -70,6 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'ip',
 //             'adv_price',
                         'feed_time:datetime',
+                        'click_time:datetime',
                         'om',
                         'bd',
                         'pm',

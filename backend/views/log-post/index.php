@@ -52,8 +52,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'channel.username',
                             'label' => 'Channel'
                         ],
+                        [
+                            'attribute' => 'ch_subid',
+                            'value' => 'ch_subid',
+                            'label' => 'Channel Sub id'
+                        ],
                         'post_time:datetime',
-
+                        'click_time:datetime',
                     ];
                     $fullExportMenu = ExportMenu::widget([
                         'dataProvider' => $dataProvider,
