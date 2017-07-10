@@ -47,8 +47,8 @@ SbAppAsset::register($this);
                     $name = 'pause';
                     $count_pause = CampaignStsUpdate::getCampaignUpdate($name);
 
-                    $name = 'discount';
-                    $count_discount = CampaignStsUpdate::getCampaignUpdate($name);
+//                    $name = 'discount';
+//                    $count_discount = CampaignStsUpdate::getCampaignUpdate($name);
 
                     $name = 'payout';
                     $count_payout = CampaignStsUpdate::getCampaignUpdate($name);
@@ -62,7 +62,7 @@ SbAppAsset::register($this);
                     $name = 'update-geo';
                     $count_geo = CampaignStsUpdate::getCampaignUpdate($name);
 
-                    $count = $count_new + $count_geo + $count_pause + $count_discount + $count_payout + $count_cap + $count_creative;
+                    $count = $count_new + $count_geo + $count_pause + $count_payout + $count_cap + $count_creative;
 
                     echo '<span id= "lov-cvr" class="label label-warning"> '.$count.' </span>';
                     ?>
@@ -87,13 +87,13 @@ SbAppAsset::register($this);
                                     ?>
                                 </a>
                             </li>
-                            <li>
-                                <a href="/camp-log/campaign-update?name=discount">
-                                    <?php
-                                    echo '<i class="fa fa-save text-yellow"></i> '.$count_discount.'  update offers';
-                                    ?>
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=discount">-->
+<!--                                    --><?php
+//                                    echo '<i class="fa fa-save text-yellow"></i> '.$count_discount.'  update offers';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
                             <li>
                                 <a href="/camp-log/campaign-update?name=payout">
                                     <?php
