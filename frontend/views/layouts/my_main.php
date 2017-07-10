@@ -44,25 +44,26 @@ SbAppAsset::register($this);
                     <?php
                     $count_new = \common\models\Deliver::getTodayDeliver();
 
-                    $name = 'pause';
-                    $count_pause = CampaignStsUpdate::getCampaignUpdate($name);
+//                    $name = 'pause';
+//                    $count_pause = CampaignStsUpdate::getCampaignUpdate($name);
 
 //                    $name = 'discount';
 //                    $count_discount = CampaignStsUpdate::getCampaignUpdate($name);
 
-                    $name = 'payout';
-                    $count_payout = CampaignStsUpdate::getCampaignUpdate($name);
+//                    $name = 'payout';
+//                    $count_payout = CampaignStsUpdate::getCampaignUpdate($name);
+//
+//                    $name = 'cap';
+//                    $count_cap = CampaignStsUpdate::getCampaignUpdate($name);
+//
+//                    $name = 'update-creative';
+//                    $count_creative = CampaignStsUpdate::getCampaignUpdate($name);
+//
+//                    $name = 'update-geo';
+//                    $count_geo = CampaignStsUpdate::getCampaignUpdate($name);
 
-                    $name = 'cap';
-                    $count_cap = CampaignStsUpdate::getCampaignUpdate($name);
-
-                    $name = 'update-creative';
-                    $count_creative = CampaignStsUpdate::getCampaignUpdate($name);
-
-                    $name = 'update-geo';
-                    $count_geo = CampaignStsUpdate::getCampaignUpdate($name);
-
-                    $count = $count_new + $count_geo + $count_pause + $count_payout + $count_cap + $count_creative;
+//                    $count = $count_new + $count_geo + $count_pause + $count_payout + $count_cap + $count_creative;
+                    $count = $count_new ;
 
                     echo '<span id= "lov-cvr" class="label label-warning"> '.$count.' </span>';
                     ?>
@@ -72,14 +73,14 @@ SbAppAsset::register($this);
                     <li>
                         <!-- inner menu: contains the actual data -->
                         <ul class="nav navbar-nav">
-                            <li>
-                                <a href="/camp-log/campaign-update?name=pause">
-                                    <?php
-
-                                    echo '<i class="fa fa-pause text-yellow"></i>  '.$count_pause.' pausing offers';
-                                    ?>
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=pause">-->
+<!--                                    --><?php
+//
+//                                    echo '<i class="fa fa-pause text-yellow"></i>  '.$count_pause.' pausing offers';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
                             <li>
                                 <a href="/camp-log/deliver-new">
                                     <?php
@@ -94,34 +95,34 @@ SbAppAsset::register($this);
 //                                    ?>
 <!--                                </a>-->
 <!--                            </li>-->
-                            <li>
-                                <a href="/camp-log/campaign-update?name=payout">
-                                    <?php
-                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_payout.' payout update';
-                                    ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/camp-log/campaign-update?name=cap">
-                                    <?php
-                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_cap.' cap update';
-                                    ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/camp-log/campaign-update?name=update-creative">
-                                    <?php
-                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_creative.' creative update';
-                                    ?>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/camp-log/campaign-update?name=update-geo">
-                                    <?php
-                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_geo.' GEO update';
-                                    ?>
-                                </a>
-                            </li>
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=payout">-->
+<!--                                    --><?php
+//                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_payout.' payout update';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=cap">-->
+<!--                                    --><?php
+//                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_cap.' cap update';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=update-creative">-->
+<!--                                    --><?php
+//                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_creative.' creative update';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li>-->
+<!--                                <a href="/camp-log/campaign-update?name=update-geo">-->
+<!--                                    --><?php
+//                                    echo '<i class="fa fa-save text-aqua"></i>  '.$count_geo.' GEO update';
+//                                    ?>
+<!--                                </a>-->
+<!--                            </li>-->
                         </ul>
                     </li>
 <!--                    <li class="footer"><a href="#">View all</a></li>-->
