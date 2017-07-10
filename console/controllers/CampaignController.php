@@ -119,6 +119,19 @@ class CampaignController extends Controller
                 }
             }
         }
+
+        $restart = CampaignStsUpdate::getStsRestart();
+        if(!empty($restart)){
+            foreach ($restart as $item) {
+                $deliver = Deliver::findIdentity($item->campaign_id, $item->channel_id);
+                if (isset($deliver)) {
+                    $deliver->status = 1;
+                    $deliver->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
     }
 
     public function actionSendUpdate()
