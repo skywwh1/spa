@@ -29,6 +29,7 @@ class Nposting
         $curl->setOption(CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
         $curl->setOption(CURLOPT_COOKIE, '');
         $response = $curl->get($url);
+
 //        var_dump($response);
         if (isset($response)) {
             $response = json_decode($response);

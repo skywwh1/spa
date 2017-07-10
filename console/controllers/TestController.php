@@ -52,6 +52,9 @@ class TestController extends Controller
     {
 //        date('Y-m-d', time());
 
+        $aa = 'Android,AndroidTablet';
+        var_dump(strp($aa,'Android'));
+        die();
         $aa = new Taptica();
         $aa->getApiCampaign();
 

@@ -49,8 +49,8 @@ class ApiController extends Controller
 //        $yeah = new Yeahmobi2();
 //        $yeah->getApiCampaign();
 
-        $yeah = new Nposting();
-        $yeah->getApiCampaign();
+//        $yeah = new Nposting();
+//        $yeah->getApiCampaign();
 
         $yeah = new Mundo();
         $yeah->getApiCampaign();
@@ -88,7 +88,7 @@ class ApiController extends Controller
     public function actionGetNposting()
     {
         $yeah = new Nposting();
-      //  $yeah->getApiCampaign();
+        $yeah->getApiCampaign();
     }
 
     public function actionGetMi()

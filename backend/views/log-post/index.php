@@ -61,6 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'Channel'
                             ],
                             'post_time:datetime',
+                            'click_time:datetime',
 
                         ],
                     ]); ?>

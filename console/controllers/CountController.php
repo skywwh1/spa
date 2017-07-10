@@ -168,7 +168,7 @@ class CountController extends Controller
         if (isset($feeds)) {
             foreach ($feeds as $item) {
                 $logClick = LogClick::findByClickUuid($item->click_id);
-                if(empty($logClick)){
+                if (empty($logClick)) {
                     $logClick = LogClick2::findByClickUuid($item->click_id);
                 }
                 if (!empty($logClick)) {
@@ -189,14 +189,15 @@ class CountController extends Controller
                     $logFeed->ip = $item->ip;
                     $logFeed->ip_long = $item->ip_long;
                     $logFeed->adv_price = $camp->adv_price;
+                    $logFeed->click_time = $logClick->click_time;
                     if ($sts->is_redirect) {
                         $redirect = RedirectLog::findIsActive($logClick->campaign_id, $logClick->channel_id);
                         if (isset($redirect)) {
                             $logFeed->adv_price = $redirect->campaignIdNew->adv_price;
                         }
                     }
-                    if (!empty($logClick->ch_subid)){
-                        $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($logClick->campaign_id, $logClick->channel_id,$logClick->ch_subid);
+                    if (!empty($logClick->ch_subid)) {
+                        $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($logClick->campaign_id, $logClick->channel_id, $logClick->ch_subid);
                         if (isset($sub_redirect)) {
                             $logFeed->adv_price = $sub_redirect->campaignIdNew->adv_price;
                         }
@@ -209,7 +210,7 @@ class CountController extends Controller
                         var_dump($logFeed->getErrors());
                     } else {
                         //更新post 扣量
-                        if ($this->isNeedPost($sts,$logClick->ch_subid)) {
+                        if ($this->isNeedPost($sts, $logClick->ch_subid)) {
                             $post = new LogPost();
                             $post->click_uuid = $logFeed->click_uuid;
                             $post->click_id = $logFeed->click_id;
@@ -221,6 +222,7 @@ class CountController extends Controller
                             $post->is_redirect = $sts->is_redirect;
                             $post->ch_subid = empty($logClick->ch_subid) ? '0' : $logClick->ch_subid;
                             $post->post_link = $this->genPostLink($sts->channel->post_back, $logClick->all_parameters);
+                            $post->click_time = $logClick->click_time;
                             //* 0:need to post, 1.posted
                             $post->post_status = 0;
                             if ($post->save() == false) {
@@ -243,12 +245,12 @@ class CountController extends Controller
      * @param Deliver $sts
      * @return bool
      */
-    private function isNeedPost(&$sts,$ch_subid)
+    private function isNeedPost(&$sts, $ch_subid)
     {
         $needPost = false;
 
-        if (!empty($ch_subid)){
-            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($sts->campaign_id, $sts->channel_id,$ch_subid);
+        if (!empty($ch_subid)) {
+            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($sts->campaign_id, $sts->channel_id, $ch_subid);
             if (isset($sub_redirect)) {
                 $standard = 100 - $sub_redirect->discount;
                 $numerator = $sub_redirect->discount_numerator + 1;//分子
@@ -736,7 +738,7 @@ class CountController extends Controller
 //      final_revenue = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue
 //      receivable = systemRevenue+add_historic-pendingRevenue-deduction_value+addRevenue-adjustRevenue
         //pending
-        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
+        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id, 'status' => 0]);
         if (!empty($pends)) {
             foreach ($pends as $item) {
                 $model->pending += $item->revenue;
@@ -784,7 +786,7 @@ class CountController extends Controller
 //      final_cost = systemCost+add_historicCost-pendingCost-deduction_value+addCost
 //        history cost
         //pending
-        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
+        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id, 'status' => 0]);
         if (!empty($pends)) {
             foreach ($pends as $item) {
                 $model->pending += $item->cost;
@@ -880,8 +882,8 @@ class CountController extends Controller
     public function actionStatsAdvertiserByMonth($date)
     {
         //统计上个月账单：
-        $first_day = date("Y.m.01",strtotime($date));
-        $last_day = date("Y.m.t",strtotime("$date 1 month -1 day"));
+        $first_day = date("Y.m.01", strtotime($date));
+        $last_day = date("Y.m.t", strtotime("$date 1 month -1 day"));
         $period = $first_day . '-' . $last_day;
         var_dump($period);
         //当前时区的凌晨转为0时区
@@ -922,7 +924,7 @@ class CountController extends Controller
                         }
                     }
                 }
-                var_dump(date("Y-m-d H:i:s",$item->start_time), date("Y-m-d H:i:s",$item->end_time), $item->adv_id);
+                var_dump(date("Y-m-d H:i:s", $item->start_time), date("Y-m-d H:i:s", $item->end_time), $item->adv_id);
                 $campaign_bill = FinanceAdvertiserCampaignBillTerm::statsByAdv($item->start_time, $item->end_time, $item->adv_id);
                 if (!empty($campaign_bill) && !empty($campaign_bill->clicks)) {
                     $item->clicks = $campaign_bill->clicks;
@@ -949,12 +951,13 @@ class CountController extends Controller
 
     }
 
-    public function actionGen($date){
+    public function actionGen($date)
+    {
         //每个月2号建立一个预账单，
         //查找周期为month的广告主：
         $first_day = strtotime($date);
         $last_day = strtotime("$date 1 month -1 day");
-        $ads = Advertiser::getNewAdv($first_day,$last_day);
+        $ads = Advertiser::getNewAdv($first_day, $last_day);
         foreach ($ads as $ad) {
             $timezone = $ad->timezone;
             var_dump($first_day);
@@ -962,7 +965,7 @@ class CountController extends Controller
                 $timezone = 'Etc/GMT-8';
             }
             //当前时区的凌晨转为0时区
-            $start_date = new DateTime(date('Y-m-d H:00',$first_day), new DateTimeZone($timezone));
+            $start_date = new DateTime(date('Y-m-d H:00', $first_day), new DateTimeZone($timezone));
             $end_date = new DateTime(date('Y-m-d H:00', $last_day), new DateTimeZone($timezone));
             $start_time = $start_date->getTimestamp();
             $end_time = $end_date->getTimestamp() + 3600 * 24;
@@ -984,7 +987,7 @@ class CountController extends Controller
 
         //每个月2号建立一个预账单，
         //查找周期为month的广告主：
-        $channels = Channel::getNewChannel($first_day,$last_day);
+        $channels = Channel::getNewChannel($first_day, $last_day);
         foreach ($channels as $channel) {
             $timezone = $channel->timezone;
             if (empty($timezone)) {
@@ -1017,8 +1020,8 @@ class CountController extends Controller
     public function actionStatsChannelByMonth($date)
     {
         //统计上个月账单：
-        $first_day = date("Y.m.01",strtotime($date));
-        $last_day = date("Y.m.t",strtotime("$date 1 month -1 day"));
+        $first_day = date("Y.m.01", strtotime($date));
+        $last_day = date("Y.m.t", strtotime("$date 1 month -1 day"));
         $period = $first_day . '-' . $last_day;
 //        $period = $first_day_last_month . '-' . $last_day_last_month;
 //        echo $period;
@@ -1100,13 +1103,13 @@ class CountController extends Controller
                 $model->receivable -= $item->deduction_revenue;
                 $model->final_revenue -= $item->deduction_revenue;
                 $model->cost -= $item->deduction_cost;
-                $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id,$item->adv_bill_id,$item->campaign_id,$item->channel);
-                if (!empty($financePending)){
+                $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id, $item->adv_bill_id, $item->campaign_id, $item->channel);
+                if (!empty($financePending)) {
                     FinancePending::confirmPending($financePending->id);
                 }
             }
         }
-        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id,'status' => 0]);
+        $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id, 'status' => 0]);
         $model->pending = 0;
         if (!empty($pends)) {
             foreach ($pends as $item) {
@@ -1155,15 +1158,15 @@ class CountController extends Controller
                 $model->payable -= $item->deduction_cost;
                 $model->final_cost -= $item->deduction_cost;
                 $model->revenue -= $item->deduction_revenue;
-                $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id,$item->adv_bill_id,$item->campaign_id,$item->channel);
-                if (!empty($financePending)){
+                $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id, $item->adv_bill_id, $item->campaign_id, $item->channel);
+                if (!empty($financePending)) {
                     FinancePending::confirmPending($financePending->id);
                 }
             }
         }
 
         //pending
-        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id,'status' => 0]);
+        $pends = FinancePending::findAll(['channel_bill_id' => $model->bill_id, 'status' => 0]);
         $model->pending = 0;
         if (!empty($pends)) {
             foreach ($pends as $item) {

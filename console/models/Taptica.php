@@ -71,10 +71,10 @@ class Taptica
             $camp->adv_link = str_replace('&s1={Sub_ID}&s2={Clickid}&s3={Sub3}&s4={Sub4}&s5={Sub5}&udid={GAID/IDFA}', '', $adv_link);
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
-            if (strpos($camp->platform, 'Android') === true) {
+            if (strpos($camp->platform, 'Android') !==false) {
                 $camp->platform = 'android';
             }
-            if (strpos($camp->platform, 'IPhone') === true) {
+            if (strpos($camp->platform, 'IPhone') !==false) {
                 $camp->platform = 'ios';
             }
             $camp->traffic_source = 'non-incent,no adult';
