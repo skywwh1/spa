@@ -179,7 +179,7 @@ class DeliverSearch extends Deliver
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
 
         $query->joinWith('channel ch');
-//        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username]);
+        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username]);
         $query->andFilterWhere(['>','create_time',$beginTheDay])->all();
 
         return $dataProvider;
