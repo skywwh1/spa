@@ -72,6 +72,8 @@ use yii\web\IdentityInterface;
  * @property string $os
  * @property integer recommended
  * @property string $discount
+ * @property integer $daily_cap
+ * @property string $pay_out
  * @property integer $level
  *
  * @property ApplyCampaign[] $applyCampaigns
@@ -124,6 +126,9 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['om'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['om' => 'id']],
             ['om', 'required', 'message' => 'OM does not exist'],
             ['event_post_back', 'url'],
+            [['pay_out'], 'number'],
+            [['daily_cap'], 'integer'],
+
         ];
     }
 
@@ -194,6 +199,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             'discount' => 'Discount',
             'level' => 'Level',
             'master_channel_name' => 'Master Channel',
+            'daily_cap' => 'Daily Cap',
+            'pay_out' => 'Pay Out',
         ];
     }
 
