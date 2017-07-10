@@ -1044,22 +1044,22 @@ class StatsUtil
                             if ($cvr > 1.5) {
                                 $check = LogAutoCheckSub::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $log->channel_id,'sub_chid' => $log->sub_channel])
                                     ->andFilterWhere(['>', 'match_cvr', 1.5])->andWhere(['>', 'create_time', strtotime('today')])->one();
-                            }
 
-                            if (empty($check)) {
-                                $check = new LogAutoCheckSub();
-                            } else {
-                                continue;
+                                if (empty($check)) {
+                                    $check = new LogAutoCheckSub();
+                                } else {
+                                    continue;
+                                }
+                                $check->campaign_id = $camp->id;
+                                $check->channel_id = $log->channel_id;
+                                $check->campaign_name = $camp->campaign_name;
+                                $check->channel_name = (empty($log->channel) ? null : $log->channel->username);
+                                $check->match_cvr = $cvr;
+                                $check->match_install = $log->match_installs;
+                                $check->type = 1;
+                                $check->sub_chid = $log->sub_channel;
+                                $check->save();
                             }
-                            $check->campaign_id = $camp->id;
-                            $check->channel_id = $log->channel_id;
-                            $check->campaign_name = $camp->campaign_name;
-                            $check->channel_name = (empty($log->channel) ? null : $log->channel->username);
-                            $check->match_cvr = $cvr;
-                            $check->match_install = $log->match_installs;
-                            $check->type = 1;
-                            $check->sub_chid = $log->sub_channel;
-                            $check->save();
                         }
                     }
                 }
