@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
                                     $restart = '';
-                                    if($model->status == 2){
+                                    if($model->campaign->status == 1 && $model->status == 2){
                                         $restart = '<li><a data-view="0" data-url="/campaign-sts-update/sts-restart?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Restart</a></li>';
                                     }
                                     return '<div class="dropdown">
