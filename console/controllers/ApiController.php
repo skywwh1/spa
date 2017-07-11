@@ -58,6 +58,9 @@ class ApiController extends Controller
         $yeah = new Taptica();
         $yeah->getApiCampaign();
 
+        $yeah = new Mobair();
+        $yeah->getApiCampaign();
+
     }
 
     public function actionGetHeadway()
