@@ -48,10 +48,6 @@ class Affle
             $camp = Campaign::findByUuid($uuid);
             if (empty($camp)) {
                 $camp = new Campaign();
-            } else {
-                if($camp->is_manual == 1){
-                    continue;
-                }
             }
             $camp->campaign_uuid = $uuid;
 
@@ -105,6 +101,9 @@ class Affle
 //        var_dump($all);
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
+                if ($item->is_manual == 1) {
+                    continue;
+                }
                 $item->status = 2;
                 if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
