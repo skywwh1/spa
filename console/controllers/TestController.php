@@ -56,18 +56,18 @@ class TestController extends Controller
 //        date('Y-m-d', time());
 
         $aa = new LogClickDM();
-        $aa->setFindType(Query::USING_GET_ITEM);
-        $aa->findOne(['click_uuid'=>'213sdf']);
-//        $aa->click_uuid='213sdf';
-//        $aa->channel_id='sdf';
-//        $aa->campaign_id='sdf';
-//        $aa->click_time=23423;
-//        $aa->create_time=898;
-//        $aa->adv_price='sdfasd';
-//        var_dump($aa->insert());
-//        var_dump($aa->errors);
+//        $aa->setFindType(Query::USING_GET_ITEM);
+//        $aa->findOne(['click_uuid'=>'213sdf']);
+        $aa->click_uuid='999';
+        $aa->channel_id=7887;
+        $aa->campaign_id=9009;
+        $aa->click_time=23423;
+        $aa->adv_price='sdfasd';
+        var_dump($aa->insert());
+        var_dump($aa->errors);
         $aa = LogClickDM::findOne(['click_uuid'=>'213sdf']);
-        var_dump($aa->click_uuid);
+
+
 
 
         die();
