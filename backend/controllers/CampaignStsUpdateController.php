@@ -48,11 +48,7 @@ class CampaignStsUpdateController extends Controller
                             'index',
                             'update-creative',
                             'sub-pause',
-//                            'view',
-//                            'delete',
-//                            'testlink',
-//                            'sts-create',
-//                            'pause',
+                            'sts-restart'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -459,4 +455,34 @@ class CampaignStsUpdateController extends Controller
 
     }
 
+    /**
+     * Updates an existing Deliver model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $campaign_id
+     * @param integer $channel_id
+     * @param integer $type //1 campaign 2. sts
+     * @return mixed
+     */
+    public function actionStsRestart($campaign_id, $channel_id, $type)
+    {
+        $this->layout = false;
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->type = $type;//2 is sts 1 is campaign
+            $model->name = 'sts-restart';
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
+
+            // return $this->redirect(['deliver/index']);
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            return $this->renderAjax('sts-restart', [
+                'model' => $model,
+            ]);
+        }
+
+    }
 }

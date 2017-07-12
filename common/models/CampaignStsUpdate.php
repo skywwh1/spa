@@ -158,4 +158,14 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
 
         return $data;
     }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsRestart()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'sts-restart'])
+            ->andWhere(['<', 'effect_time', time()])
+            ->all();
+    }
 }

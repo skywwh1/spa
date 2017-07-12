@@ -102,13 +102,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header' => 'Action',
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
+                                    $restart = '';
+                                    if($model->campaign->status == 1 && $model->status == 2){
+                                        $restart = '<li><a data-view="0" data-url="/campaign-sts-update/sts-restart?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Restart</a></li>';
+                                    }
                                     return '<div class="dropdown">
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                       <span class="caret"></span></button>
                                       <ul class="dropdown-menu">
 
                                       <li><a data-view="0" data-url="/deliver/view?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View</a></li>
-                                      <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>'.$restart.'
                                       <li><a data-view="0" data-url="/campaign-sts-update/sub-pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Paused</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-cap?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Cap</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>

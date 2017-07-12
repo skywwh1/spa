@@ -60,7 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         'company_address',
                         'discount',
                         'daily_cap',
-                        'pay_out',
+                        [
+                            'attribute' => 'pay_out',
+                            'value' => function ($model) {
+                                if($model->pay_out ==1){
+                                    return 'ADV price';
+                                }else{
+                                    return 'payout';
+                                }
+                            }
+                        ],
                         'note',
                         'contacts',
                         'created_time:datetime',

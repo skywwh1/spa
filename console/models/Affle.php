@@ -101,6 +101,9 @@ class Affle
 //        var_dump($all);
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
+                if ($item->is_manual == 1) {
+                    continue;
+                }
                 $item->status = 2;
                 if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
@@ -125,15 +128,15 @@ class Affle
 //        die();
         $apiOffers = $response->data;
         $newOffers = [];
-        if(!empty($apiOffers)){
-            foreach ($apiOffers as $item){
+        if (!empty($apiOffers)) {
+            foreach ($apiOffers as $item) {
                 $geo = $item->targeting->geoTargeting->country;
                 $item->targeting = $geo;
-                $newOffers[]=$item;
+                $newOffers[] = $item;
                 $creatives = '';
-                if(isset($item->creatives)){
-                    foreach ($item->creatives as $creative){
-                        $creatives.=$creative->creativeURL.';';
+                if (isset($item->creatives)) {
+                    foreach ($item->creatives as $creative) {
+                        $creatives .= $creative->creativeURL . ';';
                     }
                 }
                 $item->creatives = $creatives;
@@ -141,7 +144,6 @@ class Affle
         }
         return $newOffers;
     }
-
 
 
 }
