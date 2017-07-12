@@ -280,16 +280,16 @@ class StreamController extends Controller
 
         $clickDm = new LogClickDM();
         $clickDm->click_uuid = $click->click_uuid;
-        $clickDm->click_time =$click->click_time;
+        $clickDm->click_time = $click->click_time;
 
-        $clickDm->click_id = $click->click_id;
-        $clickDm->campaign_id=$click->campaign_id;
-        $clickDm->channel_id = $click->channel_id;
+        $clickDm->click_id = (string)$click->click_id;
+        $clickDm->campaign_id = (int)$click->campaign_id;
+        $clickDm->channel_id = (int)$click->channel_id;
         $clickDm->ch_subid = $click->ch_subid;
-        $clickDm->adv_price=$click->adv_price;
-        $clickDm->pay_out=$click->pay_out;
-        $clickDm->all_parameters =$click->all_parameters;
-        $clickDm->ip_long =$click->ip_long;
+        $clickDm->adv_price = $click->adv_price;
+        $clickDm->pay_out = $click->pay_out;
+        $clickDm->all_parameters = $click->all_parameters;
+        $clickDm->ip_long = $click->ip_long;
 
         $clickDm->insert();
 
