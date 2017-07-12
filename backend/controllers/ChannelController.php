@@ -324,7 +324,7 @@ class ChannelController extends Controller
         $channel = $this->findModel($id);
         $campaignSearch = new CampaignSearch();
         $campaignSearch->platform = $channel->os;
-        $campaignSearch->category = $channel->strong_category;
+//        $campaignSearch->category = $channel->strong_category;
         $campaignSearch->target_geo = $channel->strong_geo;
         $dataProvider = $campaignSearch->recommendSearch(Yii::$app->request->queryParams);
         return $this->render('recommend', [
