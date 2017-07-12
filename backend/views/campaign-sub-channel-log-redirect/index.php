@@ -101,7 +101,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => function ($model) {
                                 return ModelsUtil::getRedirectStatus($model->status);
                             },
-                            'filter' => ModelsUtil::redirect_status
+                            'filter' => ModelsUtil::sub_redirect_status
                         ],
                         [
                             'attribute' => 'create_time',

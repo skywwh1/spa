@@ -136,6 +136,7 @@ class DeliverSearch extends Deliver
     public function lowCvrSearch()
     {
         $query = LogCheckClicksDaily::find();
+        $query->alias('de');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -144,11 +145,14 @@ class DeliverSearch extends Deliver
 
         // grid filtering conditions
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
-
         $query->joinWith('channel ch');
         $query->joinWith('campaign camp');
         $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
-        $query->where(['>=','time',$beginTheDay])->all();
+        $query->leftJoin('user u', 'adv.bd = u.id');
+        $query->leftJoin('user u2', 'adv.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
+
+        $query->select("de.*, u3.username om, u.username bd,u2.username pm");
 
         if (\Yii::$app->user->can('admin')) {
 
@@ -161,6 +165,8 @@ class DeliverSearch extends Deliver
                 $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
             }
         }
+
+        $query->andFilterWhere(['=','is_read',0])->all();
         return $dataProvider;
     }
 
@@ -180,9 +186,9 @@ class DeliverSearch extends Deliver
         $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
 
         $query->joinWith('channel ch');
-        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username]);
-        $query->andFilterWhere(['>','create_time',$beginTheDay])->all();
-
+        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
+            ->andFilterWhere(['is_read' => 0])
+            ->orderBy('create_time desc');
         return $dataProvider;
     }
 }

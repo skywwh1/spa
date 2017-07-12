@@ -95,7 +95,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
 //                        'pjax' => true,
-                        'layout' => '{summary} {items}',
                         'id' => 'detailGrid',
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],

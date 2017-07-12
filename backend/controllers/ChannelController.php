@@ -274,6 +274,10 @@ class ChannelController extends Controller
         if (!empty($model->strong_category)) {
             $model->strong_category = explode(',', $model->strong_category);
         }
+
+        if (!empty($model->os)) {
+            $model->os = explode(',', $model->os);
+        }
     }
 
 ///*****************************************************************************************

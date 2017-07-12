@@ -63,6 +63,13 @@ class ApplyCampaignController extends Controller
         $searchModel = new ApplyCampaignSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        //notice读完将其设为已读
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

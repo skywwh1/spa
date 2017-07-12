@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'campaign.platform',
                         'campaign.target_geo',
                         'pay_out',
-                        'campaign.campaign_name',
                         [
                             'attribute'=>  'campaign.preview_link',
                             'value' => function ($model) {
@@ -47,7 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 if (empty($model->track_url)){
                                     return "";
                                 }else{
-                                    return Html::a($model->track_url,\yii\helpers\Url::to('@track' . $model->track_url), ['target' => '_blank']);
+                                    return \yii\helpers\Url::to('@track' . $model->track_url);
                                 }
                             },
                             'format' => 'raw',

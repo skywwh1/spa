@@ -154,18 +154,19 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
             'csu.type',
             'is_effected',
             'effect_time',
-            'csu.create_time'
+            'csu.create_time',
+            'u.username creator_name',
         ]);
 
         $query->leftJoin('channel ch', 'csu.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'csu.campaign_id = cam.id');
-
+        $query->leftJoin('user u', 'csu.creator = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-            'type' => $this->type,
+            'csu.type' => $this->type,
             'is_send' => $this->is_send,
             'send_time' => $this->send_time,
             'is_effected' => $this->is_effected,
@@ -173,11 +174,15 @@ class CampaignStsUpdateSearch extends CampaignStsUpdate
             'name' => $this->name
         ]);
 
-        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+        if (empty($this->type)){
+//            $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+//            $query->andFilterWhere(['>', 'csu.create_time', $beginThisDay]);
+            $query->andFilterWhere(['is_read' => 0]);
+        }
         $query->andFilterWhere(['like', 'value', $this->value])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
-            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['>', 'csu.create_time', $beginThisDay]);
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name]);
+
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(["effect_time" => SORT_DESC]);

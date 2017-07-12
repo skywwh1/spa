@@ -55,10 +55,6 @@ class LogFeedController extends Controller
     {
         $searchModel = new LogFeedSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $data = $dataProvider->getModels();
-        foreach($data as $item){
-            $item->feed_time =  $item->feed_time+28800;
-        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,

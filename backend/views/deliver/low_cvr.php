@@ -22,13 +22,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     'columns' => [
                         'campaign_id',
                         'campaign.campaign_name',
-                        'channel_id',
                         'channel.username',
                         'channel_id',
                         'clicks',
                         'match_install',
                         'match_cvr',
                         'revenue',
+                        'pm',
+                        'bd',
+                        'om'
                     ],
                 ]); ?>
             </div>

@@ -25,15 +25,6 @@ if (!empty($dataProvider)) {
                 <div class="channel-quality-report-index">
                     <p>
                         <?php
-//                        if ($searchModel->read_only){
-                        //                            echo Html::a('<span class="glyphicon glyphicon-plus"></span>', null,
-                        //                                [
-                        //                                    'title' => Yii::t('yii', 'add Columns'),
-                        //                                    'data-url' => 'columns?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id,
-                        //                                    'data-view' => 0,
-                        //                                    'data-pjax' => 0,
-                        //                                ]);
-                        //                        }
                         echo Html::a('<span class="glyphicon glyphicon-plus"></span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
@@ -50,13 +41,6 @@ if (!empty($dataProvider)) {
                                 'data-pjax' => 0,
                             ]);
                         echo PHP_EOL;
-//                        echo Html::a('<span class="btn btn-primary">Notice</span>', null,
-//                            [
-//                                'title' => Yii::t('yii', 'Notice'),
-//                                'data-url' => 'notice?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id,
-//                                'data-view' => 0,
-//                                'data-pjax' => 0,
-//                            ]);
                         ?>
                         <button type="button" class="btn btn-primary" id="submit-button">Batch Save</button>
                     </p>
@@ -88,16 +72,19 @@ if (!empty($dataProvider)) {
                             'attribute' => 'clicks',
                             'value' => 'clicks',
                             'filter' => false,
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'unique_clicks',
                             'value' => 'unique_clicks',
                             'filter' => false,
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'installs',
                             'value' => 'installs',
                             'filter' => false,
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'cvr',
@@ -126,50 +113,43 @@ if (!empty($dataProvider)) {
 //                            ],
 //                    ];
                     //动态拼接列和行。$clos为手动增加的列数，$colunmnName为手动增加的字段和值组成的数组
-//                    var_dump($cols);
-//                    var_dump($columnName);
-//                    die();
-                        foreach($cols as $key=>$value){
-                            $name = $key;
-                            $dynamic_column = [
-                                'label' => $key,
-                                'value'=> function ($model,$key,$index) use ($name,$columnName){
-                                    $model = (object)$model;
-//                                $datas = $dataProvider->getModels();
-//                                var_dump($model);
-                                    if (!empty($columnName[$index])){
-                                        return $columnName[$index][$name];
-                                    }else{
-                                        return 'not-set';
-                                    }
-                                },
-//                            'attribute' => 'column_value',
-                                'class'=>'kartik\grid\EditableColumn',
-                                'editableOptions'=>function ($model,$index)use($name) {
-                                    $campaign_id = $model['campaign_id'];
-                                    $channel_id = $model['channel_id'];
-                                    $sub_channel = $model['sub_channel'];
-                                    $time = $model['timestamp'];
-                                    return [
-                                        'asPopover' => false,
-                                        'name'=>$name,
-                                        'inputType' => Editable::INPUT_TEXTAREA,
-                                        'formOptions' => ['action' => ['/channel-quality-report/update?campaign_id='.$campaign_id.'&channel_id='.$channel_id.'&sub_channel='.$sub_channel.'&time='.$time.'&name='.urlencode($name)]],
-                                    ];
+                    foreach($cols as $key=>$value){
+                        $name = $key;
+                        $dynamic_column = [
+                            'label' => $key,
+                            'value'=> function ($model,$key,$index) use ($name,$columnName){
+                                if (!empty($columnName[$index])){
+                                    return $columnName[$index][$name];
+                                }else{
+                                    return 'not-set';
                                 }
-                            ];
-
-                            array_push($columns,$dynamic_column);
+                            },
+                            'class'=>'kartik\grid\EditableColumn',
+                            'editableOptions'=>function ($model,$index)use($name) {
+                                $campaign_id = $model['campaign_id'];
+                                $channel_id = $model['channel_id'];
+                                $sub_channel = $model['sub_channel'];
+                                $time = $model['timestamp'];
+                                $installs = $model['installs'];
+                                return [
+                                    'asPopover' => false,
+                                    'name'=>$name,
+                                    'inputType' => Editable::INPUT_TEXTAREA,
+                                    'formOptions' => ['action' => ['/channel-quality-report/update?campaign_id='.$campaign_id.'&channel_id='.$channel_id.'&sub_channel='.$sub_channel.'&time='.$time.'&name='.urlencode($name).'&installs='.$installs]],
+                                ];
+                            }
+                        ];
+                        array_push($columns,$dynamic_column);
                     }
-
                     ?>
-
                     <?= GridView::widget([
                         'id' => 'applying_list',
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'pjax' => true, // pjax is set to always true for this demo
                         'responsive' => true,
+                        'showPageSummary' => true,
+                        'layout' => '{toolbar}{summary} {items} {pager}',
                         'hover' => true,
                         'columns' => $columns,
                     ]); ?>

@@ -50,16 +50,13 @@ AdminAsset::register($this);
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                             <i class="fa fa-bell-o"></i>
                             <?php
-                            $beginTheDayBefore=mktime(0,0,0,date('m'),date('d')-2,date('Y'));
-                            $data = \common\models\ApplyCampaign::find()
-                                ->leftJoin('channel','apply_campaign.channel_id = channel.id')
-                                ->andFilterWhere(['>','apply_campaign.create_time',$beginTheDayBefore])
-                                ->andFilterWhere(['channel.om' =>yii::$app->user->id])
-                                ->andFilterWhere(['apply_campaign.status' => 1])->all();
+                            $data = \common\models\ApplyCampaign::getRecentApplying();
                             $count1 = count($data);
 
                             $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
-                            $data2 = \common\models\LogCheckClicksDaily::find()->where(['>=','time',$beginTheDay])->all();
+//                            $data2 = \common\models\LogCheckClicksDaily::find()->where(['>=','time',$beginTheDay])->all();
+                            $status = 0;
+                            $data2 = \common\models\LogCheckClicksDaily::getRecentMsg($status);
                             $count2 = count($data2);
                             $count = $count1+ $count2;
                             echo '<span id= "lov-cvr" class="label label-warning"> '. $count.' </span>';

@@ -3,7 +3,7 @@
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
-
+use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\DeliverSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -18,6 +18,71 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="box-body">
 
                 <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                <?php
+                $columns = [
+                    'campaign_id',
+                    [
+                        'attribute' => 'campaign_name',
+                        'value' => function ($data) {
+                            if (isset($data->campaign)) {
+                                return  $data->campaign->campaign_name;
+                            }
+                        },
+                        'label' => 'Campaign',
+                    ],
+                    'campaign_uuid',
+                    'channel_id',
+                    [
+                        'attribute' => 'channel_name',
+                        'value' => 'channel.username',
+                        'label' => 'Channel'
+                    ],
+
+                    'pricing_mode',
+                    'pay_out',
+                    'daily_cap',
+                    'discount',
+                    'end_time:datetime',
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignStatus($model->status);
+                        },
+                        'filter' => ModelsUtil::campaign_status
+                    ],
+                    [
+                        'attribute' => 'is_redirect',
+                        'value' => function ($model) {
+                            return ModelsUtil::getStatus($model->is_redirect);
+                        },
+                        'filter' => ModelsUtil::status,
+                    ],
+                    'create_time:datetime',
+                    'redirect_time:datetime',
+                    'om',
+                    'bd',
+                    'pm',
+                ];
+                $fullExportMenu = ExportMenu::widget([
+                    'dataProvider' => $dataProvider,
+                    'columns' => $columns,
+                    'target' => ExportMenu::TARGET_BLANK,
+                    'fontAwesome' => true,
+                    'showConfirmAlert' => false,
+                    'batchSize' => 20,
+                    'pjaxContainerId' => 'kv-pjax-container',
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default'
+                    ],
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_EXCEL_X => false,
+                        ExportMenu::FORMAT_HTML => false,
+                    ],
+                ]);
+                ?>
                 <?= GridView::widget([
                     'id' => 'applying_list',
                     'dataProvider' => $dataProvider,
@@ -25,6 +90,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     'pjax' => true, // pjax is set to always true for this demo
                     'responsive' => true,
                     'hover' => true,
+                    'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+                    'layout' => '{toolbar}{summary} {items} {pager}',
+                    'toolbar' => [
+                        $fullExportMenu,
+                    ],
                     'columns' => [
                         [
                             'class' => 'kartik\grid\ActionColumn',

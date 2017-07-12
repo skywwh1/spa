@@ -17,12 +17,16 @@ use Yii;
  * @property integer $is_send
  * @property integer $time
  * @property integer $create_time
+ * @property integer $is_read
  *
  * @property Campaign $campaign
  * @property Channel $channel
  */
 class LogCheckClicksDaily extends \yii\db\ActiveRecord
 {
+    public $pm;
+    public $om;
+    public $bd;
     /**
      * @inheritdoc
      */
@@ -79,5 +83,33 @@ class LogCheckClicksDaily extends \yii\db\ActiveRecord
     public function getChannel()
     {
         return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
+
+    /**
+     * @param $status
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getRecentMsg($status){
+        $query = LogCheckClicksDaily::find();
+
+        // grid filtering conditions
+        $query->joinWith('channel ch');
+        $query->joinWith('campaign camp');
+        $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+        $data = $query->andFilterWhere(['=','is_read',$status])->all();
+
+        return $data;
     }
 }

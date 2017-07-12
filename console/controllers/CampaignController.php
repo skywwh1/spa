@@ -10,6 +10,7 @@ use common\models\LogClick;
 use common\models\LogClick2;
 use common\models\LogFeed;
 use common\models\LogPost;
+use common\models\RedirectLog;
 use common\utility\MailUtil;
 use yii\console\Controller;
 
@@ -36,6 +37,9 @@ class CampaignController extends Controller
                 $item->is_manual = 1; //手动停单
                 $this->echoMessage('sts paused ' . $item->campaign_uuid . '-' . $item->channel_id);
                 $item->save();
+                $redirect = RedirectLog::findLastRedirect($item->campaign_id,$item->channel_id);
+                $redirect->status = 2;
+                $redirect->save();
                 var_dump($item->getErrors());
             }
         }
@@ -51,8 +55,13 @@ class CampaignController extends Controller
                         foreach ($delivers as $sts) {
                             $sts->status = 2;
                             $this->echoMessage('sts paused ' . $item->campaign_uuid . '-' . $sts->channel_id);
-                            if (!$sts->save())
+                            if (!$sts->save()){
                                 var_dump($sts->getErrors());
+                            }else{
+                                $redirect = RedirectLog::findLastRedirect($sts->campaign_id,$sts->channel_id);
+                                $redirect->status = 2;
+                                $redirect->save();
+                            }
                         }
                     }
                 } else {
