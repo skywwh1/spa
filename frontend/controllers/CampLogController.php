@@ -207,7 +207,15 @@ class CampLogController extends Controller
         $searchModel = new CampaignStsUpdateSearch();
         $searchModel->name = $name;
         $searchModel->channel_name = Yii::$app->user->identity->username;
-        $dataProvider = $searchModel->campaignUpdateSearch();
+        $dataProvider = $searchModel->campaignUpdateSearch();//获取campaign的最近更新记录
+
+        //notice读完将其设为已读
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
 
         return $this->render('campaign_update', [
             'dataProvider' => $dataProvider,
@@ -221,6 +229,14 @@ class CampLogController extends Controller
         $searchModel = new DeliverSearch();
         $searchModel->channel_name = Yii::$app->user->identity->username;
         $dataProvider = $searchModel->deliverNewSearch();
+
+        //notice读完将其设为已读
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
 
         return $this->render('deliver_new', [
             'dataProvider' => $dataProvider,

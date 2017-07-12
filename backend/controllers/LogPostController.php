@@ -53,10 +53,6 @@ class LogPostController extends Controller
     {
         $searchModel = new LogPostSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $data = $dataProvider->getModels();
-        foreach($data as $item){
-            $item->post_time =  $item->post_time+28800;
-        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

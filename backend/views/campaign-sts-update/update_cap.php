@@ -3,10 +3,10 @@
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model common\models\CampaignStsUpdate */
-
+/* @var $dataProvider yii\data\ActiveDataProvider */
 ?>
 <?php $form = ActiveForm::begin([
     'id' => $model->formName(),
@@ -41,6 +41,16 @@ use yii\widgets\ActiveForm;
 ?>
 
 <?= $form->field($model, 'is_send')->dropDownList(['1' => 'Yes', '0' => "No"]) ?>
+<?= GridView::widget([
+    'id' => 'applying_list',
+    'dataProvider' => $dataProvider,
+    'pjax' => true, // pjax is set to always true for this demo
+    'columns' => [
+        'value',
+        'effect_time:datetime',
+        'creator_name',
+    ],
+]); ?>
 <div class="form-group">
     <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
 </div>

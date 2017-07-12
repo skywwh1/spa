@@ -181,10 +181,10 @@ class ChannelQualityReportController extends Controller
      * @param $sub_channel
      * @param $time
      * @param $name
-     * @return string|\yii\web\Response
-     * @throws NotFoundHttpException
+     * @param $installs
+     * @return string
      */
-    public function actionUpdate($campaign_id, $channel_id, $sub_channel, $time,$name)
+    public function actionUpdate($campaign_id, $channel_id, $sub_channel, $time,$name,$installs)
     {
 //        $model = $this->findModel($campaign_id, $channel_id, $sub_channel, $time);
 //        var_dump($campaign_id, $channel_id, $sub_channel, $time,$name);
@@ -201,15 +201,14 @@ class ChannelQualityReportController extends Controller
             $model->time = $time;
             $model->name = $name;
         }
-        $model->value = $_POST[str_replace(' ', '_', $name)];
-//        var_dump($_POST[$name]);
-//        die();
-//        $model->value =  $_POST[$name];
+
+        $value = $_POST[str_replace(' ', '_', $name)]/$installs*100;
+        $model->value = round($value,2).'%';
         $model->save();
 
         $out = Json::encode(['message' => 'successifully saved']);
         echo $out;
-        return;
+        return ;
 
     }
 

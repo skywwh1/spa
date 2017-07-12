@@ -55,7 +55,7 @@ use yii\helpers\Url;
         $version = '<td> OS</td>';
         $target_geo = '<td> Target Geo</td>';
         $preview_link = '<td>Preview Link</td>';
-        $sub_channel = '<td> Sub Channel</td>';
+        $sub_channel = '<td> Sub ID</td>';
         $new = '<td><b>Pausing Time(GMT+8)</b></td>';
 
 

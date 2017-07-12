@@ -21,6 +21,7 @@ use Yii;
  * @property integer $effect_time
  * @property integer $creator
  * @property integer $create_time
+ * @property integer $is_read
  */
 class CampaignStsUpdate extends \yii\db\ActiveRecord
 {
@@ -29,6 +30,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public $creative_type;
     public $channel_name;
     public $campaign_name;
+    public $creator_name;
     /**
      * @inheritdoc
      */
@@ -68,6 +70,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
             'effect_time' => 'Effect Time',
             'creator' => 'Creator',
             'create_time' => 'Create Time',
+            'creator_name' => 'Updator',
         ];
     }
 

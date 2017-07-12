@@ -69,8 +69,20 @@ $this->params['breadcrumbs'][] = $this->title;
 //             'all_parameters:ntext',
 //             'ip',
 //             'adv_price',
-                        'feed_time:datetime',
-                        'click_time:datetime',
+                        [
+                            'attribute' => 'feed_time',
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->feed_time + 8*3600);
+                            },
+                            'filter' => false,
+                        ],
+                        [
+                            'attribute' => 'click_time',
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->click_time + 8*3600);
+                            },
+                            'filter' => false,
+                        ],
                         'om',
                         'bd',
                         'pm',

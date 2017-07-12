@@ -48,6 +48,7 @@ use yii\db\Query;
  * @property integer $is_send_create
  * @property integer $is_manual
  * @property string $old_value
+ * @property integer $is_read
  * @property Campaign $campaign
  * @property Channel $channel
  * @property User $creator0
@@ -280,10 +281,11 @@ class Deliver extends \yii\db\ActiveRecord
      */
     public static function getTodayDeliver()
     {
-        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
+//        $beginThisDay = TimeZoneUtil::setTimeZoneGMT8Before();
         $count = Deliver::find()->joinWith('channel ch')
             ->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
-            ->andFilterWhere(['>', 'create_time', $beginThisDay])
+//            ->andFilterWhere(['>', 'create_time', $beginThisDay])
+            ->andFilterWhere(['is_read' => 0])
             ->count();
         return $count;
     }

@@ -284,6 +284,11 @@ class ModelsUtil
         '3' => 'C',
         '4' => 'D',
     );
+
+    const sub_redirect_status = array(
+        '0' => 'closed',
+        '1' => 'active',
+    );
     public static function getChannelLevel($k)
     {
         return static::getValue(static::channel_level, $k);
@@ -438,4 +443,7 @@ class ModelsUtil
         return static::getValue(static::pause_status, $k);
     }
 
+    public static function getSubRedirectStatus($k){
+        return static::getValue(static::sub_redirect_status, $k);
+    }
 }

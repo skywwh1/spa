@@ -57,8 +57,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'ch_subid',
                             'label' => 'Channel Sub id'
                         ],
-                        'post_time:datetime',
-                        'click_time:datetime',
+                        [
+                            'attribute' => 'post_time',
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->post_time + 8*3600);
+                            },
+                            'filter' => false,
+                        ],
+                        [
+                            'attribute' => 'click_time',
+                            'value' => function ($model) {
+                                return gmdate('Y-m-d H:i',$model->click_time + 8*3600);
+                            },
+                            'filter' => false,
+                        ],
                     ];
                     $fullExportMenu = ExportMenu::widget([
                         'dataProvider' => $dataProvider,

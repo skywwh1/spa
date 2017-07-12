@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'others',
                     'pricing_mode',
                     'category',
+                    'package_name',
                 ];
 
                 $fullExportMenu = ExportMenu::widget([
@@ -269,6 +270,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'pricing_mode',
                         'category',
+                        'package_name',
                     ],
                 ]); ?>
             </div>

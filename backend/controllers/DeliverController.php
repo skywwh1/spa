@@ -466,6 +466,12 @@ class DeliverController extends Controller
         $searchModel = new DeliverSearch();
         $dataProvider = $searchModel->lowCvrSearch();
 
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
         return $this->render('low_cvr', [
             'dataProvider' => $dataProvider,
         ]);
@@ -517,4 +523,5 @@ class DeliverController extends Controller
         }
 
     }
+
 }

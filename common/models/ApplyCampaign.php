@@ -12,6 +12,7 @@ use Yii;
  * @property integer $status
  * @property integer $create_time
  * @property integer $update_time
+ * @property integer $is_read
  *
  * @property Campaign $campaign
  * @property Channel $channel
@@ -89,5 +90,15 @@ class ApplyCampaign extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    public static function getRecentApplying(){
+//        $beginTheDayBefore=mktime(0,0,0,date('m'),date('d')-2,date('Y'));
+        $data = static::find()
+            ->leftJoin('channel','apply_campaign.channel_id = channel.id')
+//            ->andFilterWhere(['>','apply_campaign.create_time',$beginTheDayBefore])
+            ->andFilterWhere(['channel.om' =>yii::$app->user->id])
+            ->andFilterWhere(['apply_campaign.status' => 1])
+            ->andFilterWhere(['apply_campaign.is_read' => 0])->all();
+        return $data;
+    }
 
 }

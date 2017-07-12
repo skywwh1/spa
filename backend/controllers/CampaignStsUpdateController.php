@@ -227,8 +227,15 @@ class CampaignStsUpdateController extends Controller
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
+            $searchModel = new CampaignStsUpdateSearch();
+            $searchModel->name = 'cap';
+            $searchModel->type = $type;
+            $searchModel->campaign_id = $campaign_id;
+            $searchModel->channel_id = $channel_id;
+            $dataProvider = $searchModel->campaignUpdateSearch();
             return $this->renderAjax('update_cap', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
 
@@ -268,8 +275,15 @@ class CampaignStsUpdateController extends Controller
             }
 
         } else {
+            $searchModel = new CampaignStsUpdateSearch();
+            $searchModel->name = 'discount';
+            $searchModel->type = $type;
+            $searchModel->campaign_id = $campaign_id;
+            $searchModel->channel_id = $channel_id;
+            $dataProvider = $searchModel->campaignUpdateSearch();//获取campaign更新者的信息
             return $this->renderAjax('update_discount', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
 
@@ -304,8 +318,15 @@ class CampaignStsUpdateController extends Controller
             }
 
         } else {
+            $searchModel = new CampaignStsUpdateSearch();
+            $searchModel->name = 'payout';
+            $searchModel->type = $type;
+            $searchModel->campaign_id = $campaign_id;
+            $searchModel->channel_id = $channel_id;
+            $dataProvider = $searchModel->campaignUpdateSearch();
             return $this->renderAjax('update_payout', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
 
