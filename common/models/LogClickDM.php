@@ -5,7 +5,7 @@ namespace common\models;
 use UrbanIndo\Yii2\DynamoDb\ActiveRecord;
 
 /**
- * This is the model class for table "log_click".
+ * This is the model class for table "log_click_dm".
  *
  * @property string $click_uuid
  * @property string $click_id
