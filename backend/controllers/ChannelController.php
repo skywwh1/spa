@@ -43,6 +43,7 @@ class ChannelController extends Controller
                 'rules' => [
                     [
                         'actions' => [
+                            'index',
                             'create',
                             'update',
                             'view',
@@ -62,11 +63,6 @@ class ChannelController extends Controller
                         ],
                         'allow' => true,
                         'roles' => ['@'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['index'],
-                        'roles' => ['admin'],
                     ],
                 ],
             ],

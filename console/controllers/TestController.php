@@ -20,9 +20,11 @@ use common\models\Feed;
 use common\models\LogClick;
 use common\models\LogClick2;
 use common\models\LogClick3;
+use common\models\LogClickDM;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\Stream;
+use ConnectionTest;
 use console\models\Affle;
 use console\models\Glispa;
 use console\models\Mi;
@@ -37,9 +39,10 @@ use DateTimeZone;
 use HttpException;
 use HttpRequest;
 use linslin\yii2\curl\Curl;
+use UrbanIndo\Yii2\DynamoDb\Connection;
+use UrbanIndo\Yii2\DynamoDb\Query;
 use Yii;
 use yii\console\Controller;
-use yii\db\Query;
 
 /**
  * Class TestController
@@ -52,11 +55,22 @@ class TestController extends Controller
     {
 //        date('Y-m-d', time());
 
-        $aa = 'Android,AndroidTablet';
-        var_dump(strp($aa,'Android'));
+        $aa = new LogClickDM();
+        $aa->setFindType(Query::USING_GET_ITEM);
+        $aa->findOne(['click_uuid'=>'213sdf']);
+//        $aa->click_uuid='213sdf';
+//        $aa->channel_id='sdf';
+//        $aa->campaign_id='sdf';
+//        $aa->click_time=23423;
+//        $aa->create_time=898;
+//        $aa->adv_price='sdfasd';
+//        var_dump($aa->insert());
+//        var_dump($aa->errors);
+        $aa = LogClickDM::findOne(['click_uuid'=>'213sdf']);
+        var_dump($aa->click_uuid);
+
+
         die();
-        $aa = new Taptica();
-        $aa->getApiCampaign();
 
 
 /*        $redis = Yii::$app->redis;
