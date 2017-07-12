@@ -64,11 +64,6 @@ class ChannelController extends Controller
                         'allow' => true,
                         'roles' => ['@'],
                     ],
-//                    [
-//                        'allow' => true,
-//                        'actions' => ['index'],
-//                        'roles' => ['admin'],
-//                    ],
                 ],
             ],
         ];

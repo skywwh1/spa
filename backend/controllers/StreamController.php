@@ -14,6 +14,7 @@ use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
 use common\models\LogClickCount;
+use common\models\LogClickDM;
 use common\models\LogEvent;
 use common\models\RedirectLog;
 use common\models\Stream;
@@ -276,6 +277,21 @@ class StreamController extends Controller
         $link = $this->genAdvLink($campaign, $click);
         $click->redirect = $link;
         $click->click_time = time();
+
+        $clickDm = new LogClickDM();
+        $clickDm->click_uuid = $click->click_uuid;
+        $clickDm->click_time = $click->click_time;
+
+        $clickDm->click_id = (string)$click->click_id;
+        $clickDm->campaign_id = (int)$click->campaign_id;
+        $clickDm->channel_id = (int)$click->channel_id;
+        $clickDm->ch_subid = $click->ch_subid;
+        $clickDm->adv_price = $click->adv_price;
+        $clickDm->pay_out = $click->pay_out;
+        $clickDm->all_parameters = $click->all_parameters;
+        $clickDm->ip_long = $click->ip_long;
+
+        $clickDm->insert();
 
         if (!$click->validate() && $click->hasErrors()) {
             return 404;
