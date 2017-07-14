@@ -3,14 +3,14 @@
 namespace common\models;
 
 use UrbanIndo\Yii2\DynamoDb\ActiveRecord;
+use UrbanIndo\Yii2\DynamoDb\Query;
 
 /**
  * This is the model class for table "log_click_dm".
  *
  * @property string $click_uuid
  * @property string $click_id
- * @property integer $channel_id
- * @property integer $campaign_id
+ * @property string $campaign_channel_id
  * @property string $ch_subid
  * @property string $gaid
  * @property string $idfa
@@ -23,6 +23,7 @@ use UrbanIndo\Yii2\DynamoDb\ActiveRecord;
  */
 class LogClickDM extends ActiveRecord
 {
+    protected $_findType = Query::USING_QUERY;
 
     /**
      * @inheritdoc
@@ -31,8 +32,7 @@ class LogClickDM extends ActiveRecord
     {
         return ['click_uuid',
             'click_id',
-            'channel_id',
-            'campaign_id',
+            'campaign_channel_id',
             'ch_subid',
             'gaid',
             'idfa',
@@ -53,14 +53,19 @@ class LogClickDM extends ActiveRecord
         return 'log_click_dm';
     }
 
+    public static function primaryKey()
+    {
+        return ['click_uuid'];
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['click_uuid', 'channel_id', 'campaign_id'], 'required'],
-            [['channel_id', 'campaign_id', 'ip_long', 'click_time',], 'safe'],
+            [['click_uuid', 'campaign_channel_id'], 'required'],
+            [['ip_long', 'click_time',], 'safe'],
             [['adv_price', 'pay_out', 'redirect_campaign_id'], 'safe'],
             [['click_uuid', 'click_id', 'ch_subid', 'gaid', 'idfa', 'all_parameters',], 'safe'],
             [['click_uuid'], 'unique'],
@@ -76,8 +81,7 @@ class LogClickDM extends ActiveRecord
             'id' => 'ID',
             'click_uuid' => 'Click Uuid',
             'click_id' => 'Click ID',
-            'channel_id' => 'Channel ID',
-            'campaign_id' => 'Campaign ID',
+            'campaign_channel_id' => 'Campaign Channel ID',
             'ch_subid' => 'Ch Subid',
             'gaid' => 'Gaid',
             'idfa' => 'Idfa',
@@ -90,4 +94,41 @@ class LogClickDM extends ActiveRecord
         ];
     }
 
+    /**
+     * @param $id
+     * @return LogClickDM|mixed
+     */
+    public static function findById($id)
+    {
+        $click = new LogClickDM();
+        $query = new Query();
+        $query->using = Query::USING_QUERY;
+        $query->from('log_click_dm');
+        $query->where(['click_uuid' => $id]);
+        $array = $query->one();
+        if (!empty($array)) {
+            $click = json_decode(json_encode($array), FALSE);
+        }
+        return $click;
+    }
+
+    /**
+     * @param $campaign_channel_id
+     * @param $ip
+     * @return bool
+     */
+    public static function isExistIp($campaign_channel_id, $ip)
+    {
+        $query = new Query();
+        $query->using = Query::USING_SCAN;
+        $query->from('log_click_dm');
+        $query->where(['campaign_channel_id' => $campaign_channel_id]);
+        $query->andWhere(['ip_long' => $ip]);
+        $query->andWhere(['>', 'click_time', time() - 3600]);
+        $array = $query->all();
+        if (!empty($array)) {
+            return true;
+        }
+        return false;
+    }
 }

@@ -10,6 +10,7 @@ namespace console\controllers;
 
 
 use console\models\Affle;
+use console\models\Clinkad;
 use console\models\Glispa;
 use console\models\HeadWay;
 use console\models\Mi;
@@ -132,6 +133,12 @@ class ApiController extends Controller
     public function actionGetMobair()
     {
         $yeah = new Mobair();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetClink()
+    {
+        $yeah = new Clinkad();
         $yeah->getApiCampaign();
     }
 }
