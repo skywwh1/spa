@@ -65,16 +65,16 @@ class Clinkad
             }
             $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
             $camp->target_geo = $model->target_geo;
-            $camp->adv_link = $model->adv_link;
+
+            $camp->adv_link = rtrim($model->adv_link,'&');
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             $camp->preview_link = $model->preview_link;
-            $camp->note = $model->note;
             $camp->category = $model->category;
-            $camp->kpi = $model->conversion_flow . ':' . $model->status;
+            $camp->kpi = $model->note;
             if ($model->conversion_flow == 'None') {
                 $camp->kpi = 'Day 2 RR > 30%';
             }
@@ -128,7 +128,7 @@ class Clinkad
         $total = isset($response->offer_total) ? $response->offer_total : 0;
         $data = isset($response->$data_key) ? $response->$data_key : array();
         $page_total = $response->page_total;
-        $pagesize = $response->pagesize;
+//        $pagesize = $response->pagesize;
         echo "total " . $total . "\n";
         echo "totalPage " . $page_total . "\n";
 
