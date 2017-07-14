@@ -69,6 +69,7 @@ class Clinkad
             $camp->adv_link = rtrim($model->adv_link,'&');
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
+            $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);

@@ -62,6 +62,9 @@ class ApiController extends Controller
         $yeah = new Mobair();
         $yeah->getApiCampaign();
 
+        $yeah = new Clinkad();
+        $yeah->getApiCampaign();
+
     }
 
     public function actionGetHeadway()
