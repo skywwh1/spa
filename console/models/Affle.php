@@ -78,6 +78,10 @@ class Affle
             $camp->status = 1;
             $camp->open_type = 1;
 
+            if($camp->platform == 'android'){
+                $start = strpos($camp->preview_link,'id=');
+                $camp->package_name = substr($camp->preview_link,$start);
+            }
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
