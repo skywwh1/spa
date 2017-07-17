@@ -54,6 +54,10 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $start = strpos('com.psafe.msuite&hl=en','&');
+        var_dump($start);
+        $aa = substr('com.psafe.msuite&hl=en',0,$start);
+        var_dump($aa);
         /* $i = 0;
          while ($i < 1000) {
 
@@ -106,7 +110,7 @@ class TestController extends Controller
 //        die();
 //        $i=0;
 //while ($i<100) {
-        var_dump(LogClickDM::isExistIp('88900_7788',1499999561));
+ die();       var_dump(LogClickDM::isExistIp('88900_7788',1499999561));
 
 //        var_dump($aa);
         die();
