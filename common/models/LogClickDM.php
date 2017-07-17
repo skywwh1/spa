@@ -124,11 +124,16 @@ class LogClickDM extends ActiveRecord
         $query->from('log_click_dm');
         $query->where(['campaign_channel_id' => $campaign_channel_id]);
         $query->andWhere(['ip_long' => $ip]);
-        $query->andWhere(['>', 'click_time', time() - 3600]);
+        $query->andWhere(['>=', 'click_time', time() - 3600]);
         $array = $query->all();
         if (!empty($array)) {
             return true;
         }
         return false;
+    }
+
+    public static function getCampaignChannelIds($campaign_channel_id)
+    {
+        return explode('_', $campaign_channel_id);
     }
 }

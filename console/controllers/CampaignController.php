@@ -59,8 +59,10 @@ class CampaignController extends Controller
                                 var_dump($sts->getErrors());
                             }else{
                                 $redirect = RedirectLog::findLastRedirect($sts->campaign_id,$sts->channel_id);
-                                $redirect->status = 2;
-                                $redirect->save();
+                                if(!empty($redirect)){
+                                    $redirect->status = 2;
+                                    $redirect->save();
+                                }
                             }
                         }
                     }

@@ -14,6 +14,7 @@ use common\models\Feed;
 use common\models\IpTable;
 use common\models\LogClick;
 use common\models\LogClickCount;
+use common\models\LogClickCountSubChannel;
 use common\models\LogClickDM;
 use common\models\LogEvent;
 use common\models\RedirectLog;
@@ -256,17 +257,17 @@ class StreamController extends Controller
 //            $cache->set($model->ch_id, $model, 300);
 //        }
 //        //2.ip 限制
-        $target = $campaign->target_geo;
-        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
-            $Info = \Yii::createObject([
-                'class' => '\rmrevin\yii\geoip\HostInfo',
-                'host' => $click->ip, // some host or ip
-            ]);
-            $geo = $Info->getCountryCode();   // US
-            if (strpos($target, $geo) === false) {
-                return 501;
-            }
-        }
+//        $target = $campaign->target_geo;
+//        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+//            $Info = \Yii::createObject([
+//                'class' => '\rmrevin\yii\geoip\HostInfo',
+//                'host' => $click->ip, // some host or ip
+//            ]);
+//            $geo = $Info->getCountryCode();   // US
+//            if (strpos($target, $geo) === false) {
+//                return 501;
+//            }
+//        }
 
         //正常0
         $click->campaign_id = $campaign->id;
@@ -277,22 +278,6 @@ class StreamController extends Controller
         $link = $this->genAdvLink($campaign, $click);
         $click->redirect = $link;
         $click->click_time = time();
-
-        $clickDm = new LogClickDM();
-        $clickDm->click_uuid = $click->click_uuid;
-        $clickDm->click_time = $click->click_time;
-
-        $clickDm->click_id = (string)$click->click_id;
-        $clickDm->campaign_channel_id = (string)$click->campaign_id . '_' . $click->channel_id;
-        $clickDm->ch_subid = $click->ch_subid;
-        $clickDm->adv_price = $click->adv_price;
-        $clickDm->pay_out = $click->pay_out;
-        $clickDm->all_parameters = $click->all_parameters;
-        $clickDm->ip_long = $click->ip_long;
-        $clickDm->idfa = $click->idfa;
-        $clickDm->gaid = $click->gaid;
-
-        $clickDm->insert();
 
         if (!$click->validate() && $click->hasErrors()) {
             return 404;
@@ -326,7 +311,23 @@ class StreamController extends Controller
                 $click->redirect_campaign_id = $sub_redirect->campaignIdNew->id;
             }
         }
-//        $this->countClick($click);
+
+        $clickDm = new LogClickDM();
+        $clickDm->click_uuid = $click->click_uuid;
+        $clickDm->click_time = $click->click_time;
+
+        $clickDm->click_id = (string)$click->click_id;
+        $clickDm->campaign_channel_id = (string)$click->campaign_id . '_' . $click->channel_id;
+        $clickDm->ch_subid = $click->ch_subid;
+        $clickDm->adv_price = $click->adv_price;
+        $clickDm->pay_out = $click->pay_out;
+        $clickDm->all_parameters = $click->all_parameters;
+        $clickDm->ip_long = $click->ip_long;
+        $clickDm->idfa = $click->idfa;
+        $clickDm->gaid = $click->gaid;
+        $clickDm->redirect_campaign_id = $click->redirect_campaign_id;
+        $clickDm->save();
+        $this->countClick($clickDm);
 
         return 200;
     }
@@ -465,19 +466,26 @@ class StreamController extends Controller
     }
 
     /**
-     * @param LogClick $logClick
+     * @param LogClickDM $logClick
      */
     private function countClick($logClick)
     {
         $hourly_str = date('Y-m-d H:00', $logClick->click_time);
         $hourly = strtotime($hourly_str);
-        $clickCount = LogClickCount::findCampaignClick($logClick->campaign_id, $logClick->channel_id, $hourly);
-        $clickCount->clicks += 1;
-        $ip = LogClick::findOne(['campaign_id' => $logClick->campaign_id, 'channel_id' => $logClick->channel_id, 'ip_long' => $logClick->ip_long]);
-        if (empty($ip)) {
-            $clickCount->unique_clicks += 1;
+        $campaignChannelIds = LogClickDM::getCampaignChannelIds($logClick->campaign_channel_id);
+        $clickCount = LogClickCount::findCampaignClick($campaignChannelIds[0], $campaignChannelIds[1], $hourly);
+        $subClick = LogClickCountSubChannel::findCampaignSubClick($campaignChannelIds[0], $campaignChannelIds[1],$logClick->ch_subid, $hourly);
+        if (LogClickDM::isExistIp($logClick->campaign_channel_id, $logClick->ip_long)) {
+            $clickCount->updateCounters(['clicks' => 1]);
+            if(isset($subClick)){
+                $subClick->updateCounters(['clicks' => 1]);
+            }
+        } else {
+            $clickCount->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
+            if(isset($subClick)){
+                $subClick->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
+            }
         }
-        $clickCount->save();
     }
 
 }
