@@ -71,6 +71,7 @@ class MyCampaignLogSearch extends MyCampaignLogHourly
             'sum(clh.unique_clicks) unique_clicks',
             'sum(clh.installs) installs',
             'avg(clh.pay_out) pay_out',
+            'SUM(clh.cost) revenue',
 
         ]);
         $query->joinWith('campaign cam');
