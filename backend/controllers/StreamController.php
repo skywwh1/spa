@@ -17,6 +17,7 @@ use common\models\LogClickCount;
 use common\models\LogClickCountSubChannel;
 use common\models\LogClickDM;
 use common\models\LogEvent;
+use common\models\LogIp;
 use common\models\RedirectLog;
 use common\models\Stream;
 use common\models\StreamSearch;
@@ -256,7 +257,7 @@ class StreamController extends Controller
 //        if ($test !== false) {
 //            $cache->set($model->ch_id, $model, 300);
 //        }
-//        //2.ip 限制
+        //2.ip 限制
         $target = $campaign->target_geo;
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
             $Info = \Yii::createObject([
@@ -474,18 +475,21 @@ class StreamController extends Controller
         $hourly = strtotime($hourly_str);
         $campaignChannelIds = LogClickDM::getCampaignChannelIds($logClick->campaign_channel_id);
         $clickCount = LogClickCount::findCampaignClick($campaignChannelIds[0], $campaignChannelIds[1], $hourly);
-        $subClick = LogClickCountSubChannel::findCampaignSubClick($campaignChannelIds[0], $campaignChannelIds[1],$logClick->ch_subid, $hourly);
-//        if (LogClickDM::isExistIp($logClick->campaign_channel_id, $logClick->ip_long)) {
-//            $clickCount->updateCounters(['clicks' => 1]);
-//            if(isset($subClick)){
-//                $subClick->updateCounters(['clicks' => 1]);
-//            }
-//        } else {
+        $subClick = LogClickCountSubChannel::findCampaignSubClick($campaignChannelIds[0], $campaignChannelIds[1], $logClick->ch_subid, $hourly);
+        $ip = new LogIp();
+        $ip->ip_campaign_channel_hour = $logClick->ip_long . '_' . $logClick->campaign_channel_id . '_' . $hourly;
+        $ip->click_time = $hourly;
+        if ($ip->save()) {
             $clickCount->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
-            if(isset($subClick)){
+            if (!empty($subClick)) {
                 $subClick->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
             }
-//        }
+        } else {
+            $clickCount->updateCounters(['clicks' => 1]);
+            if (isset($subClick)) {
+                $subClick->updateCounters(['clicks' => 1]);
+            }
+        }
     }
 
 }

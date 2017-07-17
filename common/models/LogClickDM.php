@@ -112,26 +112,6 @@ class LogClickDM extends ActiveRecord
         return $click;
     }
 
-    /**
-     * @param $campaign_channel_id
-     * @param $ip
-     * @return bool
-     */
-    public static function isExistIp($campaign_channel_id, $ip)
-    {
-        $query = new Query();
-        $query->using = Query::USING_SCAN;
-        $query->from('log_click_dm');
-        $query->where(['campaign_channel_id' => $campaign_channel_id]);
-        $query->andWhere(['ip_long' => $ip]);
-        $query->andWhere(['>=', 'click_time', time() - 3600]);
-        $array = $query->all();
-        if (!empty($array)) {
-            return true;
-        }
-        return false;
-    }
-
     public static function getCampaignChannelIds($campaign_channel_id)
     {
         return explode('_', $campaign_channel_id);

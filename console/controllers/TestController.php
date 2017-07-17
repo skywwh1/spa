@@ -107,7 +107,7 @@ class TestController extends Controller
 //        die();
 //        $i=0;
 //while ($i<100) {
-     var_dump(LogClickDM::isExistIp('88900_7788',1499999574));
+     var_dump(LogClickDM::isExistIp('183872_188',1732963635));
 
 //        var_dump($aa);
         die();
