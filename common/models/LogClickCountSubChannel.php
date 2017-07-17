@@ -69,6 +69,7 @@ class LogClickCountSubChannel extends \yii\db\ActiveRecord
             $click->channel_id = $channel_id;
             $click->sub_channel = $sub_channel;
             $click->time = $time;
+            $click->save();
         }
         return $click;
     }

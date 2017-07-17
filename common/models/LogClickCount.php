@@ -63,6 +63,7 @@ class LogClickCount extends \yii\db\ActiveRecord
             $click->campaign_id = $campaign_id;
             $click->channel_id = $channel_id;
             $click->time = $time;
+            $click->save();
         }
         return $click;
     }
