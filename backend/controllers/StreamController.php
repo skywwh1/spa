@@ -257,17 +257,17 @@ class StreamController extends Controller
 //            $cache->set($model->ch_id, $model, 300);
 //        }
 //        //2.ip 限制
-//        $target = $campaign->target_geo;
-//        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
-//            $Info = \Yii::createObject([
-//                'class' => '\rmrevin\yii\geoip\HostInfo',
-//                'host' => $click->ip, // some host or ip
-//            ]);
-//            $geo = $Info->getCountryCode();   // US
-//            if (strpos($target, $geo) === false) {
-//                return 501;
-//            }
-//        }
+        $target = $campaign->target_geo;
+        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+            $Info = \Yii::createObject([
+                'class' => '\rmrevin\yii\geoip\HostInfo',
+                'host' => $click->ip, // some host or ip
+            ]);
+            $geo = $Info->getCountryCode();   // US
+            if (strpos($target, $geo) === false) {
+                return 501;
+            }
+        }
 
         //正常0
         $click->campaign_id = $campaign->id;
@@ -475,17 +475,17 @@ class StreamController extends Controller
         $campaignChannelIds = LogClickDM::getCampaignChannelIds($logClick->campaign_channel_id);
         $clickCount = LogClickCount::findCampaignClick($campaignChannelIds[0], $campaignChannelIds[1], $hourly);
         $subClick = LogClickCountSubChannel::findCampaignSubClick($campaignChannelIds[0], $campaignChannelIds[1],$logClick->ch_subid, $hourly);
-        if (LogClickDM::isExistIp($logClick->campaign_channel_id, $logClick->ip_long)) {
-            $clickCount->updateCounters(['clicks' => 1]);
-            if(isset($subClick)){
-                $subClick->updateCounters(['clicks' => 1]);
-            }
-        } else {
+//        if (LogClickDM::isExistIp($logClick->campaign_channel_id, $logClick->ip_long)) {
+//            $clickCount->updateCounters(['clicks' => 1]);
+//            if(isset($subClick)){
+//                $subClick->updateCounters(['clicks' => 1]);
+//            }
+//        } else {
             $clickCount->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
             if(isset($subClick)){
                 $subClick->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
             }
-        }
+//        }
     }
 
 }
