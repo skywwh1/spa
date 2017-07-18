@@ -27,13 +27,13 @@ class Nposting
         $url = $apiModel->url;
         $curl = new Curl();
         $curl->setOption(CURLOPT_USERAGENT, "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750");
-        $curl->setOption(CURLOPT_COOKIE, '');
+        $curl->setOption(CURLOPT_COOKIE, '1');
         $response = $curl->get($url);
 
 //        var_dump($response);
         if (isset($response)) {
             $response = json_decode($response);
-            $data = $response->$data_key->lists;
+            $data = $response->body->lists;
 //            $allCamps = $this->getAllCampaigns($data);
 //            var_dump($data);
             $apiCams = ApiUtil::genApiCampaigns($apiModel, $data);

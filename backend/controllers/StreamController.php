@@ -326,7 +326,7 @@ class StreamController extends Controller
         $clickDm->ip_long = $click->ip_long;
         $clickDm->idfa = $click->idfa;
         $clickDm->gaid = $click->gaid;
-        $clickDm->redirect_campaign_id = $click->redirect_campaign_id;
+        $clickDm->redirect_campaign_id = empty($click->redirect_campaign_id) ? 0 : $click->redirect_campaign_id;
         $clickDm->save();
         $this->countClick($clickDm);
 
