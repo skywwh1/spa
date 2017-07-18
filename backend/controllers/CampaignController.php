@@ -65,7 +65,9 @@ class CampaignController extends Controller
                             'selected',
                             'export-email',
                             'add-cart-batch',
-                            'mobair-index'
+                            'mobair-index',
+                            'clickad-index'
+
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -570,4 +572,18 @@ class CampaignController extends Controller
         return 'add to my cart failed!';
     }
 
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionClickadIndex()
+    {
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->clickadSearch(Yii::$app->request->queryParams);
+
+        return $this->render('clickad_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }
