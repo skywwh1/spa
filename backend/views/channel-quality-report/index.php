@@ -15,13 +15,6 @@ use yii\bootstrap\Modal;
 $this->title = 'Channel Quality Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-    <style>
-        form .panel{ background:none !important;border:none;margin:0 !important;}
-        form .panel .kv-editable-form-inline{padding:0 !important;}
-        form .kv-editable-form-inline .form-group{display:none;}
-        form .kv-editable-parent.form-group{display:block;}
-        .kv-editable-link{border:none !important;}
-    </style>
     <div id="nav-menu" data-menu="channel-quality-report-index"></div>
 <?php echo $this->render('_search', ['model' => $searchModel]);
 if (!empty($dataProvider)) {

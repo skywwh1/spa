@@ -192,7 +192,7 @@ class ChannelQualityReportController extends Controller
             $model->name = $name;
         }
         if (!empty($_POST[str_replace(' ', '_', $name)])){
-            $ori_val = trim($_POST[str_replace(' ', '_', $name)]);
+            $ori_val = $_POST[str_replace(' ', '_', $name)];
             $value = round($ori_val / $installs * 100, 2) . '%';
             $model->value = $ori_val . '(' . $value . ')';
             $model->save();
