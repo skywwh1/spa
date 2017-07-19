@@ -289,6 +289,12 @@ class ModelsUtil
         '0' => 'closed',
         '1' => 'active',
     );
+
+    const  channel_create_type = array(
+        0 => "Manuel",
+        1 => "API",
+    );
+
     public static function getChannelLevel($k)
     {
         return static::getValue(static::channel_level, $k);
@@ -445,5 +451,9 @@ class ModelsUtil
 
     public static function getSubRedirectStatus($k){
         return static::getValue(static::sub_redirect_status, $k);
+    }
+
+    public static function getChannelCreateType($k){
+        return static::getValue(static::channel_create_type, $k);
     }
 }

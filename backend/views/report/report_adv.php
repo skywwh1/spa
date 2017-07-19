@@ -46,30 +46,6 @@ if (!empty($searchModel->type)) {
     ];
 }
 $columns = [
-//    [
-//        'label' => 'Time(UTC)',
-//        'attribute' => 'timestamp',
-//        'value' => function ($model) use ($searchModel) {
-//            $model = (object)$model;
-//            $format = 'Y-m-d H:i';
-//            if ($searchModel->type == 2) {
-//                $format = 'Y-m-d';
-//            }
-//            $date = new DateTime();
-//            $date->setTimezone(new DateTimeZone($searchModel->time_zone));
-//            $date->setTimestamp($model->timestamp);
-//            return $date->format($format);
-//        },
-//        'filter' => false,
-//        'pageSummary' => 'Page Total',
-//    ],
-//                                [
-//                                    'label' => 'Time(UTC+8)',
-//                                    'attribute' => 'time_format',
-//                                    // 'value' => 'time_format',
-//                                    'filter' => false,
-//                                    'pageSummary' => 'Page Total',
-//                                ],
     [
         'class' => 'kartik\grid\ActionColumn',
         'template' => '{all}',
@@ -78,7 +54,7 @@ $columns = [
             'all' => function ($url, $model, $key) use ($searchModel) {
                 $model = (object)$model;
                 return '<div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">actions
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
               <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
@@ -91,6 +67,7 @@ $columns = [
               <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
               <li><a data-view="0" data-url="/redirect-log/detail?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View Redirect</a></li>
               <li><a data-view="0" data-url="/campaign-sub-channel-log-redirect/create?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Redirect</a></li>
+               <li><a data-view="0" data-url="/deliver/send-email?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Send Email</a></li>
               </ul>
             </div>';
             },
@@ -330,6 +307,15 @@ $columns = [
         }
     ],
     [
+        'label' => 'EPC',
+        'value' => function ($model) {
+            $model = (object)$model;
+            $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+            return $epc;
+        },
+        'filter' => false,
+    ],
+    [
         'label' => 'BD',
         'attribute' => 'bd',
         'value' => 'bd',
@@ -481,6 +467,15 @@ if (!empty($dataProvider)) {
                                             return ['class' => 'bg-danger'];
                                         }
                                     }
+                                ],
+                                [
+                                    'label' => 'EPC',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+                                        return $epc;
+                                    },
+                                    'filter' => false,
                                 ],
                             ],
                         ]); ?>

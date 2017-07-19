@@ -58,50 +58,62 @@ class ReportChannelSearch extends ReportChannelHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'unique_clicks' => [
                         'asc' => ['unique_clicks' => SORT_ASC],
                         'desc' => ['unique_clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'installs' => [
                         'asc' => ['installs' => SORT_ASC],
                         'desc' => ['installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'match_installs' => [
                         'asc' => ['match_installs' => SORT_ASC],
                         'desc' => ['match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_installs' => [
                         'asc' => ['redirect_installs' => SORT_ASC],
                         'desc' => ['redirect_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_match_installs' => [
                         'asc' => ['redirect_match_installs' => SORT_ASC],
                         'desc' => ['redirect_match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'pay_out' => [
                         'asc' => ['pay_out' => SORT_ASC],
                         'desc' => ['pay_out' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_cost' => [
                         'asc' => ['redirect_cost' => SORT_ASC],
                         'desc' => ['redirect_cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_revenue' => [
                         'asc' => ['redirect_revenue' => SORT_ASC],
                         'desc' => ['redirect_revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'adv_price' => [
                         'asc' => ['adv_price' => SORT_ASC],
                         'desc' => ['adv_price' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
@@ -213,50 +225,62 @@ class ReportChannelSearch extends ReportChannelHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'unique_clicks' => [
                         'asc' => ['unique_clicks' => SORT_ASC],
                         'desc' => ['unique_clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'installs' => [
                         'asc' => ['installs' => SORT_ASC],
                         'desc' => ['installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'match_installs' => [
                         'asc' => ['match_installs' => SORT_ASC],
                         'desc' => ['match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_installs' => [
                         'asc' => ['redirect_installs' => SORT_ASC],
                         'desc' => ['redirect_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_match_installs' => [
                         'asc' => ['redirect_match_installs' => SORT_ASC],
                         'desc' => ['redirect_match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'pay_out' => [
                         'asc' => ['pay_out' => SORT_ASC],
                         'desc' => ['pay_out' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_cost' => [
                         'asc' => ['redirect_cost' => SORT_ASC],
                         'desc' => ['redirect_cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_revenue' => [
                         'asc' => ['redirect_revenue' => SORT_ASC],
                         'desc' => ['redirect_revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'adv_price' => [
                         'asc' => ['adv_price' => SORT_ASC],
                         'desc' => ['adv_price' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
@@ -435,14 +459,17 @@ class ReportChannelSearch extends ReportChannelHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]

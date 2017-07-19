@@ -29,7 +29,7 @@ class MailUtil
         if (isset($channel->om0)) {
             $mail->setCc($channel->om0->email);
         }
-        $mail->setSubject('SuperADS account create success');
+        $mail->setSubject('Welcome to SuperADS!');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;
@@ -428,5 +428,48 @@ class MailUtil
                 $check->save();
             }
         }
+    }
+
+    /**
+     * @param LogAutoCheck[] $checks
+     */
+    public static function autoCheckLowMargin($checks)
+    {
+        $mail = Yii::$app->mailer->compose('auto_check_low_margin', ['checks' => $checks]);
+
+        $mail->setTo('operations@superads.cn');
+//        $mail->setTo('2539131080@qq.com');
+        $mail->setSubject(' Low Margin Notice - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheckLowMargin', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            foreach ($checks as $check) {
+                $check->is_send = 1;
+                $check->save();
+            }
+        }
+    }
+
+    public static function sendMailFromBackend($channel,$campaign,$content)
+    {
+        $mail= Yii::$app->mailer->compose();
+//$mail->setTextBody('zheshisha ');   //发布纯文字文本
+        $mail->setHtmlBody($content);    //发布可以带html标签的文本
+//        $mail->setTo('2539131080@qq.com');
+        $mail->setTo($channel->email);
+        if (isset($channel->om0)) {
+            $mail->setCc($channel->om0->email);
+        }
+        $mail->setSubject('SuperADS '.$campaign->id.' '.$campaign->campaign_name);
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'from backend', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
     }
 }

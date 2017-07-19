@@ -23,7 +23,7 @@ class ApplyCampaignSearch extends ApplyCampaign
     {
         return [
             [['campaign_id', 'channel_id', 'status', 'create_time'], 'integer'],
-            [['channelName','campaignName','om','advertiser','ids'], 'safe'],
+            [['channelName','campaignName','om','advertiser','ids','campaign_status'], 'safe'],
         ];
     }
 
@@ -78,6 +78,8 @@ class ApplyCampaignSearch extends ApplyCampaign
         $query->andFilterWhere(['like','campaign.campaign_name',$this->campaignName]);
         $query->join('left JOIN','advertiser','campaign.advertiser = advertiser.id');
         $query->andFilterWhere(['like','advertiser.username',$this->advertiser]);
+
+        $query->andFilterWhere(['campaign.status' => $this->campaign_status]);
 
         $query->orderBy('create_time DESC');
 

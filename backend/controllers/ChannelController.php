@@ -60,6 +60,7 @@ class ChannelController extends Controller
                             'get-recommend',
                             'send-recommend',
                             'search-channel',
+                            'update-applicant'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -374,6 +375,29 @@ class ChannelController extends Controller
         return $this->render('search_channel', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Updates an existing Channel model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdateApplicant($id)
+    {
+        $model = $this->findModel($id);
+        $this->beforeUpdate($model);
+        if ($model->load(Yii::$app->request->post())) {
+            $this->beforeCreate($model);
+
+            if ($model->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        }
+        $model->isNewRecord = true;
+        return $this->render('update', [
+            'model' => $model,
         ]);
     }
 }

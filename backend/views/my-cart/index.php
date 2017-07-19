@@ -4,6 +4,7 @@ use kartik\grid\GridView;
 use yii\helpers\Html;
 use yii\bootstrap\Modal;
 use kartik\form\ActiveForm;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\MyCartSearch */
@@ -29,6 +30,110 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php $form = \kartik\form\ActiveForm::begin(['id' => 'deliver-form']); ?>
                     <?= $form->field($searchModel, 'ids')->hiddenInput()->label(false) ?>
                     <?php ActiveForm::end(); ?>
+                    <?php
+                    $columns = [
+                        ['class' => 'yii\grid\SerialColumn'],
+                        [
+                            'attribute' => 'id',
+                            'value' => 'id',
+                        ],
+                        [
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        'campaign_name',
+//                        [
+//                            'class' => '\kartik\grid\DataColumn',
+//                            'attribute' => 'campaign_name',
+//                            'value' => function ($data) {
+//                                return Html::tag('div', $data->campaign_name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+//                            },
+//                            'format' => 'raw',
+//                        ],
+                        [
+                            'class' => '\kartik\grid\DataColumn',
+                            'attribute' => 'target_geo',
+                            'value' => function ($data) {
+                                return Html::tag('div', $data->target_geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
+                            },
+                            'width' => '60px',
+                            'format' => 'raw',
+                        ],
+                        [
+                            // 'label' => 'platform',
+                            'attribute' => 'platform',
+                            'value' => 'platform',
+                        ],
+                        [
+                            'label' => 'payout',
+                            'attribute' => 'payout',
+                            'value' => 'payout',
+                        ],
+                        [
+                            'label' => 'daily_cap',
+                            'attribute' => 'daily_cap',
+                            'value' => 'daily_cap',
+                        ],
+                        [
+                            'attribute' => 'traffic_source',
+                            'value' => 'traffic_source',
+                            'filter' => TrafficSource::find()
+                                ->select(['name', 'value'])
+                                ->orderBy('id')
+                                ->indexBy('value')
+                                ->column(),
+                        ],
+                        [
+                            'attribute' => 'tag',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignTag($model->tag);
+                            },
+                            'filter' => ModelsUtil::campaign_tag,
+                            'contentOptions' => function ($model) {
+                                if ($model->tag == 3) {
+                                    return ['class' => 'bg-danger'];
+                                } else if ($model->tag == 2) {
+                                    return ['class' => 'bg-warning'];
+                                } else if ($model->tag == 4) {
+                                    return ['class' => 'bg-info'];
+                                } else {
+                                    return ['class' => 'bg-success'];
+                                }
+                            }
+                        ],
+                        [
+                            'attribute' => 'direct',
+                            'value' => function ($model) {
+                                return ModelsUtil::getCampaignDirect($model->direct);
+                            },
+                            'filter' => ModelsUtil::campaign_direct,
+                        ],
+                        [
+                            'label' => 'advertiser',
+                            'attribute' => 'advertiser',
+                            'value' => function($model){
+                                return $model->advertiser0->username;
+                            }
+                        ],
+                    ];
+                    echo ExportMenu::widget([
+                        'dataProvider' => $dataProvider,
+                        'columns' => $columns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
+                    ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,

@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Html;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\CampaignSearch */
@@ -30,6 +31,126 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php ActiveForm::end(); ?>
                 <?= Html::button('Select', ['class' => 'btn btn-primary', 'id' => 'recommend-channel-btn', 'data-url' => '/channel/get-recommend?id=' . $channel_id]) ?>
                 <?= Html::button('S2S', ['class' => 'btn btn-primary', 'id' => 's2s_button'])?>
+
+                <?php
+                $columns = [
+                    [
+                        'class' => 'yii\grid\CheckboxColumn', 'checkboxOptions' => function ($model) {
+                        return ['value' => $model->id];
+                    },
+                    ],
+                    'id',
+                    [
+                        'class' => '\kartik\grid\DataColumn',
+                        'attribute' => 'campaign_name',
+                        'value' => function ($data) {
+                            return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
+                        },
+                        'width' => '60px',
+                        'format' => 'raw',
+                    ],
+                    [
+                        'class' => '\kartik\grid\DataColumn',
+                        'attribute' => 'target_geo',
+                        'value' => function ($data) {
+                            return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
+                        },
+                        'width' => '60px',
+                        'format' => 'raw',
+                    ],
+//                    'device',
+                    'platform',
+//                        'adv_price',
+                    'now_payout',
+                    'daily_cap',
+                    [
+                        'attribute' => 'traffic_source',
+                        'value' => 'traffic_source',
+                        'filter' => TrafficSource::find()
+                            ->select(['name', 'value'])
+                            ->orderBy('id')
+                            ->indexBy('value')
+                            ->column(),
+                    ],
+                    // 'traffic_source',
+                    // 'note',
+//                        'preview_link',
+                    // 'icon',
+                    // 'package_name',
+                    // 'app_name',
+                    // 'app_size',
+
+                    // 'version',
+                    // 'app_rate',
+                    // 'description',
+                    // 'creative_link',
+                    // 'creative_type',
+                    // 'creative_description',
+                    // 'carriers',
+                    // 'conversion_flow',
+                    // 'recommended',
+
+//                        'cvr',
+//                        'epc',
+                    [
+                        'attribute' => 'tag',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignTag($model->tag);
+                        },
+                        'filter' => ModelsUtil::campaign_tag,
+                        'contentOptions' => function ($model) {
+                            if ($model->tag == 3) {
+                                return ['class' => 'bg-danger'];
+                            } else if ($model->tag == 2) {
+                                return ['class' => 'bg-warning'];
+
+                            } else if ($model->tag == 4) {
+                                return ['class' => 'bg-info'];
+                            } else {
+                                return ['class' => 'bg-success'];
+                            }
+                        }
+                    ],
+                    [
+                        'attribute' => 'direct',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignDirect($model->direct);
+                        },
+                        'filter' => ModelsUtil::campaign_direct,
+//                            'contentOptions' => function ($model) {
+//                                if ($model->tag == 3) {
+//                                    return ['class' => 'bg-danger'];
+//                                } else if ($model->tag == 2) {
+//                                    return ['class' => 'bg-warning'];
+//                                } else {
+//                                    return ['class' => 'bg-success'];
+//                                }
+//                            }
+                    ],
+                    [
+                        'attribute' => 'advertiser',
+                        'value' => 'advertiser0.username',
+//                                'pageSummary' => 'Total'
+                    ],
+                ];
+                echo ExportMenu::widget([
+                    'dataProvider' => $dataProvider,
+                    'columns' => $columns,
+                    'fontAwesome' => true,
+                    'showConfirmAlert' => false,
+                    'target' => GridView::TARGET_BLANK,
+                    'dropdownOptions' => [
+                        'label' => 'Export All',
+                        'class' => 'btn btn-default'
+                    ],
+                    'exportConfig' => [
+                        ExportMenu::FORMAT_TEXT => false,
+                        ExportMenu::FORMAT_PDF => false,
+                        ExportMenu::FORMAT_EXCEL_X => false,
+                        ExportMenu::FORMAT_HTML => false,
+                    ],
+                ]);
+                ?>
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'id' => 'recommend-channel-grid',
@@ -48,106 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    ],
                     'responsive' => true,
                     'hover' => true,
-                    'columns' => [
-                        [
-                            'class' => 'yii\grid\CheckboxColumn', 'checkboxOptions' => function ($model) {
-                            return ['value' => $model->id];
-                        },
-                        ],
-                        'id',
-                        [
-                            'class' => '\kartik\grid\DataColumn',
-                            'attribute' => 'campaign_name',
-                            'value' => function ($data) {
-                                return Html::tag('div', $data->name, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->campaign_name, 'data-delay' => '{"show":0, "hide":3000}', 'style' => 'cursor:default;']);
-                            },
-                            'width' => '60px',
-                            'format' => 'raw',
-                        ],
-                        [
-                            'class' => '\kartik\grid\DataColumn',
-                            'attribute' => 'target_geo',
-                            'value' => function ($data) {
-                                return Html::tag('div', $data->geo, ['data-toggle' => 'tooltip', 'data-placement' => 'left', 'title' => $data->target_geo, 'data-delay' => '{"show":0, "hide":5000}', 'style' => 'cursor:default;']);
-                            },
-                            'width' => '60px',
-                            'format' => 'raw',
-                        ],
-//                    'device',
-                        'platform',
-//                        'adv_price',
-                        'now_payout',
-                        'daily_cap',
-                        [
-                            'attribute' => 'traffic_source',
-                            'value' => 'traffic_source',
-                            'filter' => TrafficSource::find()
-                                ->select(['name', 'value'])
-                                ->orderBy('id')
-                                ->indexBy('value')
-                                ->column(),
-                        ],
-                        // 'traffic_source',
-                        // 'note',
-//                        'preview_link',
-                        // 'icon',
-                        // 'package_name',
-                        // 'app_name',
-                        // 'app_size',
-
-                        // 'version',
-                        // 'app_rate',
-                        // 'description',
-                        // 'creative_link',
-                        // 'creative_type',
-                        // 'creative_description',
-                        // 'carriers',
-                        // 'conversion_flow',
-                        // 'recommended',
-
-//                        'cvr',
-//                        'epc',
-                        [
-                            'attribute' => 'tag',
-                            'value' => function ($model) {
-                                return ModelsUtil::getCampaignTag($model->tag);
-                            },
-                            'filter' => ModelsUtil::campaign_tag,
-                            'contentOptions' => function ($model) {
-                                if ($model->tag == 3) {
-                                    return ['class' => 'bg-danger'];
-                                } else if ($model->tag == 2) {
-                                    return ['class' => 'bg-warning'];
-
-                                } else if ($model->tag == 4) {
-                                    return ['class' => 'bg-info'];
-                                } else {
-                                    return ['class' => 'bg-success'];
-                                }
-                            }
-                        ],
-                        [
-                            'attribute' => 'direct',
-                            'value' => function ($model) {
-                                return ModelsUtil::getCampaignDirect($model->direct);
-                            },
-                            'filter' => ModelsUtil::campaign_direct,
-//                            'contentOptions' => function ($model) {
-//                                if ($model->tag == 3) {
-//                                    return ['class' => 'bg-danger'];
-//                                } else if ($model->tag == 2) {
-//                                    return ['class' => 'bg-warning'];
-//                                } else {
-//                                    return ['class' => 'bg-success'];
-//                                }
-//                            }
-                        ],
-                        [
-                            'attribute' => 'advertiser',
-                            'value' => 'advertiser0.username',
-//                                'pageSummary' => 'Total'
-                        ],
-                    ],
+                    'columns' => $columns,
                 ]); ?>
             </div>
         </div>

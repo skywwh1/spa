@@ -88,6 +88,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -214,6 +215,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -305,6 +307,7 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
         ]);
 
         $this->load($params);
@@ -384,6 +387,47 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
 //        die();
         return $dataProvider;
     }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     */
+    public function dynamicDailySearch($params)
+    {
+        $query = QualityDynamicColumn::find();
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'time' => $this->time,
+            'sub_channel' => $this->sub_channel,
+        ]);
+
+        $query->andFilterWhere(['in' ,'time',$this->time]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['time' => SORT_DESC]);
+        }
+//        var_dump($query->createCommand()->sql);
+
+        return $dataProvider;
+    }
+
 
     public function getColumnName(){
         return $this->column_name;

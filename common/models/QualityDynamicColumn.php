@@ -63,4 +63,20 @@ class QualityDynamicColumn extends \yii\db\ActiveRecord
         return static::find()->andFilterWhere(['campaign_id' => $campaign_id, 'channel_id' => $channel_id,
             'sub_channel' => $sub_channel_id, 'time' => $timestamp])->one();
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
 }

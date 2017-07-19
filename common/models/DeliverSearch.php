@@ -191,4 +191,82 @@ class DeliverSearch extends Deliver
             ->orderBy('create_time desc');
         return $dataProvider;
     }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function antiCheatCvrSearch()
+    {
+        $query = LogAutoCheck::find();
+        $query->alias('lac');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $query->leftJoin('channel ch','ch.id = lac.channel_id');
+        $query->leftJoin('campaign camp','camp.id = lac.campaign_id');
+        $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
+        $query->leftJoin('user u', 'adv.bd = u.id');
+        $query->leftJoin('user u2', 'adv.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
+
+        $query->select("lac.*, u3.username om, u.username bd,u2.username pm");
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+        $query->andFilterWhere(['lac.type' => 1]);
+        $query->andFilterWhere(['=','is_read',0])->all();
+        return $dataProvider;
+    }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function subChIdAntiCheatSearch()
+    {
+        $query = LogAutoCheckSub::find();
+        $query->alias('lac');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $query->leftJoin('channel ch','ch.id = lac.channel_id');
+        $query->leftJoin('campaign camp','camp.id = lac.campaign_id');
+        $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
+        $query->leftJoin('user u', 'adv.bd = u.id');
+        $query->leftJoin('user u2', 'adv.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
+
+        $query->select("lac.*, u3.username om, u.username bd,u2.username pm");
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+        $query->andFilterWhere(['lac.type' => 1]);
+        $query->andFilterWhere(['=','is_read',0])->all();
+        return $dataProvider;
+    }
 }

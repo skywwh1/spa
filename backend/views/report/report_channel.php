@@ -71,7 +71,7 @@ $columns = [
             'all' => function ($url, $model, $key) use ($searchModel){
                 $model = (object)$model;
                 return '<div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Actions
               <span class="caret"></span></button>
               <ul class="dropdown-menu">
               <li><a data-view="0"  href="/channel-quality-report/quality?campaign=' . $model->campaign_id . '&channel='.$model->channel_id.'&timeZone='.$searchModel->time_zone.'">quality</a></li>
@@ -84,6 +84,9 @@ $columns = [
               <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
               <li><a data-view="0" data-url="/redirect-log/detail?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View Redirect</a></li>
               <li><a data-view="0" data-url="/campaign-sub-channel-log-redirect/create?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Redirect</a></li>
+              <li><a data-view="0" data-url="/deliver/send-email?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Send Email</a></li>
+              <li><a data-view="0" href="/deliver/view-email?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View Email</a></li>
+              <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->campaign_id . '">Add to Cart</a></li>
               </ul>
             </div>';
             },
@@ -321,6 +324,15 @@ $columns = [
         }
     ],
     [
+        'label' => 'EPC',
+        'value' => function ($model) {
+            $model = (object)$model;
+            $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+            return $epc;
+        },
+        'filter' => false,
+    ],
+    [
         'label' => 'OM',
         'attribute' => 'om',
         'value' => 'om',
@@ -468,6 +480,15 @@ if (!empty($dataProvider)) {
                                             return ['class' => 'bg-danger'];
                                         }
                                     }
+                                ],
+                                [
+                                    'label' => 'EPC',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+                                        return $epc;
+                                    },
+                                    'filter' => false,
                                 ],
                             ],
                         ]); ?>

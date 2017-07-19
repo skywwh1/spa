@@ -20,12 +20,16 @@ use Yii;
  * @property integer $daily_cap
  * @property string $action
  * @property integer $is_send
+ * @property integer $is_read
  * @property integer $type
  * @property integer $update_time
  * @property integer $create_time
  */
 class LogAutoCheckSub extends \yii\db\ActiveRecord
 {
+    public $pm;
+    public $om;
+    public $bd;
     /**
      * @inheritdoc
      */
@@ -82,4 +86,46 @@ class LogAutoCheckSub extends \yii\db\ActiveRecord
         return parent::beforeSave($insert);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCampaign()
+    {
+        return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannel()
+    {
+        return $this->hasOne(Channel::className(), ['id' => 'channel_id']);
+    }
+
+    /**
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public static function getReadStatus(){
+        $query = LogAutoCheckSub::find();
+        $query->alias('lac');
+        // grid filtering conditions
+        $query->leftJoin('channel ch','ch.id = lac.channel_id');
+        $query->leftJoin('campaign camp','camp.id = lac.campaign_id');
+        $query->leftJoin('advertiser adv', 'camp.advertiser = adv.id');
+
+        if (\Yii::$app->user->can('admin')) {
+
+        } else {
+            if (\Yii::$app->user->can('pm')) {
+                $query->andFilterWhere(['adv.pm' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('om')) {
+                $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
+            } else if (\Yii::$app->user->can('bd')) {
+                $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+            }
+        }
+        $data = $query->andFilterWhere(['=','is_read',0])->all();
+
+        return $data;
+    }
 }

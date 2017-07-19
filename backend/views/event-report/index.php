@@ -7,6 +7,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\EventReportSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $column_names array() */
+/* @var $cols array() */
+/* @var $match_cols array() */
 
 $this->title = 'Event Report';
 $this->params['breadcrumbs'][] = $this->title;
@@ -39,80 +42,98 @@ if (!empty($searchModel->type)) {
             return $date->format($format);
         },
         'filter' => false,
-
     ];
 }
 $columns = [
     [
-        // 'label' => 'time',
-        'attribute' => 'time',
-        'value' => 'time',
-        'format' => 'datetime'
-    ],
-
-    [
         // 'label' => 'campaign_id',
         'attribute' => 'campaign_id',
         'value' => 'campaign_id',
+        'filter' => false,
     ],
     [
         // 'label' => 'channel_id',
         'attribute' => 'channel_id',
         'value' => 'channel_id',
-    ],
-
-    [
-        // 'label' => 'event',
-        'attribute' => 'event',
-        'value' => 'event',
+        'filter' => false,
     ],
     [
-        'label' => 'match_total',
-        'attribute' => 'match_total',
-        'value' => 'match_total',
+        'attribute' => 'channel_name',
+        'value' => 'channel_name',
+        'filter' => false,
+    ],
+    'campaign_name',
+    [
+        'attribute' => 'installs',
+        'value' => 'installs',
+        'filter' => false,
+        'pageSummary' => true
     ],
     [
-        'label' => 'total',
-        'attribute' => 'total',
-        'value' => 'total',
+        'attribute' => 'match_installs',
+        'value' => 'match_installs',
+        'filter' => false,
+        'pageSummary' => true
     ],
-    //[
-    // 'label' => 'create_time',
-    // 'attribute' => 'create_time',
-    // 'value' => 'create_time:datetime',
-    // ],
-
-
 ];
 if (!empty($searchModel->type)) {
     array_unshift($columns, $time_row);
 }
-
+foreach($cols as $k=>$value){
+    $dynamic_column = [
+        'label' => $k,
+        'value'=> function ($model,$key,$index) use ($k,$column_names){
+            if (array_key_exists($k,$column_names[$index])){
+                return $column_names[$index][$k];
+            }else{
+                return '--';
+            }
+        },
+        'pageSummary' => true
+    ];
+    array_push($columns,$dynamic_column);
+}
+foreach($cols as $k=>$value){
+    $match_column = [
+        'label' => $k.'-match',
+        'value'=> function ($model,$key,$index) use ($k,$match_cols){
+            if (array_key_exists($k,$match_cols[$index])){
+                return $match_cols[$index][$k];
+            }else{
+                return '--';
+            }
+        },
+        'pageSummary' => true
+    ];
+    array_push($columns,$match_column);
+}
 ?>
-
+<?php
+if (!empty($dataProvider)) {
+    ?>
 <div class="row">
     <div class="col-lg-12">
         <div class="box box-info table-responsive">
             <div class="box-body">
-                <div class="log-event-hourly-index">
+                <div class="event-report-index">
                     <?php
-                    echo ExportMenu::widget([
-                        'dataProvider' => $dataProvider,
-                        'columns' => $columns,
-                        'fontAwesome' => true,
-                        'showConfirmAlert' => false,
-                        'target' => GridView::TARGET_BLANK,
-                        'dropdownOptions' => [
-                            'label' => 'Export All',
-                            'class' => 'btn btn-default'
-                        ],
-                        'exportConfig' => [
-                            ExportMenu::FORMAT_TEXT => false,
-                            ExportMenu::FORMAT_PDF => false,
-                            ExportMenu::FORMAT_EXCEL_X => false,
-                            ExportMenu::FORMAT_HTML => false,
-                        ],
-                    ]);
+//                    echo ExportMenu::widget([
+//                        'dataProvider' => $dataProvider,
+//                        'columns' => $columns,
+//                        'fontAwesome' => true,
+//                        'showConfirmAlert' => false,
+//                        'target' => GridView::TARGET_BLANK,
+//                        'dropdownOptions' => [
+//                            'label' => 'Export All',
+//                            'class' => 'btn btn-default'
+//                        ],
+//                        'exportConfig' => [
+//                            ExportMenu::FORMAT_TEXT => false,
+//                            ExportMenu::FORMAT_PDF => false,
+//                            ExportMenu::FORMAT_EXCEL_X => false,
+//                            ExportMenu::FORMAT_HTML => false,
+//                        ],
+//                    ]);
                     ?>
 
                     <?= GridView::widget([
@@ -124,8 +145,11 @@ if (!empty($searchModel->type)) {
                             '{toggleData}',
                         ],
                         'columns' => $columns,
+                        'pjax' => true, // pjax is set to always true for this demo
+                        'responsive' => true,
                     ]); ?>
                 </div>
             </div>
         </div>
     </div>
+<?php  } ?>

@@ -37,6 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php Pjax::begin(); ?>    <?= GridView::widget([
                         'id' => 'recommend-list',
                         'dataProvider' => $dataProvider,
+                        'filterModel' => $searchModel,
                         'columns' => [
                             [
                                 'class' => '\kartik\grid\CheckboxColumn'
@@ -47,11 +48,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return ModelsUtil::getChannelLevel($model->level);
                                 }
                             ],
+                            [
+                                'attribute' => 'create_type',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getChannelCreateType($model->create_type);
+                                },
+                                'filter' => ModelsUtil::channel_create_type
+                            ],
                             'username',
                             [
-                                'attribute' => 'om',
+                                'attribute' => 'om_name',
                                 'value' => 'om0.username',
-                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'os',
@@ -60,6 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'strong_geo',
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'strong_category',

@@ -21,6 +21,7 @@ class EventReportSearch extends LogEventHourly
     public $end;
     public $time_zone;
     public $channel_name;
+    public $timestamp;
 
     /**
      * @inheritdoc
@@ -29,7 +30,7 @@ class EventReportSearch extends LogEventHourly
     {
         return [
             [['id', 'campaign_id', 'channel_id', 'time', 'match_total', 'total', 'create_time'], 'integer'],
-            [['event'], 'safe'],
+            [['event','start','end','type','channel_name'], 'safe'],
         ];
     }
 
@@ -43,51 +44,54 @@ class EventReportSearch extends LogEventHourly
     }
 
     /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
+     * @param $params
+     * @param $column_names
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$column_names)
     {
-        $query = LogEventHourly::find();
-
         // add conditions that should always apply here
-
+        $case = '';
+        foreach ($column_names as $key =>$item){
+            if ($key == count($column_names)-1){
+                $case .= "case event when '$item' then total else 0 end as '$item'";
+            } else {
+                $case .= "case event when '$item' then total else 0 end as '$item',";
+            }
+        }
+        $query = LogEventHourly::findBySql('SELECT campaign_id,channel_id,time,'.$case.'  FROM log_event_hourly group by campaign_id');
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
-
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
-
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-            'time' => $this->time,
             'match_total' => $this->match_total,
             'total' => $this->total,
             'create_time' => $this->create_time,
         ]);
-
         $query->andFilterWhere(['like', 'event', $this->event]);
+        $query->andFilterWhere(['>=', 'time', $this->start]);
+        $query->andFilterWhere(['<', 'time', $this->end]);
+
+        $query->groupBy(['campaign_id']);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 
     public function dailySearch($params)
     {
-
         $query = new Query();
-//        $query->alias('clh');
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
@@ -97,6 +101,10 @@ class EventReportSearch extends LogEventHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        if (empty($this->campaign_id)){
+            return null;
+        }
+
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -107,18 +115,13 @@ class EventReportSearch extends LogEventHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
-            'clh.event',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
-            'SUM(clh.clicks) clicks',
-            'SUM(clh.match_total) unique_clicks',
-            'SUM(clh.total) installs',
-            'u.username om',
-
+            'SUM(clh.match_installs) match_installs',
+            'SUM(clh.installs) installs',
         ]);
-        $query->from('log_event_hourly clh');
+        $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'clh.campaign_id' => $this->campaign_id,
@@ -130,36 +133,21 @@ class EventReportSearch extends LogEventHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-//        if (\Yii::$app->user->can('admin')) {
-//            $query->andFilterWhere(['like', 'u.username', $this->om]);
-//        } else {
-//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-//        }
         $query->groupBy([
             'clh.campaign_id',
-            'clh.channel_id',
-            'clh.event',
+            'channel_id',
             'timestamp',
         ]);
 
-//        if ($dataProvider->getSort()->getOrders() == null) {
-//            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
-//        }
+        if ($dataProvider->getSort()->getOrders() == null) {
+            $query->orderBy(['time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 
-    public function hourlySearch($queryParams)
-    {
-    }
-
-    public function sumSearch($queryParams)
-    {
-    }
-
-    public function summarySearch($params)
+    public function hourlySearch($params)
     {
         $query = new Query();
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'pagination' => false,
@@ -169,32 +157,31 @@ class EventReportSearch extends LogEventHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+        if (empty($this->campaign_id)){
+            return null;
+        }
+
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
         $query->select([
-            'SUM(clh.clicks) clicks',
-            'SUM(clh.unique_clicks) unique_clicks',
-            'SUM(clh.installs) installs',
-            'SUM(clh.match_installs) match_installs',
-            'SUM(clh.cost) cost',
-            'SUM(clh.revenue) revenue',
-            'SUM(clh.redirect_installs) redirect_installs',
-            'SUM(clh.redirect_match_installs) redirect_match_installs',
-            'SUM(clh.redirect_cost) redirect_cost',
-            'SUM(clh.redirect_revenue) redirect_revenue',
-
+            'ch.username channel_name',
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'clh.channel_id',
+            'clh.time timestamp',
+            'clh.match_installs',
+            'clh.installs',
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
         // grid filtering conditions
         $query->andFilterWhere([
-            'campaign_id' => $this->campaign_id,
-            'channel_id' => $this->channel_id,
+            'clh.campaign_id' => $this->campaign_id,
+            'clh.channel_id' => $this->channel_id,
             'ch.username' => $this->channel_name,
         ]);
 
@@ -202,11 +189,109 @@ class EventReportSearch extends LogEventHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
-//        if (\Yii::$app->user->can('admin')) {
-//            $query->andFilterWhere(['like', 'u.username', $this->om]);
-//        } else {
-//            $query->andFilterWhere(['ch.om' => \Yii::$app->user->id]);
-//        }
+        if ($dataProvider->getSort()->getOrders() == null) {
+            $query->orderBy(['time' => SORT_DESC]);
+        }
+        return $dataProvider;
+    }
+
+    public function dynamicHourlySearch($params)
+    {
+        $query = LogEventHourly::find();
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        if (empty($this->campaign_id)){
+            return null;
+        }
+
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+
+        $query->select([
+            'campaign_id',
+            'channel_id',
+            'time timestamp',
+            'event',
+            'match_total',
+            'total',
+        ]);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'time' => $this->time,
+        ]);
+
+        $query->andFilterWhere(['>=', 'time', $start])
+        ->andFilterWhere(['<', 'time', $end]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['time' => SORT_DESC]);
+        }
+        return $dataProvider;
+    }
+
+    public function dynamicDailySearch($params)
+    {
+        $query = LogEventHourly::find();
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        if (empty($this->campaign_id)){
+            return null;
+        }
+
+        $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
+        $end = $end->add(new DateInterval('P1D'));
+        $start = $start->getTimestamp();
+        $end = $end->getTimestamp();
+
+        $query->select([
+            'campaign_id',
+            'channel_id',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(time, "%Y-%m-%d")) timestamp',
+            'event',
+            'SUM(match_total) match_total',
+            'SUM(total) total',
+        ]);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'time' => $this->time,
+        ]);
+
+        $query->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        $query->groupBy([
+            'campaign_id',
+            'channel_id',
+            'timestamp',
+        ]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy(['time' => SORT_DESC]);
+        }
         return $dataProvider;
     }
 }

@@ -12,6 +12,8 @@ use common\models\Channel;
  */
 class ChannelSearch extends Channel
 {
+    public $level;
+    public $create_type;
     /**
      * @inheritdoc
      */
@@ -23,7 +25,7 @@ class ChannelSearch extends Channel
                 'payment_way', 'payment_term', 'beneficiary_name', 'bank_country',
                 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'note', 'system', 'contacts', 'email', 'cc_email',
                 'company', 'country', 'city', 'address', 'phone1', 'phone2', 'wechat', 'skype', 'alipay',
-                'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_category','os','om_name','master_channel_name'], 'safe'],
+                'lang', 'timezone', 'post_back', 'paid', 'strong_geo', 'strong_category','os','om_name','master_channel_name','level','create_type'], 'safe'],
         ];
     }
 
@@ -198,9 +200,7 @@ class ChannelSearch extends Channel
     public function recommendSearch($params)
     {
         $query = Channel::find();
-
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
@@ -212,6 +212,7 @@ class ChannelSearch extends Channel
             // $query->where('0=1');
             return $dataProvider;
         }
+        $query->joinWith('om0 u');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -234,8 +235,12 @@ class ChannelSearch extends Channel
 //            'total_revenue' => $this->total_revenue,
 //            'payable' => $this->payable,
 //            'os' => $this->os,
+            'create_type' => $this->create_type,
+            'level' => $this->level,
             'recommended' => 1,
         ]);
+        $query->andFilterWhere(['like', 'username', $this->username]);
+        $query->andFilterWhere(['like', 'u.username', $this->om_name]);
         if(isset($this->os)){
             $os = explode(',',$this->os);
             $query->andWhere(['or like', 'os', $os]);
@@ -248,6 +253,7 @@ class ChannelSearch extends Channel
             $geo = explode(',',$this->strong_geo);
             $query->andWhere(['or like', 'strong_geo', $geo]);
         }
+        $query->orderBy('level asc');
         return $dataProvider;
     }
 

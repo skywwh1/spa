@@ -38,33 +38,68 @@ class EventReportController extends Controller
     public function actionIndex()
     {
         $searchModel = new EventReportSearch();
-//        $searchModel->time_zone = 'Etc/GMT-8';
-//        $date = new DateTime();
-//        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
-//        $date->setTimestamp(time());
-//        $date->format('Y-m-d');
-//        $searchModel->start = $date->format('Y-m-d');
-//        $searchModel->end = $date->format('Y-m-d');
-//        $searchModel->type = 2;
-//        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
-//        if (!empty(Yii::$app->request->queryParams)) {
-//            $searchModel->load(Yii::$app->request->queryParams);
-//            $type = $searchModel->type;
-//
-//            if ($type == 1) {
-//                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
-//            } else if ($type == 2) {
-//                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
-//            } else {
-//                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
-//            }
-//        }
-//        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->time_zone = 'Etc/GMT-8';
+
+        $searchModel->load(Yii::$app->request->queryParams);
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        switch ($searchModel->type) {
+            case 1:
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicHourlySearch(Yii::$app->request->queryParams);
+                break;
+            case 2:
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicDailySearch(Yii::$app->request->queryParams);
+                break;
+            default:
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicDailySearch(Yii::$app->request->queryParams);
+                break;
+        }
+
+        $models = empty($dataProvider) ? null : $dataProvider->getModels();
+        $columns = empty($dataProvider_column) ? null : $dataProvider_column->getModels();
+
+        $cols = [];
+        $dynamic_cols = [];
+        $match_cols = [];
+        if (!empty($models) && !(empty($columns))) {
+            foreach ($models as $model) {
+                $flag = 0;
+                foreach ($columns as $column) {
+                    if ($model['campaign_id'] == $column->campaign_id
+                        && $model['channel_id'] == $column->channel_id
+                        && $model['timestamp'] == $column->timestamp
+                    ) {
+                        $model['column_name'][$column->event] = $column->total;
+                        $cols[$column->event] = $column->total;
+
+                        $model['match_column'][$column->event] = $column->match_total;
+                        $cols[$column->event] = $column->match_total;
+                        $flag = 1;
+                    }
+                }
+                if ($flag == 0){
+                    $model['column_name']['none'] = 0;
+                    $model['match_column']['none'] = 0;
+                }
+                if (!empty($model['column_name'])) {
+                    $dynamic_cols[] = $model['column_name'];
+                    $match_cols[] = $model['match_column'];
+                }
+            }
+        }
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-//            'summary' => $summary,
+            'column_names' => $dynamic_cols,
+            'match_cols' => $match_cols,
+            'cols' => $cols,
         ]);
     }
 
