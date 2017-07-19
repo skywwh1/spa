@@ -251,26 +251,18 @@ class StreamController extends Controller
             return 403;
         }
 
-        /**
-         * test link
-         */
-//        $cache = Yii::$app->cache;
-//        $test = $cache->get($model->ch_id . '');
-//        if ($test !== false) {
-//            $cache->set($model->ch_id, $model, 300);
-//        }
         //2.ip 限制
-//        $target = $campaign->target_geo;
-//        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
-//            $Info = \Yii::createObject([
-//                'class' => '\rmrevin\yii\geoip\HostInfo',
-//                'host' => $click->ip, // some host or ip
-//            ]);
-//            $geo = $Info->getCountryCode();   // US
-//            if (strpos($target, $geo) === false) {
-//                return 501;
-//            }
-//        }
+        $target = $campaign->target_geo;
+        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+            $Info = \Yii::createObject([
+                'class' => '\rmrevin\yii\geoip\HostInfo',
+                'host' => $click->ip, // some host or ip
+            ]);
+            $geo = $Info->getCountryCode();   // US
+            if (strpos($target, $geo) === false) {
+                return 501;
+            }
+        }
 
         //正常0
         $click->campaign_id = $campaign->id;
