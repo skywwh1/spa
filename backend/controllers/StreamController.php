@@ -260,17 +260,17 @@ class StreamController extends Controller
 //            $cache->set($model->ch_id, $model, 300);
 //        }
         //2.ip 限制
-        $target = $campaign->target_geo;
-        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
-            $Info = \Yii::createObject([
-                'class' => '\rmrevin\yii\geoip\HostInfo',
-                'host' => $click->ip, // some host or ip
-            ]);
-            $geo = $Info->getCountryCode();   // US
-            if (strpos($target, $geo) === false) {
-                return 501;
-            }
-        }
+//        $target = $campaign->target_geo;
+//        if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
+//            $Info = \Yii::createObject([
+//                'class' => '\rmrevin\yii\geoip\HostInfo',
+//                'host' => $click->ip, // some host or ip
+//            ]);
+//            $geo = $Info->getCountryCode();   // US
+//            if (strpos($target, $geo) === false) {
+//                return 501;
+//            }
+//        }
 
         //正常0
         $click->campaign_id = $campaign->id;
@@ -294,24 +294,24 @@ class StreamController extends Controller
                 $redirectLink = $this->genAdvLink($redirectCam, $click);
                 $click->redirect = $redirectLink;
                 $click->redirect_campaign_id = $redirect->campaignIdNew->id;
-                return 200;
             }
-        }
+        } else {
 
-        //子渠道是否导量
-        if (!empty($click->ch_subid)) {
-            //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
-            $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $click->channel_id, 'sub_channel' => $click->ch_subid]);
-            if (!empty($sub_channel)) {
-                return 405;
-            }
+            //子渠道是否导量
+            if (!empty($click->ch_subid)) {
+                //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
+                $sub_channel = CampaignSubChannelLog::findOne(['is_effected' => 1, 'campaign_id' => $campaign->id, 'channel_id' => $click->channel_id, 'sub_channel' => $click->ch_subid]);
+                if (!empty($sub_channel)) {
+                    return 405;
+                }
 
-            $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
-            if (!empty($sub_redirect)) {
-                $redirectCam = $sub_redirect->campaignIdNew;
-                $redirectLink = $this->genAdvLink($redirectCam, $click);
-                $click->redirect = $redirectLink;
-                $click->redirect_campaign_id = $sub_redirect->campaignIdNew->id;
+                $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
+                if (!empty($sub_redirect)) {
+                    $redirectCam = $sub_redirect->campaignIdNew;
+                    $redirectLink = $this->genAdvLink($redirectCam, $click);
+                    $click->redirect = $redirectLink;
+                    $click->redirect_campaign_id = $sub_redirect->campaignIdNew->id;
+                }
             }
         }
 
