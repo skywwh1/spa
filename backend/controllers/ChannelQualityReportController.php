@@ -429,7 +429,7 @@ class ChannelQualityReportController extends Controller
                     $time_arr[] = $time;
                 }
                 $searchModel->time = $time_arr;
-                $dynamicProvider = $searchModel->dynamicDailySearch();
+                $dynamicProvider = $searchModel->dynamicDailySearch(null);
             }
             return $this->renderAjax('update_columns', [
                 'dataProvider' => $dynamicProvider,
