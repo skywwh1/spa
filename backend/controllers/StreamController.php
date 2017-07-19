@@ -176,10 +176,12 @@ class StreamController extends Controller
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getAdvCodeMessage($code)]);
         }
-        if (!empty($allParameters)) {
-            $model->save();
+        if (!empty($allParameters) && $model->save()) {
+            return Json::encode(['success' => $data]);
+        } else {
+            return Json::encode(['error' => $model->errors]);
+
         }
-        return Json::encode(['success' => $data]);
     }
 
     /**
@@ -327,8 +329,8 @@ class StreamController extends Controller
         $clickDm->idfa = $click->idfa;
         $clickDm->gaid = $click->gaid;
         $clickDm->redirect_campaign_id = empty($click->redirect_campaign_id) ? 0 : $click->redirect_campaign_id;
-        $clickDm->save();
-        $this->countClick($clickDm);
+//        $clickDm->save();
+//        $this->countClick($clickDm);
 
         return 200;
     }
