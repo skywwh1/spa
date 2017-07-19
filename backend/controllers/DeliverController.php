@@ -15,10 +15,12 @@ use common\models\ChannelSubBlacklist;
 use common\models\ChannelSubWhitelist;
 use common\models\Deliver;
 use common\models\DeliverSearch;
+use common\models\EmailContent;
 use common\models\MyCart;
 use common\models\MyCartSearch;
 use common\models\Stream;
 use common\models\LogCheckClicksDaily;
+use common\utility\MailUtil;
 use linslin\yii2\curl\Curl;
 use Yii;
 use yii\filters\AccessControl;
@@ -64,6 +66,11 @@ class DeliverController extends Controller
                             'recommend-create',
                             'low-cvr',
                             'recommend-channel',
+                            'anti-cheat-cvr',
+                            'sub-chid-anticheat',
+                            'send-email',
+                            'send-sts-email',
+                            'view-email',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -524,4 +531,110 @@ class DeliverController extends Controller
 
     }
 
+    /**
+     * @return string
+     */
+    public function actionAntiCheatCvr()
+    {
+        $searchModel = new DeliverSearch();
+        $dataProvider = $searchModel->antiCheatCvrSearch();
+
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
+        return $this->render('anti_cheat_cvr', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function actionSubChidAnticheat()
+    {
+        $searchModel = new DeliverSearch();
+        $dataProvider = $searchModel->subChIdAntiCheatSearch();
+
+        $data = $dataProvider->getModels();
+        foreach ($data as $item){
+            $item = (object)$item;
+            $item->is_read = 1;
+            $item->save();
+        }
+
+        return $this->render('sub_chid_anticheat', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * @param $channel_id
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionSendEmail($channel_id,$campaign_id)
+    {
+        $model = new EmailContent();
+        $model->campaign_id = $campaign_id;
+        $model->channel_id = $channel_id;
+
+        //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
+        if ($model->load(Yii::$app->request->post())) {
+            $content = $model->content ;
+            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
+            $model->content = $style.$content;
+            $model->save();
+            $channel = Channel::findOne($channel_id);
+            $campaign = Campaign::findOne($campaign_id);
+            MailUtil::sendMailFromBackend($channel,$campaign,$model->content);
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        return $this->renderAjax('send_email',
+            [
+                'model' => $model,
+        ]);
+    }
+
+    /**
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionSendStsEmail($campaign_id)
+    {
+        $model = new EmailContent();
+        $model->campaign_id = $campaign_id;
+
+        //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
+        if ($model->load(Yii::$app->request->post())) {
+            $model->save();
+            $campaign = Campaign::findOne($campaign_id);
+            $s2s = Deliver::findAll(['campaign_id' => $campaign->id,'status' => 1]);
+            foreach ($s2s as $item){
+                $channel = Channel::findOne($item->channel_id);
+                MailUtil::sendMailFromBackend($channel,$campaign,$model->content);
+            }
+            return $this->redirect(Yii::$app->request->referrer);
+        }
+        return $this->renderAjax('send_email',
+            [
+                'model' => $model,
+            ]);
+    }
+
+    /**
+     * @param $channel_id
+     * @param $campaign_id
+     * @return string|Response
+     */
+    public function actionViewEmail($channel_id,$campaign_id)
+    {
+        $model = EmailContent::findAll(['campaign_id' => $campaign_id,'channel_id' => $channel_id,]);
+        return $this->render('view_email',
+            [
+                'model' => $model,
+            ]);
+    }
 }

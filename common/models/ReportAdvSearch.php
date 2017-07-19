@@ -58,14 +58,17 @@ class ReportAdvSearch extends ReportAdvHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'adv_name' => [
                         'asc' => ['adv_name' => SORT_ASC],
@@ -74,38 +77,47 @@ class ReportAdvSearch extends ReportAdvHourly
                     'unique_clicks' => [
                         'asc' => ['unique_clicks' => SORT_ASC],
                         'desc' => ['unique_clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'installs' => [
                         'asc' => ['installs' => SORT_ASC],
                         'desc' => ['installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'match_installs' => [
                         'asc' => ['match_installs' => SORT_ASC],
                         'desc' => ['match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_installs' => [
                         'asc' => ['redirect_installs' => SORT_ASC],
                         'desc' => ['redirect_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_match_installs' => [
                         'asc' => ['redirect_match_installs' => SORT_ASC],
                         'desc' => ['redirect_match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'pay_out' => [
                         'asc' => ['pay_out' => SORT_ASC],
                         'desc' => ['pay_out' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_cost' => [
                         'asc' => ['redirect_cost' => SORT_ASC],
                         'desc' => ['redirect_cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_revenue' => [
                         'asc' => ['redirect_revenue' => SORT_ASC],
                         'desc' => ['redirect_revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'bd' => [
                         'asc' => ['bd' => SORT_ASC],
                         'desc' => ['bd' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
@@ -214,14 +226,17 @@ class ReportAdvSearch extends ReportAdvHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
-                        'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'asc' => ['cost' => SORT_ASC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
-                        'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'asc' => ['revenue' => SORT_ASC],
+                        'default' => SORT_DESC,
                     ],
                     'adv_name' => [
                         'asc' => ['adv_name' => SORT_ASC],
@@ -230,34 +245,42 @@ class ReportAdvSearch extends ReportAdvHourly
                     'unique_clicks' => [
                         'asc' => ['unique_clicks' => SORT_ASC],
                         'desc' => ['unique_clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'installs' => [
                         'asc' => ['installs' => SORT_ASC],
                         'desc' => ['installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'match_installs' => [
                         'asc' => ['match_installs' => SORT_ASC],
                         'desc' => ['match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_installs' => [
                         'asc' => ['redirect_installs' => SORT_ASC],
                         'desc' => ['redirect_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_match_installs' => [
                         'asc' => ['redirect_match_installs' => SORT_ASC],
                         'desc' => ['redirect_match_installs' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'pay_out' => [
                         'asc' => ['pay_out' => SORT_ASC],
                         'desc' => ['pay_out' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_cost' => [
                         'asc' => ['redirect_cost' => SORT_ASC],
                         'desc' => ['redirect_cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'redirect_revenue' => [
                         'asc' => ['redirect_revenue' => SORT_ASC],
                         'desc' => ['redirect_revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
@@ -441,14 +464,17 @@ class ReportAdvSearch extends ReportAdvHourly
                     'clicks' => [
                         'asc' => ['clicks' => SORT_ASC],
                         'desc' => ['clicks' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]

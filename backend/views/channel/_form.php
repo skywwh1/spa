@@ -194,6 +194,7 @@ use common\models\Platform;
                         ],
                     ]); ?>
                     <?= $form->field($model, 'level')->dropDownList(ModelsUtil::channel_level) ?>
+                    <?= $form->field($model, 'create_type')->dropDownList(ModelsUtil::channel_create_type) ?>
                     <?= $form->field($model, 'recommended')->dropDownList(ModelsUtil::status) ?>
 
                     <div class="form-group">

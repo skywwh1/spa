@@ -64,7 +64,7 @@ class ApplyCampaignController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         //notice读完将其设为已读
-        $data = $dataProvider->getModels();
+        $data = ApplyCampaign::getRecentApplying();
         foreach ($data as $item){
             $item = (object)$item;
             $item->is_read = 1;

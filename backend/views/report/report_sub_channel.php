@@ -266,6 +266,15 @@ $columns = [
         }
     ],
     [
+        'label' => 'EPC',
+        'value' => function ($model) {
+            $model = (object)$model;
+            $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+            return $epc;
+        },
+        'filter' => false,
+    ],
+    [
         'label' => 'OM',
         'attribute' => 'om',
         'value' => 'om',
@@ -411,6 +420,15 @@ if (!empty($dataProvider)) {
                                             return ['class' => 'bg-danger'];
                                         }
                                     }
+                                ],
+                                [
+                                    'label' => 'EPC',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+                                        return $epc;
+                                    },
+                                    'filter' => false,
                                 ],
                             ],
                         ]); ?>

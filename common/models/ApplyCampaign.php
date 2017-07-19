@@ -19,6 +19,7 @@ use Yii;
  */
 class ApplyCampaign extends \yii\db\ActiveRecord
 {
+    public $campaign_status;
     /**
      * @inheritdoc
      */
@@ -34,7 +35,7 @@ class ApplyCampaign extends \yii\db\ActiveRecord
     {
         return [
             [['campaign_id', 'channel_id'], 'required'],
-            [['campaign_id', 'channel_id', 'status', 'create_time', 'update_time'], 'safe'],
+            [['campaign_id', 'channel_id', 'status', 'create_time', 'update_time','campaign_status'], 'safe'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],
         ];
@@ -51,6 +52,7 @@ class ApplyCampaign extends \yii\db\ActiveRecord
             'status' => 'Status',
             'create_time' => 'Create Time',
             'update_time' => 'Update Time',
+            'campaign_status' => 'Campaign Status'
         ];
     }
 

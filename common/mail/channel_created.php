@@ -7,11 +7,13 @@ use yii\helpers\Url;
 
 ?>
 <div class="password-reset">
-    <p>Hello <?= Html::encode($channel->username) ?>,</p>
+    <p>Welcome <?= Html::encode($channel->username) ?>,</p>
 
-    <p>You account have been created</p>
-    <p>username: <?= $channel->username ?></p>
-    <p>password: <?= $channel->password_hash?></p>
-    <p>please login in SuperADS <?= Html::a('Home ', 'http://www.superads.cn/site/login') ?> to reset your password</p>
-    <p>Notice : This email is none reply, if any question please contact service@superads.cn</p>
+    <p>Thank you for registering a SuperADS publisher account.</p>
+    <p>An account manager will contact you soon.</p>
+    <p>Notice: This email is non-reply. If you have any questions about getting started, please contact service@superads.cn </p>
+<!--    <p>please login in SuperADS --><?//= Html::a('Home ', 'http://www.superads.cn/site/login') ?><!-- to reset your password</p>-->
+<!--    <p>Notice : This email is none reply, if any question please contact service@superads.cn</p>-->
+    <p>Great to have you,</p>
+    <p>The SuperADS Team</p>
 </div>

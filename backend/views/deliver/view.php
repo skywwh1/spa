@@ -15,6 +15,7 @@ $this->params['breadcrumbs'][] = $this->title;
     'model' => $model,
     'attributes' => [
         'campaign_id',
+        'campaign.campaign_name',
         'channel.username',
         'pricing_mode',
         'pay_out',

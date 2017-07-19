@@ -75,6 +75,7 @@ use yii\web\IdentityInterface;
  * @property integer $daily_cap
  * @property string $pay_out
  * @property integer $level
+ * @property integer $create_type
  *
  * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
@@ -106,7 +107,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['payment_way', 'payment_term'], 'safe'],
             [['username', 'email', 'password_hash', 'status'], 'required'],
             [['username', 'email'], 'required'],
-            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable', 'payment_term', 'recommended', 'level'], 'integer'],
+            [['type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted', 'status', 'total_revenue', 'payable', 'payment_term', 'recommended', 'level','create_type'], 'integer'],
             [['pricing_mode', 'username', 'firstname', 'lastname', 'beneficiary_name', 'system', 'contacts', 'alipay', 'timezone'], 'string', 'max' => 100],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company_address', 'company', 'address', 'post_back', 'paid'], 'string', 'max' => 255],

@@ -58,7 +58,14 @@ AdminAsset::register($this);
                             $status = 0;
                             $data2 = \common\models\LogCheckClicksDaily::getRecentMsg($status);
                             $count2 = count($data2);
-                            $count = $count1+ $count2;
+
+                            $data3 = \common\models\LogAutoCheck::getReadStatus();
+                            $count3 = count($data3);
+
+                            $data4 = \common\models\LogAutoCheckSub::getReadStatus();
+                            $count4 = count($data4);
+
+                            $count = $count1 + $count2 + $count3 + $count4;
                             echo '<span id= "lov-cvr" class="label label-warning"> '. $count.' </span>';
                             ?>
                         </a>
@@ -78,6 +85,20 @@ AdminAsset::register($this);
                                         <a href="/deliver/low-cvr">
                                             <?php
                                             echo '<i class="fa fa-warning text-yellow"></i> '. $count2.' Low CVR antiCheat';
+                                            ?>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/deliver/anti-cheat-cvr">
+                                            <?php
+                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count3.' Anti Cheat CVR';
+                                            ?>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/deliver/sub-chid-anticheat">
+                                            <?php
+                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count4.' Sub Chid Aanticheat';
                                             ?>
                                         </a>
                                     </li>

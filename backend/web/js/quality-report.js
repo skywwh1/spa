@@ -1,13 +1,14 @@
 /**
  * Created by iven.wu on 2/5/2017.
  */
+$(document).on("click", "a[data-view=1]", function (e) {
+    //alert($(this).attr('data-url'));
+    $('#campaign-update-modal').modal('show').find('#campaign-update-content').load($(this).attr('data-url'));
+});
 
-
-//$(document).on("click", "a[data-view=0]", function (e) {
-//    //alert($(this).attr('data-url'));
-//    $('#campaign-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
-//    alert($(this).attr('data-url'));
-//});
+$('#campaign-update-modal').on('hidden.bs.modal', function () {
+    $('#campaign-update-content').empty();
+});
 
 $('#campaign-modal').on('hidden.bs.modal', function () {
     $('#campaign-detail-content').empty();

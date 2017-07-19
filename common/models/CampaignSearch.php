@@ -617,4 +617,36 @@ class CampaignSearch extends Campaign
         }
         return $dataProvider;
     }
+
+    public function selectedSearch($params)
+    {
+        $query = Campaign::find();
+        $query->alias('c');
+
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+        if (!isset($this->status)) {
+            $this->status = 1;
+        }
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'c.id' => $this->id,
+            'c.status' => $this->status,
+        ]);
+
+        $query->andFilterWhere(['in', 'c.id', $this->ids]);
+
+        if ($dataProvider->getSort()->getOrders() == null) {
+            $query->orderBy('create_time DESC');
+        }
+        return $dataProvider;
+    }
 }

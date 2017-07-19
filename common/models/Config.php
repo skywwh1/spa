@@ -163,4 +163,23 @@ class Config extends \yii\db\ActiveRecord
         $config->value = $time;
         return $config->save();
     }
+
+    public static function findLastCheckLowMargin()
+    {
+        $name = 'last_check_low_margin';
+        $config = static::findOne(['name' => $name]);
+        return isset($config) ? $config->value : time();
+    }
+
+    public static function updateLastCheckLowMargin($time)
+    {
+        $name = 'last_check_low_margin';
+        $config = static::findOne(['name' => $name]);
+        if ($config == null) {
+            $config = new Config();
+            $config->name = $name;
+        }
+        $config->value = $time;
+        return $config->save();
+    }
 }

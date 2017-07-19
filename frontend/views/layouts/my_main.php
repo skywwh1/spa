@@ -44,11 +44,8 @@ SbAppAsset::register($this);
                     <?php
                     $count_new = \common\models\Deliver::getTodayDeliver();
 
-//                    $name = 'pause';
-//                    $count_pause = CampaignStsUpdate::getCampaignUpdate($name);
-
-//                    $name = 'discount';
-//                    $count_discount = CampaignStsUpdate::getCampaignUpdate($name);
+                    $name = 'pause';
+                    $count_pause = CampaignStsUpdate::getCampaignUpdate($name);
 
 //                    $name = 'payout';
 //                    $count_payout = CampaignStsUpdate::getCampaignUpdate($name);
@@ -63,7 +60,7 @@ SbAppAsset::register($this);
 //                    $count_geo = CampaignStsUpdate::getCampaignUpdate($name);
 
 //                    $count = $count_new + $count_geo + $count_pause + $count_payout + $count_cap + $count_creative;
-                    $count = $count_new ;
+                    $count = $count_new + $count_pause ;
 
                     echo '<span id= "lov-cvr" class="label label-warning"> '.$count.' </span>';
                     ?>
@@ -73,14 +70,14 @@ SbAppAsset::register($this);
                     <li>
                         <!-- inner menu: contains the actual data -->
                         <ul class="nav navbar-nav">
-<!--                            <li>-->
-<!--                                <a href="/camp-log/campaign-update?name=pause">-->
-<!--                                    --><?php
-//
-//                                    echo '<i class="fa fa-pause text-yellow"></i>  '.$count_pause.' pausing offers';
-//                                    ?>
-<!--                                </a>-->
-<!--                            </li>-->
+                            <li>
+                                <a href="/camp-log/campaign-update?name=pause">
+                                    <?php
+
+                                    echo '<i class="fa fa-pause text-yellow"></i>  '.$count_pause.' pausing offers';
+                                    ?>
+                                </a>
+                            </li>
                             <li>
                                 <a href="/camp-log/deliver-new">
                                     <?php

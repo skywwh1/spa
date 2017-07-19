@@ -44,6 +44,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             'campaign_id',
                             ['attribute' => 'advertiser',  'value' => 'campaign.advertiser0.username' ],
                             ['attribute' => 'campaignName',  'value' => 'campaign.campaign_name' ],
+                            [
+                                'attribute' => 'campaign_status',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getCampaignStatus($model->campaign->status);
+                                },
+                                'filter' => ModelsUtil::campaign_status,
+                            ],
                             ['attribute' => 'channelName',  'value' => 'channel.username' ],
                             [
                                 'attribute' => 'om',
@@ -71,39 +78,42 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'header' => 'Action',
                                 'buttons' => [
                                     'apply' => function ($url, $model) {
-                                        if ($model->status !== 1) {
-                                            $class = 'btn btn-primary btn-xs';
-                                            $title = Yii::t('yii', 'Applying');
-                                            switch ($model->status) {
+                                        if ($model->campaign->status ==1){
+                                            if ($model->status !== 1) {
+                                                $class = 'btn btn-primary btn-xs';
+                                                $title = Yii::t('yii', 'Applying');
+                                                switch ($model->status) {
 //                                            case 1:
 //                                                $class = 'btn btn-warning disabled btn-xs';
 //                                                $title = Yii::t('yii', 'Applying');
 //                                                break;
-                                                case 2:
-                                                    $class = 'btn btn-success disabled btn-xs';
-                                                    $title = Yii::t('yii', 'Approved');
-                                                    break;
-                                                case 3:
-                                                    $class = 'btn btn-danger disabled btn-xs';
-                                                    $title = Yii::t('yii', 'Reject');
-                                                    break;
-                                            }
-                                            return Html::a($title, '#', [
-                                                'class' => $class,
-                                                'title' => $title,
-                                            ]);
-                                        } else {
-                                            return Html::a('applying', '#', [
-                                                'class' => 'btn btn-primary btn-xs',
-                                                'title' => Yii::t('yii', 'Applying'),
+                                                    case 2:
+                                                        $class = 'btn btn-success disabled btn-xs';
+                                                        $title = Yii::t('yii', 'Approved');
+                                                        break;
+                                                    case 3:
+                                                        $class = 'btn btn-danger disabled btn-xs';
+                                                        $title = Yii::t('yii', 'Reject');
+                                                        break;
+                                                }
+                                                return Html::a($title, '#', [
+                                                    'class' => $class,
+                                                    'title' => $title,
+                                                ]);
+                                            } else {
+                                                return Html::a('applying', '#', [
+                                                    'class' => 'btn btn-primary btn-xs',
+                                                    'title' => Yii::t('yii', 'Applying'),
 //                                                'data-method' => 'post',
 //                                                'data-pjax' => 'w0',
-                                                'data-view' => '0',
-                                                'data-url' => $url,
-                                            ]);
-                                            //return Html::button('view', ['class' => 'btn btn-primary btn-xs', 'value' => $url, 'data-view' => 0]);
+                                                    'data-view' => '0',
+                                                    'data-url' => $url,
+                                                ]);
+                                                //return Html::button('view', ['class' => 'btn btn-primary btn-xs', 'value' => $url, 'data-view' => 0]);
+                                            }
                                         }
                                     }
+
                                 ],
                                 'urlCreator' => function ($action, $model, $key, $index) {
                                     return Url::toRoute(['/apply-campaign/deliver-create', 'channel_id' => $model->channel_id, 'campaign_id' => $model->campaign_id]);

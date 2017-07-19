@@ -805,7 +805,6 @@ class StatsUtil
                                     }
                                 }
                             }
-
                         }
                     }
                 }
@@ -1073,4 +1072,66 @@ class StatsUtil
         }
     }
 
+    public function checkLowMargin($start_time)
+    {
+        echo "Check Low Margin" . PHP_EOL;
+        $start_time = $this->getBeforeTwoHours($start_time);
+        $logs = CampaignLogHourly::find()->where(['>=', 'time', $start_time])->all();
+        if (!empty($logs)) {
+            foreach ($logs as $log) {
+                $camp = Campaign::findById($log->campaign_id);
+                if (!empty($camp)) {
+                    $traffic_source = $camp->traffic_source;
+                    echo $traffic_source . PHP_EOL;
+                    if (strpos($traffic_source, 'incent') !== 0) { // non-incent
+                        echo "camp-" . $camp->id . PHP_EOL;
+                        if ($log->clicks == 0) {
+                            continue;
+                        }
+                        $sts = Deliver::findIdentity($camp->id, $log->channel_id);
+                        var_dump($camp->id,$log->channel_id);
+                        if (!empty($sts) && $sts->status == 1) {
+                            echo "status = 1" . $camp->id . PHP_EOL;
+                            $check = LogAutoCheck::find()->where(['campaign_id' => $log->campaign_id, 'channel_id' => $log->channel_id])
+                                ->andWhere(['>', 'create_time', strtotime('today')])->one();
+                            if (empty($check)) {
+                                $check = new LogAutoCheck();
+                                if ($log->clicks == 0) {
+                                    continue;
+                                }
+                                $revenue = $log->match_installs * $log->adv_price;
+                                $cost = $log->installs * $log->pay_out;
+                                $profit = $revenue - $cost;
+                                $margin = $revenue > 0 ? round(($profit / $revenue), 4) : 0;
+                                $cvr = ($log->match_installs / $log->clicks) * 100;
+
+                                if ($revenue > 50 && $margin<0.2){
+                                    echo "revenue > 50 && margin<0.2" . $camp->id . PHP_EOL;
+                                    $check->match_cvr = $cvr;
+                                    $check->margin = $margin;
+                                    $check->revenue = $revenue;
+                                    $check->campaign_id = $log->campaign_id;
+                                    $check->channel_id = $log->channel_id;
+                                    $check->campaign_name = $log->campaign_name;
+                                    $check->channel_name = $log->channel_name;
+                                    $check->installs = $log->installs;
+                                    $check->match_install = $log->match_installs;
+                                    $check->daily_cap = $log->daily_cap;
+                                    $check->action = '80%discount';
+                                    $check->type = 3;
+                                    $check->save();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        // send mail
+        $sendings = LogAutoCheck::findAll(['is_send' => 0, 'type' => 3]);
+        if (!empty($sendings)) {
+            MailUtil::autoCheckLowMargin($sendings);
+        }
+    }
 }

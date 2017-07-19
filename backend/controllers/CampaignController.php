@@ -513,7 +513,7 @@ class CampaignController extends Controller
         if (isset($_POST['CampaignSearch']['ids'])) {
             $searchModel->ids = explode(",",$_POST['CampaignSearch']['ids']);
         }
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->selectedSearch(Yii::$app->request->queryParams);
         return $this->render('detail', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

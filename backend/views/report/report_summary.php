@@ -222,6 +222,15 @@ $columns = [
         },
         'filter' => false,
     ],
+    [
+        'label' => 'EPC',
+        'value' => function ($model) {
+            $model = (object)$model;
+            $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+            return $epc;
+        },
+        'filter' => false,
+    ],
 ];
 if (!empty($searchModel->type)) {
     array_unshift($columns, $time_row);
@@ -344,6 +353,15 @@ if (!empty($dataProvider)) {
                                             return ['class' => 'bg-danger'];
                                         }
                                     }
+                                ],
+                                [
+                                    'label' => 'EPC',
+                                    'value' => function ($model) {
+                                        $model = (object)$model;
+                                        $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+                                        return $epc;
+                                    },
+                                    'filter' => false,
                                 ],
                             ],
                         ]); ?>

@@ -879,6 +879,16 @@ class CountController extends Controller
 
     }
 
+    public function actionCheckLowMargin()
+    {
+        $start = Config::findLastCheckLowMargin();
+        $end = time();
+        // 检查low margin
+        $stats = new StatsUtil();
+        $stats->checkLowMargin($start);
+        Config::updateLastCheckLowMargin($end);
+    }
+
     public function actionStatsAdvertiserByMonth($date)
     {
         //统计上个月账单：

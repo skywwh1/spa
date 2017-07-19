@@ -39,19 +39,21 @@ class ChannelQualityReportController extends Controller
                             'update',
                             'delete',
                             'columns',
+                            'edit',
                             'email',
+                            'update-column'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
                 ],
             ],
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
+//            'verbs' => [
+//                'class' => VerbFilter::className(),
+//                'actions' => [
+//                    'delete' => ['POST'],
+//                ],
+//            ],
         ];
     }
 
@@ -73,7 +75,7 @@ class ChannelQualityReportController extends Controller
         $searchModel->end = $date->format('Y-m-d');
 
         $searchModel->load(Yii::$app->request->queryParams);
-        switch($searchModel->type){
+        switch ($searchModel->type) {
             case 1:
                 $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
                 $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
@@ -88,36 +90,28 @@ class ChannelQualityReportController extends Controller
                 break;
         }
 
-        $models = empty($dataProvider)?null:$dataProvider->getModels();
-        $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
+        $models = empty($dataProvider) ? null : $dataProvider->getModels();
+        $columns = empty($dataProvider_column) ? null : $dataProvider_column->getModels();
 
         $cols = [];
         $dynamic_cols = [];
-//        var_dump(count($columns));
-//        var_dump(count($models));
-//        die();
-        if (!empty($models) && !(empty($columns)) ){
-            foreach($models as $model){
-                foreach ($columns as $column){
+        if (!empty($models) && !(empty($columns))) {
+            foreach ($models as $model) {
+                foreach ($columns as $column) {
                     if ($model['campaign_id'] == $column->campaign_id
                         && $model['channel_id'] == $column->channel_id
                         && $model['sub_channel'] == $column->sub_channel
-                        && $model['timestamp'] == $column->time) {
+                        && $model['timestamp'] == $column->time
+                    ) {
                         $model['column_name'][$column->name] = $column->value;
                         $cols[$column->name] = $column->value;
-//                        $model['column_name']['campaign_id'] = $column->campaign_id;
-//                        $model['column_name']['channel_id'] = $column->channel_id;
-//                        $model['column_name']['sub_channel'] = $column->sub_channel;
-//                        $model['column_name']['timestamp'] = $column->time;
                     }
                 }
-                if (!empty($model['column_name'])){
+                if (!empty($model['column_name'])) {
                     $dynamic_cols[] = $model['column_name'];
                 }
             }
         }
-//        var_dump($dynamic_cols);
-//        die();
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -127,7 +121,7 @@ class ChannelQualityReportController extends Controller
         ]);
     }
 
-    public function actionQuality($campaign,$channel,$timeZone)
+    public function actionQuality($campaign, $channel, $timeZone)
     {
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->campaign_id = $campaign;
@@ -145,23 +139,24 @@ class ChannelQualityReportController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
 
-        $models = empty($dataProvider)?null:$dataProvider->getModels();
-        $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
+        $models = empty($dataProvider) ? null : $dataProvider->getModels();
+        $columns = empty($dataProvider_column) ? null : $dataProvider_column->getModels();
 
         $cols = [];
         $dynamic_cols = [];
-        if (!empty($models) && !(empty($columns))){
-            foreach($models as $model){
-                foreach ($columns as $column){
+        if (!empty($models) && !(empty($columns))) {
+            foreach ($models as $model) {
+                foreach ($columns as $column) {
                     if ($model['campaign_id'] == $column->campaign_id
                         && $model['channel_id'] == $column->channel_id
                         && $model['sub_channel'] == $column->sub_channel
-                        && $model['timestamp'] == $column->time) {
+                        && $model['timestamp'] == $column->time
+                    ) {
                         $model['column_name'][$column->name] = $column->value;
                         $cols[$column->name] = $column->value;
                     }
                 }
-                if (!empty($model['column_name'])){
+                if (!empty($model['column_name'])) {
                     $dynamic_cols[] = $model['column_name'];
                 }
             }
@@ -184,16 +179,11 @@ class ChannelQualityReportController extends Controller
      * @param $installs
      * @return string
      */
-    public function actionUpdate($campaign_id, $channel_id, $sub_channel, $time,$name,$installs)
+    public function actionUpdate($campaign_id, $channel_id, $sub_channel, $time, $name, $installs)
     {
-//        $model = $this->findModel($campaign_id, $channel_id, $sub_channel, $time);
-//        var_dump($campaign_id, $channel_id, $sub_channel, $time,$name);
-//        die();
-
-        $model = QualityDynamicColumn::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel, 'time' => $time,'name' => $name]);
-
-        $out = Json::encode([ 'message' => '']);
-        if (empty($model)){
+        $out = Json::encode(['message' => '']);
+        $model = QualityDynamicColumn::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel, 'time' => $time, 'name' => $name]);
+        if (empty($model)) {
             $model = new QualityDynamicColumn();
             $model->campaign_id = $campaign_id;
             $model->channel_id = $channel_id;
@@ -201,31 +191,32 @@ class ChannelQualityReportController extends Controller
             $model->time = $time;
             $model->name = $name;
         }
-
-        $value = $_POST[str_replace(' ', '_', $name)]/$installs*100;
-        $model->value = round($value,2).'%';
-        $model->save();
-
+        if (!empty($_POST[str_replace(' ', '_', $name)])){
+            $ori_val = trim($_POST[str_replace(' ', '_', $name)]);
+            $value = round($ori_val / $installs * 100, 2) . '%';
+            $model->value = $ori_val . '(' . $value . ')';
+            $model->save();
+        }
         $out = Json::encode(['message' => 'successifully saved']);
         echo $out;
-        return ;
+        return;
 
     }
 
     /**
-     * Deletes an existing ChannelQualityReport model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $campaign_id
-     * @param integer $channel_id
-     * @param string $sub_channel
-     * @param integer $time
-     * @return mixed
+     * @param $id
+     * @param $time
+     * @return \yii\web\Response
      */
-    public function actionDelete($campaign_id, $channel_id, $sub_channel, $time)
+    public function actionDelete($id,$time)
     {
-        $this->findModel($campaign_id, $channel_id, $sub_channel, $time)->delete();
-
-        return $this->redirect(['index']);
+        $old_model = QualityDynamicColumn::findOne($id);
+        $model = new QualityDynamicColumn();
+        $time = explode(",",$time);
+        $model->deleteAll(['campaign_id' => $old_model->campaign_id, 'channel_id' => $old_model->channel_id,'time' => $time, 'name' => $old_model->name]);
+        $out = Json::encode(['message' => 'successifully saved']);
+        echo $out;
+        return $this->redirect(Yii::$app->request->referrer);
     }
 
     /**
@@ -257,10 +248,10 @@ class ChannelQualityReportController extends Controller
      * @return string|\yii\web\Response
      */
     //创建的时候增加camp
-    public function actionColumns($campaign_id,$channel_id,$channel_name,$start,$end,$type)
+    public function actionColumns($campaign_id, $channel_id, $channel_name, $start, $end, $type)
     {
         $model = new QualityDynamicColumn();
-        $channel_id = empty($channel_id)?Channel::findByUsername($channel_name)->id:$channel_id;//id/name必有一个不为Null
+        $channel_id = empty($channel_id) ? Channel::findByUsername($channel_name)->id : $channel_id;//id/name必有一个不为Null
         $model->channel_id = $channel_id;
         $model->campaign_id = $campaign_id;
 
@@ -276,7 +267,7 @@ class ChannelQualityReportController extends Controller
             $searchModel->end = $end;
             $searchModel->time_zone = 'Etc/GMT-8';
 
-            switch($type){
+            switch ($type) {
                 case 1:
                     $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
                     break;
@@ -288,12 +279,12 @@ class ChannelQualityReportController extends Controller
                     break;
             }
 
-            $models = empty($dataProvider)?null:$dataProvider->getModels();
-            if (!empty($models)){
-                foreach($models as $static){
-                    $quality = QualityDynamicColumn::findOne(['campaign_id' => $static['campaign_id'], 'channel_id' => $static['channel_id'], 'sub_channel' => $static['sub_channel'], 'time' =>  $static['timestamp'],'name' =>  $model->name]);
+            $models = empty($dataProvider) ? null : $dataProvider->getModels();
+            if (!empty($models)) {
+                foreach ($models as $static) {
+                    $quality = QualityDynamicColumn::findOne(['campaign_id' => $static['campaign_id'], 'channel_id' => $static['channel_id'], 'sub_channel' => $static['sub_channel'], 'time' => $static['timestamp'], 'name' => $model->name]);
 
-                    if (empty($quality)){
+                    if (empty($quality)) {
                         $quality = new QualityDynamicColumn();
                     }
                     $quality->campaign_id = $static['campaign_id'];
@@ -313,17 +304,18 @@ class ChannelQualityReportController extends Controller
         }
     }
 
-    public function actionEmail($campaign_id,$channel_id,$channel_name,$start,$end,$type){
+    public function actionEmail($campaign_id, $channel_id, $channel_name, $start, $end, $type)
+    {
         $searchModel = new ChannelQualityReportSearch();
         $searchModel->time_zone = 'Etc/GMT-8';
         $searchModel->campaign_id = $campaign_id;
-        $channel_id = empty($channel_id)?Channel::findByUsername($channel_name)->id:$channel_id;
+        $channel_id = empty($channel_id) ? Channel::findByUsername($channel_name)->id : $channel_id;
         $searchModel->channel_id = $channel_id;
         $searchModel->channel_name = $channel_name;
         $searchModel->start = $start;
         $searchModel->end = $end;
 
-        switch($type){
+        switch ($type) {
             case 1:
                 $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
                 $dataProvider_column = $searchModel->dynamicSearch(Yii::$app->request->queryParams);
@@ -338,35 +330,36 @@ class ChannelQualityReportController extends Controller
                 break;
         }
 
-        $models = empty($dataProvider)?null:$dataProvider->getModels();
-        $columns = empty($dataProvider_column)?null:$dataProvider_column->getModels();
+        $models = empty($dataProvider) ? null : $dataProvider->getModels();
+        $columns = empty($dataProvider_column) ? null : $dataProvider_column->getModels();
 
         $cols = [];
         $dynamic_cols = [];
-        if (!empty($models) && !(empty($columns))){
-            foreach($models as $model){
-                foreach ($columns as $column){
+        if (!empty($models) && !(empty($columns))) {
+            foreach ($models as $model) {
+                foreach ($columns as $column) {
                     if ($model['campaign_id'] == $column->campaign_id
                         && $model['channel_id'] == $column->channel_id
                         && $model['sub_channel'] == $column->sub_channel
-                        && $model['timestamp'] == $column->time) {
+                        && $model['timestamp'] == $column->time
+                    ) {
                         $model['column_name'][$column->name] = $column->value;
                         $cols[$column->name] = $column->value;
                     }
                 }
-                if (!empty($model['column_name'])){
+                if (!empty($model['column_name'])) {
                     $dynamic_cols[] = $model['column_name'];
                 }
             }
         }
-        $channel = Channel::findOne(['id' => $channel_id ]);
-        $campaign = Campaign::findOne(['id' => $campaign_id ]);
-        $date_range = $start.'~'.$end;
+        $channel = Channel::findOne(['id' => $channel_id]);
+        $campaign = Campaign::findOne(['id' => $campaign_id]);
+        $date_range = $start . '~' . $end;
 
-        if(MailUtil::sendQualityOffers($channel,$campaign,$models,$dynamic_cols,$cols,$date_range)){
-            $this->actionNotice($campaign_id,$channel_id);//发送邮件成功则提醒渠道看质量报告
+        if (MailUtil::sendQualityOffers($channel, $campaign, $models, $dynamic_cols, $cols, $date_range)) {
+            $this->actionNotice($campaign_id, $channel_id);//发送邮件成功则提醒渠道看质量报告
             $this->asJson("send email success!");
-        }else{
+        } else {
             $this->asJson("send email fail!");
         }
     }
@@ -375,8 +368,9 @@ class ChannelQualityReportController extends Controller
      * @param $campaign_id
      * @param $channel_id
      */
-    private function actionNotice($campaign_id,$channel_id){
-        $campaign = Campaign::findOne(['id' => $campaign_id ]);
+    private function actionNotice($campaign_id, $channel_id)
+    {
+        $campaign = Campaign::findOne(['id' => $campaign_id]);
         $channel = Channel::findOne($channel_id);
         $auto_check = new QualityAutoCheck();
         $auto_check->campaign_id = $campaign_id;
@@ -385,5 +379,94 @@ class ChannelQualityReportController extends Controller
         $auto_check->channel_name = $channel->username;
         $auto_check->is_send = 0;
         $auto_check->save();
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $channel_name
+     * @param $start
+     * @param $end
+     * @param $type
+     * @return mixed
+     */
+    public function actionEdit($campaign_id, $channel_id, $channel_name, $start, $end, $type)
+    {
+        $model = new QualityDynamicColumn();
+        $model->channel_id = $channel_id;
+        $model->campaign_id = $campaign_id;
+
+        //查询sub_channel_hourly表获取所选时间和campaign,channel的数据以便和动态列表数据一一对应
+        $searchModel = new ChannelQualityReportSearch();
+        $searchModel->campaign_id = $campaign_id;
+        $searchModel->channel_id = $channel_id;
+        $searchModel->channel_name = $channel_name;
+        $searchModel->start = $start;
+        $searchModel->end = $end;
+        $searchModel->time_zone = 'Etc/GMT-8';
+
+        switch ($type) {
+            case 1:
+                $dataProvider = $searchModel->weekSearch(Yii::$app->request->queryParams);
+                break;
+            case 2:
+                $dataProvider = $searchModel->monthSearch(Yii::$app->request->queryParams);
+                break;
+            default:
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                break;
+        }
+
+        $models = empty($dataProvider) ? null : $dataProvider->getModels();
+        if (!empty($models)) {
+            $time_arr = [];
+            if ($type != null) {
+                $time = $models[0]['timestamp'];
+                $searchModel->time = $time;
+                $time_arr[] = $time;
+                $dynamicProvider = $searchModel->dynamicSearch(null);
+            } else {
+                foreach ($models as $static) {
+                    $time = $static['timestamp'];
+                    $time_arr[] = $time;
+                }
+                $searchModel->time = $time_arr;
+                $dynamicProvider = $searchModel->dynamicDailySearch();
+            }
+            return $this->renderAjax('update_columns', [
+                'dataProvider' => $dynamicProvider,
+                'time_between' => implode(',',$time_arr)
+            ]);
+        }
+    }
+
+    /**
+     * @param $campaign_id
+     * @param $channel_id
+     * @param $time
+     * @param $name
+     * @param $index
+     */
+    public function actionUpdateColumn($campaign_id, $channel_id,$time,$name,$index)
+    {
+        if (isset($_POST['hasEditable'])) {
+            // use Yii's response format to encode output as JSON
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $ori_val = trim($_POST['QualityDynamicColumn'][$index]['name']);
+            $time = explode(",",$time);
+
+            $columns = QualityDynamicColumn::find()->andFilterWhere(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'name' => $name])->andFilterWhere(['in','time',$time])->all();
+            if (!empty($columns)){
+                foreach ($columns as $item){
+                    $item->name = $ori_val;
+                    $item->save();
+                }
+                $out = Json::encode(['message' => 'successifully saved']);
+            }else{
+                $out = Json::encode(['message' => 'failed']);
+            }
+            echo $out;
+            return;
+        }
     }
 }

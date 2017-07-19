@@ -135,6 +135,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'level',
                             'value' => ModelsUtil::getChannelLevel($model->level)
                         ],
+                        [
+                            'attribute' => 'create_type',
+                            'value' => ModelsUtil::getChannelCreateType($model->create_type)
+                        ],
                     ],
                 ]) ?>
 

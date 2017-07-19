@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\editable\Editable;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ChannelQualityReportSearch */
@@ -14,6 +15,13 @@ use kartik\editable\Editable;
 $this->title = 'Channel Quality Reports';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+    <style>
+        form .panel{ background:none !important;border:none;margin:0 !important;}
+        form .panel .kv-editable-form-inline{padding:0 !important;}
+        form .kv-editable-form-inline .form-group{display:none;}
+        form .kv-editable-parent.form-group{display:block;}
+        .kv-editable-link{border:none !important;}
+    </style>
     <div id="nav-menu" data-menu="channel-quality-report-index"></div>
 <?php echo $this->render('_search', ['model' => $searchModel]);
 if (!empty($dataProvider)) {
@@ -33,6 +41,14 @@ if (!empty($dataProvider)) {
                                 'data-pjax' => 0,
                             ]);
                         echo PHP_EOL;
+                        echo Html::a('<span class="btn btn-primary">edit</span>', null,
+                            [
+                                'title' => Yii::t('yii', 'reduce Columns'),
+                                'data-url' => 'edit?campaign_id='.$searchModel->campaign_id.'&channel_id='.$searchModel->channel_id.'&channel_name='.$searchModel->channel_name.'&start='.$searchModel->start.'&end='.$searchModel->end.'&type='.$searchModel->type,
+                                'data-view' => 1,
+                                'data-pjax' => 0,
+                            ]);
+                        echo PHP_EOL;
                         echo Html::a('<span class="btn btn-primary">Email</span>', null,
                             [
                                 'title' => Yii::t('yii', 'add Columns'),
@@ -43,6 +59,7 @@ if (!empty($dataProvider)) {
                         echo PHP_EOL;
                         ?>
                         <button type="button" class="btn btn-primary" id="submit-button">Batch Save</button>
+
                     </p>
                     <?php
                     $columns = [
@@ -164,6 +181,18 @@ $this->registerJsFile(
     ['depends' => [\yii\web\JqueryAsset::className()]]
 );
 ?>
+<?php Modal::begin([
+    'id' => 'campaign-update-modal',
+    'size' => 'modal-lg',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+echo '<div id="campaign-update-content"></div>';
+Modal::end(); ?>
+
 <?php \yii\bootstrap\Modal::begin([
     'id' => 'campaign-modal',
     'size' => 'modal-sm',

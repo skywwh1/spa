@@ -82,9 +82,18 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'class' => 'yii\grid\ActionColumn',
-                            'template' => '{om-edit}',
+                            'template' => '{om-edit}{update-app}',
                             'header' => 'Action',
                             'buttons' => [
+                                'update-app' => function ($url, $model, $key) {
+                                    $options = [
+                                        'title' => Yii::t('yii', 'Update Channel'),
+                                        'aria-label' => Yii::t('yii', 'Update Channel'),
+                                        'data-pjax' => '0',
+                                    ];
+                                    $url = '/channel/update-applicant?id=' . $model->id;
+                                    return Html::a('<span class="glyphicon glyphicon-edit"></span>', $url, $options);
+                                },
                                 'om-edit' => function ($url, $model) {
                                     return Html::a('editOM', null, [
                                         'class' => 'btn btn-primary btn-xs',

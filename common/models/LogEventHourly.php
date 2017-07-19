@@ -18,6 +18,7 @@ use Yii;
  */
 class LogEventHourly extends \yii\db\ActiveRecord
 {
+    public $timestamp;
     /**
      * @inheritdoc
      */

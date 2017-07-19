@@ -87,9 +87,9 @@ class ClickController extends Controller
         ]);
         $query->having(['>=', 'clicks', 5000000]);
         $query->andHaving(['<=', 'cvr', 0.0003]);
-        $query->orHaving( 'clicks >= 800000 and match_installs = 0');
-        $query->orHaving( 'clicks >= 500000 and match_installs = 0');
+        $query->orHaving( 'clicks >= 300000 and match_installs = 0');
         $query->orHaving( 'clicks >= 200000 and match_installs = 0');
+        $query->orHaving( 'clicks >= 100000 and match_installs = 0');
 
         echo $query->createCommand()->sql . "\n";
         $rows = $query->all();

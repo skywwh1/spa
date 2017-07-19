@@ -16,7 +16,7 @@ use yii\widgets\ActiveForm;
         <!-- general form elements -->
         <div class="box box-primary">
             <?php $form = ActiveForm::begin([
-                'action' => ['report-channel'],
+                'action' => ['index'],
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
@@ -24,10 +24,10 @@ use yii\widgets\ActiveForm;
                     <?php
                     echo '<label class="control-label">Date</label>';
                     echo DatePicker::widget([
-                        'name' => 'ReportChannelSearch[start]',
+                        'name' => 'EventReportSearch[start]',
                         'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'ReportChannelSearch[end]',
+                        'name2' => 'EventReportSearch[end]',
                         'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'pluginOptions' => [
                             'autoclose' => true,
@@ -37,9 +37,9 @@ use yii\widgets\ActiveForm;
                     ?>
                 </div>
                 <div class="col-lg-2">
-                    <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone, ['value' => !empty($model->time_zone) ? $model->time_zone : 'Etc/GMT-8']) ?>
+                    <?= $form->field($model, 'campaign_id')->textInput() ?>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-2">
                     <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
                         'pluginOptions' => ['highlight' => true],
 //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
@@ -53,15 +53,16 @@ use yii\widgets\ActiveForm;
                                 ]
                             ]],
                     ]) ?>
-
                 </div>
                 <div class="col-lg-2">
                     <?= $form->field($model, 'type')->dropDownList([
                         2 => 'Daily',
                         1 => 'Hourly',
-                    ], ['prompt' => '--- Select ---']) ?>
+                    ]) ?>
                 </div>
-
+                <div class="col-lg-2">
+                    <?= $form->field($model, 'time_zone')->dropDownList(ModelsUtil::timezone, ['value' => !empty($model->time_zone) ? $model->time_zone : 'Etc/GMT-8']) ?>
+                </div>
             </div>
             <!-- /.box-body -->
 

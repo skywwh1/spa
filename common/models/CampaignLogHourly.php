@@ -34,6 +34,7 @@ use yii\db\Query;
  */
 class CampaignLogHourly extends \yii\db\ActiveRecord
 {
+    public $timestamp;
     /**
      * @inheritdoc
      */
