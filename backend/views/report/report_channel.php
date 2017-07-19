@@ -86,7 +86,7 @@ $columns = [
               <li><a data-view="0" data-url="/campaign-sub-channel-log-redirect/create?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Sub Redirect</a></li>
               <li><a data-view="0" data-url="/deliver/send-email?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Send Email</a></li>
               <li><a data-view="0" href="/deliver/view-email?channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">View Email</a></li>
-              <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->campaign_id . '">Add to Cart</a></li>
+              <li><a data-view="0" data-url="/my-cart/add-my-cart?campaign_id=' . $model->campaign_id . '">Add to Cart</a></li>
               </ul>
             </div>';
             },
