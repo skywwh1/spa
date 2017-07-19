@@ -37,7 +37,7 @@ class Feed extends \yii\db\ActiveRecord
         return [
             [['is_count', 'ip_long', 'create_time', 'update_time'], 'integer'],
             [['auth_token'], 'safe'],
-            [['click_id', 'ch_id', 'all_parameters', 'ip', 'host_name'], 'string', 'max' => 255],
+            [['click_id', 'ch_id', 'all_parameters', 'ip', 'host_name'], 'safe'],
         ];
     }
 

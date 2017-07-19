@@ -15,6 +15,7 @@ use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\CampaignStsUpdate;
 use common\models\Config;
+use common\models\Customer;
 use common\models\Deliver;
 use common\models\Feed;
 use common\models\LogClick;
@@ -53,34 +54,87 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-//        date('Y-m-d', time());
 
-        $aa = new LogClickDM();
+        /* $i = 0;
+         while ($i < 1000) {
+
+             $aa = new LogClickDM();
+             $aa->click_id = 8989;
+             $aa->click_uuid = uniqid();
+             $aa->click_time = time();
+
+             $aa->click_id = uniqid();
+             $aa->campaign_channel_id = '88900_7788';
+             $aa->ch_subid = uniqid();
+             $aa->adv_price = time();
+             $aa->pay_out = time();
+             $aa->all_parameters = uniqid();
+             $aa->ip_long = time();
+             $aa->save();
+             var_dump($aa->errors);
+             $i++;
+             echo  $i."\n";
+         }
+         die();*/
 //        $aa->setFindType(Query::USING_GET_ITEM);
-//        $aa->findOne(['click_uuid'=>'213sdf']);
-        $aa->click_uuid='999';
-        $aa->channel_id=7887;
-        $aa->campaign_id=9009;
-        $aa->click_time=23423;
-        $aa->adv_price='sdfasd';
-        var_dump($aa->insert());
-        var_dump($aa->errors);
-        $aa = LogClickDM::findOne(['click_uuid'=>'213sdf']);
+//       $bb = $aa->findById('59664cfd10d2e59664cfd10dd6641321');
+//        $db = Yii::$app->dynamodb;
 
+//        $command = Yii::$app->dynamodb->createCommand();
+//        /* @var $command \UrbanIndo\Yii2\DynamoDb\Command */
+//        $table = Customer::tableName();
+//        if ($command->tableExists($table)) {
+//            $command->deleteTable($table)->execute();
+//        }
+//        $command->createTable($table, [
+//            'AttributeDefinitions' => [
+//                [
+//                    'AttributeName' => 'id',
+//                    'AttributeType' => 'N'
+//                ]
+//            ],
+//            'KeySchema' => [
+//                [
+//                    'AttributeName' => 'id',
+//                    'KeyType' => 'HASH',
+//                ]
+//            ],
+//            'ProvisionedThroughput' => [
+//                'ReadCapacityUnits' => 10,
+//                'WriteCapacityUnits' => 10
+//            ],
+//        ])->execute();
+//        die();
+//        $i=0;
+//while ($i<100) {
+     var_dump(LogClickDM::isExistIp('183872_188',1732963635));
 
+//        var_dump($aa);
+        die();
+//    $objectToInsert->save(false);
+//    $i++;
+//}
+        $objectFromFind = Customer::findAll(['id' => 42976]);
 
+//        var_dump($objectFromFind);
+//        die();
+        $db = Yii::$app->dynamodb;
+//        $tableDescription =  $db->createCommand()->getItem('log_click_dm',['click_uuid'=>"59676f65e8e0d"])->execute();
 
+//        var_dump($tableDescription);
+
+        var_dump(LogClickDM::findOne(['click_uuid' => '59676f65e8e0d']));
         die();
 
 
-/*        $redis = Yii::$app->redis;
-//        $result = $redis->executeCommand('hmset', ['test_collection', 'key1', 'val1', 'key2', 'val2']);
-        $result = $redis->executeCommand('hmset', ['aa', 'bb', 'val1', 'key2', 'val2']);
-//        var_dump($result);
-        $var2 = Yii::$app->redis->keys("*");
-        $source = Yii::$app->redis->hgetall('aa');
-        var_dump($var2);
-        var_dump($source);*/
+        /*        $redis = Yii::$app->redis;
+        //        $result = $redis->executeCommand('hmset', ['test_collection', 'key1', 'val1', 'key2', 'val2']);
+                $result = $redis->executeCommand('hmset', ['aa', 'bb', 'val1', 'key2', 'val2']);
+        //        var_dump($result);
+                $var2 = Yii::$app->redis->keys("*");
+                $source = Yii::$app->redis->hgetall('aa');
+                var_dump($var2);
+                var_dump($source);*/
         die();
 
         $now = time();
@@ -88,8 +142,8 @@ class TestController extends Controller
         $aa = strtotime('20170601');
         $hourly_aa = date('Y-m-d H:i', $aa);
         echo $hourly . "\n";
-        echo $aa. "\n";
-        echo $hourly_aa. "\n";
+        echo $aa . "\n";
+        echo $hourly_aa . "\n";
 
         die();
 //        $query = new Query();

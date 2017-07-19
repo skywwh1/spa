@@ -151,9 +151,7 @@ if (!empty($dataProvider)) {
                                     ],
                                     [
                                         'attribute' => 'revenue',
-                                        'value' => function ($model) {
-                                            return $model->installs * round($model->pay_out, 2);
-                                        },
+                                        'value' => 'revenue',
                                         'filter' => false,
                                         'pageSummary' => true,
                                     ],

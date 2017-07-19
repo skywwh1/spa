@@ -17,12 +17,12 @@ use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
 
-class Affle
+class Clinkad
 {
 
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 13]);
+        $apiModel = AdvertiserApi::findOne(['id' => 16]);
         $allCamps = $this->getAllCampaigns($apiModel);
 
         if (!empty($allCamps)) {
@@ -65,25 +65,23 @@ class Affle
             }
             $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
             $camp->target_geo = $model->target_geo;
-            $adv_link = $model->adv_link;
-            $camp->adv_link = str_replace('&s1={Sub_ID}&s2={Clickid}&s3={Sub3}&s4={Sub4}&s5={Sub5}&udid={GAID/IDFA}', '', $adv_link);
+
+            $camp->adv_link = rtrim($model->adv_link,'&');
             $camp->package_name = $model->package_name;
             $camp->platform = $model->platform;
+            $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
             $camp->description = str_replace('&nbsp;', '', $camp->description);
             $camp->preview_link = $model->preview_link;
-            $camp->note = $model->note;
             $camp->category = $model->category;
+            $camp->kpi = $model->note;
+            if ($model->conversion_flow == 'None') {
+                $camp->kpi = 'Day 2 RR > 30%';
+            }
             $camp->status = 1;
             $camp->open_type = 1;
 
-            if($camp->platform == 'android'){
-                $start = strpos($camp->preview_link,'id=');
-                $camp->package_name = substr($camp->preview_link,$start+3);
-                $end = strpos( $camp->package_name,'&');
-                $camp->package_name =substr($camp->package_name,0,$end);
-            }
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
@@ -107,16 +105,13 @@ class Affle
 //        var_dump($all);
         foreach ($all as $item) {
             if (!in_array($item->campaign_uuid, $campaigns)) {
-                if ($item->is_manual == 1) {
-                    continue;
-                }
                 $item->status = 2;
                 if ($item->save()) {
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
         }
-        var_dump('update all Affle');
+        var_dump('update all clinkAD');
     }
 
     /**
@@ -125,31 +120,37 @@ class Affle
      */
     private function getAllCampaigns($apiModel)
     {
+        $data_key = $apiModel->json_offers_param;
         $url = $apiModel->url;
         $curl = new Curl();
         echo "url " . $url . "\n";
         $response = $curl->get($url);
         $response = json_decode($response);
-//        var_dump($response->data);
-//        die();
-        $apiOffers = $response->data;
-        $newOffers = [];
-        if (!empty($apiOffers)) {
-            foreach ($apiOffers as $item) {
-                $geo = $item->targeting->geoTargeting->country;
-                $item->targeting = $geo;
-                $newOffers[] = $item;
-                $creatives = '';
-                if (isset($item->creatives)) {
-                    foreach ($item->creatives as $creative) {
-                        $creatives .= $creative->creativeURL . ';';
-                    }
+        $total = isset($response->offer_total) ? $response->offer_total : 0;
+        $data = isset($response->$data_key) ? $response->$data_key : array();
+        $page_total = $response->page_total;
+//        $pagesize = $response->pagesize;
+        echo "total " . $total . "\n";
+        echo "totalPage " . $page_total . "\n";
+
+//        var_dump($data);
+//            die();
+        $apiCampaigns = $data;
+        if ($page_total > 1) {
+            for ($i = 2; $i < $page_total; $i++) {
+                $newUrl = $url . '&page=' .$i;
+                $curl = new Curl();
+                echo "new url " . $newUrl . "\n";
+                $response = $curl->get($newUrl);
+                $response = json_decode($response);
+                if (!empty($response->$data_key)) {
+                    $apiCampaigns[] = $response->$data_key;
+                }else{
+                    break;
                 }
-                $item->creatives = $creatives;
             }
         }
-        return $newOffers;
+        return $apiCampaigns;
     }
-
 
 }
