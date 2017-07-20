@@ -262,7 +262,7 @@ class CountController extends Controller
                 }
                 $sub_redirect->discount_denominator = $denominator;
                 if ($sub_redirect->discount_denominator >= 10) {
-                    $sub_redirect->discount_denominator = 1;
+                    $sub_redirect->discount_denominator = 0;
                     $sub_redirect->discount_numerator = 0;
                 }
                 $sub_redirect->save();
@@ -281,7 +281,7 @@ class CountController extends Controller
             }
             $redirect->discount_denominator = $denominator;
             if ($redirect->discount_denominator >= 10) {
-                $redirect->discount_denominator = 1;
+                $redirect->discount_denominator = 0;
                 $redirect->discount_numerator = 0;
             }
             $redirect->save();
@@ -299,7 +299,7 @@ class CountController extends Controller
             $sts->match_install += 1;
             $sts->discount_denominator = $denominator;
             if ($sts->discount_denominator >= 10) {
-                $sts->discount_denominator = 1;
+                $sts->discount_denominator = 0;
                 $sts->discount_numerator = 0;
             }
             $sts->save();
