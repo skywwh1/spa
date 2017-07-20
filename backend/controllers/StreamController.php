@@ -467,23 +467,19 @@ class StreamController extends Controller
     {
         $hourly_str = date('Y-m-d H:00', $logClick->click_time);
         $hourly = strtotime($hourly_str);
-        $campaignChannelIds = LogClickDM::getCampaignChannelIds($logClick->campaign_channel_id);
-        $clickCount = LogClickCount::findCampaignClick($campaignChannelIds[0], $campaignChannelIds[1], $hourly);
-        $subClick = LogClickCountSubChannel::findCampaignSubClick($campaignChannelIds[0], $campaignChannelIds[1], $logClick->ch_subid, $hourly);
         $ip = new LogIp();
         $ip->ip_campaign_channel_hour = $logClick->ip_long . '_' . $logClick->campaign_channel_id . '_' . $hourly;
         $ip->click_time = $hourly;
         if ($ip->save()) {
-            $clickCount->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
-            if (!empty($subClick)) {
-                $subClick->updateCounters(['clicks' => 1, 'unique_clicks' => 1]);
+            LogClickCount::updateCampaignClick($logClick->campaign_channel_id, $hourly, true);
+            if (!empty($logClick->ch_subid)) {
+                LogClickCountSubChannel::updateCampaignClick($logClick->campaign_channel_id, $logClick->ch_subid, $hourly, true);
             }
         } else {
-            $clickCount->updateCounters(['clicks' => 1]);
-            if (isset($subClick)) {
-                $subClick->updateCounters(['clicks' => 1]);
+            LogClickCount::updateCampaignClick($logClick->campaign_channel_id, $hourly);
+            if (!empty($logClick->ch_subid)) {
+                LogClickCountSubChannel::updateCampaignClick($logClick->campaign_channel_id, $logClick->ch_subid, $hourly);
             }
         }
     }
-
 }

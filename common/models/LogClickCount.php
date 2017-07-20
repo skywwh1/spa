@@ -2,18 +2,19 @@
 
 namespace common\models;
 
+use UrbanIndo\Yii2\DynamoDb\ActiveRecord;
+use UrbanIndo\Yii2\DynamoDb\Query;
 use Yii;
 
 /**
  * This is the model class for table "log_click_count".
  *
- * @property integer $campaign_id
- * @property integer $channel_id
+ * @property integer $campaign_channel_time
  * @property integer $clicks
  * @property integer $unique_clicks
  * @property integer $time
  */
-class LogClickCount extends \yii\db\ActiveRecord
+class LogClickCount extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -29,43 +30,38 @@ class LogClickCount extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'time'], 'required'],
-            [['campaign_id', 'channel_id', 'clicks', 'unique_clicks', 'time'], 'integer'],
+            [['campaign_channel_time', 'time'], 'required'],
+            [['campaign_channel_time', 'clicks', 'unique_clicks', 'time'], 'safe'],
         ];
     }
 
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
+    public function attributes()
     {
         return [
-            'campaign_id' => 'Campaign ID',
-            'channel_id' => 'Channel ID',
-            'clicks' => 'Clicks',
-            'unique_clicks' => 'Unique Clicks',
-            'time' => 'Time',
+            'campaign_channel_time',
+            'time',
+            'clicks',
+            'unique_clicks',
         ];
     }
 
-
     /**
-     * @param $campaign_id
-     * @param $channel_id
+     * @param $campaign_channel
      * @param int $time
+     * @param bool $unique_click
      * @return LogClickCount
      */
-    public static function findCampaignClick($campaign_id, $channel_id, $time)
+    public static function updateCampaignClick($campaign_channel, $time, $unique_click = false)
     {
-        $click = static::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'time' => $time]);
-        if (empty($click)) {
-            $click = new LogClickCount();
-            $click->campaign_id = $campaign_id;
-            $click->channel_id = $channel_id;
-            $click->time = $time;
-            $click->save();
+        $key = $campaign_channel . '_' . $time;
+        if ($unique_click == true) {
+            self::updateAllCounters(['clicks' => 1, 'unique_clicks' =>1], ['campaign_channel_time' => $key,'time'=>$time]);
+        } else {
+            self::updateAllCounters(['clicks' => 1], ['campaign_channel_time' => $key,'time'=>$time]);
         }
-        return $click;
     }
 
 }
