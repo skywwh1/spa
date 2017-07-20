@@ -404,11 +404,11 @@ class ChannelQualityReportSearch extends CampaignLogSubChannelHourly
             'pagination' => false
         ]);
 
-        $this->load($params);
-
-        if (!$this->validate()) {
-            return $dataProvider;
-        }
+//        $this->load($params);
+//
+//        if (!$this->validate()) {
+//            return $dataProvider;
+//        }
 
         // grid filtering conditions
         $query->andFilterWhere([

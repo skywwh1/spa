@@ -278,7 +278,7 @@ class ModelsUtil
         '1' => 'closed',
     );
     const channel_level = array(
-        '0' => 'New',
+        '5' => 'New',
         '1' => 'A',
         '2' => 'B',
         '3' => 'C',

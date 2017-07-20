@@ -38,7 +38,7 @@ use yii\helpers\Url;
 
     <h4>Hi Team:</h4>
 
-    <p>&nbsp;&nbsp; &nbsp;The CVR for the following subIds are high, here’re actions made:</p>
+    <p>&nbsp;&nbsp; &nbsp;The margin for the following channels are low, here’re actions made:</p>
 
     <table border="1">
         <tbody>
