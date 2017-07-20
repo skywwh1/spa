@@ -239,7 +239,7 @@ class ChannelSearch extends Channel
             'level' => $this->level,
             'recommended' => 1,
         ]);
-        $query->andFilterWhere(['like', 'username', $this->username]);
+        $query->andFilterWhere(['like', 'channel.username', $this->username]);
         $query->andFilterWhere(['like', 'u.username', $this->om_name]);
         if(isset($this->os)){
             $os = explode(',',$this->os);
