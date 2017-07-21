@@ -907,7 +907,7 @@ class StatsUtil
             'timestamp']);
         $query->orderBy('timestamp desc');
         //使用第二个数据库
-        $command = $query->createCommand(Yii::$app->db2);
+        $command = $query->createCommand(Yii::$app->db3);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();
@@ -971,7 +971,7 @@ class StatsUtil
         $query->orderBy('timestamp desc');
 
         //使用第二个数据库
-        $command = $query->createCommand(Yii::$app->db2);
+        $command = $query->createCommand(Yii::$app->db3);
         var_dump($command->sql);
 //        die();
         $rows = $command->queryAll();

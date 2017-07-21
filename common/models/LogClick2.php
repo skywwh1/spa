@@ -42,6 +42,11 @@ class LogClick2 extends \yii\db\ActiveRecord
         return 'log_click';
     }
 
+    public static function getDb()
+    {
+        return Yii::$app->get('db2');
+    }
+
     /**
      * @inheritdoc
      */
