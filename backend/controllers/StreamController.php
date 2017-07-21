@@ -307,22 +307,22 @@ class StreamController extends Controller
             }
         }
 
-        $clickDm = new LogClickDM();
-        $clickDm->click_uuid = $click->click_uuid;
-        $clickDm->click_time = $click->click_time;
-
-        $clickDm->click_id = (string)$click->click_id;
-        $clickDm->campaign_channel_id = (string)$click->campaign_id . '_' . $click->channel_id;
-        $clickDm->ch_subid = $click->ch_subid;
-        $clickDm->adv_price = $click->adv_price;
-        $clickDm->pay_out = $click->pay_out;
-        $clickDm->all_parameters = $click->all_parameters;
-        $clickDm->ip_long = $click->ip_long;
-        $clickDm->idfa = $click->idfa;
-        $clickDm->gaid = $click->gaid;
-        $clickDm->redirect_campaign_id = empty($click->redirect_campaign_id) ? 0 : $click->redirect_campaign_id;
-        $clickDm->save();
-        $this->countClick($clickDm);
+//        $clickDm = new LogClickDM();
+//        $clickDm->click_uuid = $click->click_uuid;
+//        $clickDm->click_time = $click->click_time;
+//
+//        $clickDm->click_id = (string)$click->click_id;
+//        $clickDm->campaign_channel_id = (string)$click->campaign_id . '_' . $click->channel_id;
+//        $clickDm->ch_subid = $click->ch_subid;
+//        $clickDm->adv_price = $click->adv_price;
+//        $clickDm->pay_out = $click->pay_out;
+//        $clickDm->all_parameters = $click->all_parameters;
+//        $clickDm->ip_long = $click->ip_long;
+//        $clickDm->idfa = $click->idfa;
+//        $clickDm->gaid = $click->gaid;
+//        $clickDm->redirect_campaign_id = empty($click->redirect_campaign_id) ? 0 : $click->redirect_campaign_id;
+//        $clickDm->save();
+//        $this->countClick($clickDm);
 
         return 200;
     }
