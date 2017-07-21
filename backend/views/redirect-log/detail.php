@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         'end_time:datetime',
                         'create_time:datetime',
                         'update_time:datetime',
-                        'creator',
+                        'creator0.username',
                     ],
                 ]) ?>
 
