@@ -179,13 +179,12 @@ class CampaignStsUpdateController extends Controller
                 $sts = Deliver::findOne(['campaign_id' => $campaign_id, 'channel_id' => $channel_id]);
                 $sts->end_time = $model->effect_time;
                 $sts->save();
-               // return $this->redirect(['deliver/index']);
-                return $this->redirect(Yii::$app->request->referrer);
+//                return $this->redirect(Yii::$app->request->referrer);
+                $this->asJson('success!');
             } else if ($type == 1) {
                 $camp = Campaign::findById($model->campaign_id);
                 $camp->promote_end = $model->effect_time;
                 $camp->save();
-              //  return $this->redirect(['campaign/index']);
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
@@ -220,7 +219,8 @@ class CampaignStsUpdateController extends Controller
                 $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
                 $model->save();
              // return $this->redirect(['deliver/index']);
-                return $this->redirect(Yii::$app->request->referrer);
+//                return $this->redirect(Yii::$app->request->referrer);
+                $this->asJson('success!');
             }
         } else {
             $searchModel = new CampaignStsUpdateSearch();
@@ -267,9 +267,9 @@ class CampaignStsUpdateController extends Controller
                 $sts->discount_denominator = 1;
                 $sts->save();
             //    return $this->redirect(['deliver/index']);
-                return $this->redirect(Yii::$app->request->referrer);
+//                return $this->redirect(Yii::$app->request->referrer);
+                $this->asJson('success!');
             }
-
         } else {
             $searchModel = new CampaignStsUpdateSearch();
             $searchModel->name = 'discount';
@@ -310,7 +310,8 @@ class CampaignStsUpdateController extends Controller
                 $model->save();
 
              //   return $this->redirect(['deliver/index']);
-                return $this->redirect(Yii::$app->request->referrer);
+//                return $this->redirect(Yii::$app->request->referrer);
+                $this->asJson('success!');
             }
 
         } else {
@@ -446,7 +447,8 @@ class CampaignStsUpdateController extends Controller
             if ($model->is_send == 1){
                 MailUtil::pauseSubChannel($model);
             }
-            return $this->redirect(Yii::$app->request->referrer);
+            $this->asJson('success!');
+//            return $this->redirect(Yii::$app->request->referrer);
         } else {
             return $this->renderAjax('sub_pause', [
                 'model' => $model,
@@ -477,7 +479,8 @@ class CampaignStsUpdateController extends Controller
             $model->save();
 
             // return $this->redirect(['deliver/index']);
-            return $this->redirect(Yii::$app->request->referrer);
+//            return $this->redirect(Yii::$app->request->referrer);
+            $this->asJson('success!');
         } else {
             return $this->renderAjax('sts-restart', [
                 'model' => $model,

@@ -310,7 +310,7 @@ $columns = [
         'label' => 'EPC',
         'value' => function ($model) {
             $model = (object)$model;
-            $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+            $epc=   $model->clicks > 0 ? round(($model->revenue / $model->clicks) * 1000 ,3): 0;
             return $epc;
         },
         'filter' => false,
@@ -472,7 +472,7 @@ if (!empty($dataProvider)) {
                                     'label' => 'EPC',
                                     'value' => function ($model) {
                                         $model = (object)$model;
-                                        $epc=   $model->clicks > 0 ? ($model->revenue / $model->clicks) * 1000 : 0;
+                                        $epc=   $model->clicks > 0 ? round(($model->revenue / $model->clicks) * 1000 ,3): 0;
                                         return $epc;
                                     },
                                     'filter' => false,
@@ -497,10 +497,17 @@ if (!empty($dataProvider)) {
                             ],
                         ]);
                         ?>
-                        <?php echo GridView::widget([
+                        <?= GridView::widget([
+                            'id' => 'report',
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'showPageSummary' => true,
+                            'pjax' => true,
+                            'pjaxSettings' => [
+                                'options'=>[
+                                    'id' => 'kv-unique-id-report'
+                                ]
+                            ],
                             'layout' => $layout,
                             'toolbar' => [
                                 '{toggleData}',

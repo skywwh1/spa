@@ -20,6 +20,7 @@ use common\models\MyCart;
 use common\models\MyCartSearch;
 use common\models\Stream;
 use common\models\LogCheckClicksDaily;
+use common\utility\CampaignUtil;
 use common\utility\MailUtil;
 use linslin\yii2\curl\Curl;
 use Yii;
@@ -585,7 +586,8 @@ class DeliverController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $content = $model->content ;
             $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
-            $model->content = $style.$content;
+            $campaign_info = CampaignUtil::genCampaignInfo($campaign_id);
+            $model->content = $style.$content.$campaign_info;
             $model->save();
             $channel = Channel::findOne($channel_id);
             $campaign = Campaign::findOne($campaign_id);
@@ -609,6 +611,10 @@ class DeliverController extends Controller
 
         //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
         if ($model->load(Yii::$app->request->post())) {
+            $content = $model->content ;
+            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
+            $campaign_info = CampaignUtil::genCampaignInfo($campaign_id);
+            $model->content = $style.$content.$campaign_info;
             $model->save();
             $campaign = Campaign::findOne($campaign_id);
             $s2s = Deliver::findAll(['campaign_id' => $campaign->id,'status' => 1]);

@@ -103,9 +103,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             'buttons' => [
                                 'all' => function ($url, $model, $key) {
                                     $restart = '';
-//                                    if($model->campaign->status == 1 && $model->status == 2){
-//                                        $restart = '<li><a data-view="0" data-url="/campaign-sts-update/sts-restart?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Restart</a></li>';
-//                                    }
+                                    if($model->campaign->status == 1 && $model->status == 2){
+                                        $restart = '<li><a data-view="0" data-url="/campaign-sts-update/sts-restart?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Restart</a></li>';
+                                    }
                                     return '<div class="dropdown">
                                       <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                       <span class="caret"></span></button>
