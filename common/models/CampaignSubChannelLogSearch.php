@@ -12,6 +12,9 @@ use common\models\CampaignSubChannelLog;
  */
 class CampaignSubChannelLogSearch extends CampaignSubChannelLog
 {
+    public $campaign_name;
+    public $channel_name;
+    public $creator_name;
     /**
      * @inheritdoc
      */
@@ -19,7 +22,7 @@ class CampaignSubChannelLogSearch extends CampaignSubChannelLog
     {
         return [
             [['id', 'campaign_id', 'channel_id', 'is_send', 'is_effected', 'effect_time', 'create_time', 'creator'], 'integer'],
-            [['sub_channel', 'name'], 'safe'],
+            [['sub_channel', 'name','campaign_name','channel_name'], 'safe'],
         ];
     }
 
@@ -42,7 +45,7 @@ class CampaignSubChannelLogSearch extends CampaignSubChannelLog
     public function search($params)
     {
         $query = CampaignSubChannelLog::find();
-
+        $query->alias("csr");
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -69,8 +72,15 @@ class CampaignSubChannelLogSearch extends CampaignSubChannelLog
             'creator' => $this->creator,
         ]);
 
-        $query->andFilterWhere(['like', 'sub_channel', $this->sub_channel])
-            ->andFilterWhere(['like', 'name', $this->name]);
+        $query->join('INNER JOIN','channel','csr.channel_id = channel.id');
+        $query->andFilterWhere(['like','channel.username',$this->channel_name]);
+        $query->join('left JOIN','campaign b','csr.campaign_id = b.id');
+
+        if ($this->campaign_name) {
+            $query->andFilterWhere(['like','b.campaign_name',trim($this->campaign_name)]);
+        }
+        $query->andFilterWhere(['like','sub_channel',$this->sub_channel]);
+        $query->andFilterWhere(['like', 'name', $this->name]);
 
         return $dataProvider;
     }

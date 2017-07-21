@@ -64,10 +64,22 @@ $this->params['breadcrumbs'][] = $this->title;
                  'attribute' => 'campaign_id',
                  'value' => 'campaign_id',
             ],
-            [ 
+            [
+                'label' => 'Campaign',
+                'attribute' => 'campaign_name',
+                'value' => 'campaign.campaign_name',
+                //'filter' => false,
+            ],
+            [
                 // 'label' => 'channel_id',
-                 'attribute' => 'channel_id',
-                 'value' => 'channel_id',
+                'attribute' => 'channel_id',
+                'value' => 'channel_id',
+            ],
+            [
+                'label' => 'Channel',
+                'attribute' => 'channel_name',
+                'value' => 'channel.username',
+                // 'filter' => false,
             ],
             [ 
                 // 'label' => 'sub_channel',
@@ -104,11 +116,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'attribute' => 'create_time',
                 // 'value' => 'create_time:datetime',
            // ],
-            //[ 
-                // 'label' => 'creator',
-                // 'attribute' => 'creator',
-                // 'value' => 'creator',
-           // ],
+            [
+                 'label' => 'creator',
+                 'attribute' => 'creator',
+                 'value' => 'creator0.username',
+                'filter' => false,
+            ],
 
 //        [
 //        'class' => 'yii\grid\ActionColumn',
