@@ -33,6 +33,47 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= Html::button('S2S', ['class' => 'btn btn-primary', 'id' => 's2s_button'])?>
 
                 <?php
+                $export_columns = [
+                    [
+                        'attribute' => 'tag',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignTag($model->tag);
+                        },
+                        'filter' => ModelsUtil::campaign_tag,
+                    ],
+                    [
+                        'attribute' => 'direct',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignDirect($model->direct);
+                        },
+                        'filter' => ModelsUtil::campaign_direct,
+                    ],
+                    [
+                        'attribute' => 'advertiser',
+                        'value' => 'advertiser0.username',
+                    ],
+                    'id',
+                    'campaign_name',
+                    'target_geo',
+                    'platform',
+                    'now_payout',
+                    'traffic_source',
+                    'preview_link',
+                    'daily_cap',
+                    [
+                        'attribute' => 'status',
+                        'value' => function ($model) {
+                            return ModelsUtil::getCampaignStatus($model->status);
+                        },
+                        'filter' => ModelsUtil::campaign_status,
+                    ],
+                    'kpi',
+                    'note',
+                    'others',
+                    'pricing_mode',
+                    'category',
+                    'package_name',
+                ];
                 $columns = [
                     [
                         'class' => 'yii\grid\CheckboxColumn', 'checkboxOptions' => function ($model) {
@@ -135,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ];
                 echo ExportMenu::widget([
                     'dataProvider' => $dataProvider,
-                    'columns' => $columns,
+                    'columns' => $export_columns,
                     'fontAwesome' => true,
                     'showConfirmAlert' => false,
                     'target' => GridView::TARGET_BLANK,

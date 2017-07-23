@@ -168,18 +168,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return ModelsUtil::getCampaignTag($model->tag);
                             },
                             'filter' => ModelsUtil::campaign_tag,
+                            'class'=>'kartik\grid\EditableColumn',
+                            'editableOptions'=>function ($model) {
+                                return [
+                                    'inputType'=>\kartik\editable\Editable::INPUT_DROPDOWN_LIST,
+                                    'asPopover' => false,
+                                    'data' => ModelsUtil::campaign_tag,
+                                    'formOptions' => ['action' => ['/campaign/update-tag']],
+                                ];
+                            },
                             'contentOptions' => function ($model) {
                                 if ($model->tag == 3) {
                                     return ['class' => 'bg-danger'];
                                 } else if ($model->tag == 2) {
                                     return ['class' => 'bg-warning'];
-
                                 } else if ($model->tag == 4) {
                                     return ['class' => 'bg-info'];
-                                } else {
+                                } else if ($model->tag == 5) {
+                                    return ['class' => 'bg-gray'];
+                                }
+                                else {
                                     return ['class' => 'bg-success'];
                                 }
-                            }
+                            },
                         ],
                         [
                             'attribute' => 'direct',
