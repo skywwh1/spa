@@ -54,7 +54,8 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-
+$aa = strtotime('20170722');
+echo $aa;
         /* $i = 0;
          while ($i < 1000) {
 
