@@ -210,6 +210,8 @@ AdminAsset::register($this);
                     <ul class="treeview-menu">
                         <li><a href="/campaign/index" data-menu="campaign_index"><i class="fa fa-circle-o"></i> Campaign
                                 List</a></li>
+                        <li><a href="/campaign/other-index" data-menu="campaign_other"><i class="fa fa-circle-o"></i> Campaign
+                                List2</a></li>
                         <li><a href="/campaign/cpa-index" data-menu="campaign_cpa"><i class="fa fa-circle-o"></i> CPA
                                 List</a></li>
                         <li><a href="/campaign/api-index" data-menu="campaign_api"><i class="fa fa-circle-o"></i> ASXMI
