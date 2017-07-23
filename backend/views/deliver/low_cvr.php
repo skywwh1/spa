@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'hover' => true,
                     'columns' => [
                         'campaign_id',
+                        'campaign.advertiser0.username',
                         'campaign.campaign_name',
                         'channel.username',
                         'channel_id',

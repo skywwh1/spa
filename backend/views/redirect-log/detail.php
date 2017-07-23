@@ -35,7 +35,12 @@ $this->params['breadcrumbs'][] = 'Update';
                         'end_time:datetime',
                         'create_time:datetime',
                         'update_time:datetime',
-                        'creator0.username',
+                        [
+                            'label' => 'creator',
+                            'value' => function($model){
+                                return $model->creator0->username;
+                            }
+                        ]
                     ],
                 ]) ?>
 
