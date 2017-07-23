@@ -19,7 +19,7 @@ class ChannelSubBlacklistSearch extends ChannelSubBlacklist
     {
         return [
             [['id', 'channel_id', 'create_time'], 'integer'],
-            [['sub_channel', 'geo', 'os', 'category'], 'safe'],
+            [['channel_name','sub_channel', 'geo', 'os', 'category'], 'safe'],
         ];
     }
 
@@ -42,6 +42,7 @@ class ChannelSubBlacklistSearch extends ChannelSubBlacklist
     public function search($params)
     {
         $query = ChannelSubBlacklist::find();
+        $query->alias('cs');
 
         // add conditions that should always apply here
 
@@ -59,14 +60,15 @@ class ChannelSubBlacklistSearch extends ChannelSubBlacklist
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'cs.id' => $this->id,
             'channel_id' => $this->channel_id,
-            'create_time' => $this->create_time,
+            'cs.create_time' => $this->create_time,
         ]);
 
         $query->andFilterWhere(['like', 'sub_channel', $this->sub_channel])
             ->andFilterWhere(['like', 'geo', $this->geo])
             ->andFilterWhere(['like', 'os', $this->os])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'category', $this->category]);
 
         return $dataProvider;

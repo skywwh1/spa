@@ -33,6 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
                  'attribute' => 'id',
                  'value' => 'id',
             ],
+            [
+                // 'label' => 'channel_id',
+                'attribute' => 'channel_name',
+                'value' => 'channel.username',
+            ],
             [ 
                 // 'label' => 'channel_id',
                  'attribute' => 'channel_id',
@@ -53,11 +58,11 @@ $this->params['breadcrumbs'][] = $this->title;
                  'attribute' => 'os',
                  'value' => 'os',
             ],
-            //[ 
-                // 'label' => 'category',
-                // 'attribute' => 'category',
-                // 'value' => 'category',
-           // ],
+            [
+                 'label' => 'category',
+                 'attribute' => 'category',
+                 'value' => 'category',
+            ],
             //[ 
                 // 'label' => 'note',
                 // 'attribute' => 'note',

@@ -19,7 +19,7 @@ class ChannelSubWhitelistSearch extends ChannelSubWhitelist
     {
         return [
             [['id', 'channel_id', 'create_time'], 'integer'],
-            [['sub_channel', 'geo', 'os', 'category', 'note'], 'safe'],
+            [['channel_name', 'sub_channel', 'geo', 'os', 'category', 'note'], 'safe'],
         ];
     }
 
@@ -42,6 +42,7 @@ class ChannelSubWhitelistSearch extends ChannelSubWhitelist
     public function search($params)
     {
         $query = ChannelSubWhitelist::find();
+        $query->alias('cs');
 
         // add conditions that should always apply here
 
@@ -57,16 +58,18 @@ class ChannelSubWhitelistSearch extends ChannelSubWhitelist
             return $dataProvider;
         }
 
+        $query->leftJoin('channel ch','cs.channel_id = ch.id');
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
+            'cs.id' => $this->id,
             'channel_id' => $this->channel_id,
-            'create_time' => $this->create_time,
+            'cs.create_time' => $this->create_time,
         ]);
 
         $query->andFilterWhere(['like', 'sub_channel', $this->sub_channel])
             ->andFilterWhere(['like', 'geo', $this->geo])
             ->andFilterWhere(['like', 'os', $this->os])
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'category', $this->category])
             ->andFilterWhere(['like', 'note', $this->note]);
 
