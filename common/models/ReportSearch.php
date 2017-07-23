@@ -562,14 +562,14 @@ class ReportSearch extends CampaignLogHourly
                         'asc' => ['campaign_uuid' => SORT_ASC],
                         'desc' => ['campaign_uuid' => SORT_DESC],
                     ],
-                    'channel_id' => [
-                        'asc' => ['ch.id' => SORT_ASC],
-                        'desc' => ['ch.id' => SORT_DESC],
-                    ],
-                    'channel_name' => [
-                        'asc' => ['ch.username' => SORT_ASC],
-                        'desc' => ['ch.username' => SORT_DESC],
-                    ],
+//                    'channel_id' => [
+//                        'asc' => ['ch.id' => SORT_ASC],
+//                        'desc' => ['ch.id' => SORT_DESC],
+//                    ],
+//                    'channel_name' => [
+//                        'asc' => ['ch.username' => SORT_ASC],
+//                        'desc' => ['ch.username' => SORT_DESC],
+//                    ],
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
@@ -610,11 +610,11 @@ class ReportSearch extends CampaignLogHourly
 
         $query->select([
 //            'adv.username advertiser',
-            'ch.username channel_name',
+//            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
-            'clh.channel_id',
-            'u.username om',
+//            'clh.channel_id',
+//            'u.username om',
 //            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
@@ -629,7 +629,7 @@ class ReportSearch extends CampaignLogHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
+//        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -638,18 +638,18 @@ class ReportSearch extends CampaignLogHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
-            ->andFilterWhere(['like', 'u.username', $this->om])
+//            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+//            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         $query->groupBy([
             'clh.campaign_id',
-            'clh.channel_id',
+//            'clh.channel_id',
         ]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
-            $query->orderBy(['ch.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
+            $query->orderBy(['cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
 
         return $dataProvider;
