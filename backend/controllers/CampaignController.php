@@ -68,7 +68,7 @@ class CampaignController extends Controller
                             'mobair-index',
                             'clickad-index',
                             'other-index',
-
+                            'update-tag',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -602,5 +602,20 @@ class CampaignController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionUpdateTag()
+    {
+        $out = Json::encode(['message' => '']);
+        $model = Campaign::findOne(['id' => $_POST['editableKey']]);
+        if (isset($_POST['hasEditable'])) {
+            \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+            $tag = $_POST['Campaign'][$_POST['editableIndex']]['tag'];
+            $model->tag = $tag;
+            $model->save();
+            $out = Json::encode(['message' => 'successifully saved']);
+        }
+        echo $out;
+        return;
     }
 }

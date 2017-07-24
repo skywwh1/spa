@@ -157,6 +157,7 @@ class ModelsUtil
         2 => 'Good',
         3 => 'Private',
         4 => 'Keep',
+        5 => 'Strong',
     );
 
     const apply_status = array(

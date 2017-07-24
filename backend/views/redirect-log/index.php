@@ -123,6 +123,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 },
                                 'filter' => false,
                             ],
+                            [
+                             'label' => 'creator',
+                             'attribute' => 'create_name',
+                             'value' => 'creator0.username',
+                             ],
                             //[
                             // 'label' => 'update_time',
                             // 'attribute' => 'update_time',

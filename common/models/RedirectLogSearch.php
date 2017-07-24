@@ -13,7 +13,7 @@ use common\models\RedirectLog;
 class RedirectLogSearch extends RedirectLog
 {
     public function attributes(){
-        return array_merge(parent::attributes(),['channelName','campaignName','redirectCampaignName']);
+        return array_merge(parent::attributes(),['channelName','campaignName','redirectCampaignName','create_name']);
     }
     /**
      * @inheritdoc
@@ -22,7 +22,7 @@ class RedirectLogSearch extends RedirectLog
     {
         return [
             [['id', 'campaign_id', 'channel_id', 'campaign_id_new', 'discount_numerator', 'discount_denominator', 'status', 'end_time', 'create_time', 'update_time', 'creator'], 'integer'],
-            [['daily_cap','channelName','campaignName','redirectCampaignName'], 'safe'],
+            [['daily_cap','channelName','campaignName','redirectCampaignName','create_name',], 'safe'],
             [['actual_discount', 'discount'], 'number'],
         ];
     }
@@ -85,9 +85,11 @@ class RedirectLogSearch extends RedirectLog
         $query->andFilterWhere(['like', 'daily_cap', $this->daily_cap]);
 
         $query->join('INNER JOIN','channel','campaign_channel_log_redirect.channel_id = channel.id');
-        $query->andFilterWhere(['like','channel.username',$this->channelName]);
         $query->join('left JOIN','campaign b','campaign_channel_log_redirect.campaign_id = b.id');
         $query->join('left JOIN','campaign c','campaign_channel_log_redirect.campaign_id_new = c.id');
+        $query->joinWith('creator0 u');
+        $query->andFilterWhere(['like','channel.username',$this->channelName]);
+        $query->andFilterWhere(['like','u.username',$this->create_name]);
 
         if ($this->campaignName) {
             $query->andFilterWhere(['like','b.campaign_name',trim($this->campaignName)]);
