@@ -1,6 +1,5 @@
 <?php
 
-use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
@@ -73,12 +72,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                         ],
                     ];
-                    echo ExportMenu::widget([
+                    $campaign_ids = implode(",",$keys);
+                    var_dump($campaign_ids);
+                    $fullExportMenu = ExportMenu::widget([
                         'dataProvider' => $dataProvider,
                         'columns' => $systemColumns,
+                        'target' => ExportMenu::TARGET_BLANK,
                         'fontAwesome' => true,
                         'showConfirmAlert' => false,
-                        'target' => GridView::TARGET_BLANK,
+                        'batchSize' => 20,
+                        'exportRequestParam' => $campaign_ids,
+                        'pjaxContainerId' => 'kv-pjax-container',
                         'dropdownOptions' => [
                             'label' => 'Export All',
                             'class' => 'btn btn-default'
@@ -94,7 +98,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
-//                        'pjax' => true,
+                        'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+                        'pjax' => true,
+                        'layout' => '{toolbar}{summary} {items} {pager}',
+                        'toolbar' => [
+                            $fullExportMenu,
+                        ],
                         'id' => 'detailGrid',
                         'columns' => [
                             ['class' => 'yii\grid\SerialColumn'],

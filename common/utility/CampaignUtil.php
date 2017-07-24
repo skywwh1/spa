@@ -11,13 +11,11 @@ use common\models\Campaign;
  */
 class CampaignUtil{
 
-    /**
-     * 生成campaign_info模板
-     * @param $campaign_id
+    /**生成campaign_info模板
+     * @param $deliver
      * @return string
      */
-    public static function genCampaignInfo($campaign_id){
-        $campaign = Campaign::findOne($campaign_id);
+    public static function genCampaignInfo($deliver){
         $tmpl = '<style type="text/css">
         table {
             border-spacing: 0;
@@ -52,6 +50,7 @@ class CampaignUtil{
                     <th> Target GEO</th>
                     <th> Platform</th>
                     <th> Payout</th>
+                    <th> Cap</th>
                     <th>Traffic Source</th>
                     <th> Preview Link</th>
                     <th> KPI</th>
@@ -59,19 +58,19 @@ class CampaignUtil{
                 </thead>
                 <tbody>
                     <tr>'.
-                        $ids = '<td>' . Html::encode($campaign->id) . '</td>'.
-                        $campaign_names = '<td width="130px">' . Html::encode($campaign->campaign_name) . '</td>'.
-                        $target_geos = '<td>' . Html::encode($campaign->target_geo) . '</td>'.
-                        $platforms = '<td>' . Html::encode($campaign->platform) . '</td>'.
-                        $payouts = '<td>' . Html::encode($campaign->now_payout) . '</td>'.
-                        $traffic_sources = '<td>' . $campaign->traffic_source . '</td>'.
-                        $preview_links = '<td><a href="' . Html::encode($campaign->preview_link) . '">Preview Link</a></td>'.
-                        $kpi = '<td>' . Html::encode($campaign->kpi) . '</td>'.'
+                        $ids = '<td>' . Html::encode($deliver->campaign->id) . '</td>'.
+                        $campaign_names = '<td width="130px">' . Html::encode($deliver->campaign->campaign_name) . '</td>'.
+                        $target_geos = '<td>' . Html::encode($deliver->campaign->target_geo) . '</td>'.
+                        $platforms = '<td>' . Html::encode($deliver->campaign->platform) . '</td>'.
+                        $payouts = '<td>' . Html::encode($deliver->pay_out) . '</td>'.
+                        $cap = '<td>' . Html::encode($deliver->daily_cap) . '</td>'.
+                        $traffic_sources = '<td>' . $deliver->campaign->traffic_source . '</td>'.
+                        $preview_links = '<td><a href="' . Html::encode($deliver->campaign->preview_link) . '">Preview Link</a></td>'.
+                        $kpi = '<td>' . Html::encode($deliver->campaign->kpi) . '</td>'.'
                          </tr>
                          </tbody>
                     </table>
                 </div>';
-        return $tmpl;
+        return str_replace("  ","",$tmpl);
     }
-
 }

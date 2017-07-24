@@ -585,9 +585,10 @@ class DeliverController extends Controller
         //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
         if ($model->load(Yii::$app->request->post())) {
             $content = $model->content ;
-            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
-            $campaign_info = CampaignUtil::genCampaignInfo($campaign_id);
-            $model->content = $style.$content.$campaign_info;
+//            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
+            $deliver = Deliver::findIdentity($campaign_id,$channel_id);
+            $campaign_info = CampaignUtil::genCampaignInfo($deliver);
+            $model->content = $content.$campaign_info;
             $model->save();
             $channel = Channel::findOne($channel_id);
             $campaign = Campaign::findOne($campaign_id);
@@ -612,14 +613,16 @@ class DeliverController extends Controller
         //2、保存并跳转到详细页面，对于拉黑的渠道则不让跳转
         if ($model->load(Yii::$app->request->post())) {
             $content = $model->content ;
-            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
-            $campaign_info = CampaignUtil::genCampaignInfo($campaign_id);
-            $model->content = $style.$content.$campaign_info;
-            $model->save();
+//            $style = '<style type="text/css">table,th,td{border:1px solid black;}</style>';
+
             $campaign = Campaign::findOne($campaign_id);
             $s2s = Deliver::findAll(['campaign_id' => $campaign->id,'status' => 1]);
             foreach ($s2s as $item){
                 $channel = Channel::findOne($item->channel_id);
+                $campaign_info = CampaignUtil::genCampaignInfo($item);
+                $model->channel_id = $item->channel_id;
+                $model->content = $content.$campaign_info;
+                $model->save();
                 MailUtil::sendMailFromBackend($channel,$campaign,$model->content);
             }
             return $this->redirect(Yii::$app->request->referrer);

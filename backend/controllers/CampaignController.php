@@ -10,6 +10,7 @@ use common\models\ChannelSearch;
 use common\models\CampaignCreativeLink;
 use common\models\User;
 use common\utility\MailUtil;
+use kartik\export\ExportMenu;
 use Yii;
 use common\models\Campaign;
 use common\models\CampaignSearch;
@@ -515,6 +516,9 @@ class CampaignController extends Controller
         $searchModel = new CampaignSearch();
         if (isset($_POST['CampaignSearch']['ids'])) {
             $searchModel->ids = explode(",",$_POST['CampaignSearch']['ids']);
+        }
+        if (isset(array_keys($_POST)[2])){
+            $searchModel->ids = explode(",",array_keys($_POST)[2]);
         }
         $dataProvider = $searchModel->selectedSearch(Yii::$app->request->queryParams);
         return $this->render('detail', [

@@ -9,34 +9,6 @@ use yii\helpers\HtmlPurifier;
 /* @var $form yii\widgets\ActiveForm */
 
 ?>
-    <style type="text/css">
-        table {
-            border-spacing: 0;
-            border-collapse: collapse;
-            background-color: #ffffff;
-            border-color: #ccc;
-            font-family: 'microsoft yahei', calibri, verdana;
-            table-layout: fixed;
-        }
-
-        table tr {
-            height: 30px;
-            vertical-align: middle;
-            font-size: 13px;
-            background-color: #fefefe;
-            border: 1px solid #ddd
-        }
-
-        table tr th {
-            text-align: center;
-            border: 1px solid #ccc
-        }
-
-        table tbody td {
-            /*text-align: center;*/
-            border: 1px solid #ddd
-        }
-    </style>
 <h3>History Email</h3>
 <?php
     if (!is_null($model)) {

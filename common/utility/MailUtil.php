@@ -176,21 +176,7 @@ class MailUtil
     public static function autoCheckCvr($checks)
     {
         $mail = Yii::$app->mailer->compose('auto_check', ['checks' => $checks]);
-//        $channel_ids = array_unique(array_column($checks, 'channel_id'));
-//        $campaign_ids = array_unique(array_column($checks, 'campaign_id'));
-//        $oms = Channel::getUserEmailByChannel($channel_ids);
-//        $bds = Advertiser::getUserEmailByCampaign($campaign_ids);
-//        $pms =  Advertiser::getPMEmailByCampaign($campaign_ids);
-
         $mail->setTo('operations@superads.cn');
-//        $to = $oms;
-//        if (!empty($bds) ){
-//            $to = array_merge($to, $bds);
-//        }
-//        if (!empty($pms) ){
-//            $to = array_merge($to, $pms);
-//        }
-//        $mail->setTo(array_unique($to));
         $mail->setSubject('Anticheat - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -248,7 +234,6 @@ class MailUtil
             $cc = array_merge($cc, explode(';', $channel->cc_email));
         }
         $mail->setCc($cc);
-//        $mail->setTo('2539131080@qq.com');
         $mail->setSubject('Creative Update - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -288,7 +273,6 @@ class MailUtil
     {
 //        $user_id = Yii::$app->user->id;
         $mail = Yii::$app->mailer->compose('good_campaign', ['campaigns' => $campaigns,'channel' =>$channel ]);
-//        $mail->setTo("2539131080@qq.com");
         $mail->setTo($channel->email);
 //        if (isset($channel->om0)) {
 //            $mail->setCc($channel->om0->email);
@@ -321,7 +305,6 @@ class MailUtil
             $cc = array_merge($cc, explode(';', $advertiser->cc_email));
         }
         $mail->setCc($cc);
-//        $mail->setTo("2539131080@qq.com");
         $mail->setSubject('Number Confirm - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -344,7 +327,6 @@ class MailUtil
             'subChannels' =>$subChannels,'columnName' =>$dynamic_cols,'cols' => $col_len,'date_range' =>$date_range ]);
         $user_name = yii::$app->user->identity->username;
         $user = User::findOne(['username' => $user_name ]);
-//        $mail->setTo("2539131080@qq.com");
 //        $mail->setTo($channel->email);
         $mail->setTo($user->email);
 //        $mail->setTo($channel->email);
@@ -375,7 +357,6 @@ class MailUtil
         $channel = Channel::findIdentity($sts->channel_id);
         $mail = Yii::$app->mailer->compose('pause_sub_channel', ['sub_log' => $sts]);
         $mail->setTo($channel->email);
-//        $mail->setTo("2539131080@qq.com");
         $cc = array($channel->om0->email);
         if (!empty($channel->cc_email) && !empty(explode(';', $channel->cc_email))) {
             $cc = array_merge($cc, explode(';', $channel->cc_email));
@@ -414,7 +395,6 @@ class MailUtil
         $mail = Yii::$app->mailer->compose('auto_check_sub', ['checks' => $checks]);
 
         $mail->setTo('operations@superads.cn');
-        //$mail->setTo('2539131080@qq.com');
         $mail->setSubject('Sub Chid Anticheat - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -438,7 +418,6 @@ class MailUtil
         $mail = Yii::$app->mailer->compose('auto_check_low_margin', ['checks' => $checks]);
 
         $mail->setTo('operations@superads.cn');
-//        $mail->setTo('2539131080@qq.com');
         $mail->setSubject(' Low Margin Notice - SuperADS');
         $isSend = 0;
         if ($mail->send()) {
@@ -457,7 +436,6 @@ class MailUtil
     public static function sendMailFromBackend($channel,$campaign,$content)
     {
         $mail= Yii::$app->mailer->compose();
-//$mail->setTextBody('zheshisha ');   //发布纯文字文本
         $mail->setHtmlBody($content);    //发布可以带html标签的文本
 //        $mail->setTo('2539131080@qq.com');
         $mail->setTo($channel->email);
