@@ -46,6 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
 //            ['class' => 'yii\grid\SerialColumn'],
 //
                         'id',
+                        [
+                            'attribute' => 'level',
+                            'value' => function ($model) {
+                                return ModelsUtil::getChannelLevel($model->level);
+                            },
+                            'filter' => ModelsUtil::channel_level
+                        ],
                         'username',
 //            'firstname',
 //            'lastname',
@@ -100,12 +107,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'traffic_source',
                         // 'pricing_mode',
                         // 'post_back',
-                        'total_revenue',
-                        'payable',
-                        'paid',
+//                        'total_revenue',
+//                        'payable',
+//                        'paid',
+                         'strong_geo',
+                         'strong_category',
                         'note:text',
-                        // 'strong_geo',
-                        // 'strong_catagory',
+
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

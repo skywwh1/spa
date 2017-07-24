@@ -12,6 +12,13 @@ $this->title = 'Channel List';
 $this->params['breadcrumbs'][] = $this->title;
 $columns = [
     'id',
+    [
+        'attribute' => 'level',
+        'value' => function ($model) {
+            return ModelsUtil::getChannelLevel($model->level);
+        },
+        'filter' => ModelsUtil::channel_level
+    ],
     'username',
     [
         'attribute' => 'om_name',
@@ -104,6 +111,13 @@ $columns = [
                             ],
                         ],
                         'id',
+                        [
+                            'attribute' => 'level',
+                            'value' => function ($model) {
+                                return ModelsUtil::getChannelLevel($model->level);
+                            },
+                            'filter' => ModelsUtil::channel_level
+                        ],
                         'username',
                         [
                             'attribute' => 'om_name',
@@ -129,9 +143,9 @@ $columns = [
                             },
                             'filter' => ModelsUtil::advertiser_status,
                         ],
-                        'total_revenue',
-                        'payable',
-                        'paid',
+//                        'total_revenue',
+//                        'payable',
+//                        'paid',
                         [
                             'attribute' => 'recommended',
                             'value' => function ($data) {
@@ -139,6 +153,8 @@ $columns = [
                             },
                             'filter' => ModelsUtil::status,
                         ],
+                         'strong_geo',
+                        'strong_category',
                         'note:text',
                     ],
                 ]); ?>

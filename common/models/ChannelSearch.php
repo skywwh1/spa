@@ -81,6 +81,7 @@ class ChannelSearch extends Channel
             'ch.pricing_mode' => $this->pricing_mode,
             'ch.total_revenue' => $this->total_revenue,
             'ch.payable' => $this->payable,
+            'ch.level' => $this->level,
 //            'os' => $this->os,
             'ch.recommended' => $this->recommended,
         ]);
