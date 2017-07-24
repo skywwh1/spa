@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 // 'label' => 'channel_id',
-                                'attribute' => 'channel_id',
+                                'attribute' => 'channel_name',
                                 'value' => 'channel.username',
                             ],
                             [
