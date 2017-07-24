@@ -86,7 +86,7 @@ use common\models\Platform;
                     <?= $form->field($model, 'daily_cap')->textInput(['maxlength' => true]) ?>
 
                     <?= $form->field($model, 'pay_out')->dropDownList([
-                            '0'=>'Payout',
+                            0=>'Payout',
                             1=>'ADV price'
                     ]) ?>
 
