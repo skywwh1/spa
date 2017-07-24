@@ -14,6 +14,7 @@ class CampaignChannelLogSearch extends CampaignChannelLog
     public $campaign_name;
     public $geo;
     public $platform;
+    public $channel_name;
 
     /**
      * @inheritdoc
@@ -159,4 +160,25 @@ class CampaignChannelLogSearch extends CampaignChannelLog
 
         return $dataProvider;
     }
+
+    /**
+     * @return ActiveDataProvider
+     */
+    public function deliverNewSearch()
+    {
+        $query = CampaignChannelLog::find();
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $query->joinWith('channel ch');
+        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
+            ->andFilterWhere(['is_read' => 0])
+            ->orderBy('create_time desc');
+        return $dataProvider;
+    }
+
 }

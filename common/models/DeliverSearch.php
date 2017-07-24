@@ -173,28 +173,6 @@ class DeliverSearch extends Deliver
     /**
      * @return ActiveDataProvider
      */
-    public function deliverNewSearch()
-    {
-        $query = Deliver::find();
-        // add conditions that should always apply here
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
-
-        // grid filtering conditions
-        $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
-
-        $query->joinWith('channel ch');
-        $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
-            ->andFilterWhere(['is_read' => 0])
-            ->orderBy('create_time desc');
-        return $dataProvider;
-    }
-
-    /**
-     * @return ActiveDataProvider
-     */
     public function antiCheatCvrSearch()
     {
         $query = LogAutoCheck::find();

@@ -1,83 +1,123 @@
 <?php
 
-use kartik\grid\GridView;
-use yii\bootstrap\Modal;
+use common\models\Platform;
 use yii\helpers\Html;
-
+use yii\grid\GridView;
+use yii\widgets\Pjax;
+use common\models\PriceModel;
 /* @var $this yii\web\View */
-/* @var $searchModel common\models\DeliverSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'S2S Log';
+$this->title = 'New Offers';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div id="nav-menu" data-menu="deliver_index"></div>
-<div class="row">
-    <div class="col-lg-12">
-        <div class="box box-info ">
-            <div class="box-body">
+<div id="nav-menu" data-menu="myoffers"></div>
+<div class="campaign-channel-log-index">
 
-                <?= GridView::widget([
-                    'id' => 'applying_list',
-                    'dataProvider' => $dataProvider,
-                    'pjax' => true, // pjax is set to always true for this demo
-                    'responsive' => true,
-                    'hover' => true,
-                    'columns' => [
-                        'campaign_id',
-                        'campaign.campaign_name',
-                        'campaign.platform',
-                        'campaign.target_geo',
-                        'pay_out',
-                        [
-                            'attribute'=>  'campaign.preview_link',
-                            'value' => function ($model) {
-                                if (empty($model->campaign->preview_link)){
-                                    return "";
-                                }else{
-                                    return Html::a($model->campaign->preview_link,$model->campaign->preview_link, ['target' => '_blank']);
-                                }
-                            },
-                            'format' => 'raw',
-                        ],
-                        [
-                            'attribute'=>  'track_url',
-                            'value' => function ($model) {
-                                if (empty($model->track_url)){
-                                    return "";
-                                }else{
-                                    return \yii\helpers\Url::to('@track' . $model->track_url);
-                                }
-                            },
-                            'format' => 'raw',
-                        ],
-                        'campaign.traffic_source',
-                        'daily_cap',
-                        'kpi',
-                        'note',
-                        'campaign.carriers',
-                    ],
-                ]); ?>
-            </div>
-        </div>
-    </div>
-</div>
-<?php
-$this->registerJsFile(
-    '@web/js/deliver.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
-?>
-<?php Modal::begin([
-    'id' => 'deliver-modal',
-    'size' => 'modal-md',
-//    'header' =>'00',
-    'clientOptions' => [
-        'backdrop' => 'static',
-        'keyboard' => false,
-    ],
-]);
+    <h3><?= Html::encode($this->title) ?></h3>
+    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-echo '<div id="deliver-detail-content"></div>';
-
-Modal::end(); ?>
+    <?php Pjax::begin(); ?>    <?= GridView::widget([
+        'dataProvider' => $dataProvider,
+//        'showHeader'=>false,
+        'columns' => [
+            'campaign_id',
+//            'campaign.campaign_name',
+            [
+                'label' => 'Campaign Name',
+                'attribute' => 'campaign_name',
+                'value' => 'campaign.campaign_name',
+                'filter' => true,
+            ],
+//            'adv_price',
+            //'pricing_mode',
+//            [
+//                'attribute' => 'pricing_mode',
+//                'value' => function ($data) {
+//                    return ModelsUtil::getPricingMode($data->pricing_mode);
+//                },
+//                'filter' => ModelsUtil::pricing_mode,
+//            ],
+            [
+                'attribute' => 'pricing_mode',
+                'value' => function ($data) {
+                    return ModelsUtil::getPricingModeNew($data->pricing_mode);
+                },
+                'filter' =>  PriceModel::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column(),
+            ],
+            [
+                'attribute' => 'pay_out',
+//                'filter' => false,
+            ],
+//            'daily_cap',
+            [
+                'attribute' => 'daily_cap',
+//                'filter' => false,
+            ],
+            [
+                'label' => 'GEO',
+                'attribute' => 'geo',
+                'value' => 'campaign.geo',
+                'filter' => true,
+            ],
+            [
+                'label' => 'Platform',
+                'attribute' => 'platform',
+                'value' => 'campaign.platform',
+                'filter' => \common\models\Platform::find()
+                    ->select(['name', 'value'])
+                    ->orderBy('id')
+                    ->indexBy('value')
+                    ->column()
+            ],
+//             'actual_discount',
+//             'discount',
+            //'is_run',
+//            [
+//                'label' => 'Running',
+//                'attribute' => 'is_run',
+//                'value' => function ($data) {
+//                    return ModelsUtil::getStatus($data->is_run);
+//                },
+//                'filter' => ModelsUtil::status,
+//            ],
+//             'creator',
+//             'create_time:datetime',
+//             'update_time:datetime',
+//             'track_url:url',
+//            'click',
+//            [
+//                'attribute' => 'click',
+//                'filter' => false,
+//            ],
+////            'unique_click',
+//            [
+//                'attribute' => 'unique_click',
+//                'filter' => false,
+//            ],
+////            'install',
+//            [
+//                'attribute' => 'install',
+//                'filter' => false,
+//            ],
+//             'cvr',
+//             'cost',
+//             'match_install',
+//             'match_cvr',
+//             'revenue',
+//             'def',
+//             'deduction_percent',
+//             'profit',
+//             'margin',
+//             'note',
+            [
+                'class' => 'yii\grid\ActionColumn', 'template' => '{view}',
+                'header' => 'Detail',
+            ],
+        ],
+    ]); ?>
+    <?php Pjax::end(); ?></div>

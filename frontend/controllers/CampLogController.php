@@ -226,7 +226,7 @@ class CampLogController extends Controller
      * @return string
      */
     public function actionDeliverNew(){
-        $searchModel = new DeliverSearch();
+        $searchModel = new CampaignChannelLogSearch();
         $searchModel->channel_name = Yii::$app->user->identity->username;
         $dataProvider = $searchModel->deliverNewSearch();
 
