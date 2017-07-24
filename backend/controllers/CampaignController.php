@@ -66,7 +66,8 @@ class CampaignController extends Controller
                             'export-email',
                             'add-cart-batch',
                             'mobair-index',
-                            'clickad-index'
+                            'clickad-index',
+                            'other-index',
 
                         ],
                         'allow' => true,
@@ -582,6 +583,22 @@ class CampaignController extends Controller
         $dataProvider = $searchModel->clickadSearch(Yii::$app->request->queryParams);
 
         return $this->render('clickad_index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Campaign models.
+     * @return mixed
+     */
+    public function actionOtherIndex()
+    {
+//        $this->layout='mylayout';
+        $searchModel = new CampaignSearch();
+        $dataProvider = $searchModel->otherSearch(Yii::$app->request->queryParams);
+
+        return $this->render('other_index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
