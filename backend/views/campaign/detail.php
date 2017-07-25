@@ -73,7 +73,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                     ];
                     $campaign_ids = implode(",",$keys);
-                    var_dump($campaign_ids);
                     $fullExportMenu = ExportMenu::widget([
                         'dataProvider' => $dataProvider,
                         'columns' => $systemColumns,
