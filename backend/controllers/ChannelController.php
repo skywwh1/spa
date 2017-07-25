@@ -157,11 +157,16 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $old_status = $model->status;
         $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeCreate($model);
-
             if ($model->save()) {
+                $new_status = $model->status;
+                if(!empty($old_status) && !empty($new_status)
+                    && strcmp($old_status,$new_status)!=0 && $new_status == 1){
+                    MailUtil::sendChannelInfo($model);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }

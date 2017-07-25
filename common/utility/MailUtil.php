@@ -450,4 +450,21 @@ class MailUtil
         $param = array('type' => 'from backend', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
     }
+
+
+    public static function sendChannelInfo($channel)
+    {
+        $mail = Yii::$app->mailer->compose('channel_info', ['channel' => $channel]);
+        $mail->setTo($channel->email);
+        if (isset($channel->om0)) {
+            $mail->setCc($channel->om0->email);
+        }
+        $mail->setSubject('account create success!');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'channel info', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+    }
 }
