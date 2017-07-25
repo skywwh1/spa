@@ -107,6 +107,8 @@ class HeadWay
         }
         $camp->daily_cap = $daily_cap;
         $camp->target_geo = $model->target_geo;
+        $camp->target_geo = str_replace('0:', '', $camp->target_geo);
+        $camp->target_geo = str_replace(';', '', $camp->target_geo);
         $camp->adv_link = substr($model->adv_link, 0, stripos($model->adv_link, '?'));
         if (empty($camp->note)) {
             $camp->note = $model->note . PHP_EOL . $model->description;
