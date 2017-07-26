@@ -865,7 +865,7 @@ class CountController extends Controller
         $stats->checkCvr($start);
         $stats->checkCap();
         Config::updateLastCheckCvr($end);
-
+        $stats->sendPausedCampaign();
     }
 
     public function actionCheckSubCvr()
