@@ -1139,6 +1139,8 @@ class StatsUtil
     public function sendPausedCampaign()
     {
        $cams =  CampaignApiStatusLog::findAll(['status'=>0]);
-       MailUtil::autoCheckApiPause($cams);
+       if(!empty($cams)){
+           MailUtil::autoCheckApiPause($cams);
+       }
     }
 }
