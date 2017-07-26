@@ -13,6 +13,7 @@ use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\ApiCampaigns;
 use common\models\Campaign;
+use common\models\CampaignApiStatusLog;
 use common\models\Deliver;
 use linslin\yii2\curl\Curl;
 use yii\db\BaseActiveRecord;
@@ -188,6 +189,9 @@ class ApiUtil
                 }
                 $item->status = 2;
                 if ($item->save()) {
+                    $pause = new CampaignApiStatusLog();
+                    $pause->campaign_id = $item->id;
+                    $pause->save();
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
