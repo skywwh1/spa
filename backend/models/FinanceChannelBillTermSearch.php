@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\utility\TimeZoneUtil;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -24,8 +25,8 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift','om'], 'safe'],
-            [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift','om','start_time','end_time','status'], 'safe'],
+            [['channel_id', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
         ];
     }
@@ -204,24 +205,28 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
         if (!$this->validate()) {
             return $dataProvider;
         }
+        $start = TimeZoneUtil::getPrevMonthLastDayTime($this->start_time);
+        $end_time = TimeZoneUtil::getNextMonthFirstDayTime($this->end_time);
 
-        // grid filtering conditions
         $query->andFilterWhere([
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
             'fcb.status' => $this->status,
             'update_time' => $this->update_time,
             'create_time' => $this->create_time,
         ]);
 
         $query->leftJoin('channel ch','fcb.channel_id = ch.id');
+        $query->leftJoin('user u','ch.om = u.id');
 
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
-            ->andFilterWhere(['like', 'period', $this->period])
+//            ->andFilterWhere(['like', 'period', $period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
-            ->andFilterWhere(['in', 'fcb.status', [6,7,8]]);
-
-        $query->andFilterWhere(['like', 'ch.username', $this->channel_name]);
+            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'u.username', $this->om])
+            ->andFilterWhere(['>','fcb.start_time',$start])
+            ->andFilterWhere(['<','fcb.end_time',$end_time]);
+        if (empty($this->status)){
+            $query->andFilterWhere(['in', 'fcb.status', [6,7,8]]);
+        }
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);

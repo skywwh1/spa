@@ -57,22 +57,23 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'label' => 'adv_id',
                                 'attribute' => 'adv_name',
                                 'value' => 'adv.username',
+                                'filter' => false,
                             ],
                             [
                                 'attribute' => 'cost',
                                 'value' => 'cost',
                                 'filter' => false,
                             ],
-//                            [
-//                                'attribute' => 'payable',
-//                                'value' => 'payable',
-//                                'filter' => false,
-//                            ],
-//                            [
-//                                'attribute' => 'final_cost',
-//                                'value' => 'final_cost',
-//                                'filter' => false,
-//                            ],
+                            [
+                                'attribute' => 'cha_payable',
+                                'value' => 'cha_payable',
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'cha_paid',
+                                'value' => 'cha_paid',
+                                'filter' => false,
+                            ],
                             [
                                 'label' => 'revenue',
                                 'attribute' => 'revenue',
@@ -85,6 +86,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
+                                'label' => 'received',
                                 'attribute' => 'final_revenue',
                                 'value' => 'final_revenue',
                                 'filter' => false,
@@ -94,11 +96,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'actual_margin',
                                 'filter' => false,
                             ],
-//                            [
-//                                'label' => 'cash_flow',
-//                                'attribute' => 'cash_flow',
-//                                'value' => 'cash_flow',
-//                            ],
+                            [
+                                'label' => 'cash_flow',
+                                'attribute' => 'cash_flow',
+                                'value' => function ($model){
+                                    return $model->cha_paid-$model->cost;
+                                }
+                            ],
                             [
                                 'attribute' => 'period',
                                 'value' => 'period',
@@ -120,9 +124,3 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
-<?php
-$this->registerJsFile(
-    '@web/js/finance-pending-campaign.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
-?>

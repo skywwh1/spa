@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                              ],
                             [
-                                 'attribute' => 'final_cost',
+                                 'attribute' => 'paid',
                                  'value' => 'final_cost',
                                 'filter' => false,
                              ],
@@ -93,11 +93,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'actual_margin',
                                 'filter' => false,
                             ],
-//                            [
-//                                'label' => 'cash_flow',
-//                                'attribute' => 'cash_flow',
-//                                'value' => 'cash_flow',
-//                            ],
+                            [
+                                'label' => 'cash_flow',
+                                'attribute' => 'cash_flow',
+                                'value' => function ($model){
+                                    return $model->adv_received-$model->final_cost;
+                                }
+                            ],
                             [
                                 'attribute' => 'period',
                                 'value' => 'period',
@@ -116,8 +118,4 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 <?php
-$this->registerJsFile(
-    '@web/js/finance-pending-campaign.js',
-    ['depends' => [\yii\web\JqueryAsset::className()]]
-);
 ?>

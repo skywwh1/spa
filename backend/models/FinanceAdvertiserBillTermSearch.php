@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\utility\TimeZoneUtil;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -22,8 +23,8 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','adv_name','payment_term','bd','pm'], 'safe'],
-            [['adv_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','adv_name','payment_term','bd','pm','start_time', 'end_time', 'status', ], 'safe'],
+            [['adv_id', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'receivable'], 'number'],
         ];
     }
@@ -205,21 +206,24 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
         // grid filtering conditions
         $query->andFilterWhere([
             'adv_id' => $this->adv_id,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
             'fab.status' => $this->status,
             'update_time' => $this->update_time,
             'create_time' => $this->create_time,
         ]);
 
+        $start = TimeZoneUtil::getPrevMonthLastDayTime($this->start_time);
+        $end_time = TimeZoneUtil::getNextMonthFirstDayTime($this->end_time);
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
             ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
             ->andFilterWhere(['in', 'fab.status', [6,7,8]])
             ->andFilterWhere(['like', 'adv.payment_term', $this->payment_term])
-            ->andFilterWhere(['like', 'u.username', $this->bd])
-            ->andFilterWhere(['like', 'adv.username', $this->adv_name]);
+            ->andFilterWhere(['like', 'u0.username', $this->bd])
+            ->andFilterWhere(['like', 'u1.username', $this->pm])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name])
+            ->andFilterWhere(['>','fab.start_time',$start])
+            ->andFilterWhere(['<','fab.end_time',$end_time]);
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);

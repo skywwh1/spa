@@ -24,14 +24,14 @@ use yii\widgets\ActiveForm;
                     <?php
                     echo '<label class="control-label">Date</label>';
                     echo DatePicker::widget([
-                        'name' => 'FinanceChannelBillTermSearch[start]',
-                        'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'name' => 'FinanceChannelBillTermSearch[start_time]',
+                        'value' => isset($model->start_time) ? $model->start_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
                         'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'FinanceChannelBillTermSearch[end]',
-                        'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'name2' => 'FinanceChannelBillTermSearch[end_time]',
+                        'value2' => isset($model->end_time) ? $model->end_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
                         'pluginOptions' => [
                             'autoclose' => true,
-                            'format' => 'yyyy-mm-dd'
+                            'format' => 'yyyy-mm'
                         ]
                     ]);
                     ?>
@@ -78,8 +78,8 @@ use yii\widgets\ActiveForm;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'status')->dropDownList(
                             [
-                                6 => 'Receivable',
-                                7 => 'Received',
+                                6 => 'Payable',
+                                7 => 'Paid',
                                 8 => 'Overdue',
                             ],
                             ['prompt' => '-- select --']) ?>
