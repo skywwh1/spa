@@ -47,6 +47,7 @@ class EventReportController extends Controller
         $date->format('Y-m-d');
         $searchModel->start = $date->format('Y-m-d');
         $searchModel->end = $date->format('Y-m-d');
+
         switch ($searchModel->type) {
             case 1:
                 $dataProvider = $searchModel->SummarySearch(Yii::$app->request->queryParams);
@@ -55,6 +56,14 @@ class EventReportController extends Controller
             case 2:
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
                 $dataProvider_column = $searchModel->dynamicDailySearch(Yii::$app->request->queryParams);
+                break;
+            case 3:
+                $dataProvider = $searchModel->subDailySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->subDynamicDailySearch(Yii::$app->request->queryParams);
+                break;
+            case 4:
+                $dataProvider = $searchModel->subSummarySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->subDynamicSummarySearch(Yii::$app->request->queryParams);
                 break;
             default:
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
@@ -69,29 +78,56 @@ class EventReportController extends Controller
         $dynamic_cols = [];
         $match_cols = [];
         if (!empty($models) && !(empty($columns))) {
-            foreach ($models as $model) {
-                $flag = 0;
-                foreach ($columns as $column) {
-                    if ($model['campaign_id'] == $column->campaign_id
-                        && $model['channel_id'] == $column->channel_id
-                        && $model['sub_channel'] == $column->ch_subid
-                        && $model['timestamp'] == $column->timestamp
-                    ) {
-                        $model['column_name'][$column->event] = $column->total;
-                        $cols[$column->event] = $column->total;
+            if ($searchModel->type == 3 || $searchModel->type == 4){
+                foreach ($models as $model) {
+                    $flag = 0;
+                    foreach ($columns as $column) {
+                        if ($model['campaign_id'] == $column->campaign_id
+                            && $model['channel_id'] == $column->channel_id
+                            && $model['sub_channel'] == $column->ch_subid
+                            && $model['timestamp'] == $column->timestamp
+                        ) {
+                            $model['column_name'][$column->event] = $column->total;
+                            $cols[$column->event] = $column->total;
 
-                        $model['match_column'][$column->event] = $column->match_total;
-                        $cols[$column->event] = $column->match_total;
-                        $flag = 1;
+                            $model['match_column'][$column->event] = $column->match_total;
+                            $cols[$column->event] = $column->match_total;
+                            $flag = 1;
+                        }
+                    }
+                    if ($flag == 0){
+                        $model['column_name']['none'] = 0;
+                        $model['match_column']['none'] = 0;
+                    }
+                    if (!empty($model['column_name'])) {
+                        $dynamic_cols[] = $model['column_name'];
+                        $match_cols[] = $model['match_column'];
                     }
                 }
-                if ($flag == 0){
-                    $model['column_name']['none'] = 0;
-                    $model['match_column']['none'] = 0;
-                }
-                if (!empty($model['column_name'])) {
-                    $dynamic_cols[] = $model['column_name'];
-                    $match_cols[] = $model['match_column'];
+            } else{
+                foreach ($models as $model) {
+                    $flag = 0;
+                    foreach ($columns as $column) {
+                        if ($model['campaign_id'] == $column->campaign_id
+                            && $model['channel_id'] == $column->channel_id
+                            && $model['timestamp'] == $column->timestamp
+                        ) {
+                            $model['column_name'][$column->event] = $column->total;
+                            $cols[$column->event] = $column->total;
+
+                            $model['match_column'][$column->event] = $column->match_total;
+                            $cols[$column->event] = $column->match_total;
+                            $flag = 1;
+                        }
+                    }
+                    if ($flag == 0){
+                        $model['column_name']['none'] = 0;
+                        $model['match_column']['none'] = 0;
+                    }
+                    if (!empty($model['column_name'])) {
+                        $dynamic_cols[] = $model['column_name'];
+                        $match_cols[] = $model['match_column'];
+                    }
                 }
             }
         }

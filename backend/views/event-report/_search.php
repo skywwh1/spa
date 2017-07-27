@@ -58,6 +58,8 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'type')->dropDownList([
                         2 => 'Daily',
                         1 => 'Summary',
+                        3 => 'sub Daily',
+                        4 => 'sub Summary',
                     ]) ?>
                 </div>
                 <div class="col-lg-2">

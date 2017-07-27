@@ -22,8 +22,9 @@ if ($searchModel->type == 2) {
     $layout = '{toolbar}{summary} {items} {pager}';
 }
 $time_row = [];
+$ch_sub = [];
 if (!empty($searchModel->type)) {
-    if ($searchModel->type == 2) {
+    if ($searchModel->type == 2 || $searchModel->type == 3) {
         $format = 'php:Y-m-d';
         $time_row = [
             'label' => 'Time(UTC)',
@@ -39,6 +40,14 @@ if (!empty($searchModel->type)) {
             'filter' => false,
         ];
     }
+    if ($searchModel->type == 3 || $searchModel->type == 4) {
+        $ch_sub =[
+            // 'label' => 'channel_id',
+            'attribute' => 'sub_channel',
+            'value' => 'sub_channel',
+            'filter' => false,
+        ];
+    }
 }
 $columns = [
     [
@@ -51,12 +60,6 @@ $columns = [
         // 'label' => 'channel_id',
         'attribute' => 'channel_id',
         'value' => 'channel_id',
-        'filter' => false,
-    ],
-    [
-        // 'label' => 'channel_id',
-        'attribute' => 'sub_channel',
-        'value' => 'sub_channel',
         'filter' => false,
     ],
     [
@@ -78,7 +81,10 @@ $columns = [
         'pageSummary' => true
     ],
 ];
-if (!empty($searchModel->type) && $searchModel->type == 2) {
+if (!empty($searchModel->type) && ($searchModel->type == 3 || $searchModel->type == 4)) {
+    array_unshift($columns, $ch_sub);
+}
+if (!empty($searchModel->type) && ($searchModel->type == 2 || $searchModel->type == 3)) {
     array_unshift($columns, $time_row);
 }
 foreach($cols as $k=>$value){
@@ -86,7 +92,7 @@ foreach($cols as $k=>$value){
         'label' => $k,
         'value'=> function ($model,$key,$index) use ($k,$column_names){
             if (array_key_exists($k,$column_names[$index])){
-                return $column_names[$index][$k];
+                return empty($model['installs'])?0:'('.$column_names[$index][$k].')'.($column_names[$index][$k]/$model['installs']*100).'%';
             }else{
                 return '--';
             }
