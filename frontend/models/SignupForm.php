@@ -3,6 +3,7 @@
 namespace frontend\models;
 
 use common\models\Channel;
+use common\utility\MailUtil;
 use yii\base\Model;
 
 /**
@@ -87,6 +88,7 @@ class SignupForm extends Model
             $this->addErrors($this->_channel->getErrors());
             if (!$this->hasErrors()) {
                 if ($this->_channel->save()) {
+                    MailUtil::sendCreateChannel($this->_channel);
                     return $this->_channel;
                 }
             }

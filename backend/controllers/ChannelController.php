@@ -140,6 +140,9 @@ class ChannelController extends Controller
             $this->beforeCreate($model);
 
             if ($model->save()) {
+                if(!empty($model->status) && $model->status == 1){
+                    MailUtil::sendChannelInfo($model);
+                }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         }
