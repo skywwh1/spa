@@ -5,6 +5,7 @@ namespace backend\controllers;
 use common\models\ChannelReportSearch;
 use common\models\Deliver;
 use common\models\ReportAdvSearch;
+use common\models\ReportCampaignSummarySearch;
 use common\models\ReportChannelSearch;
 use common\models\ReportSearch;
 use common\models\ReportSubChannelSearch;
@@ -45,6 +46,7 @@ class ReportController extends Controller
                             'report-adv',
                             'report-summary',
                             'report-sub-channel',
+                            'campaign-summary',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -253,6 +255,42 @@ class ReportController extends Controller
         }
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         return $this->render('report_sub_channel', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'summary' => $summary,
+        ]);
+    }
+
+    /**
+     * Lists all Deliver models.
+     * @return mixed
+     */
+    public function actionCampaignSummary()
+    {
+        $searchModel = new ReportCampaignSummarySearch();
+
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
+        if (!empty(Yii::$app->request->queryParams)) {
+            $searchModel->load(Yii::$app->request->queryParams);
+            $type = $searchModel->type;
+            if ($type == 1) {
+                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
+            } else if ($type == 2) {
+                $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+            } else {
+                $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
+            }
+        }
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
+
+        return $this->render('campaign-summary', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'summary' => $summary,

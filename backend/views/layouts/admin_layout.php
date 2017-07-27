@@ -310,6 +310,12 @@ AdminAsset::register($this);
                         <?php } ?>
                         <li><a href="/report/index" data-menu="report-index"><i class="fa fa-circle-o"></i> Campaign
                                 Reports</a></li>
+                        <?php
+                        if (Yii::$app->user->can('admin') || Yii::$app->user->can('pm')) {
+                        ?>
+                        <li><a href="/report/campaign-summary" data-menu="report-campaign-summary"><i class="fa fa-circle-o"></i> Campaign
+                                Summary</a></li>
+                        <?php } ?>
                         <li><a href="/event-report/index" data-menu="event-report-index"><i class="fa fa-circle-o"></i> Event
                                 Reports</a></li>
                         <li><a href="/log-feed/index" data-menu="log-feed-index"><i class="fa fa-circle-o"></i> Match
