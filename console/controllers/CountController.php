@@ -515,6 +515,7 @@ class CountController extends Controller
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
                     $item->receivable = $campaign_bill->revenue;
                     $item->final_revenue = $campaign_bill->revenue;
+                    $item->report_cost = $campaign_bill->cost;
                 }
                 $this->countAdvBill($item);
                 $item->status = 1;
@@ -615,6 +616,7 @@ class CountController extends Controller
                     $item->redirect_cost = $campaign_bill->redirect_cost;
                     $item->revenue = $campaign_bill->revenue;
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
+                    $item->report_revenue = $campaign_bill->revenue;
                 }
                 $this->countChannelBill($item);
                 $item->status = 1;
@@ -951,6 +953,7 @@ class CountController extends Controller
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
                     $item->receivable = $campaign_bill->revenue;
                     $item->final_revenue = $campaign_bill->revenue;
+                    $item->report_cost = $campaign_bill->cost;
                 }
                 $this->countAdvBillApr($item);
                 $item->status = 1;
@@ -1087,6 +1090,7 @@ class CountController extends Controller
                     $item->redirect_cost = $campaign_bill->redirect_cost;
                     $item->revenue = $campaign_bill->revenue;
                     $item->redirect_revenue = $campaign_bill->redirect_revenue;
+                    $item->report_revenue = $campaign_bill->revenue;
                 }
                 $this->countChannelBillApr($item);
                 $item->status = 1;

@@ -163,4 +163,35 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
         $query->andWhere(['adv_id' => $adv_id]);
         return $query->one();
     }
+
+    /**
+     * @param $period
+     * @param $status
+     * @param $channel
+     * @param $advs
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public static function getReceivedOrReceivablePerMonthByAdv($period,$status,$channel,$advs){
+
+        $query = static::find();
+        $query->alias("fab");
+
+        $query->select([
+            'sum(fab.revenue) revenue',
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'fab.channel_id' => $channel,
+            'a.period' => $period,
+        ]);
+        $query->from("finance_advertiser_campaign_bill_term fab");
+        $query->joinWith('bill a');
+
+        $query->andFilterWhere(['in', 'fab.adv_id', $advs])
+//            ->andFilterWhere(['like', 'fab.time_zone', $this->time_zone])
+            ->andFilterWhere(['<>', 'fab.revenue', 0])
+            ->andFilterWhere(['a.status' => $status]);
+        return $query->one();
+    }
 }

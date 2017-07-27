@@ -276,13 +276,13 @@ class Channel extends ActiveRecord implements IdentityInterface
         return parent::beforeSave($insert);
     }
 
-    public function afterSave($insert, $changedAttributes)
-    {
-        parent::afterSave($insert, $changedAttributes);
-        if ($insert) {
-            MailUtil::sendCreateChannel($this);
-        }
-    }
+//    public function afterSave($insert, $changedAttributes)
+//    {
+//        parent::afterSave($insert, $changedAttributes);
+//        if ($insert) {
+//            MailUtil::sendCreateChannel($this);
+//        }
+//    }
 
 
     public static function getChannelNameListByName($name)

@@ -246,7 +246,8 @@ class FinancePending extends \yii\db\ActiveRecord
 
                 $this->resetChannelBillIdNew($recent_not_ending_bill);//对于已经已经结款的单子，我们处理账单的时候需要重新关联到对应的账单
             }else{
-                //如果账单没有结束，则将解禁的账目放到本账单上面
+                //如果账单没有结束，则将解禁的账
+                //目放到本账单上面
                 $channel_bill->final_cost = $channel_bill->final_cost + $this->cost;
                 $channel_bill->payable = $channel_bill->payable + $this->cost;
                 $channel_bill->pending -= $this->cost;
