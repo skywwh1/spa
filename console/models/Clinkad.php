@@ -108,9 +108,9 @@ class Clinkad
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
                 if ($item->save()) {
-                    $pause = new CampaignApiStatusLog();
-                    $pause->campaign_id = $item->id;
-                    $pause->save();
+//                    $pause = new CampaignApiStatusLog();
+//                    $pause->campaign_id = $item->id;
+//                    $pause->save();
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
