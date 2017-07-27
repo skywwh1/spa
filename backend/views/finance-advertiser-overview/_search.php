@@ -24,14 +24,14 @@ use yii\widgets\ActiveForm;
                     <?php
                     echo '<label class="control-label">Date</label>';
                     echo DatePicker::widget([
-                        'name' => 'FinanceAdvertiserBillTermSearch[start]',
-                        'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'name' => 'FinanceAdvertiserBillTermSearch[start_time]',
+                        'value' => isset($model->start_time) ? $model->start_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
                         'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'FinanceAdvertiserBillTermSearch[end]',
-                        'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                        'name2' => 'FinanceAdvertiserBillTermSearch[end_time]',
+                        'value2' => isset($model->end_time) ? $model->end_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
                         'pluginOptions' => [
                             'autoclose' => true,
-                            'format' => 'yyyy-mm-dd'
+                            'format' => 'yyyy-mm'
                         ]
                     ]);
                     ?>

@@ -28,4 +28,33 @@ class TimeZoneUtil
         return $beginTheDay;
     }
 
+    public  static function getNextMonthFirstDay($date) {
+        return date('Y-m-d', strtotime(date('Y-m-01', strtotime($date)) . ' +1 month'));
+    }
+    public static function getNextMonthLastDay($date) {
+        return date('Y-m-d', strtotime(date('Y-m-01', strtotime($date)) . ' +2 month -1 day'));
+    }
+
+    public  static function getNextMonthFirstDayTime($date) {
+        return strtotime(date('Y-m-01', strtotime($date)) . ' +1 month');
+    }
+    public static function getNextMonthLastDayTime($date) {
+        return strtotime(date('Y-m-01', strtotime($date)) . ' +2 month -1 day');
+    }
+
+    public static function getPrevMonthFirstDay($date) {
+        return date('Y-m-d', strtotime(date('Y-m-01', strtotime($date)) . ' -1 month'));
+    }
+    public static function getPrevMonthLastDay($date) {
+        return date('Y-m-d', strtotime(date('Y-m-01', strtotime($date)) . ' -1 day'));
+    }
+
+    public static function getPrevMonthFirstDayTime($date) {
+        return strtotime(date('Y-m-01', strtotime($date)) . ' -1 month');
+    }
+    public static function getPrevMonthLastDayTime($date) {
+        return strtotime(date('Y-m-01', strtotime($date)) . ' -1 day');
+    }
+
+
 }

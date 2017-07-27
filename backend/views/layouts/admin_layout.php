@@ -345,6 +345,19 @@ AdminAsset::register($this);
                         </li>
                         <li><a href="/finance-channel-bill-term/index" data-menu="finance-channel-bill-term-index"><i class="fa fa-circle-o"></i> Channel Payable</a>
                         </li>
+                        <?php
+                        if (Yii::$app->user->can('admin')) {
+                            ?>
+                            <li><a href="/finance-advertiser-overview/index" data-menu="finance-advertiser-overview-index"><i class="fa fa-circle-o"></i> Advertiser Overview</a>
+                            </li>
+                        <?php } ?>
+                        <?php
+                        if (\Yii::$app->user->can('admin')) {
+                            ?>
+                            <li><a href="/finance-channel-overview/index" data-menu="finance-channel-overview-index"><i class="fa fa-circle-o"></i> Channel Overview</a>
+                            </li>
+                        }
+                        <?php } ?>
                     </ul>
                 </li>
                 <?php

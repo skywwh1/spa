@@ -41,22 +41,24 @@ class FinanceChannelOverviewController extends \yii\web\Controller
     public function actionIndex()
     {
         $searchModel = new FinanceChannelBillTermSearch();
+        $searchModel->load(Yii::$app->request->queryParams);
         $dataProvider = $searchModel->overviewSearch(Yii::$app->request->queryParams);
 
         $models = $dataProvider->getModels();
-        foreach ($models as $item) {
-            $campaign_ids = $item->campaigns;
-            $advs = [];
-            foreach ($campaign_ids as $camp) {
-                $adv = $camp->advertiser;
-                $advs[] = $adv;
+        if (!empty($models)){
+            foreach ($models as $item) {
+                $campaign_ids = $item->campaigns;
+                $advs = [];
+                foreach ($campaign_ids as $camp) {
+                    $adv = $camp->advertiser;
+                    $advs[] = $adv;
+                }
+                $advs = array_unique($advs);
+                $receivable = FinanceAdvertiserCampaignBillTerm::getReceivedOrReceivablePerMonthByAdv($item->period, 6, $item->channel_id, $advs);
+                $received = FinanceAdvertiserCampaignBillTerm::getReceivedOrReceivablePerMonthByAdv($item->period,7, $item->channel_id, $advs);
+                $item->adv_receivable = $receivable->revenue;
+                $item->adv_received = $received->revenue;
             }
-            $advs = array_unique($advs);
-            $receivable = FinanceAdvertiserCampaignBillTerm::getReceivedOrReceivablePerMonthByAdv($item->period, 6, $item->channel_id, $advs);
-            $received = FinanceAdvertiserCampaignBillTerm::getReceivedOrReceivablePerMonthByAdv($item->period,7, $item->channel_id, $advs);
-            $item->adv_receivable = $receivable->revenue;
-            $item->adv_received = $received->revenue;
-
         }
         return $this->render('index', [
             'searchModel' => $searchModel,

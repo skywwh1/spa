@@ -4,6 +4,7 @@ namespace backend\models;
 
 use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\Channel;
 use DateTime;
 use DateTimeZone;
 use Yii;
@@ -59,6 +60,8 @@ use Yii;
 class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
 {
     public $user_id;
+    public $cha_paid;
+    public $cha_payable;
     /**
      * @inheritdoc
      */
@@ -175,6 +178,14 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
     public function getFinanceDeductions()
     {
         return $this->hasMany(FinanceDeduction::className(), ['adv_bill_id' => 'bill_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChannels()
+    {
+        return $this->hasMany(Channel::className(), ['id' => 'channel_id'])->viaTable('finance_advertiser_campaign_bill_term', ['bill_id' => 'bill_id']);
     }
 
     public function beforeSave($insert)
