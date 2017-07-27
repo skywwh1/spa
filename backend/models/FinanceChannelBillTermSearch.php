@@ -180,4 +180,52 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
         }
         return $dataProvider;
     }
+
+    public function overviewSearch($params)
+    {
+        $query = FinanceChannelBillTerm::find();
+        $query->alias("fcb");
+
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'sort' =>[
+                'attributes' => [
+                    'cost' => [
+                        'asc' => ['cost' => SORT_ASC],
+                        'desc' => ['cost' => SORT_DESC],
+                    ],
+                ],
+            ]
+        ]);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'start_time' => $this->start_time,
+            'end_time' => $this->end_time,
+            'fcb.status' => $this->status,
+            'update_time' => $this->update_time,
+            'create_time' => $this->create_time,
+        ]);
+
+        $query->leftJoin('channel ch','fcb.channel_id = ch.id');
+
+        $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
+            ->andFilterWhere(['like', 'period', $this->period])
+            ->andFilterWhere(['like', 'time_zone', $this->time_zone])
+            ->andFilterWhere(['in', 'fcb.status', [6,7,8]]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name]);
+
+        if ($dataProvider->getSort()->getOrders()==null){
+            $query->orderBy([ 'start_time' => SORT_DESC]);
+        }
+        return $dataProvider;
+    }
 }

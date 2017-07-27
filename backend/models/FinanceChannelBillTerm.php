@@ -49,6 +49,7 @@ use Yii;
  * @property integer $create_time
  * @property string $adjust_cost
  * @property string $adjust_note
+ * @property string $report_revenue
  *
  * @property FinanceAddCost[] $financeAddCosts
  * @property FinanceChannelPrepayment[] $financeApplyPrepayments
@@ -63,6 +64,8 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
     public $bank_address;
     public $account_nu_iban;
     public $swift;
+    public $adv_received;
+    public $adv_receivable;
     /**
      * @inheritdoc
      */
@@ -79,7 +82,7 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
         return [
             [['bill_id', 'invoice_id', 'period', 'channel_id', 'start_time', 'end_time'], 'required'],
             [['channel_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance','adjust_cost'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance','adjust_cost','report_revenue'], 'number'],
             [['note','adjust_note'], 'string'],
             [['bank_name','bank_address','account_nu_iban','swift'], 'safe'],
             [['bill_id', 'period'], 'string', 'max' => 255],

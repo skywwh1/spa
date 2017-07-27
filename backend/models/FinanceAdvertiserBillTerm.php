@@ -47,6 +47,7 @@ use Yii;
  * @property string $adjust_note
  * @property integer $update_time
  * @property integer $create_time
+ * @property string $report_cost
  *
  * @property FinanceAddRevenue[] $financeAddRevenues
  * @property Advertiser $adv
@@ -74,7 +75,7 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
         return [
             [['bill_id', 'invoice_id', 'period', 'adv_id', 'start_time', 'end_time'], 'required'],
             [['adv_id', 'start_time', 'end_time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
-            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic', 'pending', 'deduction', 'add_revenue', 'final_revenue', 'actual_margin', 'received_amount', 'receivable', 'prepayment','adjust_revenue'], 'number'],
+            [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic', 'pending', 'deduction', 'add_revenue', 'final_revenue', 'actual_margin', 'received_amount', 'receivable', 'prepayment','adjust_revenue','report_cost'], 'number'],
             [['note','adjust_note'], 'string'],
             [['bill_id', 'period'], 'string', 'max' => 255],
             [['invoice_id', 'time_zone', 'daily_cap', 'cap'], 'string', 'max' => 100],

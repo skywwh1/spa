@@ -161,4 +161,25 @@ class FinanceChannelCampaignBillTerm extends ActiveRecord
         return $query->one();
     }
 
+    public static function getPayablePerMonthByAdv(){
+        $query = static::find();
+        $query->select([
+            'sum(clicks) clicks',
+            'sum(unique_clicks) unique_clicks',
+            'sum(installs) installs',
+            'sum(match_installs) match_installs',
+            'sum(redirect_installs) redirect_installs',
+            'sum(redirect_match_installs) redirect_match_installs',
+            'sum(pay_out) pay_out',
+            'sum(adv_price) adv_price',
+            'sum(cost) cost',
+            'sum(redirect_cost) redirect_cost',
+            'sum(revenue) revenue',
+            'sum(redirect_revenue) redirect_revenue',
+        ]);
+        $query->where(['start_time' => $start_time]);
+        $query->andWhere(['end_time' => $end_time]);
+        $query->andWhere(['channel_id' => $channel_id]);
+        return $query->one();
+    }
 }
