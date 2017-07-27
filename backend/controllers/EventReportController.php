@@ -49,8 +49,8 @@ class EventReportController extends Controller
         $searchModel->end = $date->format('Y-m-d');
         switch ($searchModel->type) {
             case 1:
-                $dataProvider = $searchModel->hourlySearch(Yii::$app->request->queryParams);
-                $dataProvider_column = $searchModel->dynamicHourlySearch(Yii::$app->request->queryParams);
+                $dataProvider = $searchModel->SummarySearch(Yii::$app->request->queryParams);
+                $dataProvider_column = $searchModel->dynamicSummarySearch(Yii::$app->request->queryParams);
                 break;
             case 2:
                 $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
@@ -74,6 +74,7 @@ class EventReportController extends Controller
                 foreach ($columns as $column) {
                     if ($model['campaign_id'] == $column->campaign_id
                         && $model['channel_id'] == $column->channel_id
+                        && $model['sub_channel'] == $column->ch_subid
                         && $model['timestamp'] == $column->timestamp
                     ) {
                         $model['column_name'][$column->event] = $column->total;

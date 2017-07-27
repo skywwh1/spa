@@ -58,11 +58,12 @@ class EventController extends Controller
                 $time_str = date('Y-m-d H:00', $item->create_time);
                 $time = strtotime($time_str);
                 $this->echoMessage('hourly ' . $time_str);
-                $hourly = LogEventHourly::findOne(['campaign_id' => $logClick->campaign_id, 'channel_id' => $logClick->channel_id, 'time' => $time, 'event' => $item->event_name]);
+                $hourly = LogEventHourly::findOne(['campaign_id' => $logClick->campaign_id, 'channel_id' => $logClick->channel_id, 'ch_subid' => $logClick->ch_subid, 'time' => $time, 'event' => $item->event_name]);
                 if (empty($hourly)) {
                     $hourly = new LogEventHourly();
                     $hourly->campaign_id = $logClick->campaign_id;
                     $hourly->channel_id = $logClick->channel_id;
+                    $hourly->ch_subid = $logClick->ch_subid;
                     $hourly->time = $time;
                     $hourly->event = $item->event_name;
                 }

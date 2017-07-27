@@ -23,26 +23,22 @@ if ($searchModel->type == 2) {
 }
 $time_row = [];
 if (!empty($searchModel->type)) {
-    $format = 'php:Y-m-d H:i';
     if ($searchModel->type == 2) {
         $format = 'php:Y-m-d';
-    }
-    $time_row = [
-        'label' => 'Time(UTC)',
-        'attribute' => 'timestamp',
-        'value' => function ($model) use ($searchModel) {
-            $model = (object)$model;
-            $format = 'Y-m-d H:i';
-            if ($searchModel->type == 2) {
+        $time_row = [
+            'label' => 'Time(UTC)',
+            'attribute' => 'timestamp',
+            'value' => function ($model) use ($searchModel) {
+                $model = (object)$model;
                 $format = 'Y-m-d';
-            }
-            $date = new DateTime();
-            $date->setTimezone(new DateTimeZone($searchModel->time_zone));
-            $date->setTimestamp($model->timestamp);
-            return $date->format($format);
-        },
-        'filter' => false,
-    ];
+                $date = new DateTime();
+                $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+                $date->setTimestamp($model->timestamp);
+                return $date->format($format);
+            },
+            'filter' => false,
+        ];
+    }
 }
 $columns = [
     [
@@ -55,6 +51,12 @@ $columns = [
         // 'label' => 'channel_id',
         'attribute' => 'channel_id',
         'value' => 'channel_id',
+        'filter' => false,
+    ],
+    [
+        // 'label' => 'channel_id',
+        'attribute' => 'sub_channel',
+        'value' => 'sub_channel',
         'filter' => false,
     ],
     [
@@ -76,7 +78,7 @@ $columns = [
         'pageSummary' => true
     ],
 ];
-if (!empty($searchModel->type)) {
+if (!empty($searchModel->type) && $searchModel->type == 2) {
     array_unshift($columns, $time_row);
 }
 foreach($cols as $k=>$value){

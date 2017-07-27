@@ -115,11 +115,12 @@ class EventReportSearch extends LogEventHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
+            'clh.sub_channel',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.match_installs) match_installs',
             'SUM(clh.installs) installs',
         ]);
-        $query->from('campaign_log_hourly clh');
+        $query->from('campaign_log_sub_channel_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         // grid filtering conditions
@@ -145,7 +146,7 @@ class EventReportSearch extends LogEventHourly
         return $dataProvider;
     }
 
-    public function hourlySearch($params)
+    public function SummarySearch($params)
     {
         $query = new Query();
         $dataProvider = new ActiveDataProvider([
@@ -171,11 +172,11 @@ class EventReportSearch extends LogEventHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
-            'clh.time timestamp',
-            'clh.match_installs',
-            'clh.installs',
+            'clh.sub_channel',
+            'sum(clh.match_installs)',
+            'sum(clh.installs)',
         ]);
-        $query->from('campaign_log_hourly clh');
+        $query->from('campaign_log_sub_channel_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
         // grid filtering conditions
@@ -189,13 +190,18 @@ class EventReportSearch extends LogEventHourly
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
+        $query->groupBy([
+            'clh.campaign_id',
+            'channel_id',
+        ]);
+
         if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy(['time' => SORT_DESC]);
         }
         return $dataProvider;
     }
 
-    public function dynamicHourlySearch($params)
+    public function dynamicSummarySearch($params)
     {
         $query = LogEventHourly::find();
         // add conditions that should always apply here
@@ -221,10 +227,10 @@ class EventReportSearch extends LogEventHourly
         $query->select([
             'campaign_id',
             'channel_id',
-            'time timestamp',
+            'ch_subid',
             'event',
-            'match_total',
-            'total',
+            'SUM(match_total) match_total',
+            'SUM(total) total',
         ]);
         // grid filtering conditions
         $query->andFilterWhere([
@@ -235,6 +241,11 @@ class EventReportSearch extends LogEventHourly
 
         $query->andFilterWhere(['>=', 'time', $start])
         ->andFilterWhere(['<', 'time', $end]);
+
+        $query->groupBy([
+            'campaign_id',
+            'channel_id',
+        ]);
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['time' => SORT_DESC]);
@@ -268,6 +279,7 @@ class EventReportSearch extends LogEventHourly
         $query->select([
             'campaign_id',
             'channel_id',
+            'ch_subid',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(time, "%Y-%m-%d")) timestamp',
             'event',
             'SUM(match_total) match_total',

@@ -10,6 +10,7 @@ use Yii;
  * @property integer $id
  * @property integer $campaign_id
  * @property integer $channel_id
+ * @property string $ch_subid
  * @property integer $time
  * @property string $event
  * @property integer $match_total
@@ -35,7 +36,7 @@ class LogEventHourly extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'channel_id', 'time', 'match_total', 'total', 'create_time'], 'integer'],
             [['event'], 'string', 'max' => 11],
-            [['campaign_id', 'channel_id', 'time', 'event'], 'unique', 'targetAttribute' => ['campaign_id', 'channel_id', 'time', 'event'], 'message' => 'The combination of Campaign ID, Channel ID, Time and Event has already been taken.'],
+            [['campaign_id', 'channel_id', 'time', 'event','ch_subid'], 'unique', 'targetAttribute' => ['campaign_id', 'channel_id', 'time', 'event'], 'message' => 'The combination of Campaign ID, Channel ID, Time and Event has already been taken.'],
         ];
     }
 
