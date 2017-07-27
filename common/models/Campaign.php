@@ -356,7 +356,7 @@ class Campaign extends \yii\db\ActiveRecord
      */
     public static function findAllByAdv($adv_id)
     {
-        return static::find()->where(['advertiser' => $adv_id])->all();
+        return static::find()->where(['advertiser' => $adv_id])->andWhere(['status' => 1])->all();
     }
 //    public function afterSave($insert,$changedAttributes){
 //        parent::afterSave($insert,$changedAttributes);
@@ -376,16 +376,16 @@ class Campaign extends \yii\db\ActiveRecord
      * @param $campaign_ids
      * @return array|\yii\db\ActiveRecord[]
      */
-    public static function getSelectCampaign($keys,$campaign_ids)
+    public static function getSelectCampaign($keys, $campaign_ids)
     {
-        if (empty($campaign_ids)){
+        if (empty($campaign_ids)) {
             $campaign_ids = MyCart::find()->select(['campaign_id'])->where(['in', 'id', $keys])->asArray();
         }
         $rows = static::find()
-            ->select(['id','CONCAT(id,"-",campaign_uuid) campaign_uuid'])
+            ->select(['id', 'CONCAT(id,"-",campaign_uuid) campaign_uuid'])
             ->where(['in', 'id', $campaign_ids])
             ->all();
-        $uuidArray = ArrayHelper::map($rows, 'id','campaign_uuid');
+        $uuidArray = ArrayHelper::map($rows, 'id', 'campaign_uuid');
         return $uuidArray;
     }
 

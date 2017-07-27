@@ -11,6 +11,7 @@ namespace common\utility;
 
 use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\CampaignApiStatusLog;
 use common\models\Channel;
 use common\models\Deliver;
 use common\models\LogAutoCheck;
@@ -466,5 +467,18 @@ class MailUtil
         }
         $param = array('type' => 'channel info', 'isSend' => $isSend);
         SendMailLog::saveMailLog($mail, $param);
+    }
+
+    /**
+     * @param CampaignApiStatusLog[] $checks
+     */
+    public static function autoCheckApiPause($checks)
+    {
+        echo count($checks);
+        $mail = Yii::$app->mailer->compose('api_paused', ['checks' => $checks]);
+        $mail->setTo('operations@superads.cn');
+//        $mail->setTo('iven.wu@superads.cn');
+        $mail->setSubject('Api campaign paused - SuperADS');
+        $mail->send();
     }
 }

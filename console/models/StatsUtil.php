@@ -11,6 +11,7 @@ namespace console\models;
 
 use common\models\Advertiser;
 use common\models\Campaign;
+use common\models\CampaignApiStatusLog;
 use common\models\CampaignLogDaily;
 use common\models\CampaignLogHourly;
 use common\models\CampaignLogSubChannelHourly;
@@ -982,7 +983,7 @@ class StatsUtil
             return;
         }
         foreach ($rows as $item) {
-            $hourly = CampaignLogSubChannelHourly::findIdentity($item->campaign_id, $item->channel_id,$item->ch_subid, $item->timestamp);
+            $hourly = CampaignLogSubChannelHourly::findIdentity($item->campaign_id, $item->channel_id, $item->ch_subid, $item->timestamp);
             if (empty($hourly)) {
                 $hourly = new CampaignLogSubChannelHourly();
                 $hourly->channel_id = $item->channel_id;
@@ -990,8 +991,8 @@ class StatsUtil
                 $hourly->time = $item->timestamp;
                 $hourly->time_format = $item->time;
                 $hourly->sub_channel = $item->ch_subid;
-                $hourly->clicks =$item->clicks;
-                $hourly->unique_clicks =$item->uclicks;
+                $hourly->clicks = $item->clicks;
+                $hourly->unique_clicks = $item->uclicks;
             } else {
                 $hourly->clicks += $item->clicks;
                 $hourly->unique_clicks += $item->uclicks;
@@ -1014,7 +1015,7 @@ class StatsUtil
         echo "Check Sub CVR" . PHP_EOL;
         if ($start_time > 0) {
             $start_time = $this->getBeforeTwoHours($start_time);
-        }else{
+        } else {
             $datetime = new \DateTime();
             $datetime->setTimestamp(time());
 
@@ -1041,7 +1042,7 @@ class StatsUtil
                             }
                             $cvr = ($log->match_installs / $log->clicks) * 100;
                             if ($cvr > 1.5) {
-                                $check = LogAutoCheckSub::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $log->channel_id,'sub_chid' => $log->sub_channel])
+                                $check = LogAutoCheckSub::find()->andWhere(['campaign_id' => $camp->id, 'channel_id' => $log->channel_id, 'sub_chid' => $log->sub_channel])
                                     ->andFilterWhere(['>', 'match_cvr', 1.5])->andWhere(['>', 'create_time', strtotime('today')])->one();
 
                                 if (empty($check)) {
@@ -1089,7 +1090,7 @@ class StatsUtil
                             continue;
                         }
                         $sts = Deliver::findIdentity($camp->id, $log->channel_id);
-                        var_dump($camp->id,$log->channel_id);
+                        var_dump($camp->id, $log->channel_id);
                         if (!empty($sts) && $sts->status == 1) {
                             echo "status = 1" . $camp->id . PHP_EOL;
                             $check = LogAutoCheck::find()->where(['campaign_id' => $log->campaign_id, 'channel_id' => $log->channel_id])
@@ -1105,7 +1106,7 @@ class StatsUtil
                                 $margin = $revenue > 0 ? round(($profit / $revenue), 4) : 0;
                                 $cvr = ($log->match_installs / $log->clicks) * 100;
 
-                                if ($revenue > 50 && $margin<0.2){
+                                if ($revenue > 50 && $margin < 0.2) {
                                     echo "revenue > 50 && margin<0.2" . $camp->id . PHP_EOL;
                                     $check->match_cvr = $cvr;
                                     $check->margin = $margin;
@@ -1133,5 +1134,13 @@ class StatsUtil
         if (!empty($sendings)) {
             MailUtil::autoCheckLowMargin($sendings);
         }
+    }
+
+    public function sendPausedCampaign()
+    {
+       $cams =  CampaignApiStatusLog::findAll(['status'=>0]);
+       if(!empty($cams)){
+           MailUtil::autoCheckApiPause($cams);
+       }
     }
 }

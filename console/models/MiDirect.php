@@ -13,6 +13,7 @@ use common\models\Advertiser;
 use common\models\AdvertiserApi;
 use common\models\ApiCampaign;
 use common\models\Campaign;
+use common\models\CampaignApiStatusLog;
 use common\models\Deliver;
 use common\utility\ApiUtil;
 use linslin\yii2\curl\Curl;
@@ -120,6 +121,9 @@ class MiDirect
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
                 if ($item->save()) {
+                    $pause = new CampaignApiStatusLog();
+                    $pause->campaign_id = $item->id;
+                    $pause->save();
                     Deliver::updateStsStatusByCampaignUid($item->campaign_uuid, 2);
                 }
             }
