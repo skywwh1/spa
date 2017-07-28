@@ -171,8 +171,8 @@ class EventReportSearch extends LogEventHourly
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
             'clh.channel_id',
-            'sum(clh.match_installs)',
-            'sum(clh.installs)',
+            'sum(clh.match_installs) match_installs',
+            'sum(clh.installs) installs',
         ]);
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
@@ -388,8 +388,8 @@ class EventReportSearch extends LogEventHourly
             'clh.campaign_id',
             'clh.channel_id',
             'clh.sub_channel',
-            'sum(clh.match_installs)',
-            'sum(clh.installs)',
+            'sum(clh.match_installs) match_installs',
+            'sum(clh.installs) installs',
         ]);
         $query->from('campaign_log_sub_channel_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');

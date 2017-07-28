@@ -85,7 +85,7 @@ class EventReportController extends Controller
                         if ($model['campaign_id'] == $column->campaign_id
                             && $model['channel_id'] == $column->channel_id
                             && $model['sub_channel'] == $column->ch_subid
-                            && $model['timestamp'] == $column->timestamp
+                            && array_key_exists('timestamp',$model)?$model['timestamp'] == $column->timestamp:true
                         ) {
                             $model['column_name'][$column->event] = $column->total;
                             $cols[$column->event] = $column->total;
@@ -110,7 +110,7 @@ class EventReportController extends Controller
                     foreach ($columns as $column) {
                         if ($model['campaign_id'] == $column->campaign_id
                             && $model['channel_id'] == $column->channel_id
-                            && $model['timestamp'] == $column->timestamp
+                            && array_key_exists('timestamp',$model)?$model['timestamp'] == $column->timestamp:true
                         ) {
                             $model['column_name'][$column->event] = $column->total;
                             $cols[$column->event] = $column->total;
