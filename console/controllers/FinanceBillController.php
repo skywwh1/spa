@@ -17,6 +17,7 @@ use backend\models\FinanceAdvertiserPrepayment;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelCampaignBillTerm;
 use backend\models\FinanceChannelPrepayment;
+use backend\models\FinanceCompensation;
 use backend\models\FinanceDeduction;
 use backend\models\FinancePending;
 use common\models\Advertiser;
@@ -322,8 +323,6 @@ class FinanceBillController extends Controller
      */
     private function countAdvBillApr(&$model)
     {
-        $model->final_revenue = $model->revenue;
-        $model->receivable = $model->revenue;
         //deduction
         $deductions = FinanceDeduction::findAll(['adv_bill_id' => $model->bill_id]);
 //        $deductions = FinanceDeduction::getConfirmOrCompensatedDeduction($model->bill_id);
@@ -334,12 +333,14 @@ class FinanceBillController extends Controller
                 $model->receivable -= $item->deduction_revenue;
                 $model->final_revenue -= $item->deduction_revenue;
                 $model->cost -= $item->deduction_cost;
+                $model->deduction_cost += $item->deduction_cost;
                 $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id, $item->adv_bill_id, $item->campaign_id, $item->channel);
                 if (!empty($financePending)) {
                     FinancePending::confirmPending($financePending->id);
                 }
             }
         }
+        //本月月初生成当月账单
         $pends = FinancePending::findAll(['adv_bill_id' => $model->bill_id, 'status' => 0]);
         $model->pending = 0;
         if (!empty($pends)) {
@@ -348,6 +349,7 @@ class FinanceBillController extends Controller
                 $model->receivable -= $item->revenue;
                 $model->final_revenue -= $item->revenue;
                 $model->cost -= $item->cost;
+                $model->pending_cost += $item->cost;
             }
         }
         //add revenue
@@ -359,6 +361,7 @@ class FinanceBillController extends Controller
                 $model->receivable += $item->revenue;
                 $model->final_revenue += $item->revenue;
                 $model->cost += $item->cost;
+                $model->add_cost += $item->cost;
             }
         }
         //prepayment
@@ -389,6 +392,7 @@ class FinanceBillController extends Controller
                 $model->payable -= $item->deduction_cost;
                 $model->final_cost -= $item->deduction_cost;
                 $model->revenue -= $item->deduction_revenue;
+                $model->deduction_revenue -= $item->deduction_revenue;
                 $financePending = FinancePending::getPendingBeforeDeduction($item->channel_bill_id, $item->adv_bill_id, $item->campaign_id, $item->channel);
                 if (!empty($financePending)) {
                     FinancePending::confirmPending($financePending->id);
@@ -405,6 +409,7 @@ class FinanceBillController extends Controller
                 $model->payable -= $item->cost;
                 $model->final_cost -= $item->cost;
                 $model->revenue -= $item->revenue;
+                $model->pending_revenue += $item->revenue;
             }
         }
 
@@ -415,8 +420,19 @@ class FinanceBillController extends Controller
             foreach ($addCost as $item) {
                 $model->add_cost += $item->cost;
                 $model->payable += $item->cost;
-//                $model->payable += $item->cost;
-//                $model->final_cost += $item->cost;
+                $model->add_revenue += $item->revenue;
+                $model->final_cost += $item->cost;
+            }
+        }
+
+        //compensation
+        $deduction_ids = FinanceDeduction::getDeductionIds( $model->bill_id);
+        $compensation = FinanceCompensation::getApprovedCompensation($deduction_ids);
+        $model->compensation = 0;
+        if (!empty($compensation)) {
+            foreach ($compensation as $item) {
+                $model->compensation += $item->compensation;
+                $model->payable += $item->compensation;
             }
         }
 

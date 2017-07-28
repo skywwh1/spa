@@ -50,6 +50,9 @@ use Yii;
  * @property string $adjust_cost
  * @property string $adjust_note
  * @property string $report_revenue
+ * @property string $pending_revenue
+ * @property string $add_revenue
+ * @property string $deduction_revenue
  *
  * @property FinanceAddCost[] $financeAddCosts
  * @property FinanceChannelPrepayment[] $financeApplyPrepayments
@@ -66,6 +69,7 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
     public $swift;
     public $adv_received;
     public $adv_receivable;
+    public $cash_flow;
     /**
      * @inheritdoc
      */

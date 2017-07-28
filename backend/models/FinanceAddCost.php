@@ -94,6 +94,7 @@ class FinanceAddCost extends \yii\db\ActiveRecord
             $bill->payable = $bill->payable + $this->cost;
             //渠道 Actual margin = （Final Revenue -Payable）／Final Revenue
             $bill->revenue = $bill->revenue + $this->revenue;
+            $bill->add_revenue += $this->revenue;
 //            $bill->actual_margin = 1 - $bill->payable/$bill->revenue;
             $bill->save();
         }

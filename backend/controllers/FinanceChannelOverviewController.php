@@ -4,6 +4,7 @@ namespace backend\controllers;
 
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserCampaignBillTerm;
+use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
 use backend\models\FinanceChannelCampaignBillTerm;
 use common\models\Campaign;
@@ -29,7 +30,7 @@ class FinanceChannelOverviewController extends \yii\web\Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['index','edit'],
+                        'actions' => ['index','view'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -64,5 +65,22 @@ class FinanceChannelOverviewController extends \yii\web\Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    /**
+     * @param $bill_id
+     * @param $adv_received
+     * @param $adv_receivable
+     * @return string
+     */
+    public function actionView($bill_id,$adv_received,$adv_receivable){
+        $model = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+        $model->adv_received = $adv_received;
+        $model->adv_receivable = $adv_receivable;
+        $model->cash_flow = $model->adv_received-$model->final_cost;
+        return $this->renderAjax('view',
+            [
+                'model' => $model,
+            ]);
     }
 }

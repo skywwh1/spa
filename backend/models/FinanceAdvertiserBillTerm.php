@@ -49,6 +49,9 @@ use Yii;
  * @property integer $update_time
  * @property integer $create_time
  * @property string $report_cost
+ * @property string $pending_cost
+ * @property string $deduction_cost
+ * @property string $add_cost
  *
  * @property FinanceAddRevenue[] $financeAddRevenues
  * @property Advertiser $adv
@@ -62,6 +65,7 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
     public $user_id;
     public $cha_paid;
     public $cha_payable;
+    public $cash_flow;
     /**
      * @inheritdoc
      */

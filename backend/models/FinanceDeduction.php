@@ -207,6 +207,7 @@ class FinanceDeduction extends \yii\db\ActiveRecord
                 $channel_bill->final_cost = $channel_bill->final_cost - $this->deduction_cost;
                 $channel_bill->payable = $channel_bill->payable - $this->deduction_cost;
                 $channel_bill->revenue -= $this->deduction_revenue;
+                $channel_bill->deduction_revenue += $this->deduction_revenue;
                 $channel_bill->save();
             }
         }
@@ -232,6 +233,7 @@ class FinanceDeduction extends \yii\db\ActiveRecord
                 $adv_bill->final_revenue = $adv_bill->final_revenue - $this->deduction_revenue;
                 $adv_bill->receivable = $adv_bill->receivable - $this->deduction_revenue;
                 $adv_bill->cost -= $this->deduction_cost;
+                $adv_bill->deduction_cost += $this->deduction_cost;
                 $adv_bill->save();
             }
         }
@@ -278,6 +280,7 @@ class FinanceDeduction extends \yii\db\ActiveRecord
                 $channel_bill->final_cost = $channel_bill->final_cost + $diff_cost;
                 $channel_bill->payable = $channel_bill->payable + $diff_cost;
                 $channel_bill->revenue += $this->deduction_revenue - $old_deduction_revenue;
+                $channel_bill->deduction_revenue += $this->deduction_revenue - $old_deduction_revenue;
                 $channel_bill->save();
             }
         }
@@ -301,6 +304,7 @@ class FinanceDeduction extends \yii\db\ActiveRecord
                 $adv_bill->final_revenue = $adv_bill->final_revenue + $diff_revenue;
                 $adv_bill->receivable = $adv_bill->receivable + $diff_revenue;
                 $adv_bill->cost += $this->deduction_cost - $old_deduction_cost;
+                $adv_bill->deduction_cost += $this->deduction_cost - $old_deduction_cost;
                 $adv_bill->save();
             }
         }

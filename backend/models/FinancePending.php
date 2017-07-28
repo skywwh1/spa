@@ -202,6 +202,7 @@ class FinancePending extends \yii\db\ActiveRecord
                 $channel_bill->final_cost = $channel_bill->final_cost - $this->cost;
                 $channel_bill->payable = $channel_bill->payable - $this->cost;
                 $channel_bill->revenue -= $this->revenue;//TODO maybe revenue will be changed;
+                $channel_bill->pending_revenue += $this->revenue;
                 $channel_bill->save();
             }
         }
@@ -223,6 +224,7 @@ class FinancePending extends \yii\db\ActiveRecord
                 $adv_bill->final_revenue = $adv_bill->final_revenue - $this->revenue;
                 $adv_bill->receivable = $adv_bill->receivable - $this->revenue;
                 $adv_bill->cost -= $this->cost;
+                $adv_bill->pending_cost += $this->cost;
                 $adv_bill->save();
             }
         }
@@ -251,6 +253,7 @@ class FinancePending extends \yii\db\ActiveRecord
                 $channel_bill->final_cost = $channel_bill->final_cost + $this->cost;
                 $channel_bill->payable = $channel_bill->payable + $this->cost;
                 $channel_bill->pending -= $this->cost;
+                $channel_bill->pending_revenue -= $this->revenue;
                 $channel_bill->revenue += $this->revenue;
                 $channel_bill->save();
 
@@ -277,6 +280,7 @@ class FinancePending extends \yii\db\ActiveRecord
                 $adv_bill->final_revenue = $adv_bill->final_revenue + $this->revenue;
                 $adv_bill->receivable = $adv_bill->receivable + $this->revenue;
                 $adv_bill->pending -= $this->revenue;
+                $adv_bill->pending_cost -= $this->cost;
                 $adv_bill->cost += $this->cost;
                 $adv_bill->save();
             }

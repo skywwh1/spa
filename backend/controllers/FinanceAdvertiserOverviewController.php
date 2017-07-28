@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
 use backend\models\FinanceChannelCampaignBillTerm;
 use Yii;
@@ -43,4 +44,20 @@ class FinanceAdvertiserOverviewController extends \yii\web\Controller
         ]);
     }
 
+    /**
+     * @param $bill_id
+     * @param $cha_paid
+     * @param $cha_payable
+     * @return string
+     */
+    public function actionView($bill_id,$cha_paid,$cha_payable){
+        $model = FinanceAdvertiserBillTerm::findOne(['bill_id' => $bill_id]);
+        $model->cha_paid = $cha_paid;
+        $model->cha_payable = $cha_payable;
+        $model->cash_flow = $model->cha_paid-$model->cost;
+        return $this->renderAjax('view',
+            [
+                'model' => $model,
+            ]);
+    }
 }

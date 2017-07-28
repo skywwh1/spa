@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                               <span class="caret"></span></button>
                                               <ul class="dropdown-menu">
-                                              <li><a data-view="0" data-url="/finance-channel-overview/view?bill_id=' . $model->bill_id  . '">View</a></li>
+                                              <li><a data-view="0" data-url="/finance-channel-overview/view?bill_id=' . $model->bill_id  . '&adv_received' . $model->adv_received  . '&adv_receivable=' . $model->adv_receivable  . '">View</a></li>
                                               <li><a data-pjax="0" href="/finance-channel-bill-term/edit?bill_id=' . $model->bill_id . '" >Edit</a></li>
                                               </ul></div>';
                                     },
@@ -118,4 +118,21 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 <?php
+$this->registerJsFile(
+    '@web/js/deliver.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
 ?>
+<?php \yii\bootstrap\Modal::begin([
+    'id' => 'deliver-modal',
+    'size' => 'modal-lg',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="deliver-detail-content"></div>';
+
+\yii\bootstrap\Modal::end(); ?>
