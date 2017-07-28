@@ -84,7 +84,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filter' => false,
                         ],
                         [
-                            'label' => 'interval',
+                            'label' => 'CTIT',
                             'value' => function ($model) {
                                 return $model->feed_time>0?$model->feed_time-$model->click_time:0;
                             },
