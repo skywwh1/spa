@@ -1,5 +1,3 @@
-
-
 $(document).on("click", "#s2s_button", function (e) {
     var keys = $('#recommend-list').yiiGridView('getSelectedRows');
     if (keys == ''){

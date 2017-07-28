@@ -2,18 +2,14 @@
  * Created by iven.wu on 2/5/2017.
  */
 $(document).on("click", "a[data-view=1]", function (e) {
-    //alert($(this).attr('data-url'));
     $('#campaign-update-modal').modal('show').find('#campaign-update-content').load($(this).attr('data-url'));
 });
-
 $('#campaign-update-modal').on('hidden.bs.modal', function () {
     $('#campaign-update-content').empty();
 });
-
 $('#campaign-modal').on('hidden.bs.modal', function () {
     $('#campaign-detail-content').empty();
 });
-
 $(document).on("click", "a[data-view=0]", function (e) {
     var url = $(this).attr('data-url');
     $.post(url, function(result){
@@ -22,7 +18,6 @@ $(document).on("click", "a[data-view=0]", function (e) {
     });
     return false;
 });
-
 $(document).on("click", "#weekButton", function (e) {
     var nowdate = new Date();
     var oneweekdate = new Date(nowdate-7*24*3600*1000);
@@ -30,13 +25,11 @@ $(document).on("click", "#weekButton", function (e) {
     var m = oneweekdate.getMonth()+1;
     var d = oneweekdate.getDate();
     var formatwdate = y+'-'+m+'-'+d;
-    //alert(formatwdate);
 
     var y1 = nowdate.getFullYear();
     var m1 = nowdate.getMonth()+1;
     var d1 = nowdate.getDate();
     var formatnowdate = y1+'-'+m1+'-'+d1;
-    //alert(formatnowdate);
     $('input[name="ChannelQualityReportSearch[start]"]').val(formatwdate);
     $('input[name="ChannelQualityReportSearch[end]"]').val(formatnowdate);
     $('input[name="ChannelQualityReportSearch[type]"]').val(1);
@@ -50,8 +43,6 @@ $(document).on("click", "#monthButton", function (e) {
     var m = nowdate0.getMonth()+1;
     var d = nowdate0.getDate();
     var formatwdate = y+'-'+m+'-'+d;
-    //alert(formatwdate);
-
 
     var nowdate = new Date();
     var y = nowdate.getFullYear();
@@ -64,8 +55,6 @@ $(document).on("click", "#monthButton", function (e) {
     $('input[name="ChannelQualityReportSearch[type]"]').val(2);
     return false;
 });
-
-
 $('#submit-button').on('click', function () {
     $('.kv-editable-form').each(function () {
         $(this).submit();
@@ -74,12 +63,9 @@ $('#submit-button').on('click', function () {
 $('.kv-editable-form').each(function () {
     var form = $(this);
     $('body').on('beforeSubmit', 'form#' + form.attr('id'), function () {
-        // form = $(this);
-        // return false if form still have some validation errors
         if (form.find('.has-error').length) {
             return false;
         }
-        // submit form
         $.ajax({
             url: form.attr('action'),
             type: 'post',

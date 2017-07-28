@@ -1,7 +1,6 @@
 /**
  * Created by iven.wu on 2/3/2017.
  */
-
 $(document).on("click", "a[data-view=0]", function (e) {
     //alert('aaa');
     var params = $(this).attr('data-url').split("?")[1];

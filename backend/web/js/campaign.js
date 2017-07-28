@@ -1,20 +1,15 @@
 $(document).on("click", "a[data-view=0]", function (result) {
     $('#campaign-modal').modal('show').find('#campaign-detail-content').load($(this).attr('data-url'));
 });
-
 $('#campaign-modal').on('hidden.bs.modal', function () {
     $('#campaign-detail-content').empty();
 });
-
 $(document).on("click", "a[data-view=1]", function (e) {
     $('#campaign-update-modal').modal('show').find('#campaign-update-content').load($(this).attr('data-url'));
-
 });
-
 $('#campaign-update-modal').on('hidden.bs.modal', function () {
     $('#campaign-update-content').empty();
 });
-
 $('#recommend-channel-btn').on('click', function () {
     var keys = $('#recommend-channel-grid').yiiGridView('getSelectedRows');
     console.log(keys);
@@ -23,9 +18,7 @@ $('#recommend-channel-btn').on('click', function () {
     }
     var url = $(this).attr('data-url') + '&cams=' + keys;
     $('#campaign-modal').modal('show').find('#campaign-detail-content').load(url);
-
 });
-
 $(document).on("click", "#finish-recommend-channel-btn", function (e) {
     var url = $(this).attr('data-url');
     //alert(url);
@@ -35,7 +28,6 @@ $(document).on("click", "#finish-recommend-channel-btn", function (e) {
     });
     return false;
 });
-
 $(document).on("click", "#selectButton", function (e) {
     var keys = $('#grid').yiiGridView('getSelectedRows');
     var form = $('#deliver-form');
@@ -44,7 +36,6 @@ $(document).on("click", "#selectButton", function (e) {
     form.submit();
     return false;
 });
-
 $(document).on("click", "a[data-view=2]", function (result) {
     var url = $(this).attr('data-url');
     $.post(url, function(result){

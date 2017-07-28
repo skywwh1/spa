@@ -1,8 +1,6 @@
 /**
  * Created by iven.wu on 2/1/2017.
  */
-
-
 $('#submit-button').on('click', function () {
     $('.black_channel_form').each(function () {
         $(this).submit();
@@ -11,8 +9,6 @@ $('#submit-button').on('click', function () {
 $('.black_channel_form').each(function () {
     var form = $(this);
     $('body').on('beforeSubmit', 'form#' + form.attr('id'), function () {
-        // form = $(this);
-        // return false if form still have some validation errors
         if (form.find('.has-error').length) {
             return false;
         }
@@ -22,12 +18,8 @@ $('.black_channel_form').each(function () {
             type: 'post',
             data: form.serialize(),
             success: function (response) {
-                //console.log(JSON.stringify(response));
-                //console.log(response);
                 $('#black-channel-content').append(response+'<br>');
                 $('#black-channel-modal').modal('show');
-                //renderS2s();
-                //location.href="/deliver/go-create";
             }
         });
         return false;
@@ -35,24 +27,18 @@ $('.black_channel_form').each(function () {
         e.preventDefault();
     });
 });
-
 $('#black-channel-modal').on('hidden.bs.modal', function (e) {
     $(this).modal('hide');
     $('#black-channel-modal').modal('hide');
     $('#black-channel-content').empty();
-
     renderS2s();
-    //var t=setTimeout("renderS2s()",5000);
     return false;
 });
-
 function renderS2s(){
     var form = $('.black_channel_form');
-    // do something...
     if (form.find('.has-error').length) {
         return false;
     }
-
     form.attr("class","black_form");
     //console.log(form.serialize());
     form.attr("action", '/deliver/go-create');
