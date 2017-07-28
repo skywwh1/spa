@@ -71,6 +71,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                         ],
+                        [
+                            'label' => 'interval',
+                            'value' => function ($model) {
+                                return $model->post_time>0?$model->post_time-$model->click_time:0;
+                            },
+                            'filter' => false,
+                        ],
                     ];
                     $fullExportMenu = ExportMenu::widget([
                         'dataProvider' => $dataProvider,

@@ -83,6 +83,13 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                             'filter' => false,
                         ],
+                        [
+                            'label' => 'interval',
+                            'value' => function ($model) {
+                                return $model->feed_time>0?$model->feed_time-$model->click_time:0;
+                            },
+                            'filter' => false,
+                        ],
                         'om',
                         'bd',
                         'pm',
