@@ -92,7 +92,7 @@ foreach($cols as $k=>$value){
         'label' => $k,
         'value'=> function ($model,$key,$index) use ($k,$column_names){
             if (array_key_exists($k,$column_names[$index])){
-                return empty($model['installs'])?0:'('.$column_names[$index][$k].')'.round(($column_names[$index][$k]/$model['installs']*100),2).'%';
+                return empty($model['installs'])?0:$column_names[$index][$k].'('.round(($column_names[$index][$k]/$model['installs']*100),2).'%)';
             }else{
                 return '--';
             }
@@ -107,7 +107,7 @@ foreach($cols as $k=>$value){
         'value'=> function ($model,$key,$index) use ($k,$match_cols){
             if (array_key_exists($k,$match_cols[$index])){
 //                return $match_cols[$index][$k];
-                return empty($model['match_installs'])?0:'('.$match_cols[$index][$k].')'.round(($match_cols[$index][$k]/$model['match_installs']*100),2).'%';
+                return empty($model['match_installs'])?0:$match_cols[$index][$k].'('.round(($match_cols[$index][$k]/$model['match_installs']*100),2).'%)';
             }else{
                 return '--';
             }
