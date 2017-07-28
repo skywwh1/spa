@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return ModelsUtil::getPayableStatus($model->status);
                                 },
+                                'filter' => ModelsUtil::payable_status,
                             ],
 
                             [
