@@ -60,8 +60,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                             ],
                             [
-                                'attribute' => 'cost',
-                                'value' => 'cost',
+                                'label' => 'cost',
+                                'attribute' => 'report_cost',
+                                'value' => 'report_cost',
                                 'filter' => false,
                             ],
                             [

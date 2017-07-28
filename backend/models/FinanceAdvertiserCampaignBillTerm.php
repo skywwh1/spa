@@ -171,7 +171,7 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
      * @param $advs
      * @return array|null|\yii\db\ActiveRecord
      */
-    public static function getReceivedOrReceivablePerMonthByAdv($period,$status,$channel,$advs){
+    public static function  getReceivedOrReceivablePerMonthByAdv($period,$status,$channel,$advs){
 
         $query = static::find();
         $query->alias("fab");
@@ -190,8 +190,12 @@ class FinanceAdvertiserCampaignBillTerm extends \yii\db\ActiveRecord
 
         $query->andFilterWhere(['in', 'fab.adv_id', $advs])
 //            ->andFilterWhere(['like', 'fab.time_zone', $this->time_zone])
-            ->andFilterWhere(['<>', 'fab.revenue', 0])
-            ->andFilterWhere(['a.status' => $status]);
+            ->andFilterWhere(['<>', 'fab.revenue', 0]);
+        if ($status == 7){
+            $query->andFilterWhere(['a.status' => $status]);
+        } else{
+            $query->andFilterWhere(['in', 'a.status', [1,2,3,4,5,6,8]]);
+        }
         return $query->one();
     }
 }

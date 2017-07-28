@@ -186,9 +186,12 @@ class FinanceChannelCampaignBillTerm extends ActiveRecord
 
         $query->andFilterWhere(['in', 'fcb.channel_id', $channels])
             ->andFilterWhere(['in', 'fcb.campaign_id', $camps])
-            ->andFilterWhere(['<>', 'fcb.cost', 0])
-            ->andFilterWhere(['a.status' => $status]);
-
+            ->andFilterWhere(['<>', 'fcb.cost', 0]);
+        if ($status == 7){
+            $query->andFilterWhere(['a.status' => $status]);
+        } else{
+            $query->andFilterWhere(['in', 'a.status', [1,2,3,4,5,6,8]]);
+        }
         return $query->one();
     }
 }
