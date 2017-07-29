@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\editable\Editable;
 use yii\bootstrap\Modal;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ChannelQualityReportSearch */
@@ -110,6 +111,8 @@ if (!empty($dataProvider)) {
                     ];
                     $data_list = $dataProvider->models;
                     $dynamic_column = [];
+                    $export_columns = $columns;
+                    $export_dynamic_column = [];
 //                    $columnName =[
 //                        "0"=>
 //                            [
@@ -150,7 +153,37 @@ if (!empty($dataProvider)) {
                             }
                         ];
                         array_push($columns,$dynamic_column);
+
+                        $export_dynamic_column = [
+                            'label' => $key,
+                            'value'=> function ($model,$key,$index) use ($name,$columnName){
+                                if (!empty($columnName[$index])){
+                                    return $columnName[$index][$name];
+                                }else{
+                                    return 'not-set';
+                                }
+                            },
+                        ];
+                        array_push($export_columns,$export_dynamic_column);
                     }
+
+                    echo ExportMenu::widget([
+                        'dataProvider' => $dataProvider,
+                        'columns' => $export_columns,
+                        'fontAwesome' => true,
+                        'showConfirmAlert' => false,
+                        'target' => GridView::TARGET_BLANK,
+                        'dropdownOptions' => [
+                            'label' => 'Export All',
+                            'class' => 'btn btn-default'
+                        ],
+                        'exportConfig' => [
+                            ExportMenu::FORMAT_TEXT => false,
+                            ExportMenu::FORMAT_PDF => false,
+                            ExportMenu::FORMAT_EXCEL_X => false,
+                            ExportMenu::FORMAT_HTML => false,
+                        ],
+                    ]);
                     ?>
                     <?= GridView::widget([
                         'id' => 'applying_list',
@@ -159,7 +192,7 @@ if (!empty($dataProvider)) {
                         'pjax' => true, // pjax is set to always true for this demo
                         'responsive' => true,
                         'showPageSummary' => true,
-                        'layout' => '{toolbar}{summary} {items} {pager}',
+//                        'layout' => '{toolbar}{summary} {items}',
                         'hover' => true,
                         'columns' => $columns,
                     ]); ?>
