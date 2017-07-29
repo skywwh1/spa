@@ -93,9 +93,9 @@ class RedirectLogController extends Controller
             $model->channel_id = $channel_id;
         }
         if (Yii::$app->getRequest()->isPost && $model->load(Yii::$app->request->post())) {
-            $model->start_time = strtotime($model->start_time) - 8*3600;
+            $model->start_time = strtotime($model->start_time);
             if (!empty($model->end_time)){
-                $model->end_time = strtotime($model->end_time) - 8*3600;
+                $model->end_time = strtotime($model->end_time);
             }else{
                 $model->end_time = 0;
             }
