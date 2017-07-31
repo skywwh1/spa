@@ -13,15 +13,9 @@ use DateTimeZone;
 /**
  * ReportSearch represents the model behind the search form about `common\models\Deliver`.
  */
-class ReportCampaignSummarySearch extends CampaignLogHourly
+class ReportCampaignSummarySearch extends ReportAdvHourly
 {
     public $time_zone;
-    public $campaign_name;
-    public $channel_name;
-    public $type;
-    public $start;
-    public $end;
-    public $advertiser;
     public $om;
 
     /**
@@ -31,7 +25,7 @@ class ReportCampaignSummarySearch extends CampaignLogHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name', 'advertiser', 'om'], 'safe'],
-            [['time_format', 'daily_cap', 'type', 'start', 'end', 'time_zone'], 'safe'],
+            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name', 'bd', 'pm'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -514,12 +508,16 @@ class ReportCampaignSummarySearch extends CampaignLogHourly
             'AVG(clh.pay_out) pay_out',
             'AVG(clh.adv_price) adv_price',
             'SUM(clh.revenue) revenue',
+            'u.username bd',
+            'u2.username pm',
         ]);
 
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
+        $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -618,11 +616,17 @@ class ReportCampaignSummarySearch extends CampaignLogHourly
             'AVG(clh.adv_price) adv_price',
             'SUM(clh.cost) cost',
             'SUM(clh.revenue) revenue',
+            'ad.username adv_name',
+            'u.username bd',
+            'u2.username pm',
         ]);
 
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
+        $query->leftJoin('user u', 'ad.bd = u.id');
+        $query->leftJoin('user u2', 'ad.pm = u2.id');
 //        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
