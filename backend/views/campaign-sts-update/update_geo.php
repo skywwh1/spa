@@ -6,9 +6,10 @@ use kartik\select2\Select2;
 use kartik\datetime\DateTimePicker;
 use yii\helpers\Url;
 use yii\web\JsExpression;
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Campaign */
-
+/* @var $dataProvider yii\data\ActiveDataProvider */
 ?>
 <h3>Update GEO</h3>
 <?php $form = ActiveForm::begin([
@@ -56,6 +57,15 @@ echo $form->field($model, 'target_geo')->widget(Select2::classname(), [
 ]);
 ?>
 <?= $form->field($model, 'is_send')->dropDownList(['1' => 'Yes', '0' => "No"]) ?>
+<?= GridView::widget([
+    'id' => 'applying_list',
+    'dataProvider' => $dataProvider,
+    'pjax' => true, // pjax is set to always true for this demo
+    'columns' => [
+        'effect_time:datetime',
+        'operator0.username',
+    ],
+]); ?>
 <div class="form-group">
     <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
 </div>

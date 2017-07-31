@@ -4,7 +4,9 @@ namespace backend\controllers;
 
 use common\models\Campaign;
 use common\models\CampaignCreativeLink;
+use common\models\CampaignSearch;
 use common\models\CampaignSubChannelLog;
+use common\models\CampaignUpdate;
 use common\models\Deliver;
 use common\utility\MailUtil;
 use Yii;
@@ -185,11 +187,27 @@ class CampaignStsUpdateController extends Controller
                 $camp = Campaign::findById($model->campaign_id);
                 $camp->promote_end = $model->effect_time;
                 $camp->save();
+
+                CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
+            if ($type == 2) {
+                $searchModel = new CampaignStsUpdateSearch();
+                $searchModel->name = 'pause';
+                $searchModel->type = $type;
+                $searchModel->campaign_id = $campaign_id;
+                $searchModel->channel_id = $channel_id;
+                $dataProvider = $searchModel->campaignUpdateSearch();//获取campaign更新者的信息
+            } else if ($type == 1) {
+                $searchModel = new CampaignSearch();
+                $action =  'pause';
+                $dataProvider= $searchModel->updateSearch($campaign_id,$action);
+            }
+
             return $this->renderAjax('pause', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
 
@@ -366,10 +384,15 @@ class CampaignStsUpdateController extends Controller
 //            $camp->promote_end = $model->effect_time;
 //            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
             $camp->save();
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
             return $this->redirect(Yii::$app->request->referrer);
         } else {
+            $searchModel = new CampaignSearch();
+            $action =  'update-geo';
+            $dataProvider= $searchModel->updateSearch($campaign_id,$action);
             return $this->renderAjax('update_geo', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
             ]);
         }
     }
@@ -416,10 +439,15 @@ class CampaignStsUpdateController extends Controller
 //            $camp->promote_end = $model->effect_time;
 //            $camp->creative_link = $model->creative_link;
             $camp->save();
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
             return $this->redirect(Yii::$app->request->referrer);
         } else {
+            $searchModel = new CampaignSearch();
+            $action =  'update-creative';
+            $dataProvider= $searchModel->updateSearch($campaign_id,$action,$model->effect_time);
             return $this->renderAjax('update_creative', [
                 'model' => $model,
+                'dataProvider' => $dataProvider,
                 'modelsLink' => (empty($modelsLinkOld)) ? [new CampaignCreativeLink] : $modelsLinkOld
             ]);
         }

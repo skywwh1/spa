@@ -292,10 +292,11 @@ class CampaignController extends Controller
                 }
             }
             if ($flag) {
-                return $this->redirect(Yii::$app->request->referrer);
+//                return $this->redirect(Yii::$app->request->referrer);
+                return $this->render('view', ['model' => $model]);
             }
         }
-        return $this->renderAjax('update', [
+        return $this->render('update', [
             'model' => $model,
             'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
         ]);

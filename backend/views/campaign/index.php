@@ -136,22 +136,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                     if ($model->status != 1) {
                                         $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
                                     }
-                                    return '<div class="dropdown">
-                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-                                      <span class="caret"></span></button>
-                                      <ul class="dropdown-menu">
 
-                                      <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
-                                      <li><a data-view="0" data-url="/campaign/update?id=' . $model->id . '" >Update</a></li>
-                                      <li><a href="/campaign/recommend?id=' . $model->id . '" >Recommend Channels</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-geo?type=1&channel_id=&campaign_id=' . $model->id . '">GEO Updates</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-creative?type=1&channel_id=&campaign_id=' . $model->id . '">Creative Updates</a></li>
-                                      <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->id . '">Add to Cart</a></li>
-                                      <li><a data-view="0" data-url="/deliver/send-sts-email?campaign_id=' . $model->id . '">Send Email</a></li>' .
-                                        $restart
-                                        . '</ul>
+                                    if (\Yii::$app->user->can('admin')
+                                        || strcmp($model->advertiser0->pm , Yii::$app->user->identity->username)
+                                        || strcmp($model->advertiser0->bd , Yii::$app->user->identity->username)) {
+                                        return '<div class="dropdown">
+                                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                          <span class="caret"></span></button>
+                                          <ul class="dropdown-menu">
+                                          <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
+                                          <li><a href="/campaign/update?id=' . $model->id . '" >Update</a></li>
+                                          <li><a href="/campaign/recommend?id=' . $model->id . '" >Recommend Channels</a></li>
+                                          <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/pause?type=1&channel_id=&campaign_id=' . $model->id . '">Paused</a></li>
+                                          <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-geo?type=1&channel_id=&campaign_id=' . $model->id . '">GEO Updates</a></li>
+                                          <li><a data-pjax="0" data-view="1" data-url="/campaign-sts-update/update-creative?type=1&channel_id=&campaign_id=' . $model->id . '">Creative Updates</a></li>
+                                          <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->id . '">Add to Cart</a></li>
+                                          <li><a data-view="0" data-url="/deliver/send-sts-email?campaign_id=' . $model->id . '">Send Email</a></li>' .
+                                            $restart
+                                            . '</ul>
+                                        </div>';
+                                    }  else {
+                                        return '<div class="dropdown">
+                                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                          <span class="caret"></span></button>
+                                          <ul class="dropdown-menu">
+                                          <li><a data-view="0" data-url="/campaign/view?id=' . $model->id . '">View</a></li>
+                                          <li><a data-pjax="0" data-view="1" data-url="/my-cart/add-my-cart?campaign_id=' . $model->id . '">Add to Cart</a></li>'.
+                                            $restart
+                                            . '</ul>
                                     </div>';
+                                    }
                                 },
                             ],
                         ],
