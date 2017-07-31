@@ -12,7 +12,7 @@ $this->title = 'Summary Campaign Report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="report-campaign-summary"></div>
-<?php echo $this->render('_search', ['model' => $searchModel]);
+<?php echo $this->render('campaign_summary_search', ['model' => $searchModel]);
 if ($searchModel->type == 2) {
     $layout = '{summary} {items} {pager}';
 } else {
@@ -195,10 +195,22 @@ $columns = [
             $revenue = $model->match_installs * $model->adv_price;
             $cost = $model->installs * $model->pay_out;
             $profit = $revenue - $cost;
-            $margin = $revenue > 0 ? round(($profit / $revenue), 4) : 0;
+            $margin = $revenue > 0 ? round(($profit / $revenue) * 100, 2) . '%' : 0;
             return $margin;
         },
         'filter' => false,
+    ],
+    [
+        'attribute' => 'bd',
+        'value' => 'bd',
+        'label' => 'BD',
+//        'filter' => false,
+    ],
+    [
+        'attribute' => 'pm',
+        'value' => 'pm',
+        'label' => 'PM',
+//        'filter' => false,
     ],
     [
         'attribute' => 'om',
