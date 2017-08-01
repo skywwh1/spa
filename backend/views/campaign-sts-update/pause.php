@@ -37,7 +37,7 @@ use kartik\grid\GridView;
     'pjax' => true, // pjax is set to always true for this demo
     'columns' => [
         'effect_time:datetime',
-        'operator0.username',
+        'creator_name',
     ],
 ]); ?>
 <div class="form-group">

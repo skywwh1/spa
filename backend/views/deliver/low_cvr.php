@@ -1,7 +1,7 @@
 <?php
 
 use kartik\grid\GridView;
-
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -20,6 +20,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     'responsive' => true,
                     'hover' => true,
                     'columns' => [
+                        [
+                            'class' => 'kartik\grid\ActionColumn',
+                            'template' => '{all}',
+                            'header' => 'Action',
+                            'buttons' => [
+                                'all' => function ($url, $model, $key) {
+                                    return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
+                                      <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>
+                                      </ul>
+                                    </div>';
+                                },
+                            ],
+                        ],
                         'campaign_id',
                         'campaign.advertiser0.username',
                         'campaign.campaign_name',
@@ -38,4 +55,23 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     </div>
 </div>
+<?php
+$this->registerJsFile(
+    '@web/js/deliver.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>
+<?php Modal::begin([
+    'id' => 'deliver-modal',
+    'size' => 'modal-md',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="deliver-detail-content"></div>';
+
+Modal::end(); ?>
 
