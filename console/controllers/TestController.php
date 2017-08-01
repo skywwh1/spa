@@ -24,6 +24,7 @@ use common\models\LogClick3;
 use common\models\LogClickDM;
 use common\models\LogFeed;
 use common\models\LogPost;
+use common\models\ReportMatchInstallHourly;
 use common\models\Stream;
 use ConnectionTest;
 use console\models\Affle;
@@ -54,8 +55,10 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $stats = new StatsUtil();
-die();
+
+        $feed = LogFeed::findOne(['id' => 24524]);
+        ReportMatchInstallHourly::updateInstalls($feed);
+        die();
         /* $i = 0;
          while ($i < 1000) {
 
@@ -108,7 +111,7 @@ die();
 //        die();
 //        $i=0;
 //while ($i<100) {
-     var_dump(LogClickDM::isExistIp('183872_188',1732963635));
+        var_dump(LogClickDM::isExistIp('183872_188', 1732963635));
 
 //        var_dump($aa);
         die();
