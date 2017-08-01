@@ -109,11 +109,11 @@ class SiteController extends Controller
             ]);
         }*/
         $this->layout = 'new_main';
+        $model = new LoginForm();
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect(['camp-log/index']);
         }
 
-        $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->redirect(['camp-log/index']);
         } else {

@@ -38,7 +38,7 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'account_nu_iban')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'pm')->widget(Typeahead::classname(), [
                 'pluginOptions' => ['highlight' => true],
-                'options' => ['value' => isset($model->pm) ? $model->pm0->username : '',],
+                'options' => ['value' => isset($model->pm) ? $model->pm0->username : 'shelly',],
                 'dataset' => [
                     [
                         'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",

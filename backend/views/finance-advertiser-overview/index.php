@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'attribute' => 'status',
                                 'value' => function ($model) {
-                                    return ModelsUtil::getPayableStatus($model->status);
+                                    return ModelsUtil::getReceivableStatus($model->status);
                                 },
                                 'filter' => false,
                             ],

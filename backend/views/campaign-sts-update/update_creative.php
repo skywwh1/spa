@@ -4,9 +4,10 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\datetime\DateTimePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
+use kartik\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $model common\models\Campaign */
-
+/* @var $dataProvider yii\data\ActiveDataProvider */
 ?>
     <h3>Update Creative</h3>
 <?php $form = ActiveForm::begin([
@@ -75,6 +76,15 @@ use wbraganca\dynamicform\DynamicFormWidget;
         </tbody>
     </table>
 <?php DynamicFormWidget::end(); ?>
+<?= GridView::widget([
+    'id' => 'applying_list',
+    'dataProvider' => $dataProvider,
+    'pjax' => true, // pjax is set to always true for this demo
+    'columns' => [
+        'effect_time:datetime',
+        'operator0.username',
+    ],
+]); ?>
     <div class="form-group">
         <?= Html::submitButton('Submit', ['class' => 'btn btn-success']) ?>
     </div>

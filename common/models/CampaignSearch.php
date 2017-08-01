@@ -832,4 +832,24 @@ class CampaignSearch extends Campaign
         }
         return $dataProvider;
     }
+
+    public function updateSearch($campaign_id,$action)
+    {
+        $query = CampaignUpdate::find();
+        // add conditions that should always apply here
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $campaign_id,
+            'action' => $action
+        ]);
+
+        if ($dataProvider->getSort()->getOrders() == null) {
+            $query->orderBy('create_time DESC');
+        }
+        return $dataProvider;
+    }
 }
