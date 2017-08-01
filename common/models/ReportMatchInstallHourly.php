@@ -104,8 +104,6 @@ class ReportMatchInstallHourly extends \yii\db\ActiveRecord
             $report->revenue = $feed->adv_price;
             $report->advertiser_id = $report->campaign->advertiser;
             $report->save();
-            var_dump($report->errors);
-            die();
         }
     }
 }
