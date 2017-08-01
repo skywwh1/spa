@@ -207,7 +207,7 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
         }
         $start = TimeZoneUtil::getPrevMonthLastDayTime($this->start_time);
         $end_time = TimeZoneUtil::getNextMonthFirstDayTime($this->end_time);
-
+        $end_time =  $end_time + 24*60*60;
         $query->andFilterWhere([
             'fcb.status' => $this->status,
             'update_time' => $this->update_time,

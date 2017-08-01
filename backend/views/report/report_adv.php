@@ -78,6 +78,7 @@ $columns = [
         'attribute' => 'adv_name',
         'value' => 'adv_name',
         'filter' => false,
+//        'contentOptions'=>['style'=>'max-width: 10px;'] // <-- right here
     ],
     [
         'label' => 'Campaign ID',
@@ -96,7 +97,7 @@ $columns = [
                 return '';
             }
         },
-        'width' => '60px',
+        'contentOptions'=>['style'=>'max-width: 10px;'], // <-- right here
         'format' => 'raw',
         'filter' => false,
     ],
@@ -122,7 +123,7 @@ $columns = [
         'pageSummary' => true,
     ],
     [
-        'label' => 'Installs/Cap',
+        'label' => 'Installs /Cap',
         'attribute' => 'installs',
         'value' => function ($model) {
             $model = (object)$model;
@@ -180,7 +181,7 @@ $columns = [
     ],
 
     [
-        'label' => 'Payout(avg)',
+        'label' => 'Payout (avg)',
         'attribute' => 'pay_out',
         'value' => function ($model) {
             $model = (object)$model;
@@ -199,7 +200,7 @@ $columns = [
         'pageSummary' => true,
     ],
     [
-        'label' => 'Match Installs/Cap',
+        'label' => 'Match Installs /Cap',
         'attribute' => 'match_installs',
         'value' => function ($model) {
             $model = (object)$model;
@@ -235,7 +236,7 @@ $columns = [
         }
     ],
     [
-        'label' => 'ADV Price(avg)',
+        'label' => 'ADV Price (avg)',
         'attribute' => 'adv_price',
         'value' => function ($model) {
             $model = (object)$model;

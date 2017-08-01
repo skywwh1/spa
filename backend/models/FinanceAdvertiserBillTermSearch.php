@@ -213,6 +213,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
 
         $start = TimeZoneUtil::getPrevMonthLastDayTime($this->start_time);
         $end_time = TimeZoneUtil::getNextMonthFirstDayTime($this->end_time);
+        $end_time =  $end_time + 24*60*60;
         $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
             ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
             ->andFilterWhere(['like', 'period', $this->period])
