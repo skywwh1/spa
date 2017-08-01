@@ -68,7 +68,9 @@ class Affle
             $camp->target_geo = $model->target_geo;
             $adv_link = $model->adv_link;
             $camp->adv_link = str_replace('&s1={Sub_ID}&s2={Clickid}&s3={Sub3}&s4={Sub4}&s5={Sub5}&udid={GAID/IDFA}', '', $adv_link);
-            $camp->package_name = $model->package_name;
+            if(empty($camp->package_name)){
+                $camp->package_name = $model->package_name;
+            }
             $camp->platform = $model->platform;
             $camp->description = $model->description;
             $camp->description = strip_tags($camp->description);
