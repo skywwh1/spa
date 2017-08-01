@@ -411,7 +411,13 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
         ]);
-
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else if(\Yii::$app->user->can('bd')) {
+            $query->andFilterWhere(['u.id' => \Yii::$app->user->id]);
+        } else if(\Yii::$app->user->can('pm')){
+            $query->andFilterWhere(['u2.id' => \Yii::$app->user->id]);
+        }
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
@@ -524,6 +530,13 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
         ]);
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else if(\Yii::$app->user->can('bd')) {
+            $query->andFilterWhere(['u.id' => \Yii::$app->user->id]);
+        } else if(\Yii::$app->user->can('pm')){
+            $query->andFilterWhere(['u2.id' => \Yii::$app->user->id]);
+        }
         $query->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'u.username', $this->om])
@@ -633,7 +646,13 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
         ]);
-
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->om]);
+        } else if(\Yii::$app->user->can('bd')) {
+            $query->andFilterWhere(['u.id' => \Yii::$app->user->id]);
+        } else if(\Yii::$app->user->can('pm')){
+            $query->andFilterWhere(['u2.id' => \Yii::$app->user->id]);
+        }
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
 //            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
