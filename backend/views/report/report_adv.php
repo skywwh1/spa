@@ -78,7 +78,8 @@ $columns = [
         'attribute' => 'adv_name',
         'value' => 'adv_name',
         'filter' => false,
-//        'contentOptions'=>['style'=>'max-width: 10px;'] // <-- right here
+//        'contentOptions'=>['style'=>'max-width: 10px;'] // <-- right here\
+        'contentOptions'=>['style'=>'max-width: 140px;'], // <-- right here
     ],
     [
         'label' => 'Campaign ID',
@@ -97,7 +98,7 @@ $columns = [
                 return '';
             }
         },
-        'contentOptions'=>['style'=>'max-width: 10px;'], // <-- right here
+//        'contentOptions'=>['style'=>'max-width: 20px;'], // <-- right here
         'format' => 'raw',
         'filter' => false,
     ],
@@ -106,6 +107,7 @@ $columns = [
         'attribute' => 'channel_name',
         'value' => 'channel_name',
         'filter' => false,
+        'contentOptions'=>['style'=>'max-width: 160px;'], // <-- right here
     ],
 
 
@@ -115,6 +117,7 @@ $columns = [
         // 'value' => 'clicks',
         'filter' => false,
         'pageSummary' => true,
+        'contentOptions'=>['style'=>'max-width: 5px;'], // <-- right here
     ],
     [
         'attribute' => 'unique_clicks',

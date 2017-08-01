@@ -340,7 +340,7 @@ class Campaign extends \yii\db\ActiveRecord
     {
         $str = strip_tags($this->campaign_name);
         $len = mb_strlen($str);
-        return mb_substr($str, 0, 20, 'utf-8') . (($len > 20) ? '...' : '');
+        return mb_substr($str, 0, 10, 'utf-8') . (($len > 10) ? '...' : '');
     }
 
     public function getGeo()
