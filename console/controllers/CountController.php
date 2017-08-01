@@ -33,6 +33,7 @@ use common\models\LogClick2;
 use common\models\LogFeed;
 use common\models\LogPost;
 use common\models\RedirectLog;
+use common\models\ReportMatchInstallHourly;
 use common\models\Stream;
 use console\models\StatsUtil;
 use DateTime;
@@ -167,6 +168,7 @@ class CountController extends Controller
         $this->echoMessage('Total Feeds ' . count($feeds));
         if (isset($feeds)) {
             foreach ($feeds as $item) {
+                $this->echoMessage('click id ' . $item->click_id);
                 $logClick = LogClick::findByClickUuid($item->click_id);
                 if (empty($logClick)) {
                     $logClick = LogClick2::findByClickUuid($item->click_id);
@@ -188,8 +190,12 @@ class CountController extends Controller
                     $logFeed->all_parameters = $item->all_parameters;
                     $logFeed->ip = $item->ip;
                     $logFeed->ip_long = $item->ip_long;
-                    $logFeed->adv_price = $camp->adv_price;
+                    $logFeed->adv_price = $logClick->adv_price;
                     $logFeed->click_time = $logClick->click_time;
+                    $logFeed->feed_time = $item->create_time;
+                    $logFeed->is_redirect = $sts->is_redirect;
+                    //原子统计installs数量；
+                    ReportMatchInstallHourly::updateInstalls($logFeed);
                     if ($sts->is_redirect) {
                         $redirect = RedirectLog::findIsActive($logClick->campaign_id, $logClick->channel_id);
                         if (isset($redirect)) {
@@ -202,9 +208,6 @@ class CountController extends Controller
                             $logFeed->adv_price = $sub_redirect->campaignIdNew->adv_price;
                         }
                     }
-
-                    $logFeed->feed_time = $item->create_time;
-                    $logFeed->is_redirect = $sts->is_redirect;
                     if ($logFeed->save() == false) {
                         $this->echoMessage('save log feed error');
                         var_dump($logFeed->getErrors());
@@ -230,7 +233,6 @@ class CountController extends Controller
                                 var_dump($post->getErrors());
                             }
                         }
-
                     }
                     $item->is_count = 1;
                     $item->save();
