@@ -460,7 +460,7 @@ class MailUtil
         if (isset($channel->om0)) {
             $mail->setCc($channel->om0->email);
         }
-        $mail->setSubject('account create success!');
+        $mail->setSubject('[SuperADS] account create success!');
         $isSend = 0;
         if ($mail->send()) {
             $isSend = 1;
