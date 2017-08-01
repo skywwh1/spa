@@ -216,7 +216,6 @@ class ReportSummarySearch extends ReportSummaryHourly
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy(['ad.username' => SORT_ASC, 'cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
         }
-        $query->asArray();
 //        var_dump($start);
 //        var_dump($end);
 //        var_dump($query->createCommand()->sql);
