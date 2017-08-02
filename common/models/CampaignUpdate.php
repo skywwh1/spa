@@ -32,7 +32,7 @@ class CampaignUpdate extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'creator_name', 'create_time', 'effect_time'], 'integer'],
+            [['campaign_id', 'create_time', 'effect_time'], 'integer'],
             [['action'], 'string', 'max' => 255],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
         ];
@@ -69,5 +69,7 @@ class CampaignUpdate extends \yii\db\ActiveRecord
         $model_update->action = $action;
         $model_update->effect_time = $effect_time;
         $model_update->save();
+        var_dump($model_update->errors);
+        die();
     }
 }

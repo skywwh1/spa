@@ -185,6 +185,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
@@ -218,6 +219,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
             ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
+            ->andFilterWhere(['<>', 'fab.status', 0])
 //            ->andFilterWhere(['in', 'fab.status', [6,7,8]])
             ->andFilterWhere(['like', 'adv.payment_term', $this->payment_term])
             ->andFilterWhere(['like', 'u0.username', $this->bd])

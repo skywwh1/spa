@@ -67,13 +67,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'cha_payable',
-                                'value' => 'cha_payable',
                                 'filter' => false,
+                                'value' => function ($model){
+                                    return $model->cha_payable == 0 ? 0.00 :$model->cha_payable;
+                                }
                             ],
                             [
                                 'attribute' => 'cha_paid',
-                                'value' => 'cha_paid',
                                 'filter' => false,
+                                'value' => function ($model){
+                                    return $model->cha_paid == 0 ? 0.00 :$model->cha_paid;
+                                }
                             ],
                             [
                                 'label' => 'revenue',
@@ -96,7 +100,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'actual_margin',
                                 'filter' => false,
                                 'value' => function ($model){
-                                    return $model->receivable == 0 ? 0 : round((($model->receivable - $model->cha_payable) / $model->receivable)*100, 2).'%';
+                                    return $model->receivable == 0 ? 0.00 : round((($model->receivable - $model->cha_payable) / $model->receivable)*100, 2).'%';
                                 }
                             ],
                             [

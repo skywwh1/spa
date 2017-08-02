@@ -31,6 +31,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public $channel_name;
     public $campaign_name;
     public $creator_name;
+    public $adv_price;
     /**
      * @inheritdoc
      */
@@ -165,6 +166,16 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public static function getStsRestart()
     {
         return static::find()->where(['is_effected' => 0, 'type' => 2, 'name' => 'sts-restart'])
+            ->andWhere(['<', 'effect_time', time()])
+            ->all();
+    }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdatePrice()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-price'])
             ->andWhere(['<', 'effect_time', time()])
             ->all();
     }
