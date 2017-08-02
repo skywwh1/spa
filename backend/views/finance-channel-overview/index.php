@@ -79,20 +79,24 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'report_revenue',
                             ],
                             [
-                                'label' => 'Receivable',
+                                'label' => 'Adv Receivable',
                                 'attribute' => 'adv_receivable',
-                                'value' => 'adv_receivable',
+                                'value' => function ($model){
+                                    return $model->adv_receivable == 0 ? 0.00 :$model->adv_receivable;
+                                }
                             ],
                             [
-                                'label' => 'Received',
+                                'label' => 'Adv Received',
                                 'attribute' => 'adv_received',
-                                'value' => 'adv_received',
+                                'value' => function ($model){
+                                    return $model->adv_received == 0 ? 0.00 :$model->adv_received;
+                                }
                             ],
                             [
                                 'attribute' => 'actual_margin',
                                 'filter' => false,
                                 'value' => function($model){
-                                    return $model->adv_receivable == 0 ? 0 : round((($model->adv_receivable - $model->payable) / $model->adv_receivable)*100, 2).'%';
+                                    return $model->adv_receivable == 0 ? 0.00 : round((($model->adv_receivable - $model->payable) / $model->adv_receivable)*100, 2).'%';
                                 }
                             ],
                             [

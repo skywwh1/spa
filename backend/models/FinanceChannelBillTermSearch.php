@@ -195,6 +195,7 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
                     'cost' => [
                         'asc' => ['cost' => SORT_ASC],
                         'desc' => ['cost' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]

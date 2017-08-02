@@ -185,6 +185,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
                     'revenue' => [
                         'asc' => ['revenue' => SORT_ASC],
                         'desc' => ['revenue' => SORT_DESC],
+                        'default' => SORT_DESC,
                     ],
                 ],
             ]
