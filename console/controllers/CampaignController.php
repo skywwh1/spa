@@ -38,8 +38,10 @@ class CampaignController extends Controller
                 $this->echoMessage('sts paused ' . $item->campaign_uuid . '-' . $item->channel_id);
                 $item->save();
                 $redirect = RedirectLog::findLastRedirect($item->campaign_id,$item->channel_id);
-                $redirect->status = 2;
-                $redirect->save();
+                if (!empty($redirect)){
+                    $redirect->status = 2;
+                    $redirect->save();
+                }
                 var_dump($item->getErrors());
             }
         }
@@ -138,6 +140,20 @@ class CampaignController extends Controller
                 if (isset($deliver)) {
                     $deliver->status = 1;
                     $deliver->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
+
+        $updatePrice = CampaignStsUpdate::getStsUpdatePrice();
+        if (isset($updatePrice)) {
+            foreach ($updatePrice as $item) {
+                $camp = Campaign::findOne($item->campaign_id);
+                if (isset($camp)) {
+                    $this->echoMessage('campaign update price ' . $item->campaign_id);
+                    $camp->adv_price = $item->value;
+                    $camp->save();
                 }
                 $item->is_effected = 1;
                 $item->save();

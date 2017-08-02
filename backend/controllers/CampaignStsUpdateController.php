@@ -50,7 +50,8 @@ class CampaignStsUpdateController extends Controller
                             'index',
                             'update-creative',
                             'sub-pause',
-                            'sts-restart'
+                            'sts-restart',
+                            'update-price'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -384,6 +385,7 @@ class CampaignStsUpdateController extends Controller
 //            $camp->promote_end = $model->effect_time;
 //            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
             $camp->save();
+
             CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
             return $this->redirect(Yii::$app->request->referrer);
         } else {
@@ -515,5 +517,38 @@ class CampaignStsUpdateController extends Controller
             ]);
         }
 
+    }
+
+    /**
+     * @param $campaign_id
+     * @return string|\yii\web\Response
+     */
+    public function actionUpdatePrice($campaign_id)
+    {
+        $this->layout = false;
+        $model = new CampaignStsUpdate();
+        $model->campaign_id = $campaign_id;
+
+        if ($model->load(Yii::$app->request->post())) {
+            $camp = Campaign::findById($model->campaign_id);
+
+            $model->type = 1;//2 is sts 1 is campaign
+            $model->name = 'update-price';
+            $model->value = $model->adv_price;
+            $model->old_value = $camp->adv_price;
+            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->save();
+
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
+            return $this->redirect(Yii::$app->request->referrer);
+        } else {
+            $searchModel = new CampaignSearch();
+            $action =  'update-price';
+            $dataProvider= $searchModel->updateSearch($campaign_id,$action);
+            return $this->renderAjax('update_price', [
+                'model' => $model,
+                'dataProvider' => $dataProvider,
+            ]);
+        }
     }
 }
