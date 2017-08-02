@@ -168,7 +168,6 @@ class CountController extends Controller
         $this->echoMessage('Total Feeds ' . count($feeds));
         if (isset($feeds)) {
             foreach ($feeds as $item) {
-                $this->echoMessage('click id ' . $item->click_id);
                 $logClick = LogClick::findByClickUuid($item->click_id);
                 if (empty($logClick)) {
                     $logClick = LogClick2::findByClickUuid($item->click_id);
