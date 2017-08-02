@@ -93,11 +93,7 @@ use yii\widgets\ActiveForm;
 
                     <div class="col-lg-2">
                         <?= $form->field($model, 'status')->dropDownList(
-                            [
-                                6 => 'Receivable',
-                                7 => 'Received',
-                                8 => 'Overdue',
-                            ],
+                            ModelsUtil::receivable_status,
                             ['prompt' => '-- select --']) ?>
                     </div>
                 </div>

@@ -77,11 +77,7 @@ use yii\widgets\ActiveForm;
 
                     <div class="col-lg-2">
                         <?= $form->field($model, 'status')->dropDownList(
-                            [
-                                6 => 'Payable',
-                                7 => 'Paid',
-                                8 => 'Overdue',
-                            ],
+                            ModelsUtil::payable_status,
                             ['prompt' => '-- select --']) ?>
                     </div>
                 </div>

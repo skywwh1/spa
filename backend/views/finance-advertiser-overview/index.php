@@ -94,14 +94,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'actual_margin',
-                                'value' => 'actual_margin',
                                 'filter' => false,
+                                'value' => function ($model){
+                                    return $model->receivable == 0 ? 0 : round((($model->receivable - $model->cha_payable) / $model->receivable)*100, 2).'%';
+                                }
                             ],
                             [
                                 'label' => 'cash_flow',
                                 'attribute' => 'cash_flow',
                                 'value' => function ($model){
-                                    return $model->cha_paid-$model->cost;
+                                    return $model->final_revenue-$model->cha_paid;
                                 }
                             ],
                             [

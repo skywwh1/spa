@@ -224,9 +224,9 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>','fcb.start_time',$start])
             ->andFilterWhere(['<','fcb.end_time',$end_time]);
-        if (empty($this->status)){
-            $query->andFilterWhere(['in', 'fcb.status', [6,7,8]]);
-        }
+//        if (empty($this->status)){
+//            $query->andFilterWhere(['in', 'fcb.status', [6,7,8]]);
+//        }
 
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);

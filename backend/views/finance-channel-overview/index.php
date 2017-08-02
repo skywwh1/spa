@@ -90,8 +90,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                             [
                                 'attribute' => 'actual_margin',
-                                'value' => 'actual_margin',
                                 'filter' => false,
+                                'value' => function($model){
+                                    return $model->adv_receivable == 0 ? 0 : round((($model->adv_receivable - $model->payable) / $model->adv_receivable)*100, 2).'%';
+                                }
                             ],
                             [
                                 'label' => 'cash_flow',

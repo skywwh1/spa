@@ -218,7 +218,7 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
             ->andFilterWhere(['like', 'period', $this->period])
             ->andFilterWhere(['like', 'time_zone', $this->time_zone])
-            ->andFilterWhere(['in', 'fab.status', [6,7,8]])
+//            ->andFilterWhere(['in', 'fab.status', [6,7,8]])
             ->andFilterWhere(['like', 'adv.payment_term', $this->payment_term])
             ->andFilterWhere(['like', 'u0.username', $this->bd])
             ->andFilterWhere(['like', 'u1.username', $this->pm])
