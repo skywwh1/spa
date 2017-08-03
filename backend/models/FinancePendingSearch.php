@@ -21,6 +21,7 @@ class FinancePendingSearch extends FinancePending
     public $campaign_name;
     public $master_channel;
     public $time_zone;
+
     /**
      * @inheritdoc
      */
@@ -158,6 +159,10 @@ class FinancePendingSearch extends FinancePending
         return $dataProvider;
     }
 
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
     public function summarySearch($params)
     {
         $query = new Query();
@@ -204,7 +209,7 @@ class FinancePendingSearch extends FinancePending
         ]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
-            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name]);
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])->one();
 //
 //        if (\Yii::$app->user->can('admin')) {
 //            $query->andFilterWhere(['like', 'u.username', $this->bd]);

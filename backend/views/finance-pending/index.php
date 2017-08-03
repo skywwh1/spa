@@ -9,6 +9,7 @@ use kartik\export\ExportMenu;
 /* @var $searchModel backend\models\FinancePendingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $summary yii\data\ActiveDataProvider */
+/* @var $system array() */
 $this->title = 'Finance Pendings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -24,24 +25,58 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= Html::a('Add ADV Pending', ['add-adv'], ['class' => 'btn btn-primary']) ?>
                         </p>
                         <?php
+                        $summary_columns = [
+                            'pending_cost',
+                            'pending_revenue',
+                            'confirm_cost',
+                            'confirm_revenue',
+                            [
+                                'label' => 'margin',
+                                'value' => function($model){
+                                    $model = (Object)$model;
+                                    return $model->confirm_revenue == 0 ? 0.00 : round((($model->confirm_revenue - $model->confirm_cost) / $model->confirm_revenue)*100, 2).'%';
+                                }
+                            ],
+                        ];
+
+//                        if(!empty($system['cost']) || empty($system['revenue'])){
+////                            var_dump($system['cost'],$system['revenue']);
+////                            die();
+//                            $system_column = [
+//                                [
+//                                    'label' => 'system_cost',
+//                                    'value'=> function ($model) use ($system){
+//                                        if (!empty($model)){
+//                                            if (!empty($system['cost'])){
+//                                                return $system['cost'];
+//                                            }else{
+//                                                return '0';
+//                                            }
+//                                        }
+//                                        return '0';
+//                                    },
+//                                ],
+//                                [
+//                                    'label' => 'system_revenue',
+//                                    'value'=> function ($model) use ($system){
+//                                        if (!empty($model)){
+//                                            if (!empty($system['revenue'])){
+//                                                return $system['revenue'];
+//                                            }else{
+//                                                return '0';
+//                                            }
+//                                        }
+//                                        return '0';
+//                                    },
+//                                ]
+//                            ];
+//                            array_push($summary_columns,$system_column);
+//                        }
                        echo GridView::widget([
                             'dataProvider' => $summary,
-                            'columns' => [
-                                'pending_cost',
-                                'pending_revenue',
-                                'system_cost',
-                                'system_revenue',
-                                'confirm_cost',
-                                'confirm_revenue',
-                                [
-                                    'label' => 'margin',
-                                    'value' => function($model){
-                                        $model = (Object)$model;
-                                        return $model->confirm_revenue == 0 ? 0.00 : round((($model->confirm_revenue - $model->confirm_cost) / $model->confirm_revenue)*100, 2).'%';
-                                    }
-                                ],
-                            ],
+                            'columns' => $summary_columns,
                         ]);
+
                         $columns = [
                             [
                                 // 'label' => 'id',

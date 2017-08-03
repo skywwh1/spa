@@ -11,6 +11,7 @@ use common\models\Deliver;
 use common\models\User;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceAdvertiserBillTerm;
+use common\utility\TimeZoneUtil;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -71,32 +72,34 @@ class FinancePendingController extends Controller
     {
         $searchModel = new FinancePendingSearch();
         $searchModel->time_zone = 'Etc/GMT-8';
-        $date = new DateTime();
-        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
-        $date->setTimestamp(time());
-        $date->format('Y-m-d');
-        $searchModel->start_date = $date->format('Y-m-d');
-        $searchModel->end_date = $date->format('Y-m-d');
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->start_date = TimeZoneUtil::initGMT8BeforeDate();
+        $searchModel->end_date = TimeZoneUtil::initGMT8BeforeDate();
 
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
-        $models = $dataProvider->getModels();
 
         $campaign_id = [];
+        $models = $dataProvider->getModels();
         foreach ($models as $item){
             $campaign_id[] = $item->campaign_id;
         }
-        $start = $_GET['FinancePendingSearch']['start_date'];
-        $end = $_GET['FinancePendingSearch']['end_date'];
-        $cost_revenue = CampaignLogHourly::getInfoByTime($start,$end,$searchModel->time_zone,$campaign_id);
-//        foreach ($summary as $item){
-//            $item->
+        $start_date = TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['start_date']);
+        $end_date =  TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['end_date']);
+        $cost_revenue = CampaignLogHourly::getInfoByTime($start_date,$end_date,$searchModel->time_zone,$campaign_id);
+//
+//        $summary_models = $summary->getModels();
+//        if (!empty($summary_models)){
+//            if(!empty($cost_revenue['cost']) || empty($cost_revenue['revenue'])){
+//                $summary_models[0]['system_revenue'] = $cost_revenue['revenue'];
+//                $summary_models[0]['system_cost'] = $cost_revenue['cost'];
+//            }
 //        }
-
+//        var_dump($summary);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'summary' => $summary
+            'summary' => $summary,
+            'system' => $cost_revenue,
         ]);
     }
 

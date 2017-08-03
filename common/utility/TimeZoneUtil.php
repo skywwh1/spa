@@ -56,5 +56,20 @@ class TimeZoneUtil
         return strtotime(date('Y-m-01', strtotime($date)) . ' -1 day');
     }
 
+    public static function initGMT8BeforeDate()
+    {
+        $time_zone = 'Etc/GMT-8';
+        $beginTheDay = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
 
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($time_zone));
+        $date->setTimestamp($beginTheDay);
+        $beginTheDay = $date->format('Y-m-d');
+
+        return $beginTheDay;
+    }
+
+    public static function getSearchDate($date){
+        return empty($date)?self::initGMT8BeforeDate():$date;
+    }
 }
