@@ -31,6 +31,26 @@ $this->params['breadcrumbs'][] = $this->title;
                             'confirm_cost',
                             'confirm_revenue',
                             [
+                                'label' => 'system_cost',
+                                'value'=> function ($model) use ($system){
+                                    if (!empty($system['cost'])){
+                                        return $system['cost'];
+                                    }else{
+                                        return '0';
+                                    }
+                                },
+                            ],
+                            [
+                                'label' => 'system_revenue',
+                                'value'=> function ($model) use ($system){
+                                    if (!empty($system['revenue'])){
+                                        return $system['revenue'];
+                                    }else{
+                                        return '0';
+                                    }
+                                },
+                            ],
+                            [
                                 'label' => 'margin',
                                 'value' => function($model){
                                     $model = (Object)$model;
@@ -39,39 +59,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             ],
                         ];
 
-//                        if(!empty($system['cost']) || empty($system['revenue'])){
-////                            var_dump($system['cost'],$system['revenue']);
-////                            die();
-//                            $system_column = [
-//                                [
-//                                    'label' => 'system_cost',
-//                                    'value'=> function ($model) use ($system){
-//                                        if (!empty($model)){
-//                                            if (!empty($system['cost'])){
-//                                                return $system['cost'];
-//                                            }else{
-//                                                return '0';
-//                                            }
-//                                        }
-//                                        return '0';
-//                                    },
-//                                ],
-//                                [
-//                                    'label' => 'system_revenue',
-//                                    'value'=> function ($model) use ($system){
-//                                        if (!empty($model)){
-//                                            if (!empty($system['revenue'])){
-//                                                return $system['revenue'];
-//                                            }else{
-//                                                return '0';
-//                                            }
-//                                        }
-//                                        return '0';
-//                                    },
-//                                ]
-//                            ];
-//                            array_push($summary_columns,$system_column);
-//                        }
                        echo GridView::widget([
                             'dataProvider' => $summary,
                             'columns' => $summary_columns,
