@@ -83,10 +83,12 @@ class FinancePendingController extends Controller
         foreach ($models as $item){
             $campaign_id[] = $item->campaign_id;
         }
-        $start_date = TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['start_date']);
-        $end_date =  TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['end_date']);
-        $cost_revenue = CampaignLogHourly::getInfoByTime($start_date,$end_date,$searchModel->time_zone,$campaign_id);
-//
+//        if (!empty($_GET['FinancePendingSearch']['start_date'])){
+//            $start_date = TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['start_date']);
+//            $end_date =  TimeZoneUtil::getSearchDate($_GET['FinancePendingSearch']['end_date']);
+//            $cost_revenue = CampaignLogHourly::getInfoByTime($start_date,$end_date,$searchModel->time_zone,$campaign_id);
+//        }
+////
 //        $summary_models = $summary->getModels();
 //        if (!empty($summary_models)){
 //            if(!empty($cost_revenue['cost']) || empty($cost_revenue['revenue'])){
@@ -95,6 +97,7 @@ class FinancePendingController extends Controller
 //            }
 //        }
 //        var_dump($summary);
+        $cost_revenue = array();
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
