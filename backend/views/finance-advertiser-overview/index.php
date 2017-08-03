@@ -112,7 +112,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'cash_flow',
                                 'attribute' => 'cash_flow',
                                 'value' => function ($model){
-                                    return $model->final_revenue-$model->cha_paid;
+                                    $received = $model->status == 7 ? $model->receivable :0;
+                                    return $received - $model->cha_paid;
                                 }
                             ],
                             [

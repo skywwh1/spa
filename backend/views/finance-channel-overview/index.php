@@ -105,7 +105,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'cash_flow',
                                 'attribute' => 'cash_flow',
                                 'value' => function ($model){
-                                    return $model->adv_received-$model->final_cost;
+                                    $paid = $model->status == 7 ? $model->payable :0;
+                                    return $model->adv_received-$paid;
                                 }
                             ],
                             [
