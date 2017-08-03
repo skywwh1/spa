@@ -83,6 +83,7 @@ class ReportMatchInstallHourly extends \yii\db\ActiveRecord
      */
     public static function updateInstalls(LogFeed $feed)
     {
+        date_default_timezone_set('Etc/GMT-8');
         $campaign_id = $feed->campaign_id;
         $hourly = date('Y-m-d H:00', $feed->feed_time);
         $time = strtotime($hourly);
