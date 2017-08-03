@@ -21,6 +21,7 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
     public $start;
     public $end;
     public $time_zone;
+    public $timestamp;
     /**
      * @inheritdoc
      */
@@ -93,8 +94,7 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
     public function hourlySearch($params)
     {
 
-        $query = ReportMatchInstallHourly::find();
-        $query->alias('clh');
+        $query = new Query();
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
@@ -114,11 +114,14 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
         $query->select([
-            'clh.time',
+            'clh.campaign_id',
+            'clh.advertiser_id',
+            'clh.time timestamp',
             'clh.installs',
             'clh.installs_in',
             'clh.revenue',
         ]);
+        $query->from('report_match_install_hourly clh');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -160,8 +163,8 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
         $query->select([
 //            'ch.username channel_name',
 //            'cam.campaign_name campaign_name',
-//            'clh.campaign_id',
-//            'clh.channel_id',
+            'clh.campaign_id',
+            'clh.advertiser_id',
 //            'FROM_UNIXTIME(clh.time,"%Y-%m-%d") time',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.installs) installs',
@@ -221,35 +224,19 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
         $query->select([
-            'SUM(clh.clicks) clicks',
-            'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
-            'SUM(clh.match_installs) match_installs',
-            'SUM(clh.cost) cost',
+            'SUM(clh.installs_in) installs_in',
             'SUM(clh.revenue) revenue',
-            'SUM(clh.redirect_installs) redirect_installs',
-            'SUM(clh.redirect_match_installs) redirect_match_installs',
-            'SUM(clh.redirect_cost) redirect_cost',
-            'SUM(clh.redirect_revenue) redirect_revenue',
-            'adv.username adv'
         ]);
-        $query->from('campaign_log_hourly clh');
-        $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
-        $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
-        $query->leftJoin('user u', 'ch.om = u.id');
-        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
+        $query->from('report_match_install_hourly clh');
+
+
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
-//            'channel_id' => $this->channel_id,
-//            'pay_out' => $this->pay_out,
-//            'adv_price' => $this->adv_price,
-//            'ch.username' => $this->channel_name,
-//            'adv.username' => $this->adv,
         ]);
 
-        $query->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['>=', 'time', $start])
+        $query->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         return $dataProvider;
@@ -279,7 +266,8 @@ class ReportMatchInstallHourlySearch extends ReportMatchInstallHourly
         $start = $start->getTimestamp();
         $end = $end->getTimestamp();
         $query->select([
-
+            'clh.campaign_id',
+            'clh.advertiser_id',
             'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.installs) installs',
             'SUM(installs_in) installs_in',
