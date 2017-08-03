@@ -83,19 +83,19 @@ class FinancePendingController extends Controller
         foreach ($models as $item){
             $campaign_id[] = $item->campaign_id;
         }
-        $request = Yii::$app->request;
-        $start_date = $request->getQueryParam('FinancePendingSearch')['start_date'];
-        $end_date = $request->getQueryParam('FinancePendingSearch')['end_date'];
-
-        $start_date = TimeZoneUtil::getSearchDate($start_date);
-        $end_date =  TimeZoneUtil::getSearchDate($end_date);
-        $cost_revenue = CampaignLogHourly::getInfoByTime($start_date,$end_date,$searchModel->time_zone,$campaign_id);
+//        $request = Yii::$app->request;
+//        $start_date = $request->getQueryParam('FinancePendingSearch')['start_date'];
+//        $end_date = $request->getQueryParam('FinancePendingSearch')['end_date'];
+//
+//        $start_date = TimeZoneUtil::getSearchDate($start_date);
+//        $end_date =  TimeZoneUtil::getSearchDate($end_date);
+//        $cost_revenue = CampaignLogHourly::getInfoByTime($start_date,$end_date,$searchModel->time_zone,$campaign_id);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'summary' => $summary,
-            'system' => $cost_revenue,
+//            'system' => $cost_revenue,
         ]);
     }
 

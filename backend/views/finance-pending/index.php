@@ -9,7 +9,6 @@ use kartik\export\ExportMenu;
 /* @var $searchModel backend\models\FinancePendingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $summary yii\data\ActiveDataProvider */
-/* @var $system array() */
 $this->title = 'Finance Pendings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -32,22 +31,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'confirm_revenue',
                             [
                                 'label' => 'system_cost',
-                                'value'=> function ($model) use ($system){
-                                    if (!empty($system['cost'])){
-                                        return $system['cost'];
-                                    }else{
-                                        return '0';
-                                    }
+                                'value'=> function ($model){
+                                    $model = (Object)$model;
+                                    return $model->pending_cost + $model->confirm_cost ;
                                 },
                             ],
                             [
                                 'label' => 'system_revenue',
-                                'value'=> function ($model) use ($system){
-                                    if (!empty($system['revenue'])){
-                                        return $system['revenue'];
-                                    }else{
-                                        return '0';
-                                    }
+                                'value'=> function ($model) {
+                                    $model = (Object)$model;
+                                    return $model->pending_revenue + $model->confirm_revenue ;
                                 },
                             ],
                             [
