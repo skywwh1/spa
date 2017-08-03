@@ -1,11 +1,13 @@
 <?php
 
+use kartik\grid\GridView;
 use yii\helpers\Html;
-use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\ReportMatchInstallHourlySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $summary yii\data\ActiveDataProvider */
+
 
 $this->title = 'Campaign revenue';
 $this->params['breadcrumbs'][] = $this->title;
@@ -79,8 +81,8 @@ $columns= [
 if (!empty($searchModel->type)) {
     array_unshift($columns, $time_row);
 } else {
-    unset($columns[2]);
-    array_pop($columns);
+//    unset($columns[2]);
+//    array_pop($columns);
 }
 
 ?>
@@ -90,6 +92,41 @@ if (!empty($searchModel->type)) {
         <div class="box box-info table-responsive">
             <div class="box-body">
                 <div class="report-match-install-hourly-index">
+                    <?= GridView::widget([
+                        'dataProvider' => $summary,
+                        'layout' => '{items}',
+                        'columns' => [
+//                        [
+//                            'attribute' => 'campaign_id',
+//                            'value' => 'campaign_id',
+//                            'pageSummary' => 'Total',
+//                            'filter' => false,
+//                        ],
+//                        [
+//                            'attribute' => 'campaign_name',
+//                            'value' => 'campaign_name',
+//                            'label' => 'Campaign Name',
+//                            'filter' => false,
+//                        ],
+
+                            [
+                                'attribute' => 'installs',
+                                'pageSummary' => true,
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'installs_in',
+                                'pageSummary' => true,
+                                'filter' => false,
+                            ],
+
+                            [
+                                'attribute' => 'revenue',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                        ],
+                    ]); ?>
 
 
                     <?= GridView::widget([

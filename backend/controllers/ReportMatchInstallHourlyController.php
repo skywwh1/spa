@@ -60,10 +60,11 @@ class ReportMatchInstallHourlyController extends Controller
                 $dataProvider = $searchModel->sumSearch(Yii::$app->request->queryParams);
             }
         }
-//        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 
