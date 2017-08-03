@@ -356,6 +356,9 @@ AdminAsset::register($this);
                             ?>
                             <li><a href="/finance-channel-overview/index" data-menu="finance-channel-overview-index"><i class="fa fa-circle-o"></i> Channel Overview</a>
                             </li>
+                            <li><a href="/report-match-install-hourly/index" data-menu="report-match-install-hourly-index"><i class="fa fa-circle-o"></i> Campaign Revenue</a>
+                            </li>
+
                         }
                         <?php } ?>
                     </ul>

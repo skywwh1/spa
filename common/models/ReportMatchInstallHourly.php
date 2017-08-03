@@ -51,7 +51,7 @@ class ReportMatchInstallHourly extends \yii\db\ActiveRecord
             'time' => 'Time',
             'advertiser_id' => 'Advertiser ID',
             'installs' => 'Installs',
-            'installs_in' => 'Installs In',
+            'installs_in' => 'Redirect In',
             'revenue' => 'Revenue',
             'update_time' => 'Update Time',
             'create_time' => 'Create Time',
