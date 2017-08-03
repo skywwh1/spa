@@ -84,14 +84,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'Adv Receivable',
                                 'attribute' => 'adv_receivable',
                                 'value' => function ($model){
-                                    return $model->adv_receivable == 0 ? 0.00 :$model->adv_receivable;
+                                    if ($model->revenue>0){
+                                        return $model->adv_receivable == 0 ? 0.00 :$model->adv_receivable;
+                                    }
+                                    return 0;
                                 }
                             ],
                             [
                                 'label' => 'Adv Received',
                                 'attribute' => 'adv_received',
                                 'value' => function ($model){
-                                    return $model->adv_received == 0 ? 0.00 :$model->adv_received;
+                                    if ($model->revenue>0){
+                                        return $model->adv_received == 0 ? 0.00 :$model->adv_received;
+                                    }
+                                    return 0;
                                 }
                             ],
                             [
@@ -105,8 +111,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'cash_flow',
                                 'attribute' => 'cash_flow',
                                 'value' => function ($model){
-                                    $paid = $model->status == 7 ? $model->payable :0;
-                                    return $model->adv_received-$paid;
+                                    if ($model->revenue>0){
+                                        $paid = $model->status == 7 ? $model->payable :0;
+                                        return $model->adv_received-$paid;
+                                    }
+                                    return 0;
                                 }
                             ],
                             [

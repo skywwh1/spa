@@ -79,7 +79,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cha_paid',
                                 'filter' => false,
                                 'value' => function ($model){
-                                    return $model->cha_paid == 0 ? 0.00 :$model->cha_paid;
+                                    if ($model->cost>0){
+                                        return $model->cha_paid == 0 ? 0.00 :$model->cha_paid;
+                                    }
+                                   return 0;
                                 }
                             ],
                             [
@@ -112,8 +115,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'cash_flow',
                                 'attribute' => 'cash_flow',
                                 'value' => function ($model){
-                                    $received = $model->status == 7 ? $model->receivable :0;
-                                    return $received - $model->cha_paid;
+                                    if ($model->cost>0){
+                                        $received = $model->status == 7 ? $model->receivable :0;
+                                        $cha_paid = $model->cha_paid == 0 ? 0.00 :$model->cha_paid;
+                                        return $received - $cha_paid;
+                                    }
+                                    return 0;
                                 }
                             ],
                             [
