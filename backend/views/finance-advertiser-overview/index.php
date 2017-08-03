@@ -69,7 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'cha_payable',
                                 'filter' => false,
                                 'value' => function ($model){
-                                    return $model->cha_payable == 0 ? 0.00 :$model->cha_payable;
+                                    if ($model->cost>0){
+                                        return $model->cha_payable == 0 ? 0.00 :$model->cha_payable;
+                                    }
+                                    return 0;
                                 }
                             ],
                             [
@@ -93,7 +96,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => 'received',
                                 'attribute' => 'final_revenue',
-                                'value' => 'final_revenue',
+                                'value' => function ($model){
+                                    return $model->status == 7 ? $model->receivable :0;
+                                },
                                 'filter' => false,
                             ],
                             [

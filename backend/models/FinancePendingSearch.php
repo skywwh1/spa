@@ -6,7 +6,11 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\FinancePending;
-
+use common\models\Channel;
+use DateTime;
+use DateTimeZone;
+use DateInterval;
+use yii\db\Query;
 /**
  * FinancePendingSearch represents the model behind the search form about `backend\models\FinancePending`.
  */
@@ -15,14 +19,16 @@ class FinancePendingSearch extends FinancePending
     public $month;
     public $channel_name;
     public $campaign_name;
+    public $master_channel;
+    public $time_zone;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['id', 'adv_id', 'campaign_id', 'channel_id', 'start_date', 'end_date', 'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
-            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note','month','channel_name','campaign_name'], 'safe'],
+            [['id', 'adv_id', 'campaign_id', 'channel_id',  'installs', 'match_installs', 'status', 'create_time', 'update_time'], 'integer'],
+            [['adv_bill_id', 'channel_bill_id', 'adv', 'pm', 'bd', 'om', 'note','month','channel_name','campaign_name','master_channel','start_date','end_date'], 'safe'],
             [['adv_price', 'pay_out', 'cost', 'revenue', 'margin'], 'number'],
         ];
     }
@@ -62,14 +68,23 @@ class FinancePendingSearch extends FinancePending
             return $dataProvider;
         }
 
+        if (!empty($this->master_channel)){
+            $channel_id = Channel::findByUsername($this->master_channel)->id;
+            $query->andFilterWhere([ 'channel_id' => $channel_id ]);
+        }
+        $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
+        $start_date = $start->getTimestamp();
+        $end_date = $end->add(new DateInterval('P1D'));
+        $end_date = $end_date->getTimestamp();
         // grid filtering conditions
         $query->andFilterWhere([
             'fp.id' => $this->id,
             'adv_id' => $this->adv_id,
             'campaign_id' => $this->campaign_id,
             'channel_id' => $this->channel_id,
-            'start_date' => $this->start_date,
-            'end_date' => $this->end_date,
+//            'start_date' => $this->start_date,
+//            'end_date' => $this->end_date,
             'installs' => $this->installs,
             'match_installs' => $this->match_installs,
             'adv_price' => $this->adv_price,
@@ -95,6 +110,8 @@ class FinancePendingSearch extends FinancePending
             ->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'adv_bill_id', $this->month])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
+        $query->andFilterWhere(['>=', 'fp.start_date', $start_date])
+            ->andFilterWhere(['<', 'fp.end_date', $end_date]);
         $query->orderBy(['fp.id' => SORT_DESC]);
         return $dataProvider;
     }
@@ -134,6 +151,69 @@ class FinancePendingSearch extends FinancePending
             'adv_bill_id_new' => $this->adv_bill_id_new,
             'channel_bill_id_new' => $this->channel_bill_id_new,
         ]);
+
+        return $dataProvider;
+    }
+
+    public function summarySearch($params)
+    {
+        $query = new Query();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
+        $start_date = $start->getTimestamp();
+        $end_date = $end->add(new DateInterval('P1D'));
+        $end_date = $end_date->getTimestamp();
+       /* select a.ID, b.* from
+        (select [Name], min(ID) as ID from A group by [Name]) a,
+        (select [Name], sum(case State when '排产' then Num else 0 end) as 排产, sum(case State when '发货' then Num else 0 end) as 发货 from A group by [Name]) b
+        where a.[Name] = b.[Name];*/
+        $query->select([
+            'SUM(IF(fp.status= 0, fp.revenue, 0)) AS pending_revenue,
+           SUM(IF(fp.status= 0, fp.cost, 0)) AS pending_cost,
+           SUM(IF(fp.status= 1, fp.revenue, 0)) AS confirm_revenue,
+           SUM(IF(fp.status= 1, fp.cost, 0)) AS confirm_cost'
+        ]);
+        $query->from('finance_pending fp');
+        $query->leftJoin('channel ch', 'fp.channel_id = ch.id');
+        $query->leftJoin('campaign cam', 'fp.campaign_id = cam.id');
+
+        $query->andFilterWhere(['like', 'adv_bill_id', $this->adv_bill_id])
+            ->andFilterWhere(['like', 'channel_bill_id', $this->channel_bill_id])
+            ->andFilterWhere(['like', 'fp.adv', $this->adv])
+            ->andFilterWhere(['like', 'fp.pm', $this->pm])
+            ->andFilterWhere(['like', 'fp.bd', $this->bd])
+            ->andFilterWhere(['like', 'fp.om', $this->om])
+            ->andFilterWhere(['>=', 'fp.start_date', $start_date])
+            ->andFilterWhere(['<', 'fp.end_date', $end_date]);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => $this->channel_id,
+            'pay_out' => $this->pay_out,
+            'adv_price' => $this->adv_price,
+            'ad.username' => $this->adv_name,
+        ]);
+
+        $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name]);
+//
+//        if (\Yii::$app->user->can('admin')) {
+//            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+//        } else if (\Yii::$app->user->can('pm')) {
+//            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
+//        } else {
+//            $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
+//        }
 
         return $dataProvider;
     }

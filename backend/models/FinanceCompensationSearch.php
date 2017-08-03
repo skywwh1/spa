@@ -2,17 +2,26 @@
 
 namespace backend\models;
 
+use common\models\Channel;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\models\FinanceCompensation;
-
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 /**
  * FinanceCompensationSearch represents the model behind the search form about `backend\models\FinanceCompensation`.
  */
 class FinanceCompensationSearch extends FinanceCompensation
 {
     public $deduction_ids;
+    public $adv_name;
+    public $master_channel;
+    public $bd;
+    public $om;
+    public $pm;
+    public $time_zone;
 
     /**
      * @inheritdoc
@@ -21,6 +30,7 @@ class FinanceCompensationSearch extends FinanceCompensation
     {
         return [
             [['deduction_id', 'status', 'editor', 'creator'], 'integer'],
+            [['adv_name','master_channel','bd','om','pm','start_date','end_date','channel','campaign_id','status','deduction_id',], 'safe'],
             [['compensation', 'billable_cost', 'billable_revenue', 'billable_margin', 'final_margin'], 'number'],
         ];
     }
@@ -44,6 +54,7 @@ class FinanceCompensationSearch extends FinanceCompensation
     public function search($params)
     {
         $query = FinanceCompensation::find();
+        $query->alias('fc');
 
         // add conditions that should always apply here
 
@@ -52,13 +63,26 @@ class FinanceCompensationSearch extends FinanceCompensation
         ]);
 
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
+        $query->joinWith('deduction d');
+        if (!empty($this->channel)){
+            $channel_id =  Channel::findByUsername($this->channel)->id;
+            $query->andFilterWhere([ 'd.channel_id' => $channel_id ]);
+        }
+        if (!empty($this->master_channel)){
+            $channel_id =  Channel::findByUsername($this->master_channel)->id;
+            $query->andFilterWhere([ 'd.channel_id' => $channel_id ]);
+        }
 
+        $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
+        $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
+        $start_date = $start->getTimestamp();
+        $end_date = $end->add(new DateInterval('P1D'));
+        $end_date = $end_date->getTimestamp();
         // grid filtering conditions
         $query->andFilterWhere([
             'deduction_id' => $this->deduction_id,
@@ -67,10 +91,17 @@ class FinanceCompensationSearch extends FinanceCompensation
             'billable_revenue' => $this->billable_revenue,
             'billable_margin' => $this->billable_margin,
             'final_margin' => $this->final_margin,
-            'status' => $this->status,
+            'fc.status' => $this->status,
             'editor' => $this->editor,
             'creator' => $this->creator,
+            'd.adv' => $this->adv_name,
+            'd.pm' => $this->pm,
+            'd.om' => $this->om,
+            'd.bd' => $this->bd,
+            'd.campaign_id' => $this->campaign_id,
         ]);
+        $query->andFilterWhere(['>=', 'd.start_date', $start_date])
+         ->andFilterWhere(['<', 'd.end_date', $end_date]);
 
         return $dataProvider;
     }

@@ -14,6 +14,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\Response;
 use yii\widgets\ActiveForm;
+use DateTime;
+use DateTimeZone;
 
 /**
  * FinanceCompensationController implements the CRUD actions for FinanceCompensation model.
@@ -58,6 +60,13 @@ class FinanceCompensationController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinanceCompensationSearch();
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start_date = $date->format('Y-m-d');
+        $searchModel->end_date = $date->format('Y-m-d');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [

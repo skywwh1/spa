@@ -140,4 +140,13 @@ class UtilController extends Controller
 //
 //        return $out;
 //    }
+    public function actionGetMasterChannel($name)
+    {
+        $data = Channel::getMasterChannelNameListByName($name);
+        $out = [];
+        foreach ($data as $d) {
+            $out[] = ['value' => $d];
+        }
+        return $out;
+    }
 }

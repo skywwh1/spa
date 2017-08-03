@@ -69,10 +69,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'filter' => false,
                              ],
                             [
-                                 'attribute' => 'paid',
-                                 'value' => 'final_cost',
+                                'attribute' => 'paid',
+                                'value' => function ($model){
+                                    return $model->status == 7 ? $model->payable :0;
+                                },
                                 'filter' => false,
-                             ],
+                            ],
                             [
                                 'label' => 'System Revenue',
                                 'attribute' => 'report_revenue',

@@ -8,24 +8,40 @@ use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FinancePendingSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+/* @var $summary yii\data\ActiveDataProvider */
 $this->title = 'Finance Pendings';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="finance-pending-index"></div>
+<?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="row">
         <div class="col-lg-12">
             <div class="box box-info">
                 <div class="box-body">
                     <div class="finance-pending-index">
-
-<!--                        --><?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
                         <p>
-                            <?= Html::a('Add Campaign Pending', ['add-campaign'], ['class' => 'btn btn-success']) ?>
-                            <?= Html::a('Add ADV Pending', ['add-adv'], ['class' => 'btn btn-success']) ?>
+                            <?= Html::a('Add Campaign Pending', ['add-campaign'], ['class' => 'btn btn-primary']) ?>
+                            <?= Html::a('Add ADV Pending', ['add-adv'], ['class' => 'btn btn-primary']) ?>
                         </p>
                         <?php
+                       echo GridView::widget([
+                            'dataProvider' => $summary,
+                            'columns' => [
+                                'pending_cost',
+                                'pending_revenue',
+                                'system_cost',
+                                'system_revenue',
+                                'confirm_cost',
+                                'confirm_revenue',
+                                [
+                                    'label' => 'margin',
+                                    'value' => function($model){
+                                        $model = (Object)$model;
+                                        return $model->confirm_revenue == 0 ? 0.00 : round((($model->confirm_revenue - $model->confirm_cost) / $model->confirm_revenue)*100, 2).'%';
+                                    }
+                                ],
+                            ],
+                        ]);
                         $columns = [
                             [
                                 // 'label' => 'id',
@@ -36,6 +52,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'Channel',
                                 'attribute' => 'channel_name',
                                 'value' => 'channel.username',
+                            ],
+                            [
+                                'label' => 'adv',
+                                'attribute' => 'adv',
+                                'value' => 'adv',
                             ],
                             [
                                 'attribute' => 'month',
@@ -73,6 +94,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $date->setTimestamp($model->start_date);
                                     return $date->format($format);
                                 },
+                                'filter' => false,
                             ],
                             [
                                 // 'label' => 'end_date',
@@ -84,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $date->setTimestamp($model->end_date);
                                     return $date->format($format);
                                 },
-
+                                'filter' => false,
                             ],
 
                             [
@@ -107,11 +129,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'margin',
                                 'value' => 'margin',
                             ],
-                            [
-                                'label' => 'adv',
-                                'attribute' => 'adv',
-                                'value' => 'adv',
-                            ],
+
                             [
                                 'label' => 'pm',
                                 'attribute' => 'pm',
@@ -163,6 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'id' => 'pending-list',
+                            'showPageSummary' => true,
                             'pjax' => false,
                             'columns' => [
                                 [
@@ -209,6 +228,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'value' => 'channel.username',
                                 ],
                                 [
+                                    'label' => 'adv',
+                                    'attribute' => 'adv',
+                                    'value' => 'adv',
+                                ],
+                                [
                                    'attribute' => 'month',
                                     'value' => function($model){
                                         return isset($model->adv_bill_id) ? substr($model->adv_bill_id,3) : Yii::$app->formatter->asDate('now', 'php:Y-m');
@@ -244,6 +268,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $date->setTimestamp($model->start_date);
                                         return $date->format($format);
                                     },
+                                    'filter' => false,
                                 ],
                                 [
                                     // 'label' => 'end_date',
@@ -255,7 +280,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $date->setTimestamp($model->end_date);
                                         return $date->format($format);
                                     },
-
+                                    'filter' => false,
                                 ],
 
                                 [
@@ -267,21 +292,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'label' => 'cost',
                                     'attribute' => 'cost',
                                     'value' => 'cost',
+                                    'pageSummary' => true,
                                 ],
                                 [
                                     'label' => 'revenue',
                                     'attribute' => 'revenue',
                                     'value' => 'revenue',
+                                    'pageSummary' => true,
                                 ],
                                 [
                                     'label' => 'margin',
                                     'attribute' => 'margin',
                                     'value' => 'margin',
-                                ],
-                                [
-                                    'label' => 'adv',
-                                    'attribute' => 'adv',
-                                    'value' => 'adv',
                                 ],
                                 [
                                     'label' => 'pm',

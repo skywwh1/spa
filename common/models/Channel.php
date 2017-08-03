@@ -390,4 +390,10 @@ class Channel extends ActiveRecord implements IdentityInterface
         $emails = User::getUserEmailList($user_ids);
         return $emails;
     }
+
+    public static function getMasterChannelNameListByName($name)
+    {
+        $master_channel = static::find()->select("master_channel")->where(['like', 'username', $name])->asArray()->column();
+        return static::find()->select("user_name")->where(['in', 'master_channel', $master_channel])->column();
+    }
 }

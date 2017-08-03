@@ -44,6 +44,12 @@ use Yii;
 class FinancePending extends \yii\db\ActiveRecord
 {
     public $adv_name;
+    public $pendingCost;
+    public $pending_revenue;
+    public $confirm_revenue;
+    public $confirm_cost;
+    public $system_revenue;
+    public $system_cost;
     /**
      * @inheritdoc
      */

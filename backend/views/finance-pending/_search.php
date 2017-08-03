@@ -2,70 +2,157 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use kartik\date\DatePicker;
+use kartik\typeahead\Typeahead;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinancePendingSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="finance-pending-search">
+<div class="row">
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+            <?php $form = ActiveForm::begin([
+                'action' => ['index'],
+                'method' => 'get',
+            ]); ?>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'adv')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+//                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-adv']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'campaign_id') ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'master_channel')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-channel']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'om')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            'options' => ['value' => isset($model->om) ? $model->om : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-user']) . '?u=%QUERY' . '&t=9',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'pm')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            'options' => ['value' => isset($model->pm) ? $model->pm : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-user']) . '?u=%QUERY' . '&t=9',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
 
-    <?= $form->field($model, 'id') ?>
+                    </div>
 
-    <?= $form->field($model, 'adv_bill_id') ?>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'bd')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+                            'options' => ['value' => isset($model->bd) ? $model->bd : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-user']) . '?u=%QUERY' . '&t=9',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
 
-    <?= $form->field($model, 'channel_bill_id') ?>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'status')->dropDownList(
+                            ModelsUtil::pending_status,
+                            ['prompt' => '-- select --']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <?php
+                        echo '<label class="control-label">Date</label>';
+                        echo DatePicker::widget([
+                            'name' => 'FinancePendingSearch[start_date]',
+                            'value' => isset($model->start_date) ? $model->start_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                            'type' => DatePicker::TYPE_RANGE,
+                            'name2' => 'FinancePendingSearch[end_date]',
+                            'value2' => isset($model->end_date) ? $model->end_date : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm-dd'
+                            ]
+                        ]);
+                        ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'id') ?>
+                    </div>
+                </div>
 
-    <?= $form->field($model, 'adv_id') ?>
+                <div class="form-group">
+                    <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                </div>
 
-    <?= $form->field($model, 'campaign_id') ?>
+                <?php ActiveForm::end(); ?>
 
-    <?php // echo $form->field($model, 'channel_id') ?>
-
-    <?php // echo $form->field($model, 'start_date') ?>
-
-    <?php // echo $form->field($model, 'end_date') ?>
-
-    <?php // echo $form->field($model, 'installs') ?>
-
-    <?php // echo $form->field($model, 'match_installs') ?>
-
-    <?php // echo $form->field($model, 'adv_price') ?>
-
-    <?php // echo $form->field($model, 'pay_out') ?>
-
-    <?php // echo $form->field($model, 'cost') ?>
-
-    <?php // echo $form->field($model, 'revenue') ?>
-
-    <?php // echo $form->field($model, 'margin') ?>
-
-    <?php // echo $form->field($model, 'adv') ?>
-
-    <?php // echo $form->field($model, 'pm') ?>
-
-    <?php // echo $form->field($model, 'bd') ?>
-
-    <?php // echo $form->field($model, 'om') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'note') ?>
-
-    <?php // echo $form->field($model, 'create_time') ?>
-
-    <?php // echo $form->field($model, 'update_time') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
+            </div>
+        </div>
     </div>
-
-    <?php ActiveForm::end(); ?>
-
 </div>

@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="box-body">
                     <div class="finance-compensation-index">
 
-                        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+                        <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
 
                         <?= GridView::widget([
                             'id' => 'compensation-list',
@@ -34,101 +34,96 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'all' => function ($url, $model, $key) {
                                             if ($model->status == 0) {
                                                 return '<div class="dropdown">
-                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
-                                      <span class="caret"></span></button>
-                                      <ul class="dropdown-menu">
+                                                  <button class="btn btn-primary btn-sm dropdown-toggle"" type="button" data-toggle="dropdown">Actions
+                                                  <span class="caret"></span></button>
+                                                  <ul class="dropdown-menu">
 
-                                      <li><a data-delete="0" data-title="' . $this->title . ' ' . $model->deduction_id . '" data-url="/finance-compensation/delete?id=' . $model->deduction_id . '">Delete</a></li>
-                                      <li><a data-view="0" data-title="Update Compensation ' . $model->deduction_id . '" data-url="/finance-compensation/update?id=' . $model->deduction_id . '">Update</a></li>
-                                      </ul></div>';
+                                                  <li><a data-delete="0" data-title="' . $this->title . ' ' . $model->deduction_id . '" data-url="/finance-compensation/delete?id=' . $model->deduction_id . '">Delete</a></li>
+                                                  <li><a data-view="0" data-title="Update Compensation ' . $model->deduction_id . '" data-url="/finance-compensation/update?id=' . $model->deduction_id . '">Update</a></li>
+                                                  </ul></div>';
                                             }
-
                                         },
                                     ],
                                 ],
                                 [
-                                    // 'label' => 'id',
+                                    'label' => 'Deduct Id',
                                     'attribute' => 'deduction_id',
                                     'value' => 'deduction_id',
+                                    'filter' => false,
                                 ],
                                 [
                                     'label' => 'Channel',
                                     'attribute' => 'deduction.channel.username',
-//                                    'value' => 'system_cost',
                                 ],
                                 [
-                                    // 'label' => 'system_cost',
+                                    'label' => 'Camp Id',
                                     'attribute' => 'campaign_id',
                                     'value' => 'deduction.campaign_id',
+                                    'filter' => false,
                                 ],
                                 [
-                                    // 'label' => 'system_revenue',
                                     'attribute' => 'campaign',
                                     'value' => 'deduction.campaign.campaign_name',
                                 ],
                                 [
-                                    // 'label' => 'system_revenue',
                                     'attribute' => 'start_date',
-                                    'value' => 'deduction.start_date',
-                                    'format' => 'datetime',
+//                                    'value' => 'deduction.start_date',
+//                                    'format' => 'datetime',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return gmdate('Y-m-d H:i',$model->deduction->start_date + 8*3600);
+                                    },
                                 ],
                                 [
-                                    // 'label' => 'system_revenue',
                                     'attribute' => 'end_date',
-                                    'value' => 'deduction.end_date',
+//                                    'value' => 'deduction.end_date',
+//                                    'format' => 'datetime',
+                                    'filter' => false,
+                                    'value' => function ($model) {
+                                        return gmdate('Y-m-d H:i',$model->deduction->end_date + 8*3600);
+                                    },
                                 ],
                                 [
-                                    // 'label' => 'system_revenue',
+                                    'label' => 'Deduct Revenue',
                                     'attribute' => 'deduction_revenue',
                                     'value' => 'deduction.deduction_revenue',
                                 ],
                                 [
-                                    // 'label' => 'system_revenue',
+                                    'label' => 'Deduct Cost',
                                     'attribute' => 'deduction_cost',
                                     'value' => 'deduction.deduction_cost',
                                 ],
                                 [
-                                    // 'label' => 'billable_cost',
                                     'attribute' => 'system_cost',
                                     'value' => 'deduction.cost',
+                                    'filter' => false,
                                 ],
                                 [
-                                    // 'label' => 'billable_cost',
                                     'attribute' => 'system_revenue',
                                     'value' => 'deduction.revenue',
+                                    'filter' => false,
                                 ],
                                 [
-                                    // 'label' => 'billable_cost',
                                     'attribute' => 'billable_cost',
                                     'value' => 'billable_cost',
                                 ],
                                 [
-                                    // 'label' => 'billable_cost',
-                                    'attribute' => 'billable_cost',
-                                    'value' => 'billable_cost',
-                                ],
-                                [
-//                             'label' => 'billable_revenue',
                                     'attribute' => 'billable_revenue',
                                     'value' => 'billable_revenue',
                                 ],
                                 [
-//                             'label' => 'billable_margin',
                                     'attribute' => 'billable_margin',
                                     'value' => 'billable_margin',
                                 ],
                                 [
-//                             'label' => 'compensation',
                                     'attribute' => 'compensation',
                                     'value' => 'compensation',
                                 ],
                                 [
-//                                    'label' => 'final_margin',
                                     'attribute' => 'final_margin',
                                     'value' => 'final_margin',
                                 ],
                                 [
-//                             'label' => 'status',
                                     'attribute' => 'status',
                                     'value' => function ($model) {
                                         return ModelsUtil::getCompensationStatus($model->status);

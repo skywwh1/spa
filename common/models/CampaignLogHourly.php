@@ -231,4 +231,34 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
         $query->having('installs > daily_cap');
 		var_dump($query->createCommand()->sql);        return $query->all();
     }
+
+    /**
+     * @param $start_date
+     * @param $end_date
+     * @param $time_zone
+     * @return array
+     */
+    public static function getInfoByTime($start_date,$end_date,$time_zone,$campaign_id){
+        $query = new Query();
+        $start = new DateTime($start_date, new DateTimeZone($time_zone));
+        $end = new DateTime($end_date, new DateTimeZone($time_zone));
+        $start_date = $start->getTimestamp();
+        $end_date = $end->add(new DateInterval('P1D'));
+        $end_date = $end_date->getTimestamp();
+        $query->select([
+            'clh.campaign_id',
+            'clh.channel_id',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
+            'SUM(clh.cost) cost',
+            'SUM(clh.revenue) revenue',
+        ]);
+        $query->from('campaign_log_hourly clh');
+        // grid filtering conditions
+
+       $query->andFilterWhere(['in', 'campaign_id', $start_date])
+            ->andFilterWhere(['>=', 'time', $start_date])
+            ->andFilterWhere(['<', 'time', $end_date]);
+
+       return $query->all();
+    }
 }

@@ -33,7 +33,7 @@ class FinanceCompensation extends ActiveRecord
     public $deduction_cost;
     public $system_cost;
     public $system_revenue;
-    public $final_margin;
+//    public $final_margin;
     public $note;
 
     /**

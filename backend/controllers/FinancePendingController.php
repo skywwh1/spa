@@ -70,11 +70,33 @@ class FinancePendingController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinancePendingSearch();
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start_date = $date->format('Y-m-d');
+        $searchModel->end_date = $date->format('Y-m-d');
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
+        $models = $dataProvider->getModels();
+
+        $campaign_id = [];
+        foreach ($models as $item){
+            $campaign_id[] = $item->campaign_id;
+        }
+        $start = $_GET['FinancePendingSearch']['start_date'];
+        $end = $_GET['FinancePendingSearch']['end_date'];
+        $cost_revenue = CampaignLogHourly::getInfoByTime($start,$end,$searchModel->time_zone,$campaign_id);
+//        foreach ($summary as $item){
+//            $item->
+//        }
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary
         ]);
     }
 
