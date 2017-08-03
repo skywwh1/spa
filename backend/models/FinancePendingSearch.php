@@ -72,11 +72,7 @@ class FinancePendingSearch extends FinancePending
             $channel_id = Channel::findByUsername($this->master_channel)->id;
             $query->andFilterWhere([ 'channel_id' => $channel_id ]);
         }
-        $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
-        $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
-        $start_date = $start->getTimestamp();
-        $end_date = $end->add(new DateInterval('P1D'));
-        $end_date = $end_date->getTimestamp();
+
         // grid filtering conditions
         $query->andFilterWhere([
             'fp.id' => $this->id,
@@ -110,8 +106,15 @@ class FinancePendingSearch extends FinancePending
             ->andFilterWhere(['like', 'campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'adv_bill_id', $this->month])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name]);
-        $query->andFilterWhere(['>=', 'fp.start_date', $start_date])
-            ->andFilterWhere(['<', 'fp.end_date', $end_date]);
+        if (!empty($this->time_zone)){
+            $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
+            $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
+            $start_date = $start->getTimestamp();
+            $end_date = $end->add(new DateInterval('P1D'));
+            $end_date = $end_date->getTimestamp();
+            $query->andFilterWhere(['>=', 'fp.start_date', $start_date])
+                ->andFilterWhere(['<', 'fp.end_date', $end_date]);
+        }
         $query->orderBy(['fp.id' => SORT_DESC]);
         return $dataProvider;
     }
@@ -173,10 +176,6 @@ class FinancePendingSearch extends FinancePending
         $start_date = $start->getTimestamp();
         $end_date = $end->add(new DateInterval('P1D'));
         $end_date = $end_date->getTimestamp();
-       /* select a.ID, b.* from
-        (select [Name], min(ID) as ID from A group by [Name]) a,
-        (select [Name], sum(case State when '排产' then Num else 0 end) as 排产, sum(case State when '发货' then Num else 0 end) as 发货 from A group by [Name]) b
-        where a.[Name] = b.[Name];*/
         $query->select([
             'SUM(IF(fp.status= 0, fp.revenue, 0)) AS pending_revenue,
            SUM(IF(fp.status= 0, fp.cost, 0)) AS pending_cost,
