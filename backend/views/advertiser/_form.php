@@ -66,9 +66,9 @@ use yii\widgets\ActiveForm;
             <?= $form->field($model, 'contacts')->textInput(['maxlength' => true]) ?>
             <?= $form->field($model, 'system')->dropDownList(
                 System::find()
-                    ->select(['name','value'])
+                    ->select(['name','id'])
                     ->orderBy('id')
-                    ->indexBy('value')
+                    ->indexBy('id')
                     ->column()
             ) ?>
             <?= $form->field($model, 'post_parameter')->textInput(['placeholder' => 'ex: tx={click_id}&publisher={ch_id}']) ?>

@@ -46,11 +46,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'attribute' => 'bd',
                                 'value' => $model->bd0->username,
                             ],
-                            'system',
-//                            [
-//                                'attribute' => 'system',
-//                                'value' => ModelsUtil::getValue(ModelsUtil::system, $model->system),
-//                            ],
+                            [
+                                'attribute' => 'system',
+                                'value' => \common\models\System::getName($model->system)
+                            ],
                             //'status',
                             [
                                 'attribute' => 'status',
