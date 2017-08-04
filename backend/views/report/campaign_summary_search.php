@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ReportChannelSearch */
+/* @var $model common\models\ReportCampaignSummarySearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
         <!-- general form elements -->
         <div class="box box-primary">
             <?php $form = ActiveForm::begin([
-                'action' => ['index'],
+                'action' => ['campaign-summary'],
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
@@ -29,10 +29,10 @@ use yii\widgets\ActiveForm;
                     <?php
                     echo '<label class="control-label">Date</label>';
                     echo DatePicker::widget([
-                        'name' => 'ReportSearch[start]',
+                        'name' => 'ReportCampaignSummarySearch[start]',
                         'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'ReportSearch[end]',
+                        'name2' => 'ReportCampaignSummarySearch[end]',
                         'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'pluginOptions' => [
                             'autoclose' => true,

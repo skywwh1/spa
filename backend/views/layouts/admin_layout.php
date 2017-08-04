@@ -54,7 +54,7 @@ AdminAsset::register($this);
                             $count1 = count($data);
 
                             $beginTheDay = TimeZoneUtil::setTimeZoneGMT8Before();
-//                            $data2 = \common\models\LogCheckClicksDaily::find()->where(['>=','time',$beginTheDay])->all();
+                            //                            $data2 = \common\models\LogCheckClicksDaily::find()->where(['>=','time',$beginTheDay])->all();
                             $status = 0;
                             $data2 = \common\models\LogCheckClicksDaily::getRecentMsg($status);
                             $count2 = count($data2);
@@ -66,7 +66,7 @@ AdminAsset::register($this);
                             $count4 = count($data4);
 
                             $count = $count1 + $count2 + $count3 + $count4;
-                            echo '<span id= "lov-cvr" class="label label-warning"> '. $count.' </span>';
+                            echo '<span id= "lov-cvr" class="label label-warning"> ' . $count . ' </span>';
                             ?>
                         </a>
                         <ul class="dropdown-menu">
@@ -77,28 +77,28 @@ AdminAsset::register($this);
                                     <li>
                                         <a href="/apply-campaign/index">
                                             <?php
-                                            echo '<i class="fa fa-users text-aqua"></i> '. $count1.' applying offers';
+                                            echo '<i class="fa fa-users text-aqua"></i> ' . $count1 . ' applying offers';
                                             ?>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="/deliver/low-cvr">
                                             <?php
-                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count2.' Low CVR antiCheat';
+                                            echo '<i class="fa fa-warning text-yellow"></i> ' . $count2 . ' Low CVR antiCheat';
                                             ?>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="/deliver/anti-cheat-cvr">
                                             <?php
-                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count3.' Anti Cheat CVR';
+                                            echo '<i class="fa fa-warning text-yellow"></i> ' . $count3 . ' Anti Cheat CVR';
                                             ?>
                                         </a>
                                     </li>
                                     <li>
                                         <a href="/deliver/sub-chid-anticheat">
                                             <?php
-                                            echo '<i class="fa fa-warning text-yellow"></i> '. $count4.' Sub Chid Aanticheat';
+                                            echo '<i class="fa fa-warning text-yellow"></i> ' . $count4 . ' Sub Chid Aanticheat';
                                             ?>
                                         </a>
                                     </li>
@@ -112,18 +112,18 @@ AdminAsset::register($this);
                             <i class="fa fa-envelope-o"></i>
                             <?php
                             $data = ChannelUpdate::getRecentChannel();
-                            $column = array_unique(array_column($data,'id'));
+                            $column = array_unique(array_column($data, 'id'));
                             $count = count($column);
-                            $column = empty($column)?"":implode(",",$column);
-                            echo '<span class="label label-success">'.$count.'</span>';
+                            $column = empty($column) ? "" : implode(",", $column);
+                            echo '<span class="label label-success">' . $count . '</span>';
                             ?>
                         </a>
                         <ul class="dropdown-menu">
                             <?php
-                            echo '<li class="header">The following channels: '.$column.' have been changed.</li>';
+                            echo '<li class="header">The following channels: ' . $column . ' have been changed.</li>';
                             if (Yii::$app->user->can('admin')) {
                                 echo '<li class="footer"><a href="/channel/index">Click here for more detail.</a></li>';
-                            }else{
+                            } else {
                                 echo '<li class="footer"><a href="/channel/my-channels">Click here for more detail.</a></li>';
                             }
                             ?>
@@ -194,7 +194,7 @@ AdminAsset::register($this);
                         <li><a href="/campaign-sub-channel-log-redirect/index" data-menu="campaign-sub-channel-log-redirect-index"><i class="fa fa-circle-o"></i>Sub Redirect
                                 Log</a></li>
                         <li><a href="/campaign-sts-update/index" data-menu="campaign-sts-update-index"><i class="fa fa-circle-o"></i>Payout Log
-                                </a></li>
+                            </a></li>
                         <li><a href="/campaign-sub-channel-log/index" data-menu="campaign-sub-channel-log-index"><i class="fa fa-circle-o"></i>Sub Pause
                                 Log</a></li>
                     </ul>
@@ -214,14 +214,14 @@ AdminAsset::register($this);
                                 List2</a></li>
                         <li><a href="/campaign/cpa-index" data-menu="campaign_cpa"><i class="fa fa-circle-o"></i> CPA
                                 List</a></li>
-<!--                        <li><a href="/campaign/api-index" data-menu="campaign_api"><i class="fa fa-circle-o"></i> ASXMI-->
-<!--                                List</a></li>-->
-<!--                        <li><a href="/campaign/mundo-index" data-menu="mundo_api"><i class="fa fa-circle-o"></i> Mundo-->
-<!--                                List</a></li>-->
-<!--                        <li><a href="/campaign/clickad-index" data-menu="clickad_api"><i class="fa fa-circle-o"></i> ClickAd-->
-<!--                                List</a></li>-->
-<!--                        <li><a href="/campaign/mobair-index" data-menu="clickdealer_api"><i class="fa fa-circle-o"></i> clickdealer-->
-<!--                                List</a></li>-->
+                        <!--                        <li><a href="/campaign/api-index" data-menu="campaign_api"><i class="fa fa-circle-o"></i> ASXMI-->
+                        <!--                                List</a></li>-->
+                        <!--                        <li><a href="/campaign/mundo-index" data-menu="mundo_api"><i class="fa fa-circle-o"></i> Mundo-->
+                        <!--                                List</a></li>-->
+                        <!--                        <li><a href="/campaign/clickad-index" data-menu="clickad_api"><i class="fa fa-circle-o"></i> ClickAd-->
+                        <!--                                List</a></li>-->
+                        <!--                        <li><a href="/campaign/mobair-index" data-menu="clickdealer_api"><i class="fa fa-circle-o"></i> clickdealer-->
+                        <!--                                List</a></li>-->
                         <li><a href="/campaign/create" data-menu="campaign_create"><i class="fa fa-circle-o"></i> Create
                                 Offer</a></li>
                         <li><a href="/apply-campaign/index" data-menu="apply-campaign-index"><i
@@ -250,8 +250,9 @@ AdminAsset::register($this);
                                         class="fa fa-circle-o"></i> Advertiser Api List</a></li>
                         <li><a href="/ip-table/index" data-menu="ip-table-index"><i class="fa fa-circle-o"></i>
                                 Advertiser IP List</a></li>
+                        <li><a href="/system/index" data-menu="system-index"><i class="fa fa-circle-o"></i>
+                                Third-party List</a></li>
 
-                        </li>
                     </ul>
                 </li>
                 <li class="treeview">
@@ -301,7 +302,7 @@ AdminAsset::register($this);
                         <li><a href="/report/report-channel" data-menu="report-channel"><i class="fa fa-circle-o"></i>
                                 Channel Reports</a></li>
                         <li><a href="/report/report-sub-channel" data-menu="report-sub-channel"><i class="fa fa-circle-o"></i>
-                               Sub Channel Reports</a></li>
+                                Sub Channel Reports</a></li>
                         <?php
                         if (Yii::$app->user->can('admin')) {
                             ?>
@@ -312,9 +313,9 @@ AdminAsset::register($this);
                                 Reports</a></li>
                         <?php
                         if (Yii::$app->user->can('admin') || Yii::$app->user->can('pm')) {
-                        ?>
-                        <li><a href="/report/campaign-summary" data-menu="report-campaign-summary"><i class="fa fa-circle-o"></i> Campaign
-                                Summary</a></li>
+                            ?>
+                            <li><a href="/report/campaign-summary" data-menu="report-campaign-summary"><i class="fa fa-circle-o"></i> Campaign
+                                    Summary</a></li>
                         <?php } ?>
                         <li><a href="/event-report/index" data-menu="event-report-index"><i class="fa fa-circle-o"></i> Event
                                 Reports</a></li>
@@ -359,7 +360,7 @@ AdminAsset::register($this);
                             <li><a href="/report-match-install-hourly/index" data-menu="report-match-install-hourly-index"><i class="fa fa-circle-o"></i> Campaign Revenue</a>
                             </li>
 
-                        }
+                            }
                         <?php } ?>
                     </ul>
                 </li>
@@ -408,26 +409,26 @@ AdminAsset::register($this);
         </div>
         <strong>Copyright &copy;</strong>Superads 2017
     </footer>
-<!--    <script src='http://cdn.bootcss.com/socket.io/1.3.7/socket.io.js'></script>-->
-<!--    <script>-->
-<!--        // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip-->
-<!--        var socket = io('http://192.168.56.10:2120');-->
-<!--        // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数-->
-<!--        uid = 123;-->
-<!--        // socket连接后以uid登录-->
-<!--        socket.on('connect', function(){-->
-<!--            socket.emit('login', uid);-->
-<!--        });-->
-<!--        // 后端推送来消息时-->
-<!--        socket.on('new_msg', function(msg){-->
-<!--            console.log("收到消息："+msg);-->
-<!--            $('#lov-cvr').css('class','');-->
-<!--        });-->
-<!--        // 后端推送来在线数据时-->
-<!--        socket.on('update_online_count', function(online_stat){-->
-<!--            console.log(online_stat);-->
-<!--        });-->
-<!--    </script>-->
+    <!--    <script src='http://cdn.bootcss.com/socket.io/1.3.7/socket.io.js'></script>-->
+    <!--    <script>-->
+    <!--        // 连接服务端，workerman.net:2120换成实际部署web-msg-sender服务的域名或者ip-->
+    <!--        var socket = io('http://192.168.56.10:2120');-->
+    <!--        // uid可以是自己网站的用户id，以便针对uid推送以及统计在线人数-->
+    <!--        uid = 123;-->
+    <!--        // socket连接后以uid登录-->
+    <!--        socket.on('connect', function(){-->
+    <!--            socket.emit('login', uid);-->
+    <!--        });-->
+    <!--        // 后端推送来消息时-->
+    <!--        socket.on('new_msg', function(msg){-->
+    <!--            console.log("收到消息："+msg);-->
+    <!--            $('#lov-cvr').css('class','');-->
+    <!--        });-->
+    <!--        // 后端推送来在线数据时-->
+    <!--        socket.on('update_online_count', function(online_stat){-->
+    <!--            console.log(online_stat);-->
+    <!--        });-->
+    <!--    </script>-->
 </div>
 <?php $this->endBody() ?>
 </body>

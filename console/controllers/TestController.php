@@ -55,6 +55,16 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $now = time();
+        date_default_timezone_set('Etc/GMT-8');
+        $hourly = date('Y-m-d H:00', 1497855300);
+        $aa = strtotime('20170601');
+        $hourly_aa = date('Y-m-d H:i', $aa);
+        echo $hourly . "\n";
+        echo $aa . "\n";
+        echo $hourly_aa . "\n";
+
+        die();
 
         $feed = LogFeed::findOne(['id' => 24524]);
         ReportMatchInstallHourly::updateInstalls($feed);

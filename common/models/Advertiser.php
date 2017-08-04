@@ -14,7 +14,7 @@ use Yii;
  * @property integer $payment_term
  * @property integer $pm
  * @property integer $bd
- * @property string $system
+ * @property integer $system
  * @property integer $status
  * @property string $contacts
  * @property double $total_revenue
@@ -79,9 +79,9 @@ class Advertiser extends \yii\db\ActiveRecord
     {
         return [
             [['username', 'post_parameter', 'email','pm'], 'required'],
-            [['payment_term', 'status', 'status', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
+            [['payment_term', 'status', 'system', 'type', 'created_time', 'updated_time', 'qq', 'firstaccess', 'lastaccess', 'picture', 'confirmed', 'suspended', 'deleted'], 'integer'],
             [['total_revenue', 'receivable', 'received'], 'number'],
-            [['username', 'firstname', 'lastname', 'system', 'alipay', 'timezone','beneficiary_name'], 'string', 'max' => 100],
+            [['username', 'firstname', 'lastname', 'alipay', 'timezone','beneficiary_name'], 'string', 'max' => 100],
             [['contacts', 'password_hash', 'password_reset_token', 'bank_country', 'bank_name', 'bank_address', 'swift', 'account_nu_iban', 'company', 'address', 'note','invoice_title'], 'string', 'max' => 255],
             [['auth_token', 'auth_key'], 'string', 'max' => 32],
             [['pricing_mode', 'email', 'weixin', 'skype', 'cc_email'], 'string', 'max' => 50],
