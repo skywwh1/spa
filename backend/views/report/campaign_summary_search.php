@@ -7,7 +7,7 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model common\models\ReportChannelSearch */
+/* @var $model common\models\ReportCampaignSummarySearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 <div class="row">
@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
         <!-- general form elements -->
         <div class="box box-primary">
             <?php $form = ActiveForm::begin([
-                'action' => ['index'],
+                'action' => ['campaign-summary'],
                 'method' => 'get',
             ]); ?>
             <div class="box-body">
