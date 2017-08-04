@@ -176,11 +176,6 @@ class FinancePendingSearch extends FinancePending
         if (!$this->validate()) {
             return $dataProvider;
         }
-        $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
-        $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
-        $start_date = $start->getTimestamp();
-        $end_date = $end->add(new DateInterval('P1D'));
-        $end_date = $end_date->getTimestamp();
         $query->select([
             'SUM(IF(fp.status= 0, fp.revenue, 0)) AS pending_revenue,
            SUM(IF(fp.status= 0, fp.cost, 0)) AS pending_cost,
@@ -196,9 +191,7 @@ class FinancePendingSearch extends FinancePending
             ->andFilterWhere(['like', 'fp.adv', $this->adv])
             ->andFilterWhere(['like', 'fp.pm', $this->pm])
             ->andFilterWhere(['like', 'fp.bd', $this->bd])
-            ->andFilterWhere(['like', 'fp.om', $this->om])
-            ->andFilterWhere(['>=', 'fp.start_date', $start_date])
-            ->andFilterWhere(['<', 'fp.end_date', $end_date]);
+            ->andFilterWhere(['like', 'fp.om', $this->om]);
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -211,13 +204,15 @@ class FinancePendingSearch extends FinancePending
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])->one();
 //
-//        if (\Yii::$app->user->can('admin')) {
-//            $query->andFilterWhere(['like', 'u.username', $this->bd]);
-//        } else if (\Yii::$app->user->can('pm')) {
-//            $query->andFilterWhere(['ad.pm' => \Yii::$app->user->id]);
-//        } else {
-//            $query->andFilterWhere(['ad.bd' => \Yii::$app->user->id]);
-//        }
+        if (!empty($this->time_zone)){
+            $start = new DateTime($this->start_date, new DateTimeZone($this->time_zone));
+            $end = new DateTime($this->end_date, new DateTimeZone($this->time_zone));
+            $start_date = $start->getTimestamp();
+            $end_date = $end->add(new DateInterval('P1D'));
+            $end_date = $end_date->getTimestamp();
+            $query->andFilterWhere(['>=', 'fp.start_date', $start_date])
+                ->andFilterWhere(['<', 'fp.end_date', $end_date]);
+        }
 
         return $dataProvider;
     }

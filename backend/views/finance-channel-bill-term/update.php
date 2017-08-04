@@ -398,6 +398,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     <p>
                     <h4>System Cost</h4>
                     </p>
+
                     <?php
                     $campaignBillColumns = [
                         [
@@ -586,6 +587,15 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             ExportMenu::FORMAT_HTML => false,
                         ],
                     ]);
+                    echo PHP_EOL;
+                    echo Html::a('<span class="btn btn-primary">Email</span>', null,
+                        [
+                            'title' => Yii::t('yii', 'send Email'),
+                            'data-url' => 'email?bill_id='.$model->bill_id,
+                            'data-view' => 0,
+                            'data-pjax' => 0,
+                        ]);
+                    echo PHP_EOL;
                     ?>
                     <?= GridView::widget([
                         'dataProvider' => $campaignBill,

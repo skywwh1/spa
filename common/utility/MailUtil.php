@@ -481,4 +481,25 @@ class MailUtil
         $mail->setSubject('Api campaign paused - SuperADS');
         $mail->send();
     }
+
+    public static function sendPayableConfirm($campaignBills)
+    {
+        $mail = Yii::$app->mailer->compose('payable_confirm', ['campaignBills' =>$campaignBills]);
+        $user_name = yii::$app->user->identity->username;
+        $user = User::findOne(['username' => $user_name ]);
+        $mail->setTo($user->email);
+
+        $mail->setSubject('SuperADS Confirmed Numbers');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'send  confirmed numbers', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

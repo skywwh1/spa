@@ -65,8 +65,32 @@ use kartik\typeahead\Typeahead;
                                 ]],
                         ]) ?>
                     </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'deduction_id') ?>
+                    </div>
                 </div>
                 <div class="row">
+                    <div class="col-lg-4">
+                        <?php
+                        echo '<label class="control-label">Date</label>';
+                        echo DatePicker::widget([
+                            'name' => 'FinanceCompensationSearch[start_date]',
+                            'value' => isset($model->start_date) ? $model->start_date : Yii::$app->formatter->asDate('now', 'php:Y-m'),
+                            'type' => DatePicker::TYPE_RANGE,
+                            'name2' => 'FinanceCompensationSearch[end_date]',
+                            'value2' => isset($model->end_date) ? $model->end_date : Yii::$app->formatter->asDate('now', 'php:Y-m'),
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm-dd'
+                            ]
+                        ]);
+                        ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'status')->dropDownList(
+                            ModelsUtil::compensation_status,
+                            ['prompt' => '-- select --']) ?>
+                    </div>
                     <div class="col-lg-2">
                         <?= $form->field($model, 'om')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
@@ -115,35 +139,7 @@ use kartik\typeahead\Typeahead;
                                 ]],
                         ]) ?>
                     </div>
-
-                    <div class="col-lg-2">
-                        <?= $form->field($model, 'status')->dropDownList(
-                            ModelsUtil::compensation_status,
-                            ['prompt' => '-- select --']) ?>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-4">
-                        <?php
-                        echo '<label class="control-label">Date</label>';
-                        echo DatePicker::widget([
-                            'name' => 'FinanceCompensationSearch[start_date]',
-                            'value' => isset($model->start_date) ? $model->start_date : Yii::$app->formatter->asDate('now', 'php:Y-m'),
-                            'type' => DatePicker::TYPE_RANGE,
-                            'name2' => 'FinanceCompensationSearch[end_date]',
-                            'value2' => isset($model->end_date) ? $model->end_date : Yii::$app->formatter->asDate('now', 'php:Y-m'),
-                            'pluginOptions' => [
-                                'autoclose' => true,
-                                'format' => 'yyyy-mm-dd'
-                            ]
-                        ]);
-                        ?>
-                    </div>
-                    <div class="col-lg-2">
-                        <?= $form->field($model, 'deduction_id') ?>
-                    </div>
-                </div>
-
             <div class="form-group">
                 <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
             </div>

@@ -8,6 +8,7 @@ use common\models\Campaign;
 use common\models\CampaignLogHourly;
 use common\models\Channel;
 use common\models\User;
+use common\utility\TimeZoneUtil;
 use DateInterval;
 use DateTime;
 use DateTimeZone;
@@ -70,11 +71,16 @@ class FinanceDeductionController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinanceDeductionSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $searchModel->start_date = TimeZoneUtil::initGMT8BeforeDate();
+        $searchModel->end_date = TimeZoneUtil::initGMT8BeforeDate();
 
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary
         ]);
     }
 

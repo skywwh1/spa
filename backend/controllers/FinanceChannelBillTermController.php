@@ -14,6 +14,7 @@ use backend\models\FinancePendingSearch;
 use backend\models\FinanceSubCostSearch;
 use backend\models\UploadForm;
 use common\models\Channel;
+use common\utility\MailUtil;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
@@ -45,7 +46,7 @@ class FinanceChannelBillTermController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'validate','edit','retreat','flow','upload'],
+                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'validate','edit','retreat','flow','upload','email'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -328,6 +329,23 @@ class FinanceChannelBillTermController extends Controller
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             var_dump($model->getErrors());
+        }
+    }
+
+    /**
+     * @param $bill_id
+     */
+    public function actionEmail($bill_id)
+    {
+        $campaignBillSearchModel = new FinanceChannelCampaignBillTermSearch();
+        $campaignBillSearchModel->bill_id = $bill_id;
+        $campaignBill = $campaignBillSearchModel->financeChannelSearch(Yii::$app->request->queryParams);
+//        var_dump($campaignBill->getModels());
+//        die();
+        if (MailUtil::sendPayableConfirm($campaignBill->getModels())) {
+            $this->asJson("send email success!");
+        } else {
+            $this->asJson("send email fail!");
         }
     }
 }

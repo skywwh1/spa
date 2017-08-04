@@ -78,11 +78,11 @@ class FinancePendingController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
 
-        $campaign_id = [];
-        $models = $dataProvider->getModels();
-        foreach ($models as $item){
-            $campaign_id[] = $item->campaign_id;
-        }
+//        $campaign_id = [];
+//        $models = $dataProvider->getModels();
+//        foreach ($models as $item){
+//            $campaign_id[] = $item->campaign_id;
+//        }
 //        $request = Yii::$app->request;
 //        $start_date = $request->getQueryParam('FinancePendingSearch')['start_date'];
 //        $end_date = $request->getQueryParam('FinancePendingSearch')['end_date'];

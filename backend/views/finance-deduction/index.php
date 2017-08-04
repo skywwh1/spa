@@ -8,25 +8,38 @@ use kartik\export\ExportMenu;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\FinanceDeductionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+/* @var $summary yii\data\ActiveDataProvider */
 $this->title = 'Finance Deductions';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="finance-deduction-index"></div>
+<?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="row">
         <div class="col-lg-12">
             <div class="box box-info">
                 <div class="box-body">
                     <div class="finance-deduction-index">
-
-                        <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
                         <p>
-                            <?= Html::a('Add Discount', ['add-discount'], ['class' => 'btn btn-success']) ?>
-                            <?= Html::a('Add Install Deduction', ['add-install'], ['class' => 'btn btn-success']) ?>
-                            <?= Html::a('Add Fine', ['add-fine'], ['class' => 'btn btn-success']) ?>
+                            <?= Html::a('Add Discount', ['add-discount'], ['class' => 'btn btn-primary']) ?>
+                            <?= Html::a('Add Install Deduction', ['add-install'], ['class' => 'btn btn-primary']) ?>
+                            <?= Html::a('Add Fine', ['add-fine'], ['class' => 'btn btn-primary']) ?>
                         </p>
                         <?php
+                        $summary_columns = [
+                            'deduction_cost',
+                            'deduction_revenue',
+                            'communicating_cost',
+                            'communicating_revenue',
+                            'confirm_cost',
+                            'confirm_revenue',
+                            'compensated_cost',
+                            'compensated_revenue',
+                        ];
+
+                        echo GridView::widget([
+                            'dataProvider' => $summary,
+                            'columns' => $summary_columns,
+                        ]);
                         $columns = [
                             [
                                 // 'label' => 'id',
@@ -186,6 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?= GridView::widget([
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
+                            'showPageSummary' => true,
                             'columns' => [
                                 [
                                     'class' => 'kartik\grid\ActionColumn',
@@ -276,12 +290,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     'attribute' => 'start_date',
                                     'value' => 'start_date',
                                     'format' => 'datetime',
+                                    'filter' => false,
                                 ],
                                 [
                                     // 'label' => 'end_date',
                                     'attribute' => 'end_date',
                                     'value' => 'end_date',
                                     'format' => 'datetime',
+                                    'filter' => false,
                                 ],
                                 //[
                                 // 'label' => 'installs',
@@ -298,6 +314,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                             'label' => ''
                                     'attribute' => 'deduction_value',
                                     'value' => 'deduction_value',
+                                    'pageSummary' => true,
                                 ],
                                 [
 //                                'label' => 'type',
@@ -311,20 +328,24 @@ $this->params['breadcrumbs'][] = $this->title;
 //                             'label' => 'cost',
                                     'attribute' => 'cost',
                                     'value' => 'cost',
+                                    'pageSummary' => true,
                                 ],
                                 [
 //                                'label' => 'deduction_cost',
                                     'attribute' => 'deduction_cost',
                                     'value' => 'deduction_cost',
+                                    'pageSummary' => true,
                                 ],
                                 [
 //                                'label' => 'deduction_revenue',
                                     'attribute' => 'deduction_revenue',
                                     'value' => 'deduction_revenue',
+                                    'pageSummary' => true,
                                 ],
                                 [
                                     'attribute' => 'revenue',
                                     'value' => 'revenue',
+                                    'pageSummary' => true,
                                 ],
                                 //[
                                 // 'label' => 'margin',

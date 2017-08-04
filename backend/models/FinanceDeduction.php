@@ -47,6 +47,12 @@ use Yii;
 class FinanceDeduction extends \yii\db\ActiveRecord
 {
     public $channel_name;
+    public $communicating_revenue;
+    public $communicating_cost;
+    public $confirm_revenue;
+    public $confirm_cost;
+    public $compensated_revenue;
+    public $compensated_cost;
 
     /**
      * @inheritdoc
