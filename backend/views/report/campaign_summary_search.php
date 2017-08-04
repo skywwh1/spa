@@ -29,10 +29,10 @@ use yii\widgets\ActiveForm;
                     <?php
                     echo '<label class="control-label">Date</label>';
                     echo DatePicker::widget([
-                        'name' => 'ReportSearch[start]',
+                        'name' => 'ReportCampaignSummarySearch[start]',
                         'value' => isset($model->start) ? $model->start : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'type' => DatePicker::TYPE_RANGE,
-                        'name2' => 'ReportSearch[end]',
+                        'name2' => 'ReportCampaignSummarySearch[end]',
                         'value2' => isset($model->end) ? $model->end : Yii::$app->formatter->asDate('now', 'php:Y-m-d'),
                         'pluginOptions' => [
                             'autoclose' => true,
