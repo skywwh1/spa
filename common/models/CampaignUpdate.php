@@ -69,7 +69,5 @@ class CampaignUpdate extends \yii\db\ActiveRecord
         $model_update->action = $action;
         $model_update->effect_time = $effect_time;
         $model_update->save();
-        var_dump($model_update->errors);
-        die();
     }
 }
