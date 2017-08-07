@@ -603,14 +603,10 @@ class ReportSummarySearch extends ReportSummaryHourly
             'clh.campaign_id',
             'clh.channel_id',]);
 
-        if ($dataProvider->getSort()->getOrders()==null){
-            $query->orderBy(['cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
-        }
-        $query->asArray();
-//        var_dump($start);
-//        var_dump($end);
-//        var_dump($query->createCommand()->sql);
-//        die();
+//        $query->asArray();
+//        if ($dataProvider->getSort()->getOrders()==null){
+//            $query->orderBy(['cam.campaign_name' => SORT_ASC, 'ch.username' => SORT_ASC, 'time' => SORT_DESC]);
+//        }
         return $dataProvider;
     }
 
