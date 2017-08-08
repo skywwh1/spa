@@ -6,23 +6,38 @@ use kartik\grid\GridView;
 
 /* @var $searchModel backend\models\FinanceChannelBillTermSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
+/* @var $summary yii\data\ActiveDataProvider */
 $this->title = 'Channel Payable';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="finance-channel-bill-term-index"></div>
+    <?php  echo $this->render('_search', ['model' => $searchModel]); ?>
     <div class="row">
     <div class="col-lg-12">
         <div class="box box-info">
             <div class="box-body">
                 <div class="finance-channel-bill-term-index">
+                    <?php
+                    $summary_columns = [
+                        'pending_billing',
+                        'om_leader_approval',
+                        'om_leader_reject',
+                        'finance_approval',
+                        'finance_reject',
+                        'payable',
+                        'paid',
+                    ];
 
-                    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-
+                    echo GridView::widget([
+                        'dataProvider' => $summary,
+                        'columns' => $summary_columns,
+                    ]);
+                    ?>
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'pjax' => true,
+                        'showPageSummary' => true,
                         'id' => 'channel-payable-list',
                         'columns' => [
                             [
@@ -72,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ['label' => 'cost',
                                 'attribute' => 'cost',
                                 'value' => 'cost',
+                                'pageSummary' => true,
                             ],
                             [
                                 // 'label' => 'invoice_id',
@@ -99,7 +115,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => function ($model) {
                                     return ModelsUtil::getTimezone($model->time_zone);
                                 },
-                                'filter' => ModelsUtil::timezone,
+//                                'filter' => ModelsUtil::timezone,
+                                'filter' => false,
                             ],
                             //[
                             // 'label' => 'start_time',

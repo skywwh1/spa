@@ -10,6 +10,7 @@ use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePendingSearch;
 use backend\models\FinanceSubRevenueSearch;
 use common\models\Advertiser;
+use common\utility\TimeZoneUtil;
 use Yii;
 use backend\models\FinanceAdvertiserBillTerm;
 use backend\models\FinanceAdvertiserBillTermSearch;
@@ -56,11 +57,15 @@ class FinanceAdvertiserBillTermController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinanceAdvertiserBillTermSearch();
+        $searchModel->start_time = TimeZoneUtil::initGMT8BeforeDate();
+        $searchModel->end_time = TimeZoneUtil::initGMT8BeforeDate();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 

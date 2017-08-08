@@ -844,8 +844,8 @@ class CampaignSearch extends Campaign
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $campaign_id,
-            'action' => $action
         ]);
+        $query ->andFilterWhere(['in', 'action', $action]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy('create_time DESC');

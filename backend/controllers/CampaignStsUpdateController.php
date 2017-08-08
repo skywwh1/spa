@@ -189,7 +189,7 @@ class CampaignStsUpdateController extends Controller
                 $camp->promote_end = $model->effect_time;
                 $camp->save();
 
-                CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
+                CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->value);
                 return $this->redirect(Yii::$app->request->referrer);
             }
         } else {
@@ -386,7 +386,7 @@ class CampaignStsUpdateController extends Controller
 //            $camp->target_geo = empty($model->target_geo) ? null:implode(',',$model->target_geo);
             $camp->save();
 
-            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->value);
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             $searchModel = new CampaignSearch();
@@ -441,7 +441,7 @@ class CampaignStsUpdateController extends Controller
 //            $camp->promote_end = $model->effect_time;
 //            $camp->creative_link = $model->creative_link;
             $camp->save();
-            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->value);
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             $searchModel = new CampaignSearch();
@@ -528,23 +528,38 @@ class CampaignStsUpdateController extends Controller
         $this->layout = false;
         $model = new CampaignStsUpdate();
         $model->campaign_id = $campaign_id;
+        $camp = Campaign::findById($model->campaign_id);
+        $model->pay_out_old = $camp->now_payout;
+        $model->adv_price_old = $camp->adv_price;
 
         if ($model->load(Yii::$app->request->post())) {
-            $camp = Campaign::findById($model->campaign_id);
-
+            $effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $pay_out = $model->adv_price;
             $model->type = 1;//2 is sts 1 is campaign
             $model->name = 'update-price';
             $model->value = $model->adv_price;
             $model->old_value = $camp->adv_price;
-            $model->effect_time = empty($model->effect_time) ? null : strtotime($model->effect_time);
+            $model->is_send = 0;
+            $model->effect_time = $effect_time;
             $model->save();
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->adv_price);
 
-            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time);
+            $model2 = new CampaignStsUpdate();
+            $model2->campaign_id = $campaign_id;
+            $model2->type = 1;//2 is sts 1 is campaign
+            $model2->name = 'update-payout';
+            $model2->value = $pay_out;
+            $model2->old_value = $camp->now_payout;
+            $model2->is_send = 0;
+            $model2->effect_time = $effect_time;
+            $model2->save();
+            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->pay_out);
+
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             $searchModel = new CampaignSearch();
-            $action =  'update-price';
-            $dataProvider= $searchModel->updateSearch($campaign_id,$action);
+            $arr_act =['update-price','update-payout'];
+            $dataProvider= $searchModel->updateSearch($campaign_id,$arr_act);
             return $this->renderAjax('update_price', [
                 'model' => $model,
                 'dataProvider' => $dataProvider,

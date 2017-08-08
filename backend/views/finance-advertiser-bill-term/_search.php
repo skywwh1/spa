@@ -2,76 +2,73 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use kartik\date\DatePicker;
+use kartik\typeahead\Typeahead;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\FinanceAdvertiserBillTermSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="finance-advertiser-bill-term-search">
+<div class="row">
+    <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="box box-primary">
+            <?php $form = ActiveForm::begin([
+                'action' => ['index'],
+                'method' => 'get',
+            ]); ?>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
+                            'pluginOptions' => ['highlight' => true],
+//                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
+                            'dataset' => [
+                                [
+                                    'datumTokenizer' => "Bloodhound.tokenizers.obj.whitespace('value')",
+                                    'display' => 'value',
+                                    'remote' => [
+                                        'url' => Url::to(['util/get-adv']) . '?name=%QUERY',
+                                        'wildcard' => '%QUERY'
+                                    ]
+                                ]],
+                        ]) ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'invoice_id') ?>
+                    </div>
 
-    <?php $form = ActiveForm::begin([
-        'action' => ['index'],
-        'method' => 'get',
-    ]); ?>
+                </div>
+                <div class="row">
 
-    <?= $form->field($model, 'bill_id') ?>
+                    <div class="col-lg-4">
+                        <?php
+                        echo '<label class="control-label">Date</label>';
+                        echo DatePicker::widget([
+                            'name' => 'FinanceAdvertiserBillTermSearch[start_time]',
+                            'value' => isset($model->start_time) ? $model->start_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
+                            'type' => DatePicker::TYPE_RANGE,
+                            'name2' => 'FinanceAdvertiserBillTermSearch[end_time]',
+                            'value2' => isset($model->end_time) ? $model->end_time : Yii::$app->formatter->asDate('now', 'php:Y-m'),
+                            'pluginOptions' => [
+                                'autoclose' => true,
+                                'format' => 'yyyy-mm'
+                            ]
+                        ]);
+                        ?>
+                    </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'status')->dropDownList(
+                            ModelsUtil::receivable_status,
+                            ['prompt' => '-- select --']) ?>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
+                </div>
 
-    <?= $form->field($model, 'invoice_id') ?>
+                <?php ActiveForm::end(); ?>
 
-    <?= $form->field($model, 'period') ?>
-
-    <?= $form->field($model, 'adv_id') ?>
-
-    <?= $form->field($model, 'time_zone') ?>
-
-    <?php // echo $form->field($model, 'start_time') ?>
-
-    <?php // echo $form->field($model, 'end_time') ?>
-
-    <?php // echo $form->field($model, 'clicks') ?>
-
-    <?php // echo $form->field($model, 'unique_clicks') ?>
-
-    <?php // echo $form->field($model, 'installs') ?>
-
-    <?php // echo $form->field($model, 'match_installs') ?>
-
-    <?php // echo $form->field($model, 'redirect_installs') ?>
-
-    <?php // echo $form->field($model, 'redirect_match_installs') ?>
-
-    <?php // echo $form->field($model, 'pay_out') ?>
-
-    <?php // echo $form->field($model, 'adv_price') ?>
-
-    <?php // echo $form->field($model, 'daily_cap') ?>
-
-    <?php // echo $form->field($model, 'cap') ?>
-
-    <?php // echo $form->field($model, 'cost') ?>
-
-    <?php // echo $form->field($model, 'redirect_cost') ?>
-
-    <?php // echo $form->field($model, 'revenue') ?>
-
-    <?php // echo $form->field($model, 'redirect_revenue') ?>
-
-    <?php // echo $form->field($model, 'receivable') ?>
-
-    <?php // echo $form->field($model, 'status') ?>
-
-    <?php // echo $form->field($model, 'note') ?>
-
-    <?php // echo $form->field($model, 'update_time') ?>
-
-    <?php // echo $form->field($model, 'create_time') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
-
-</div>
+            </div>

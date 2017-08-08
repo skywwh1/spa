@@ -4,8 +4,12 @@ namespace backend\models;
 
 use common\utility\TimeZoneUtil;
 use Yii;
+use yii\db\Query;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use DateTime;
+use DateTimeZone;
+use DateInterval;
 use backend\models\FinanceAdvertiserBillTerm;
 
 /**
@@ -81,8 +85,8 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
         // grid filtering conditions
         $query->andFilterWhere([
             'adv_id' => $this->adv_id,
-            'start_time' => $this->start_time,
-            'end_time' => $this->end_time,
+//            'start_time' => $this->start_time,
+//            'end_time' => $this->end_time,
             'clicks' => $this->clicks,
             'unique_clicks' => $this->unique_clicks,
             'installs' => $this->installs,
@@ -112,6 +116,15 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             ->andFilterWhere(['like', 'adv.payment_term', $this->payment_term])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'adv.username', $this->adv_name]);
+
+        $start = new DateTime($this->start_time);
+        $end = new DateTime($this->end_time);
+        $start_date = $start->sub(new DateInterval('P1D'));
+        $end_date = $end->add(new DateInterval('P1M1D'));
+        $start_date = $start_date->getTimestamp();
+        $end_date = $end_date->getTimestamp();
+        $query->andFilterWhere(['>=', 'fab.start_time', $start_date])
+            ->andFilterWhere(['<', 'fab.end_time', $end_date]);
 
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
@@ -231,6 +244,64 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
         if ($dataProvider->getSort()->getOrders()==null){
             $query->orderBy([ 'start_time' => SORT_DESC]);
         }
+        return $dataProvider;
+    }
+
+    public function summarySearch($params)
+    {
+        $query = new Query();
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        $query->select([
+            'SUM(IF(fab.status= 1, fab.revenue, 0)) AS pending_billing,
+           SUM(IF(fab.status= 2, fab.revenue, 0)) AS bd_leader_approval,
+           SUM(IF(fab.status= 3, fab.revenue, 0)) AS bd_leader_reject,
+           SUM(IF(fab.status= 4, fab.revenue, 0)) AS finance_approval,
+           SUM(IF(fab.status= 5, fab.revenue, 0)) AS finance_reject,
+           SUM(IF(fab.status= 6, fab.revenue, 0)) AS receivable,
+           SUM(IF(fab.status= 7, fab.revenue, 0)) AS received,
+           SUM(IF(fab.status= 8, fab.revenue, 0)) AS overdue'
+        ]);
+        $query->from('finance_advertiser_bill_term fab');
+        $query->leftJoin("advertiser adv",'fab.adv_id = adv.id');
+        $query->leftJoin("user u",'u.id = adv.bd');
+
+        $query->andFilterWhere([
+            'revenue' => $this->revenue,
+            'receivable' => $this->receivable,
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere(['like', 'bill_id', $this->bill_id])
+            ->andFilterWhere(['like', 'invoice_id', $this->invoice_id])
+            ->andFilterWhere(['<>', 'fab.status', 0])
+            ->andFilterWhere(['like', 'u.username', $this->bd])
+            ->andFilterWhere(['like', 'adv.payment_term', $this->payment_term])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name]);
+
+        $start = new DateTime($this->start_time);
+        $end = new DateTime($this->end_time);
+        $start_date = $start->sub(new DateInterval('P1D'));
+        $end_date = $end->add(new DateInterval('P1M1D'));
+        $start_date = $start_date->getTimestamp();
+        $end_date = $end_date->getTimestamp();
+        $query->andFilterWhere(['>=', 'fab.start_time', $start_date])
+            ->andFilterWhere(['<', 'fab.end_time', $end_date]);
+
+        if (\Yii::$app->user->can('admin')) {
+            $query->andFilterWhere(['like', 'u.username', $this->bd]);
+        } else {
+            $query->andFilterWhere(['adv.bd' => \Yii::$app->user->id]);
+        }
+
         return $dataProvider;
     }
 }

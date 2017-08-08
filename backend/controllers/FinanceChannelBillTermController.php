@@ -15,6 +15,7 @@ use backend\models\FinanceSubCostSearch;
 use backend\models\UploadForm;
 use common\models\Channel;
 use common\utility\MailUtil;
+use common\utility\TimeZoneUtil;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
@@ -62,11 +63,15 @@ class FinanceChannelBillTermController extends Controller
     public function actionIndex()
     {
         $searchModel = new FinanceChannelBillTermSearch();
+        $searchModel->start_time = TimeZoneUtil::initGMT8BeforeDate();
+        $searchModel->end_time = TimeZoneUtil::initGMT8BeforeDate();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary,
         ]);
     }
 

@@ -72,4 +72,12 @@ class TimeZoneUtil
     public static function getSearchDate($date){
         return empty($date)?self::initGMT8BeforeDate():$date;
     }
+
+    public  static function getThisMonthFirstDayTime($date) {
+        return strtotime(date('Y-m-01', strtotime($date)));
+    }
+    public static function getThisMonthLastDayTime($date) {
+        return strtotime(date('Y-m-01', $date) . ' +1 month -1 day');
+    }
+
 }

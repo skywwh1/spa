@@ -13,6 +13,7 @@ use Yii;
  * @property integer $creator_name
  * @property integer $create_time
  * @property integer $effect_time
+ * @property string $value
  *
  * @property Campaign $campaign
  */
@@ -61,13 +62,14 @@ class CampaignUpdate extends \yii\db\ActiveRecord
         return $this->hasOne(Campaign::className(), ['id' => 'campaign_id']);
     }
 
-    public static function updateLog($campaign,$action,$effect_time){
+    public static function updateLog($campaign,$action,$effect_time,$value){
         $model_update = new CampaignUpdate();
         $model_update->campaign_id = $campaign;
         $model_update->creator_name = Yii::$app->user->identity->username;
         $model_update->create_time = time();
         $model_update->action = $action;
         $model_update->effect_time = $effect_time;
+        $model_update->value = $value;
         $model_update->save();
     }
 }
