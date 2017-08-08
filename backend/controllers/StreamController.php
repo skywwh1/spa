@@ -144,6 +144,7 @@ class StreamController extends Controller
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
         $click->save();
+        $this->postKafka($click);
         return $this->redirect($click->redirect);
     }
 
@@ -482,5 +483,65 @@ class StreamController extends Controller
                 LogClickCountSubChannel::updateCampaignClick($logClick->campaign_channel_id, $logClick->ch_subid, $hourly);
             }
         }
+    }
+
+    /**
+     * @param LogClick $logClick
+     */
+    private function postKafka($logClick)
+    {
+        $data = Array();
+        $data['click_uuid'] = $logClick->click_uuid;
+        $data['click_id'] = $logClick->click_id;
+        $data['channel_id'] = $logClick->channel_id;
+        $data['campaign_id'] = $logClick->campaign_id;
+        $data['campaign_uuid'] = $logClick->campaign_uuid;
+        $data['pl'] = $logClick->pl;
+        $data['ch_subid'] = $logClick->ch_subid;
+        $data['gaid'] = $logClick->gaid;
+        $data['idfa'] = $logClick->idfa;
+        $data['site'] = $logClick->site;
+        $data['adv_price'] = $logClick->adv_price;
+        $data['pay_out'] = $logClick->pay_out;
+        $data['discount'] = $logClick->discount;
+        $data['daily_cap'] = $logClick->daily_cap;
+        $data['all_parameters'] = $logClick->all_parameters;
+        $data['ip'] = $logClick->ip;
+        $data['ip_long'] = $logClick->ip_long;
+        $data['redirect'] = $logClick->redirect;
+        $data['redirect_campaign_id'] = $logClick->redirect_campaign_id;
+        $data['browser'] = $logClick->browser;
+        $data['browser_type'] = $logClick->browser_type;
+        $data['click_time'] = $logClick->click_time;
+        $data['create_time'] = $logClick->create_time;
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => "6800",
+            CURLOPT_URL => "http://kafka.superads.cn:6800/kafka/proxy/click/log",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+//        if ($err) {
+//            echo "cURL Error #:" . $err;
+//        } else {
+//            echo $response;
+//        }
     }
 }
