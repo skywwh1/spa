@@ -27,8 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $summary_columns = [
                             'pending_cost',
                             'pending_revenue',
-                            'confirm_cost',
-                            'confirm_revenue',
                             [
                                 'label' => 'system_cost',
                                 'value'=> function ($model){
@@ -43,8 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     return $model->pending_revenue + $model->confirm_revenue ;
                                 },
                             ],
+                            'confirm_cost',
+                            'confirm_revenue',
                             [
-                                'label' => 'margin',
+                                'label' => 'confirm_margin',
                                 'value' => function($model){
                                     $model = (Object)$model;
                                     return $model->confirm_revenue == 0 ? 0.00 : round((($model->confirm_revenue - $model->confirm_cost) / $model->confirm_revenue)*100, 2).'%';

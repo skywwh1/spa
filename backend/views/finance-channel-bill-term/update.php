@@ -590,7 +590,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     echo PHP_EOL;
                     echo Html::a('<span class="btn btn-primary">Email</span>', null,
                         [
-                            'title' => Yii::t('yii', 'send Email'),
+                            'data-title' => Yii::t('yii', 'send Email'),
                             'data-url' => 'email?bill_id='.$model->bill_id,
                             'data-view' => 0,
                             'data-pjax' => 0,
