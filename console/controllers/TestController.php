@@ -38,6 +38,8 @@ use console\models\Taptica;
 use console\models\Yeahmobi;
 use DateTime;
 use DateTimeZone;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use HttpException;
 use HttpRequest;
 use linslin\yii2\curl\Curl;
@@ -55,6 +57,54 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        for($i = 0;$i<100;$i++) {
+            echo "999 \n";
+//            $curl = new Curl();
+            $stream = Array();
+            $stream['click_uuid'] = uniqid();
+            $stream['campaign_id'] = 888;
+//            $stream = new LogClick();
+//            $stream->click_uuid=uniqid();
+//            $stream->campaign_id=888;
+            var_dump($i);
+            $curl = new Curl();
+            $curl->setRequestBody(json_decode(json_encode($stream)));
+            $curl->setHeaders( array(
+                "cache-control: no-cache",
+                "content-type: application/json",
+            ));
+//            $curl->post('http://kafka.superads.cn:6800/kafka/proxy/click/log',true);
+            $curl = curl_init();
+
+            curl_setopt_array($curl, array(
+                CURLOPT_PORT => "6800",
+                CURLOPT_URL => "http://kafka.superads.cn:6800/kafka/proxy/click/log",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => "",
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => "POST",
+                CURLOPT_POSTFIELDS => json_encode($stream),
+                CURLOPT_HTTPHEADER => array(
+                    "cache-control: no-cache",
+                    "content-type: application/json",
+                ),
+            ));
+
+            $response = curl_exec($curl);
+            $err = curl_error($curl);
+
+            curl_close($curl);
+
+            if ($err) {
+                echo "cURL Error #:" . $err;
+            } else {
+                echo $response;
+            }
+
+        };
+        die();
         $now = time();
         date_default_timezone_set('Etc/GMT-8');
         $hourly = date('Y-m-d H:00', 1497855300);
