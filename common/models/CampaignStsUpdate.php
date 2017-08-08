@@ -32,6 +32,9 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public $campaign_name;
     public $creator_name;
     public $adv_price;
+    public $pay_out;
+    public $pay_out_old;
+    public $adv_price_old;
     /**
      * @inheritdoc
      */
@@ -48,7 +51,7 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
         return [
             [['campaign_id', 'is_send', 'effect_time'], 'required'],
             [['campaign_id', 'channel_id', 'type', 'is_send', 'send_time', 'is_effected', 'creator', 'create_time'], 'integer'],
-            [['effect_time', 'name', 'value', 'old_value','target_geo','creative_link','campaign_name','channel_name'], 'safe'],
+            [['effect_time','adv_price','pay_out', 'name', 'value', 'old_value','target_geo','creative_link','campaign_name','channel_name'], 'safe'],
         ];
     }
 
@@ -176,6 +179,16 @@ class CampaignStsUpdate extends \yii\db\ActiveRecord
     public static function getStsUpdatePrice()
     {
         return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-price'])
+            ->andWhere(['<', 'effect_time', time()])
+            ->all();
+    }
+
+    /**
+     * @return array|CampaignStsUpdate[]
+     */
+    public static function getStsUpdatePayout()
+    {
+        return static::find()->where(['is_effected' => 0, 'type' => 1, 'name' => 'update-payout'])
             ->andWhere(['<', 'effect_time', time()])
             ->all();
     }

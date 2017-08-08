@@ -159,6 +159,20 @@ class CampaignController extends Controller
                 $item->save();
             }
         }
+
+        $updatePayout = CampaignStsUpdate::getStsUpdatePayout();
+        if (isset($updatePayout)) {
+            foreach ($updatePayout as $item) {
+                $camp = Campaign::findOne($item->campaign_id);
+                if (isset($camp)) {
+                    $this->echoMessage('campaign update payout ' . $item->campaign_id);
+                    $camp->now_payout = $item->value;
+                    $camp->save();
+                }
+                $item->is_effected = 1;
+                $item->save();
+            }
+        }
     }
 
     public function actionSendUpdate()

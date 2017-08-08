@@ -17,16 +17,22 @@ use kartik\grid\GridView;
 
 <?= $form->field($model, 'channel_id')->hiddenInput()->label(false) ?>
 <?= $form->field($model, 'campaign_id')->hiddenInput()->label(false) ?>
-<?= $form->field($model, 'name')->hiddenInput(['value' => 'payout'])->label(false) ?>
 <div class="row">
-    <label class="col-sm-4">Now Price :</label>
+    <label class="col-sm-5">Now Price :</label>
 
     <div class="col-sm-7">
-        <label><?= $model->old_value ?></label>
+        <label><?= $model->adv_price_old ?></label>
     </div>
-    <?= $form->field($model, 'old_value')->hiddenInput()->label(false) ?>
 </div>
-<?= $form->field($model, 'value')->textInput(['type' => 'number', 'required' => "required", 'min' => '0','step'=>'any'])->label('New Price') ?>
+<?= $form->field($model, 'adv_price')->textInput(['type' => 'number', 'required' => "required", 'min' => '0','step'=>'any'])->label('New Price') ?>
+<div class="row">
+    <label class="col-sm-5">Now Payout :</label>
+
+    <div class="col-sm-7">
+        <label><?= $model->pay_out_old ?></label>
+    </div>
+</div>
+<?= $form->field($model, 'pay_out')->textInput(['type' => 'number', 'required' => "required", 'min' => '0','step'=>'any'])->label('New Payout') ?>
 <?= $form->field($model, 'effect_time')->widget(DateTimePicker::classname(), [
     'type' => DateTimePicker::TYPE_INPUT,
     'value' => '',
@@ -45,6 +51,7 @@ use kartik\grid\GridView;
     'dataProvider' => $dataProvider,
     'pjax' => true, // pjax is set to always true for this demo
     'columns' => [
+        'action',
         'value',
         'effect_time:datetime',
         'creator_name',
