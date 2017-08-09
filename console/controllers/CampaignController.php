@@ -414,4 +414,18 @@ class CampaignController extends Controller
         $this->echoMessage("generate url: " . $postback);
         return $postback;
     }
+
+    public  function actionUpdateRedirect(){
+        $camps = RedirectLog::find()->where(['status' => 1])->all();
+        if (isset($camps)) {
+            foreach ($camps as $item) {
+                $item->status = 2;
+                $this->echoMessage('S2S redirect ' . $item->campaign_id.$item->channel_id);
+                $delivers = Deliver::getPausedCampaign($item->campaign_id,$item->channel_id);
+                if (isset($delivers)) {
+                    $item->save();
+                }
+            }
+        }
+    }
 }
