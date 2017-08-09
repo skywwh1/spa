@@ -290,4 +290,7 @@ class Deliver extends \yii\db\ActiveRecord
         return $count;
     }
 
+    public static function getPausedCampaign($campaignId,$channelId){
+        return static::find()->where(['campaign_id' => $campaignId,'channel_id' => $channelId])->andWhere(['status' => 2])->one();
+    }
 }

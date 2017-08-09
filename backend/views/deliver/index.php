@@ -90,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'pjax' => true, // pjax is set to always true for this demo
                     'responsive' => true,
                     'hover' => true,
-                    'pjaxSettings' => ['options' => ['id' => 'kv-pjax-container']],
+                    'pjaxSettings' => ['options' => ['id' => 'kv-unique-id-report']],
                     'layout' => '{toolbar}{summary} {items} {pager}',
                     'toolbar' => [
                         $fullExportMenu,

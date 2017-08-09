@@ -173,6 +173,18 @@ class CampaignController extends Controller
                 $item->save();
             }
         }
+
+        $camps = RedirectLog::findAllActive();
+        if (isset($camps)) {
+            foreach ($camps as $item) {
+                $item->status = 2;
+                $this->echoMessage('S2S redirect ' . $item->campaign_id.$item->channel_id);
+                $delivers = Deliver::getPausedCampaign($item->campaign_id,$item->channel_id);
+                if (isset($delivers)) {
+                    $item->save();
+                }
+            }
+        }
     }
 
     public function actionSendUpdate()

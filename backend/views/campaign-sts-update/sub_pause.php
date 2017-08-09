@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 ?>
 <h3>Pause sub publisher</h3>
 <?php $form = ActiveForm::begin([
-    'id' => $model->formName(),
+    'id' => 'CampaignStsUpdate',
 //    'enableAjaxValidation' => true,
    // 'validationUrl' => \yii\helpers\Url::toRoute('campaign-sts-update/validate'),
 ]); ?>
