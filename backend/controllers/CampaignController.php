@@ -198,10 +198,17 @@ class CampaignController extends Controller
 //            'model' => $model,
 //        ]);
         $model = new Campaign();
+        if (isset($_GET["id"])) {
+            $model = $this->findModel($_GET["id"]);
+            if(empty($model)){
+                $model = new Campaign();
+            }
+            $model->campaign_uuid = null;
+        }
         $modelsLink = array();
         $this->beforeUpdate($model);
 
-        if(Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())){
+        if (Yii::$app->request->isAjax && $model->load(Yii::$app->request->post())) {
             Yii::$app->response->format = Response::FORMAT_JSON;
             return ActiveForm::validate($model);
         }
@@ -216,14 +223,14 @@ class CampaignController extends Controller
 
             if ($flag = $model->save(false)) {
                 foreach ($modelsLink as $modelLink) {
-                    if(empty($modelLink) || empty( $modelLink['creative_link'])){
+                    if (empty($modelLink) || empty($modelLink['creative_link'])) {
                         continue;
                     }
                     $ccl = new CampaignCreativeLink();
                     $ccl->campaign_id = $model->id;
                     $ccl->creative_link = $modelLink['creative_link'];
                     $ccl->creative_type = $modelLink['creative_type'];
-                    if (! ($flag = $ccl->save(false))) {
+                    if (!($flag = $ccl->save(false))) {
                         break;
                     }
                 }
@@ -234,6 +241,7 @@ class CampaignController extends Controller
                 ]);
             }
         }
+
         return $this->render('create', [
             'model' => $model,
             'modelsLink' => (empty($modelsLink)) ? [new CampaignCreativeLink] : $modelsLink
@@ -263,21 +271,21 @@ class CampaignController extends Controller
             $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsLink, 'id', 'id')));
 
             if ($flag = $model->save(false)) {
-                if (! empty($deletedHouseIDs)) {
+                if (!empty($deletedHouseIDs)) {
                     CampaignCreativeLink::deleteAll(['id' => $deletedHouseIDs]);
                 }
 
                 foreach ($modelsLink as $modelLink) {
 
-                    if (!empty($modelLink)&&isset($modelLink['id'])){
+                    if (!empty($modelLink) && isset($modelLink['id'])) {
                         $ccl = CampaignCreativeLink::findOne($modelLink['id']);
                     }
 
-                    if (!empty($ccl)){
+                    if (!empty($ccl)) {
                         $ccl->creative_link = $modelLink['creative_link'];
                         $ccl->creative_type = $modelLink['creative_type'];
-                    }else{
-                        if(empty( $modelLink['creative_link'])){
+                    } else {
+                        if (empty($modelLink['creative_link'])) {
                             continue;
                         }
                         $ccl = new CampaignCreativeLink();
@@ -286,7 +294,7 @@ class CampaignController extends Controller
                         $ccl->creative_type = $modelLink['creative_type'];
                     }
 
-                    if (! ($flag = $ccl->save(false))) {
+                    if (!($flag = $ccl->save(false))) {
                         break;
                     }
                 }
@@ -478,7 +486,7 @@ class CampaignController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'campaign' => $cam,
-            'model'=>new StsForm(),
+            'model' => new StsForm(),
         ]);
     }
 
@@ -497,12 +505,12 @@ class CampaignController extends Controller
 
             foreach ($modelCreativeLink as $modelLink) {
                 $modelLink->creative_type = CampaignCreativeLink::getCreativeLinkValue($modelLink->creative_type);
-                if(!empty($modelLink->creative_type) && !empty($modelLink->creative_link)){
-                    array_push($creativeLinks,$modelLink->creative_type.":" .$modelLink->creative_link);
+                if (!empty($modelLink->creative_type) && !empty($modelLink->creative_link)) {
+                    array_push($creativeLinks, $modelLink->creative_type . ":" . $modelLink->creative_link);
                 }
             }
 
-            $model->creative_link = implode(";",$creativeLinks);;
+            $model->creative_link = implode(";", $creativeLinks);;
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
@@ -516,10 +524,10 @@ class CampaignController extends Controller
     {
         $searchModel = new CampaignSearch();
         if (isset($_POST['CampaignSearch']['ids'])) {
-            $searchModel->ids = explode(",",$_POST['CampaignSearch']['ids']);
+            $searchModel->ids = explode(",", $_POST['CampaignSearch']['ids']);
         }
-        if (isset(array_keys($_POST)[2])){
-            $searchModel->ids = explode(",",array_keys($_POST)[2]);
+        if (isset(array_keys($_POST)[2])) {
+            $searchModel->ids = explode(",", array_keys($_POST)[2]);
         }
         $dataProvider = $searchModel->selectedSearch(Yii::$app->request->queryParams);
         return $this->render('detail', [
@@ -529,16 +537,17 @@ class CampaignController extends Controller
         ]);
     }
 
-    public function actionExportEmail(){
+    public function actionExportEmail()
+    {
         if (isset($_POST['keylist'])) {
             $keys = $_POST['keylist'];
         }
         $user_name = yii::$app->user->identity->username;
-        $user = User::findOne(['username' => $user_name ]);
+        $user = User::findOne(['username' => $user_name]);
         $campaigns = Campaign::find()->where(['id' => $keys])->all();
-        if(MailUtil::sendGoodOffers($campaigns,$user)){
+        if (MailUtil::sendGoodOffers($campaigns, $user)) {
             $this->asJson("send email success!");
-        }else{
+        } else {
             $this->asJson("send email fail!");
         }
     }
@@ -553,10 +562,10 @@ class CampaignController extends Controller
             $keys = $_POST['keylist'];
             $models = Campaign::getCampaignsByIds($keys);
 
-            foreach ($models as $model){
+            foreach ($models as $model) {
                 $my_cart = MyCart::find()->where(['campaign_id' => $model->id])->andFilterWhere(['creator' => yii::$app->user->identity->username])->one();
                 if (!empty($my_cart)) {
-                    return 'you have added '.$model->campaign_name.' to my cart already!';
+                    return 'you have added ' . $model->campaign_name . ' to my cart already!';
                 }
                 $my_cart = new Mycart();
                 $my_cart->target_geo = $model->target_geo;
