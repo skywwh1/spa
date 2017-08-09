@@ -153,6 +153,6 @@ class RedirectLog extends \yii\db\ActiveRecord
     public static function findAllActive()
     {
         $beginTheDay = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
-        return static::find()->where(['status' => 1])  ->andWhere(['>', 'create_time', $beginTheDay])->all();
+        return static::find()->where(['status' => 1])->andWhere(['>', 'create_time', $beginTheDay])->all();
     }
 }
