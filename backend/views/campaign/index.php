@@ -40,10 +40,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => 'advertiser0.username',
                     ],
                     'id',
-                    [
-                        'attribute' => 'campaign_name',
-                        'value' => 'name',
-                    ],
+//                    [
+//                        'attribute' => 'campaign_name',
+//                        'value' => 'name',
+//                    ],
+                    'campaign_name',
                   //  'campaign_uuid',
                     'target_geo',
                     'platform',
@@ -230,6 +231,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'advertiser0.username',
 //                                'pageSummary' => 'Total'
                         ],
+                        'campaign_uuid',
                         [
                             'class' => '\kartik\grid\DataColumn',
                             'attribute' => 'campaign_name',
@@ -239,7 +241,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'width' => '60px',
                             'format' => 'raw',
                         ],
-                        'campaign_uuid',
                         //'target_geo',
                         [
                             'class' => '\kartik\grid\DataColumn',
