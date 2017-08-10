@@ -178,6 +178,7 @@ class CountController extends Controller
                         $this->echoMessage('cannot found the campaign -' . $logClick->campaign_id);
                         continue;
                     }
+
                     $sts = Deliver::findIdentity($logClick->campaign_id, $logClick->channel_id);
                     $logFeed = new LogFeed();
                     $logFeed->auth_token = $item->auth_token;
@@ -207,10 +208,23 @@ class CountController extends Controller
                             $logFeed->adv_price = $sub_redirect->campaignIdNew->adv_price;
                         }
                     }
+
                     if ($logFeed->save() == false) {
                         $this->echoMessage('save log feed error');
                         var_dump($logFeed->getErrors());
                     } else {
+                        $data = Array();
+                        $data['click_uuid'] = $logClick->click_uuid;
+                        $data['click_id'] = $logClick->click_id;
+                        $data['channel_id'] = $logClick->channel_id;
+                        $data['campaign_id'] = empty($logClick->redirect_campaign_id) ? $logClick->campaign_id : $logClick->redirect_campaign_id;
+                        $data['ch_subid'] = $logClick->ch_subid;
+                        $data['adv_price'] = $logClick->adv_price;
+                        $data['pay_out'] = $logClick->pay_out;
+                        $data['source_campaign_id'] = $logClick->campaign_id;
+                        $data['feed_time'] = $logFeed->feed_time;
+                        $data['click_time'] = $logFeed->click_time;
+                        $data['is_post'] = 0;
                         //更新post 扣量
                         if ($this->isNeedPost($sts, $logClick->ch_subid)) {
                             $post = new LogPost();
@@ -231,7 +245,9 @@ class CountController extends Controller
                                 $this->echoMessage('save log post error');
                                 var_dump($post->getErrors());
                             }
+                            $data['is_post'] = 1;
                         }
+                        $this->postKafka($data);
                     }
                     $item->is_count = 1;
                     $item->save();
@@ -890,5 +906,40 @@ class CountController extends Controller
         $stats = new StatsUtil();
         $stats->checkLowMargin($start);
         Config::updateLastCheckLowMargin($end);
+    }
+
+    /**
+     * @param $data[]
+     */
+    private function postKafka($data)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_PORT => "6800",
+            CURLOPT_URL => "http://kafka.superads.cn:6800/kafka/proxy/install/log",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => json_encode($data),
+            CURLOPT_HTTPHEADER => array(
+                "cache-control: no-cache",
+                "content-type: application/json",
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+//        if ($err) {
+//            echo "cURL Error #:" . $err;
+//        } else {
+//            echo $response;
+//        }
     }
 }
