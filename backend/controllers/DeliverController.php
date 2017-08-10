@@ -424,8 +424,16 @@ class DeliverController extends Controller
                 $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
                 $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
                 $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
-                $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
-                $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                if($deliver->channel->pay_out == 1){
+                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                }else{
+                    $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                }
+                if(empty($deliver->channel->daily_cap)){
+                    $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                }else{
+                    $deliver->daily_cap =$deliver->channel->daily_cap;
+                }
                 $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
                 $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
                 $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
