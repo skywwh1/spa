@@ -59,10 +59,12 @@ use yii\helpers\Url;
         <thead>
             <tr>
                 <?php
+                $channel = '<th width="100px">Channel</th>';
                 $id = '<th width="100px">Campaign ID</th>';
                 $campaign_name = '<th> Campaign Name</th>';
                 $clicks = '<th> Clicks</th>';
                 $cvr = '<th> Cvr</th>';
+                $install = '<th> Install</th>';
                 $payout = '<th> Payout</th>';
                 $cost = '<th>Cost</th>';
                 $pending_cost = '<th> Pending Cost</th>';
@@ -73,10 +75,12 @@ use yii\helpers\Url;
         </thead>
         <tbody>
         <?php
+            echo $channel;
             echo $id;
             echo $campaign_name;
             echo $clicks;
             echo $cvr;
+            echo $install;
             echo $payout;
             echo $cost;
             echo $pending_cost;
@@ -85,6 +89,7 @@ use yii\helpers\Url;
 
         foreach ($campaignBills as $item) {
             if (!empty($item->campaign_id)){
+                $channels = '<td>' . Html::encode($item->channel->username) . '</td>';
                 $ids = '<td>' . Html::encode($item->campaign_id) . '</td>';
                 $campaign_names = '<td width="130px">' . Html::encode($item->campaign->campaign_name) . '</td>';
                 $clicks = '<td>' . Html::encode($item->clicks) . '</td>';
@@ -93,12 +98,13 @@ use yii\helpers\Url;
                 } else {
                     $cvrs = '<td>0</td>';
                 }
+                $installs = '<td>' . Html::encode($item->installs) . '</td>';
                 $payouts = '<td>' . $item->pay_out . '</td>';
                 $costs = '<td>' . $item->cost . '</td>';
                 $pending_costs = '<td>' . $item->pending_cost . '</td>';
                 $deduction_costs = '<td>' . $item->deduction_cost . '</td>';
                 $payables = '<td>' . Html::encode($item->cost-$item->pending_cost-$item->deduction_cost) . '</td>';
-                $row = '<tr>' .$ids.$campaign_names.$clicks.$cvrs.$payouts.$costs.$pending_costs.$deduction_costs.$payables.'</tr>';
+                $row = '<tr>' .$channels.$ids.$campaign_names.$clicks.$cvrs.$installs.$payouts.$costs.$pending_costs.$deduction_costs.$payables.'</tr>';
                 echo $row;
             }
         }

@@ -148,7 +148,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             [
                                 'label' => 'pm',
                                 'attribute' => 'pm',
-                                'value' => 'pm',
+                                'value' => function ($model) {
+                                    return $model->adv0->pm0->username;
+                                },
                             ],
                             [
                                 'label' => 'bd',
@@ -323,7 +325,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                 [
                                     'label' => 'pm',
                                     'attribute' => 'pm',
-                                    'value' => 'pm',
+                                    'value' => function ($model) {
+                                        return $model->adv0->pm0->username;
+                                    },
                                 ],
                                 [
                                     'label' => 'bd',

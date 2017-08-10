@@ -274,7 +274,8 @@ class FinancePendingController extends Controller
             $pending->cost = $records->cost;
             $pending->revenue = $records->revenue;
             $pending->margin = $pending->revenue == 0 ? 0 : ($pending->revenue - $pending->cost) / $pending->revenue;
-            $pending->pm = empty(User::findIdentity($channel->pm)) ? null : User::findIdentity($channel->pm)->username;
+//            $pending->pm = empty(User::findIdentity($cam->advertiser0->pm)) ? null : User::findIdentity($channel->pm)->username;
+            $pending->pm = empty ($cam->advertiser0->pm)?null:$cam->advertiser0->pm0->username;
             $pending->om = User::findIdentity($channel->om)->username;
             $pending->bd = User::findIdentity($cam->advertiser0->bd)->username;
             $pending->adv = $cam->advertiser0->username;

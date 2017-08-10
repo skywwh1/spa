@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\Channel;
 use common\utility\TimeZoneUtil;
 use Yii;
 use yii\db\Query;
@@ -80,6 +81,10 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             // $query->where('0=1');
             return $dataProvider;
         }
+        if (!empty($this->master_channel)){
+            $channel_id = Channel::findByUsername($this->master_channel)->id;
+            $query->andFilterWhere([ 'channel_id' => $channel_id ]);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -126,7 +131,6 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['like', 'note', $this->note]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
-        ->andFilterWhere([ 'like', 'ch.master_channel', $this->master_channel])
         ->andFilterWhere([ 'like', 'ch.level', $this->level]);
 
         $start = new DateTime($this->start_time);
@@ -267,6 +271,10 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
         if (!$this->validate()) {
             return $dataProvider;
         }
+        if (!empty($this->master_channel)){
+            $channel_id = Channel::findByUsername($this->master_channel)->id;
+            $query->andFilterWhere([ 'channel_id' => $channel_id ]);
+        }
         $query->select([
             'SUM(IF(fp.status= 1, fp.cost, 0)) AS pending_billing,
            SUM(IF(fp.status= 2, fp.cost, 0)) AS om_leader_approval,
@@ -274,7 +282,14 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
            SUM(IF(fp.status= 4, fp.cost, 0)) AS finance_approval,
            SUM(IF(fp.status= 5, fp.cost, 0)) AS finance_reject,
            SUM(IF(fp.status= 6, fp.cost, 0)) AS payable,
-           SUM(IF(fp.status= 7, fp.cost, 0)) AS paid'
+           SUM(IF(fp.status= 7, fp.cost, 0)) AS paid,
+           SUM(case when fp.status = 1 then 1 else 0 end) as count_pending,
+           SUM(case when fp.status = 2 then 1 else 0 end) as count_om_leader_approval,
+           SUM(case when fp.status = 3 then 1 else 0 end) as count_om_leader_reject,
+           SUM(case when fp.status = 4 then 1 else 0 end) as count_finance_approval,
+           SUM(case when fp.status = 5 then 1 else 0 end) as count_finance_reject,
+           SUM(case when fp.status = 6 then 1 else 0 end) as count_payable,
+           SUM(case when fp.status = 7 then 1 else 0 end) as count_paid'
         ]);
         $query->from('finance_channel_bill_term fp');
         $query->leftJoin('channel ch', 'fp.channel_id = ch.id');
@@ -299,7 +314,6 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             ->andFilterWhere(['<', 'fp.end_time', $end_date]);
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
-              ->andFilterWhere([ 'like', 'ch.master_channel', $this->master_channel])
               ->andFilterWhere([ 'like', 'ch.level', $this->level]);
 
         if (\Yii::$app->user->can('admin')) {

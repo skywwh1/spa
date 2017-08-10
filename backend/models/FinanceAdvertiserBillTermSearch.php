@@ -268,7 +268,15 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
            SUM(IF(fab.status= 5, fab.revenue, 0)) AS finance_reject,
            SUM(IF(fab.status= 6, fab.revenue, 0)) AS receivable,
            SUM(IF(fab.status= 7, fab.revenue, 0)) AS received,
-           SUM(IF(fab.status= 8, fab.revenue, 0)) AS overdue'
+           SUM(IF(fab.status= 8, fab.revenue, 0)) AS overdue,
+           SUM(case when fab.status = 1 then 1 else 0 end) as count_pending,
+           SUM(case when fab.status = 2 then 1 else 0 end) as count_bd_leader_approval,
+           SUM(case when fab.status = 3 then 1 else 0 end) as count_bd_leader_reject,
+           SUM(case when fab.status = 4 then 1 else 0 end) as count_finance_approval,
+           SUM(case when fab.status = 5 then 1 else 0 end) as count_finance_reject,
+           SUM(case when fab.status = 6 then 1 else 0 end) as count_receivable,
+           SUM(case when fab.status = 7 then 1 else 0 end) as count_received,
+           SUM(case when fab.status = 8 then 1 else 0 end) as count_overdue'
         ]);
         $query->from('finance_advertiser_bill_term fab');
         $query->leftJoin("advertiser adv",'fab.adv_id = adv.id');

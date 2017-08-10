@@ -20,14 +20,70 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <?php
                     $summary_columns = [
-                        'pending_billing',
-                        'bd_leader_approval',
-                        'bd_leader_reject',
-                        'finance_approval',
-                        'finance_reject',
-                        'receivable',
-                        'received',
-                        'overdue',
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'pending_billing',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->pending_billing.'/'.$model->count_pending;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'bd_leader_approval',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->bd_leader_approval.'/'.$model->count_bd_leader_approval;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'bd_leader_reject',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->bd_leader_reject.'/'.$model->count_bd_leader_reject;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'finance_approval',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->finance_approval.'/'.$model->count_finance_approval;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'finance_reject',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->finance_reject.'/'.$model->count_finance_reject;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'receivable',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->receivable.'/'.$model->count_receivable;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'received',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->received.'/'.$model->count_received;
+                            },
+                        ],
+                        [
+                            // 'label' => 'invoice_id',
+                            'attribute' => 'overdue',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                return $model->overdue.'/'.$model->count_overdue;
+                            },
+                        ],
                     ];
 
                     echo GridView::widget([

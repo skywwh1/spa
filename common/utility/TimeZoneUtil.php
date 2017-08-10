@@ -80,4 +80,15 @@ class TimeZoneUtil
         return strtotime(date('Y-m-01', $date) . ' +1 month -1 day');
     }
 
+    public static function initDateTimeZone($time_zone)
+    {
+        $beginTheDay = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($time_zone));
+        $date->setTimestamp($beginTheDay);
+//        $beginTheDay = $date->format('Y-m-d');
+
+        return $date->getTimestamp();
+    }
 }

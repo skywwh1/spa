@@ -66,6 +66,22 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
     public $cha_paid;
     public $cha_payable;
     public $cash_flow;
+    public $pending_billing;
+    public $bd_leader_approval;
+    public $bd_leader_reject;
+    public $finance_approval;
+    public $finance_reject;
+    public $receivable;
+    public $received;
+    public $overdue;
+    public $count_pending;
+    public $count_bd_leader_approval;
+    public $count_bd_leader_reject;
+    public $count_finance_approval;
+    public $count_finance_reject;
+    public $count_receivable;
+    public $count_received;
+    public $count_overdue;
     /**
      * @inheritdoc
      */

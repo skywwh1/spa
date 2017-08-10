@@ -70,6 +70,20 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
     public $adv_received;
     public $adv_receivable;
     public $cash_flow;
+    public $pending_billing;
+    public $om_leader_approval;
+    public $om_leader_reject;
+    public $finance_approval;
+    public $finance_reject;
+    public $payable;
+    public $paid;
+    public $count_pending;
+    public $count_om_leader_approval;
+    public $count_om_leader_reject;
+    public $count_finance_approval;
+    public $count_finance_reject;
+    public $count_payable;
+    public $count_paid;
     /**
      * @inheritdoc
      */

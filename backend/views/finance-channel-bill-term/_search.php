@@ -35,7 +35,7 @@ use kartik\typeahead\Typeahead;
                         ]) ?>
                     </div>
                     <div class="col-lg-2">
-                        <?= $form->field($model, 'channel')->widget(Typeahead::classname(), [
+                        <?= $form->field($model, 'channel_name')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
                             'dataset' => [
                                 [
