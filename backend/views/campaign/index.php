@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        'value' => 'name',
 //                    ],
                     'campaign_name',
-                  //  'campaign_uuid',
+                    'campaign_uuid',
                     'target_geo',
                     'platform',
                     [

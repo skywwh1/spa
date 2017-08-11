@@ -40,11 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => 'advertiser0.username',
                     ],
                     'id',
-                    [
-                        'attribute' => 'campaign_name',
-                        'value' => 'name',
-                    ],
-                  //  'campaign_uuid',
+//                    [
+//                        'attribute' => 'campaign_name',
+//                        'value' => 'name',
+//                    ],
+                    'campaign_name',
+                    'campaign_uuid',
                     'target_geo',
                     'platform',
                     [
