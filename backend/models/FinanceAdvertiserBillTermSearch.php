@@ -261,14 +261,14 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
             return $dataProvider;
         }
         $query->select([
-            'SUM(IF(fab.status= 1, fab.revenue, 0)) AS pending_billing,
-           SUM(IF(fab.status= 2, fab.revenue, 0)) AS bd_leader_approval,
-           SUM(IF(fab.status= 3, fab.revenue, 0)) AS bd_leader_reject,
-           SUM(IF(fab.status= 4, fab.revenue, 0)) AS finance_approval,
-           SUM(IF(fab.status= 5, fab.revenue, 0)) AS finance_reject,
-           SUM(IF(fab.status= 6, fab.revenue, 0)) AS receivable,
-           SUM(IF(fab.status= 7, fab.revenue, 0)) AS received,
-           SUM(IF(fab.status= 8, fab.revenue, 0)) AS overdue,
+            'SUM(IF(fab.status= 1, fab.receivable, 0)) AS pending_billing,
+           SUM(IF(fab.status= 2, fab.receivable, 0)) AS bd_leader_approval,
+           SUM(IF(fab.status= 3, fab.receivable, 0)) AS bd_leader_reject,
+           SUM(IF(fab.status= 4, fab.receivable, 0)) AS finance_approval,
+           SUM(IF(fab.status= 5, fab.receivable, 0)) AS finance_reject,
+           SUM(IF(fab.status= 6, fab.receivable, 0)) AS total_receivable,
+           SUM(IF(fab.status= 7, fab.receivable, 0)) AS total_received,
+           SUM(IF(fab.status= 8, fab.receivable, 0)) AS overdue,
            SUM(case when fab.status = 1 then 1 else 0 end) as count_pending,
            SUM(case when fab.status = 2 then 1 else 0 end) as count_bd_leader_approval,
            SUM(case when fab.status = 3 then 1 else 0 end) as count_bd_leader_reject,

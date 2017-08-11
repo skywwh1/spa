@@ -71,8 +71,8 @@ class FinanceAdvertiserBillTerm extends \yii\db\ActiveRecord
     public $bd_leader_reject;
     public $finance_approval;
     public $finance_reject;
-    public $receivable;
-    public $received;
+    public $total_receivable;
+    public $total_received;
     public $overdue;
     public $count_pending;
     public $count_bd_leader_approval;

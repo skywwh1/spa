@@ -21,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     $summary_columns = [
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'pending_billing',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -29,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'bd_leader_approval',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -37,7 +35,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'bd_leader_reject',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -45,7 +42,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'finance_approval',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -53,7 +49,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'finance_reject',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -61,23 +56,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
-                            'attribute' => 'receivable',
+                            'attribute' => 'total_receivable',
                             'value' => function ($model) {
                                 $model = (object)$model;
-                                return $model->receivable.'/'.$model->count_receivable;
+                                return $model->total_receivable.'/'.$model->count_receivable;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
-                            'attribute' => 'received',
+                            'attribute' => 'total_received',
                             'value' => function ($model) {
                                 $model = (object)$model;
-                                return $model->received.'/'.$model->count_received;
+                                return $model->total_received.'/'.$model->count_received;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'overdue',
                             'value' => function ($model) {
                                 $model = (object)$model;
