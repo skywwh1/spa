@@ -181,7 +181,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'datetime',
                             ],
                         ];
-                        echo ExportMenu::widget([
+                        $fullExportMenu =  ExportMenu::widget([
                             'dataProvider' => $dataProvider,
                             'columns' => $columns,
                             'fontAwesome' => true,
@@ -203,6 +203,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'dataProvider' => $dataProvider,
                             'filterModel' => $searchModel,
                             'showPageSummary' => true,
+                            'layout' => '{toolbar}{summary}{items} {pager}',
+                            'toolbar' => [
+                                '{toggleData}',
+                                $fullExportMenu,
+                            ],
                             'columns' => [
                                 [
                                     'class' => 'kartik\grid\ActionColumn',

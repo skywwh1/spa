@@ -176,7 +176,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'create_time',
                             ],
                         ];
-                        echo ExportMenu::widget([
+                        $fullExportMenu =  ExportMenu::widget([
                             'dataProvider' => $dataProvider,
                             'columns' => $columns,
                             'fontAwesome' => true,
@@ -199,6 +199,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'filterModel' => $searchModel,
                             'id' => 'pending-list',
                             'showPageSummary' => true,
+                            'layout' => '{toolbar}{summary}{items} {pager}',
+                            'toolbar' => [
+                                '{toggleData}',
+                                $fullExportMenu,
+                            ],
                             'pjax' => false,
                             'columns' => [
                                 [
