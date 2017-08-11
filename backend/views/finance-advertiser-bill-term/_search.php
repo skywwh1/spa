@@ -39,7 +39,10 @@ use kartik\typeahead\Typeahead;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'invoice_id') ?>
                     </div>
-
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'excludeZero')->dropDownList(
+                            ModelsUtil::exclude_zero) ?>
+                    </div>
                 </div>
                 <div class="row">
 

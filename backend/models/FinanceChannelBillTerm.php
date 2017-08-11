@@ -75,8 +75,8 @@ class FinanceChannelBillTerm extends \yii\db\ActiveRecord
     public $om_leader_reject;
     public $finance_approval;
     public $finance_reject;
-    public $payable;
-    public $paid;
+    public $total_payable;
+    public $total_paid;
     public $count_pending;
     public $count_om_leader_approval;
     public $count_om_leader_reject;

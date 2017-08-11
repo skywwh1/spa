@@ -79,6 +79,10 @@ use kartik\typeahead\Typeahead;
                         ]);
                         ?>
                     </div>
+                    <div class="col-lg-2">
+                        <?= $form->field($model, 'excludeZero')->dropDownList(
+                            ModelsUtil::exclude_zero) ?>
+                    </div>
                 </div>
                 <div class="form-group">
                     <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>

@@ -26,13 +26,14 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
     public $om;
     public $master_channel;
     public $level;
+    public $excludeZero;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift','om','start_time','end_time','status','master_channel','level'], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','channel_name','bank_name','bank_address','account_nu_iban','swift','om','start_time','end_time','status','master_channel','level','excludeZero'], 'safe'],
             [['channel_id', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'add_historic_cost', 'pending', 'deduction', 'compensation', 'add_cost', 'final_cost', 'actual_margin', 'paid_amount', 'payable', 'apply_prepayment', 'balance'], 'number'],
         ];
@@ -141,6 +142,10 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
         $end_date = $end_date->getTimestamp();
         $query->andFilterWhere(['>=', 'fcb.start_time', $start_date])
             ->andFilterWhere(['<', 'fcb.end_time', $end_date]);
+
+        if ($this->excludeZero == 1){
+            $query->andFilterWhere(['<>', 'fcb.cost', 0]);
+        }
 
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->om]);
@@ -276,13 +281,13 @@ class FinanceChannelBillTermSearch extends FinanceChannelBillTerm
             $query->andFilterWhere([ 'channel_id' => $channel_id ]);
         }
         $query->select([
-            'SUM(IF(fp.status= 1, fp.cost, 0)) AS pending_billing,
-           SUM(IF(fp.status= 2, fp.cost, 0)) AS om_leader_approval,
-           SUM(IF(fp.status= 3, fp.cost, 0)) AS om_leader_reject,
-           SUM(IF(fp.status= 4, fp.cost, 0)) AS finance_approval,
-           SUM(IF(fp.status= 5, fp.cost, 0)) AS finance_reject,
-           SUM(IF(fp.status= 6, fp.cost, 0)) AS payable,
-           SUM(IF(fp.status= 7, fp.cost, 0)) AS paid,
+            'SUM(IF(fp.status= 1, fp.payable, 0)) AS pending_billing,
+           SUM(IF(fp.status= 2, fp.payable, 0)) AS om_leader_approval,
+           SUM(IF(fp.status= 3, fp.payable, 0)) AS om_leader_reject,
+           SUM(IF(fp.status= 4, fp.payable, 0)) AS finance_approval,
+           SUM(IF(fp.status= 5, fp.payable, 0)) AS finance_reject,
+           SUM(IF(fp.status= 6, fp.payable, 0)) AS total_payable,
+           SUM(IF(fp.status= 7, fp.payable, 0)) AS total_paid,
            SUM(case when fp.status = 1 then 1 else 0 end) as count_pending,
            SUM(case when fp.status = 2 then 1 else 0 end) as count_om_leader_approval,
            SUM(case when fp.status = 3 then 1 else 0 end) as count_om_leader_reject,

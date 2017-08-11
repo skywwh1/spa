@@ -20,7 +20,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     $summary_columns = [
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'pending_billing',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -28,7 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'om_leader_approval',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -36,7 +34,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'om_leader_reject',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -44,7 +41,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'finance_approval',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -52,7 +48,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
                             'attribute' => 'finance_reject',
                             'value' => function ($model) {
                                 $model = (object)$model;
@@ -60,19 +55,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
-                            'attribute' => 'payable',
+                            'attribute' => 'total_payable',
                             'value' => function ($model) {
                                 $model = (object)$model;
-                                return $model->payable.'/'.$model->count_payable;
+                                return $model->total_payable.'/'.$model->count_payable;
                             },
                         ],
                         [
-                            // 'label' => 'invoice_id',
-                            'attribute' => 'paid',
+                            'attribute' => 'total_paid',
                             'value' => function ($model) {
                                 $model = (object)$model;
-                                return $model->paid.'/'.$model->count_paid;
+                                return $model->total_paid.'/'.$model->count_paid;
                             },
                         ],
                     ];
@@ -138,6 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'value' => 'cost',
                                 'pageSummary' => true,
                             ],
+                            'payable',
                             [
                                 // 'label' => 'invoice_id',
                                 'attribute' => 'invoice_id',
@@ -152,6 +146,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                 // 'label' => 'channel_id',
                                 'attribute' => 'channel_name',
                                 'value' => 'channel.username',
+                            ],
+                            [
+                                // 'label' => 'channel_id',
+                                'attribute' => 'level',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getChannelLevel($model->channel->level);
+                                },
+                                'filter' => ModelsUtil::channel_level
                             ],
                             [
                                 'label' => 'OM',

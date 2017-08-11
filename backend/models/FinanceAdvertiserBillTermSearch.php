@@ -21,13 +21,14 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
     public $payment_term;
     public $bd;
     public $pm;
+    public $excludeZero;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','adv_name','payment_term','bd','pm','start_time', 'end_time', 'status', ], 'safe'],
+            [['bill_id', 'invoice_id', 'period', 'time_zone', 'daily_cap', 'cap', 'note','adv_name','payment_term','bd','pm','start_time', 'end_time', 'status', 'excludeZero'], 'safe'],
             [['adv_id', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'redirect_installs', 'redirect_match_installs', 'status', 'update_time', 'create_time'], 'integer'],
             [['pay_out', 'adv_price', 'cost', 'redirect_cost', 'revenue', 'redirect_revenue', 'receivable'], 'number'],
         ];
@@ -125,6 +126,10 @@ class FinanceAdvertiserBillTermSearch extends FinanceAdvertiserBillTerm
         $end_date = $end_date->getTimestamp();
         $query->andFilterWhere(['>=', 'fab.start_time', $start_date])
             ->andFilterWhere(['<', 'fab.end_time', $end_date]);
+
+        if ($this->excludeZero == 1){
+            $query->andFilterWhere(['<>', 'fab.revenue', 0]);
+        }
 
         if (\Yii::$app->user->can('admin')) {
             $query->andFilterWhere(['like', 'u.username', $this->bd]);
