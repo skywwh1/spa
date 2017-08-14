@@ -144,7 +144,6 @@ class StreamController extends Controller
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
         $click->save();
-        $this->postKafka($click);
         return $this->redirect($click->redirect);
     }
 
@@ -326,6 +325,40 @@ class StreamController extends Controller
 //        $clickDm->save();
 //        $this->countClick($clickDm);
 
+
+        $data = Array();
+        $data['click_uuid'] = $click->click_uuid;
+        $data['click_id'] = $click->click_id;
+        $data['channel_id'] = $click->channel_id;
+        $data['campaign_id'] = $click->campaign_id;
+        $data['campaign_uuid'] = $click->campaign_uuid;
+        $data['pl'] = $click->pl;
+        $data['ch_subid'] = $click->ch_subid;
+        $data['gaid'] = $click->gaid;
+        $data['idfa'] = $click->idfa;
+        $data['site'] = $click->site;
+        $data['adv_price'] = $click->adv_price;
+        $data['pay_out'] = $click->pay_out;
+        $data['discount'] = $click->discount;
+        $data['daily_cap'] = $click->daily_cap;
+        $data['all_parameters'] = $click->all_parameters;
+        $data['ip'] = $click->ip;
+        $data['ip_long'] = $click->ip_long;
+        $data['redirect'] = $click->redirect;
+        $data['redirect_campaign_id'] = $click->redirect_campaign_id;
+        $data['browser'] = $click->browser;
+        $data['browser_type'] = $click->browser_type;
+        $data['click_time'] = $click->click_time;
+        $data['create_time'] = $click->create_time;
+        $data['bd'] = $campaign->advertiser0->bd;
+        $data['pm'] = $campaign->advertiser0->pm;
+        $data['om'] = $deliver->channel->om;
+        $data['category'] = $campaign->category;
+        $data['traffic_source'] = $campaign->traffic_source;
+        $data['price_mode'] = $campaign->pricing_mode;
+        $data['geo'] = $campaign->target_geo;
+        $this->postKafka($data);
+
         return 200;
     }
 
@@ -486,34 +519,11 @@ class StreamController extends Controller
     }
 
     /**
-     * @param LogClick $logClick
+     * @param $data []
      */
-    private function postKafka($logClick)
+    private function postKafka($data)
     {
-        $data = Array();
-        $data['click_uuid'] = $logClick->click_uuid;
-        $data['click_id'] = $logClick->click_id;
-        $data['channel_id'] = $logClick->channel_id;
-        $data['campaign_id'] = $logClick->campaign_id;
-        $data['campaign_uuid'] = $logClick->campaign_uuid;
-        $data['pl'] = $logClick->pl;
-        $data['ch_subid'] = $logClick->ch_subid;
-        $data['gaid'] = $logClick->gaid;
-        $data['idfa'] = $logClick->idfa;
-        $data['site'] = $logClick->site;
-        $data['adv_price'] = $logClick->adv_price;
-        $data['pay_out'] = $logClick->pay_out;
-        $data['discount'] = $logClick->discount;
-        $data['daily_cap'] = $logClick->daily_cap;
-        $data['all_parameters'] = $logClick->all_parameters;
-        $data['ip'] = $logClick->ip;
-        $data['ip_long'] = $logClick->ip_long;
-        $data['redirect'] = $logClick->redirect;
-        $data['redirect_campaign_id'] = $logClick->redirect_campaign_id;
-        $data['browser'] = $logClick->browser;
-        $data['browser_type'] = $logClick->browser_type;
-        $data['click_time'] = $logClick->click_time;
-        $data['create_time'] = $logClick->create_time;
+
 
         $curl = curl_init();
 
