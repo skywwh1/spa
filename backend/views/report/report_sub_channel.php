@@ -436,8 +436,9 @@ if (!empty($dataProvider)) {
                             'dataProvider' => $dataProvider,
                             'columns' => $columns,
                             'fontAwesome' => true,
+                            'batchSize' => 20,
                             'showConfirmAlert' => false,
-                            'target' => GridView::TARGET_BLANK,
+                            'target' => ExportMenu::TARGET_BLANK,
                             'dropdownOptions' => [
                                 'label' => 'Export All',
                                 'class' => 'btn btn-default'
