@@ -296,6 +296,12 @@ class ModelsUtil
         1 => "API",
     );
 
+    const exclude_zero = array(
+        '0' => 'include 0',
+        '1' => 'exclude 0',
+    );
+
+
     public static function getChannelLevel($k)
     {
         return static::getValue(static::channel_level, $k);
@@ -456,5 +462,9 @@ class ModelsUtil
 
     public static function getChannelCreateType($k){
         return static::getValue(static::channel_create_type, $k);
+    }
+
+    public static function getExcludeZero($k){
+        return static::getValue(static::exclude_zero,$k);
     }
 }
