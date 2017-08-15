@@ -493,10 +493,223 @@ if (!empty($dataProvider)) {
                                     'filter' => false,
                                 ],
                             ],
-                        ]); ?>
+                        ]);
+
+                        $export_columns = [
+                            [
+                                'label' => 'Channel',
+                                'attribute' => 'channel_name',
+                                'value' => 'channel_name',
+                                'filter' => false,
+                                'contentOptions'=>['style'=>'max-width: 160px;'], // <-- right here
+                            ],
+                            [
+                                'attribute' => 'adv',
+                                'value' => 'adv',
+                                'filter' => false,
+                                'contentOptions'=>['style'=>'max-width: 140px;'], // <-- right here
+                            ],
+                            [
+                                'label' => 'Campaign ID',
+                                'attribute' => 'campaign_id',
+                                'value' => 'campaign_id',
+                                'filter' => false,
+                            ],
+                            'campaign_name',
+                            [
+                                // 'label' => 'clicks',
+                                'attribute' => 'clicks',
+                                // 'value' => 'clicks',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'unique_clicks',
+                                'value' => 'unique_clicks',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'label' => 'Installs /Cap',
+                                'attribute' => 'installs',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return $model->installs . '/' . $model->daily_cap;
+                                },
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'redirect_installs',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'cvr',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->clicks > 0) {
+                                        return round(($model->installs / $model->clicks) * 100, 2) . '%';
+                                    }
+                                    return "0%";
+                                },
+                                'filter' => false,
+                                'contentOptions' => function ($model) {
+                                    $model = (object)$model;
+                                    $cvr = 0;
+                                    if ($model->clicks > 0) {
+                                        $cvr = round(($model->installs / $model->clicks) * 100, 2);
+                                    }
+                                    if ($cvr > 2) {
+                                        return ['class' => 'bg-danger'];
+                                    }
+                                }
+                            ],
+
+                            [
+                                'label' => 'Payout (avg)',
+                                'attribute' => 'pay_out',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return round($model->pay_out, 2);
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'cost',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'redirect_cost',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'label' => 'Match Installs /Cap',
+                                'attribute' => 'match_installs',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return $model->match_installs . '/' . $model->cap;
+                                },
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'redirect_match_installs',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'match_cvr',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->clicks > 0) {
+                                        return round(($model->match_installs / $model->clicks) * 100, 2) . '%';
+
+                                    }
+                                    return 0;
+                                },
+                                'filter' => false,
+                                'contentOptions' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->clicks > 0) {
+                                        $match_cvr = round(($model->match_installs / $model->clicks) * 100, 2) . '%';
+                                        if ($match_cvr > 2) {
+                                            return ['class' => 'bg-danger'];
+                                        }
+                                    }
+                                }
+                            ],
+                            [
+                                'label' => 'ADV Price (avg)',
+                                'attribute' => 'adv_price',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return round($model->adv_price, 2);
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'attribute' => 'revenue',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+
+                            [
+                                'attribute' => 'redirect_revenue',
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [
+                                'attribute' => 'def',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return $model->match_installs - $model->installs;
+                                },
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+
+                            [
+                                'attribute' => 'deduction_percent',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    if ($model->match_installs > 0) {
+                                        return round((($model->match_installs - $model->installs) / $model->match_installs) * 100, 2) . '%';
+                                    }
+                                    return 0;
+                                },
+                                'filter' => false,
+                            ],
+
+                            [
+                                'attribute' => 'profit',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    return $model->revenue - $model->cost;
+                                },
+                                'filter' => false,
+                                'pageSummary' => true,
+                            ],
+                            [ //低于30%
+                                'attribute' => 'margin',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    $profit = $model->revenue - $model->cost;
+                                    $margin = $model->revenue > 0 ? round(($profit / $model->revenue) * 100, 2) . '%' : 0;
+                                    return $margin;
+                                },
+                                'filter' => false,
+                                'contentOptions' => function ($model) {
+                                    $model = (object)$model;
+                                    $profit = $model->revenue - $model->cost;
+                                    $margin = $model->revenue > 0 ? round(($profit / $model->revenue), 2) : 0;
+                                    if ($margin < 0.3) {
+                                        return ['class' => 'bg-danger'];
+                                    }
+                                }
+                            ],
+                            [
+                                'label' => 'EPC',
+                                'value' => function ($model) {
+                                    $model = (object)$model;
+                                    $epc=   $model->clicks > 0 ? round(($model->revenue / $model->clicks) * 1000 ,3): 0;
+                                    return $epc;
+                                },
+                                'filter' => false,
+                            ],
+                            [
+                                'label' => 'OM',
+                                'attribute' => 'om',
+                                'value' => 'om',
+                            ],
+                        ];
+                        ?>
+
                         <?php echo ExportMenu::widget([
                             'dataProvider' => $dataProvider,
-                            'columns' => $columns,
+                            'columns' => $export_columns,
                             'fontAwesome' => true,
                             'showConfirmAlert' => false,
                             'target' => GridView::TARGET_BLANK,
