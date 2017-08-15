@@ -224,6 +224,14 @@ class CountController extends Controller
                         $data['source_campaign_id'] = $logClick->campaign_id;
                         $data['feed_time'] = $logFeed->feed_time;
                         $data['click_time'] = $logFeed->click_time;
+                        $data['advertiser'] = $camp->advertiser;
+                        $data['bd'] = $camp->advertiser0->bd;
+                        $data['pm'] = $camp->advertiser0->pm;
+                        $data['om'] = $sts->channel->om;
+                        $data['category'] = $camp->category;
+                        $data['traffic_source'] = $camp->traffic_source;
+                        $data['price_mode'] = $camp->pricing_mode;
+                        $data['geo'] = $camp->target_geo;
                         $data['is_post'] = 0;
                         //更新post 扣量
                         if ($this->isNeedPost($sts, $logClick->ch_subid)) {
