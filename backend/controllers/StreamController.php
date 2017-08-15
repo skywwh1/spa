@@ -357,6 +357,7 @@ class StreamController extends Controller
         $data['traffic_source'] = $campaign->traffic_source;
         $data['price_mode'] = $campaign->pricing_mode;
         $data['geo'] = $campaign->target_geo;
+        $data['advertiser'] = $campaign->advertiser;
         $this->postKafka($data);
 
         return 200;
