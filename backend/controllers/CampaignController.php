@@ -24,7 +24,8 @@ use yii\web\Response;
 use yii\base\Model;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
-
+use common\models\CampaignUpdate;
+use common\models\Deliver;
 
 /**
  * CampaignController implements the CRUD actions for Campaign model.
@@ -631,5 +632,39 @@ class CampaignController extends Controller
         }
         echo $out;
         return;
+    }
+
+    public function actionSendSelectEmail()
+    {
+        if (isset($_POST['keylist'])) {
+            $keys = $_POST['keylist'];
+        }
+        $type = $_POST['type'];
+        $user_name = yii::$app->user->identity->username;
+        $user = User::findOne(['username' => $user_name]);
+        $campaigns = [];
+        foreach ($keys as $k){
+            $channels = Deliver::getRunningChannelByCampaignId($k);
+            $campaign = Campaign::findOne(['id' => $k]);
+            switch($type){
+                case 1:
+                    $select_campaign = CampaignUpdate::getSelectCampaignUpdateInfo($k,'pause');
+                    break;
+                case 2:
+                    $select_campaign = CampaignUpdate::getSelectCampaignUpdateInfo($k,'update-price');
+                    $campaign->newValue = empty($select_campaign)?'':$select_campaign->value;
+                    break;
+                default:break;
+            }
+            $campaign->effective_time = empty($select_campaign)?'':$select_campaign->effect_time;
+            $campaign->impacted_channels = implode($channels,',');
+            var_dump($campaign->creative_link);
+            $campaigns[] = $campaign;
+        }
+        if (MailUtil::sendSelectUpdateOffers($campaigns, $user,$type)) {
+            $this->asJson("send email success!");
+        } else {
+            $this->asJson("send email fail!");
+        }
     }
 }
