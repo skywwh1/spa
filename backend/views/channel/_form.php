@@ -10,7 +10,7 @@ use yii\helpers\Url;
 use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 use common\models\Platform;
-
+use kartik\file\FileInput;
 /* @var $this yii\web\View */
 /* @var $model common\models\Channel */
 /* @var $form yii\widgets\ActiveForm */
@@ -19,8 +19,29 @@ use common\models\Platform;
     <div class="col-lg-6">
         <div class="box box-info">
             <div class="box-body">
-                <div class="channel-form"><?php $form = ActiveForm::begin(); ?>
+                <div class="channel-form">
+                    <?php $form = ActiveForm::begin([
+                        'options'=>['enctype'=>'multipart/form-data'] // important
+                    ]); ?>
                     <?= $form->field($model, 'username')->textInput(['maxlength' => true, 'readonly' => $model->isNewRecord ? false : 'readonly']) ?>
+                    <?php echo $form->field($model, 'filename');
+
+                    // display the image uploaded or show a placeholder
+                    // you can also use this code below in your `view.php` file
+                    $title = isset($model->filename) && !empty($model->filename) ? $model->filename : 'Avatar';
+                    echo Html::img($model->getImageUrlAbs(), [
+                    'class'=>'img-thumbnail',
+                    'alt'=>$title,
+                    'title'=>$title
+                    ]);
+
+                    // your fileinput widget for single file upload
+                    echo $form->field($model, 'image')->widget(FileInput::classname(), [
+                    'options'=>['accept'=>'image/*'],
+                    'pluginOptions'=>['allowedFileExtensions'=>['jpg','gif','png'],
+                        ],
+                    ]);
+                    ?>
 
                     <?= $form->field($model, 'password_hash')->passwordInput() ?>
 

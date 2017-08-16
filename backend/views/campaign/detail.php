@@ -23,6 +23,9 @@ $this->params['breadcrumbs'][] = $this->title;
                         <button type="button" id = 'emailButton' class="btn btn-primary">ExportEmail</button>
                         <button type="button" id = 'stsButton' class="btn btn-primary">S2S</button>
                         <button type="button" id = 'cartButton' class="btn btn-primary">Add to my cart</button>
+                        <button type="button" id = 'pauseButton' class="btn btn-primary">PauseEmail</button>
+                        <button type="button" id = 'priceButton' class="btn btn-primary">PriceUpdateEmail</button>
+                        <button type="button" id = 'serviceButton' class="btn btn-primary">ServiceEmail</button>
                     </p>
                     <?php $form = \kartik\form\ActiveForm::begin(['id' => 'deliver-form']); ?>
                     <?= $form->field($searchModel, 'campaign_uuid')->hiddenInput()->label(false) ?>

@@ -83,6 +83,8 @@ class Campaign extends \yii\db\ActiveRecord
 {
     public $apply_status;
     public $is_send;
+    public $impacted_channels;
+    public $newValue;
 
     /**
      * @inheritdoc

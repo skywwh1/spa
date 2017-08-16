@@ -579,7 +579,6 @@ class ReportSubChannelSearch extends CampaignLogSubChannelHourly
 
         $query->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['<', 'clh.clicks', 10])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 

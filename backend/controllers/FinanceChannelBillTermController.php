@@ -12,6 +12,7 @@ use backend\models\FinanceDeductionSearch;
 use backend\models\FinancePending;
 use backend\models\FinancePendingSearch;
 use backend\models\FinanceSubCostSearch;
+use backend\models\InvoicePicture;
 use backend\models\UploadForm;
 use common\models\Channel;
 use common\utility\MailUtil;
@@ -243,6 +244,8 @@ class FinanceChannelBillTermController extends Controller
             $subCostSearch->channel_bill_id = $bill_id;
             $subCostList = $subCostSearch->search(Yii::$app->request->queryParams);
 
+            $pics = InvoicePicture::findAll(['channel_bill_id' => $bill_id]);
+
             return $this->render('update', [
                 'payable' => $payable,
                 'model' => $model,
@@ -257,6 +260,7 @@ class FinanceChannelBillTermController extends Controller
                 'subCostList' => $subCostList,
                 'upload'=>$upload,
                 'searchModel' => $campaignBillSearchModel,
+                'pics' => $pics
             ]);
         }
     }
@@ -272,25 +276,52 @@ class FinanceChannelBillTermController extends Controller
         }
     }
 
-    public function actionUpload()
+    /**
+     * @param $bill_id
+     * @param $multi
+     * @return string
+     */
+    public function actionUpload($bill_id,$multi)
     {
         $model = new UploadForm();
 
         if (Yii::$app->request->isPost) {
 //            var_dump($_FILES['imageFiles']);
 //            die();
-            $model->imageFiles = UploadedFile::getInstancesByName('imageFiles');
 //            var_dump($model->imageFiles );
-//            die();
-            if ($model->upload()) {
-                // file is uploaded successfully
-                return '{}';
+            $pic = new InvoicePicture();
+            $flag = 0;
+            if ($multi == 1){
+                $model->imageFiles = UploadedFile::getInstancesByName('imageFiles');
+                foreach ( $model->imageFiles as $file) {
+                    $url = Yii::$app->params['uploadInvoicePath'] . $file->baseName . '.' . $file->extension;
+                    if($file->saveAs($url)){
+                        $pic->path = '/upload/financeUpload/'. $file->baseName . '.' . $file->extension;
+                        $pic->channel_bill_id = $bill_id;
+                        $pic->save();
+                        $flag = 1;
+                    }
+                }
+                if ($flag == 1){
+                    return '{}';
+                }
+            } else {
+                $imageFile = UploadedFile::getInstanceByName('imageFile');
+                $model->imageFile = $imageFile;
+                $url = Yii::$app->params['uploadInvoicePath'] . $imageFile->baseName . '.' . $imageFile->extension;
+                if($imageFile->saveAs($url)){
+                    $bill = FinanceChannelBillTerm::findOne($bill_id);
+                    $bill->invoice_path = '/upload/financeUpload/'. $imageFile->baseName . '.' . $imageFile->extension;
+                    $bill->save();
+                    return '{}';
+                }
             }
-        }
 
-//        return $this->render('upload', ['model' => $model]);
-//
-      //  return $this->render('upload', ['model' => $model]);
+//            if ($model->upload()) {
+//                // file is uploaded successfully
+//                return '{}';
+//            }
+        }
     }
 
     public function actionValidate()

@@ -199,11 +199,11 @@ class CampaignController extends Controller
 //        ]);
         $model = new Campaign();
         if (isset($_GET["id"])) {
-            $model = $this->findModel($_GET["id"]);
-            if(empty($model)){
-                $model = new Campaign();
-            }
+            $copyModel = $this->findModel($_GET["id"]);
+            $model = new Campaign();
+            $model->setAttributes($copyModel->attributes);
             $model->campaign_uuid = null;
+            $model->id = null;
         }
         $modelsLink = array();
         $this->beforeUpdate($model);

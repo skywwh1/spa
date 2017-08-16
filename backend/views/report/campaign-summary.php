@@ -200,6 +200,7 @@ $columns = [
         },
         'filter' => false,
     ],
+    'adv_name',
     [
         'attribute' => 'bd',
         'value' => 'bd',

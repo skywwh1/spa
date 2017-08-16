@@ -21,6 +21,7 @@ use kartik\editable\Editable;
 /* @var $compensationList yii\data\ActiveDataProvider */
 /* @var $upload backend\models\UploadForm; */
 /* @var $channel common\models\Channel; */
+/* @var $pics backend\models\InvoicePicture[] */
 
 
 $this->title = 'Update Finance Channel Bill Term: ' . $model->bill_id;
@@ -120,20 +121,90 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                                 'label'=>'Upload', 'class'=>'btn btn-primary'
                             ],
                         ]);
+
+                        // display the image uploaded or show a placeholder
+                        // you can also use this code below in your `view.php` file
+                        $title = isset($model->filename) && !empty($model->filename) ? $model->filename : 'Avatar';
+                        if (!empty($datas)){
+                            foreach ($datas as $item){
+                                echo Html::img($item['path'], [
+                                    'class'=>'img-thumbnail',
+                                    'alt'=>$title,
+                                    'title'=>$title
+                                ]);
+                            }
+                        }
+
                         echo FileInput::widget([
                             'name' => 'imageFiles[]',
                             'language' => 'en',
                             'options' => ['multiple' => true],
-                            'pluginOptions' => ['previewFileType' => 'any', 'uploadUrl' => Url::to(['/finance-channel-bill-term/upload'])]
+                            'pluginOptions' => ['previewFileType' => 'any',
+                                'uploadUrl' => Url::to(['/finance-channel-bill-term/upload?bill_id=' . $model->bill_id.'&multi=0']),
+                            ]
                         ]);
                         Modal::end();
 
                         //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+
+                    <div class="col-lg-1">
+                        <?php
+                        Modal::begin([
+                            'header'=>'File Detail',
+                            'toggleButton' => [
+                                'label'=>'FileDetail', 'class'=>'btn btn-primary'
+                            ],
+                        ]);
+
+                        // display the image uploaded or show a placeholder
+                        if (!empty($pics)){
+                            foreach ($pics as $item){
+                                echo Html::img($item->path, [
+                                    'class'=>'img-thumbnail',
+                                ]);
+                            }
+                        }
+
+                        Modal::end();
+
+                        //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
+                    </div>
+
+                    <div class="col-lg-1">
+                        <?php
+                        Modal::begin([
+                            'header'=>'Invoice Upload',
+                            'toggleButton' => [
+                                'label'=>'InvoiceUpload', 'class'=>'btn btn-primary'
+                            ],
+                        ]);
+
+                        echo FileInput::widget([
+                            'name' => 'imageFile',
+                            'language' => 'en',
+                            'pluginOptions' => ['previewFileType' => 'any',
+                                'uploadUrl' => Url::to(['/finance-channel-bill-term/upload?bill_id=' . $model->bill_id.'&multi=0']),
+                            ]
+                        ]);
+                        Modal::end();
+                        //Html::a('Upload File', ['upload'],['class' => 'btn btn-primary']) ?>
+                    </div>
+                    <div class="col-lg-1">
+<!--                        --><?php
+//                        echo Html::img($model->invoice_path, [
+//                        ]);?>
+                        <?= Html::a('Invoice File', $model->invoice_path,
+                        [
+                            'target' => 'blank',
+                            'class' => 'btn btn-primary',
+                        ]) ?>
+                    </div>
+
+                    <div class="col-lg-1">
                         <?= Html::submitButton('Download', ['class' => 'btn btn-primary']) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::a('Add Cost', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Add Cost',
@@ -141,7 +212,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::a('Sub Cost', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Sub Cost',
@@ -149,7 +220,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'data-view' => 0,
                         ]) ?>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-1">
                         <?= Html::a('Apply Prepayment', null, [
                             'class' => 'btn btn-primary',
                             'data-title' => 'Apply prepayment',
@@ -1354,7 +1425,6 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
             </div>
         </div>
     </div>
-
 <?php
 $this->registerJsFile(
     '@web/js/finance-pending-campaign.js',

@@ -293,4 +293,19 @@ class Deliver extends \yii\db\ActiveRecord
     public static function getPausedCampaign($campaignId,$channelId){
         return static::find()->where(['campaign_id' => $campaignId,'channel_id' => $channelId])->andWhere(['status' => 2])->one();
     }
+
+    public static function getCampaignByChannel($channel){
+        return static::find()->where(['channel_id' => $channel])->andWhere(['status' => 1])->all();
+    }
+
+    /**
+     * @param $campaignId
+     * @return array
+     */
+    public static function getRunningChannelByCampaignId($campaignId)
+    {
+        $query = Deliver::find();
+        $query->alias('d');
+        return $query->select('ch.username')->joinWith('channel ch')->where(['d.campaign_id' => $campaignId])->andWhere(['d.status' => 1])->asArray()->column();
+    }
 }

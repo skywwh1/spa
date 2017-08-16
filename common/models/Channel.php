@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Json;
 use yii\web\IdentityInterface;
+use yii\web\UploadedFile;
 
 /**
  * This is the model class for table "channel".
@@ -76,6 +77,8 @@ use yii\web\IdentityInterface;
  * @property string $pay_out
  * @property integer $level
  * @property integer $create_type
+ * @property string $avatar generated filename on server
+ * @property string $filename source filename from client
  *
  * @property ApplyCampaign[] $applyCampaigns
  * @property Deliver[] $delivers
@@ -89,7 +92,7 @@ class Channel extends ActiveRecord implements IdentityInterface
 {
     public $om_name;
     public $master_channel_name;
-
+    public $image;
     /**
      * @inheritdoc
      */
@@ -120,7 +123,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['email'], 'unique'],
             [['email'], 'email'],
             [['discount'], 'number'],
-            [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo', 'os'], 'safe'],
+            [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo', 'os','imageFile'], 'safe'],
             [['password_reset_token'], 'unique'],
             [['auth_token'], 'unique'],
             [['master_channel'], 'exist', 'targetClass' => Channel::className(), 'message' => 'Master Channel does not exist', 'targetAttribute' => ['master_channel' => 'id']],
@@ -129,7 +132,8 @@ class Channel extends ActiveRecord implements IdentityInterface
             ['event_post_back', 'url'],
             [['pay_out'], 'number'],
             [['daily_cap'], 'integer'],
-
+            [[ 'avatar', 'filename', 'image'], 'safe'],
+            [['image'], 'file', 'extensions'=>'jpg, gif, png','maxSize'=>1024 * 1024 * 1,'tooBig'=>'头像最大不超过1MB，请重新上传!',],
         ];
     }
 
@@ -395,5 +399,99 @@ class Channel extends ActiveRecord implements IdentityInterface
     {
         $master_channel = static::find()->select("master_channel")->where(['like', 'username', $name])->asArray()->column();
         return static::find()->select("user_name")->where(['in', 'master_channel', $master_channel])->column();
+    }
+
+    public static function getChannelByLevelAndType()
+    {
+        return static::findAll(['level' => 1,'create_type' => 1]);
+    }
+
+    /**
+     * fetch stored image file name with complete path
+     * @return string
+     */
+    public  function getImageFile()
+    {
+        return empty($this->avatar) ? null : Yii::$app->params['uploadPath'] . $this->avatar ;
+    }
+
+    /**
+     * fetch stored image url
+     * @return string
+     */
+    public function getImageUrl()
+    {
+        // return a default image placeholder if your source avatar is not found
+        $avatar = isset($this->avatar) ? $this->avatar : 'default_user.jpg';
+        return Yii::$app->params['uploadUrl'] . $avatar;
+    }
+
+    /**
+     * Process upload of image
+     *
+     * @return mixed the uploaded image instance
+     */
+    public function uploadImage() {
+        // get the uploaded file instance. for multiple file uploads
+        // the following data will return an array (you may need to use
+        // getInstances method)
+        $image = UploadedFile::getInstance($this, 'image');
+
+        // if no image was uploaded abort the upload
+        if (empty($image)) {
+            return false;
+        }
+
+        // store the source file name
+        $this->filename = $image->name;
+        $image_info = explode(".", $image->name);
+        $ext = end($image_info);
+//        $ext = end((explode(".", $image->name)));
+
+        // generate a unique file name
+        $this->avatar = Yii::$app->security->generateRandomString().".{$ext}";
+
+        // the uploaded image instance
+        return $image;
+    }
+
+    /**
+     * Process deletion of image
+     *
+     * @return boolean the status of deletion
+     */
+    public function deleteImage() {
+        $file = $this->getImageFile();
+
+        // check if file exists on server
+        if (empty($file) || !file_exists($file)) {
+            return false;
+        }
+
+        // check if uploaded file can be deleted on server
+        if (!unlink($file)) {
+            return false;
+        }
+
+        // if deletion successful, reset your file attributes
+        $this->avatar = null;
+        $this->filename = null;
+
+        return true;
+    }
+
+    /**
+     * fetch stored image url
+     * @return string
+     */
+    public function getImageUrlAbs()
+    {
+        // return a default image placeholder if your source avatar is not found
+        $avatar = isset($this->avatar) ? $this->avatar : 'default_user.jpg';
+        return '/upload/channel/'. $avatar;
+    }
+
+    public static function  getBaseUrl(){
+        return 'http://admin.spa.com/upload/channel/';
     }
 }

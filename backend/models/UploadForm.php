@@ -18,10 +18,10 @@ class UploadForm extends Model
      * @var UploadedFile[]
      */
     public $imageFiles;
-//    /**
-//     * @var UploadedFile
-//     */
-//    public $imageFile;
+    /**
+     * @var UploadedFile
+     */
+    public $imageFile;
 
 
     public function rules()
@@ -36,6 +36,18 @@ class UploadForm extends Model
         if ($this->validate()) {
             foreach ($this->imageFiles as $file) {
                 $file->saveAs('/var/www/html/spa/upload/financeUpload/' . $file->baseName . '.' . $file->extension);
+            }
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function uploadChannel($url)
+    {
+        if ($this->validate()) {
+            foreach ($this->imageFiles as $file) {
+                $file->saveAs('/var/www/html/spa/upload/channel/' . $url . '.' . $file->extension);
             }
             return true;
         } else {

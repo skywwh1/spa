@@ -259,4 +259,33 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
 
        return $query->one();
     }
+
+    public static function findDateReportByCamp($start, $end, $campaign_id)
+    {
+        $query = ReportChannelHourly::find();
+        $query->alias('clh');
+//        $a = strtotime($this->start);
+        $query->select([
+            'clh.campaign_id',
+            'clh.time timestamp',
+            'clh.time_format',
+            'daily_cap',
+            'SUM(clh.clicks) clicks',
+            'SUM(clh.unique_clicks) unique_clicks',
+            'SUM(clh.installs) installs',
+            'SUM(clh.match_installs) match_installs',
+        ]);
+
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'campaign_id' => $campaign_id,
+        ]);
+        $query->groupBy([
+            'clh.campaign_id',
+        ]);
+
+        $query->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+        return $query->one();
+    }
 }

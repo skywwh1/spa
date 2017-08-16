@@ -38,4 +38,37 @@ $(document).ready(function(){
         return false;
     });
 
+    $('#pauseButton').click(function(){
+        var keys = [];
+        $("#detailGrid table tbody tr").each( function() {
+            keys.push($(this).children('td').eq(1).html());
+        });
+        $.post("send-select-email", {keylist: keys,type:1}, function(result){
+            alert(result);
+        });
+        return false;
+    });
+
+    $('#priceButton').click(function(){
+        var keys = [];
+        $("#detailGrid table tbody tr").each( function() {
+            keys.push($(this).children('td').eq(1).html());
+        });
+        $.post("send-select-email", {keylist: keys,type:2}, function(result){
+            alert(result);
+        });
+        return false;
+    });
+
+    $('#serviceButton').click(function(){
+        var keys = [];
+        $("#detailGrid table tbody tr").each( function() {
+            keys.push($(this).children('td').eq(1).html());
+        });
+        $.post("send-select-email", {keylist: keys,type:3}, function(result){
+            alert(result);
+        });
+        return false;
+    });
+
 });

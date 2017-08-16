@@ -297,8 +297,8 @@ class ModelsUtil
     );
 
     const exclude_zero = array(
-        '0' => 'include 0',
         '1' => 'exclude 0',
+        '0' => 'include 0',
     );
 
 

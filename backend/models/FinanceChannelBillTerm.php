@@ -53,6 +53,7 @@ use Yii;
  * @property string $pending_revenue
  * @property string $add_revenue
  * @property string $deduction_revenue
+ * @property string $invoice_path
  *
  * @property FinanceAddCost[] $financeAddCosts
  * @property FinanceChannelPrepayment[] $financeApplyPrepayments

@@ -3,12 +3,15 @@
 namespace backend\controllers;
 
 use backend\models\StsForm;
+use backend\models\UploadForm;
+use yii\web\UploadedFile;
 use common\models\Campaign;
 use common\models\CampaignSearch;
 use common\models\Deliver;
 use common\models\Stream;
 use common\models\User;
 use common\utility\MailUtil;
+use common\utility\TimeZoneUtil;
 use linslin\yii2\curl\Curl;
 use Symfony\Component\Yaml\Dumper;
 use Yii;
@@ -60,7 +63,8 @@ class ChannelController extends Controller
                             'get-recommend',
                             'send-recommend',
                             'search-channel',
-                            'update-applicant'
+                            'update-applicant',
+                            'upload',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -138,10 +142,15 @@ class ChannelController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeCreate($model);
-
+            // process uploaded image file instance
+            $image = $model->uploadImage();
             if ($model->save()) {
                 if(!empty($model->status) && $model->status == 1){
                     MailUtil::sendChannelInfo($model);
+                }
+                if ($image !== false) {
+                    $path = $model->getImageFile();
+                    $image->saveAs($path);
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -160,15 +169,36 @@ class ChannelController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $oldFile = $model->getImageFile();
+        $oldAvatar = $model->avatar;
+        $oldFileName = $model->filename;
+
         $old_status = $model->status;
         $this->beforeUpdate($model);
         if ($model->load(Yii::$app->request->post())) {
             $this->beforeCreate($model);
+
+            // process uploaded image file instance
+            $image = $model->uploadImage();
+            // revert back if no valid file instance uploaded
+            if ($image === false) {
+                $model->avatar = $oldAvatar;
+                $model->filename = $oldFileName;
+            }
+
             if ($model->save()) {
                 $new_status = $model->status;
                 if(!empty($old_status) && !empty($new_status)
                     && strcmp($old_status,$new_status)!=0 && $new_status == 1){
                     MailUtil::sendChannelInfo($model);
+                }
+
+                // upload only if valid uploaded file instance found
+                if ($image !== false ) { // delete old and overwrite\
+                    if (!empty($oldFile))
+                        unlink($oldFile);
+                    $path = $model->getImageFile();
+                    $image->saveAs($path);
                 }
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -186,8 +216,18 @@ class ChannelController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+//        $this->findModel($id)->delete();
+//
+//        return $this->redirect(['index']);
+        $model = $this->findModel($id);
 
+        // validate deletion and on failure process any exception
+        // e.g. display an error message
+        if ($model->delete()) {
+            if (!$model->deleteImage()) {
+                Yii::$app->session->setFlash('error', 'Error deleting image');
+            }
+        }
         return $this->redirect(['index']);
     }
 
@@ -407,5 +447,35 @@ class ChannelController extends Controller
         return $this->render('update', [
             'model' => $model,
         ]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     */
+    public function actionUpload($id)
+    {
+        $model = new UploadForm();
+
+        if (Yii::$app->request->isPost) {
+            $model->imageFiles = UploadedFile::getInstancesByName('imageFiles');
+
+            $user_name = Yii::$app->user->identity->username;
+            if (empty($id)){
+                $channel = Channel::findByUsername($id);
+            } else {
+                $channel = new Channel();
+            }
+
+            $date = TimeZoneUtil::getNowDate();
+
+            $channel->imageFile = Yii::$app->security->generateRandomString().'_'.$date;
+
+            if ($model->uploadChannel($channel->imageFile)) {
+                // file is uploaded successfully
+                $channel->save();
+                return '{}';
+            }
+        }
     }
 }

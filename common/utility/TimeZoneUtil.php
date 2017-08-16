@@ -91,4 +91,15 @@ class TimeZoneUtil
 
         return $date->getTimestamp();
     }
+
+    public static function getNowDate()
+    {
+        $beginTheDay = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+
+        $date = new DateTime();
+        $date->setTimestamp($beginTheDay);
+        $beginTheDay = $date->format('Ymd');
+
+        return $beginTheDay;
+    }
 }

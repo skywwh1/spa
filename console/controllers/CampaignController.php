@@ -4,8 +4,11 @@ namespace console\controllers;
 
 use common\models\Campaign;
 use common\models\CampaignCreativeLink;
+use common\models\CampaignLogHourly;
 use common\models\CampaignStsUpdate;
+use common\models\Channel;
 use common\models\Deliver;
+use common\models\LogAutoCheck;
 use common\models\LogClick;
 use common\models\LogClick2;
 use common\models\LogFeed;
@@ -415,17 +418,85 @@ class CampaignController extends Controller
         return $postback;
     }
 
-    public  function actionUpdateRedirect(){
-        $camps = RedirectLog::find()->where(['status' => 1])->all();
-        if (isset($camps)) {
-            foreach ($camps as $item) {
-                $item->status = 2;
-                $this->echoMessage('S2S redirect ' . $item->campaign_id.$item->channel_id);
-                $delivers = Deliver::getPausedCampaign($item->campaign_id,$item->channel_id);
-                if (isset($delivers)) {
-                    $item->save();
+    /**
+     * 针对：Level =A, Create Type=API 的渠道
+        如果这些渠道昨日跑的单子 match cvr > 0.3%, 这个单子的总体cap（所有渠道加和）还未跑满（Match install < 80% daily cap)，
+     * 则系统自动创建一个一摸一样的单子（只有UUID不一样），且系统自动给这个渠道S2S
+       注意：创建克隆单之后，第二天再判断是否超总体cap 需要算原单+克隆单 的总match install 与原单子 80% daily cap 的比值。
+       当原单+克隆单 的总match install > 80% cap 时，邮件提醒该单子的BD+PM
+     */
+    public  function actionCreateCampaignAuto(){
+        $start =  mktime(0,0,0,date('m'),date('d')-10,date('Y'));
+        $end =  mktime(0,0,0,date('m'),date('d'),date('Y'));
+        $delivers = Deliver::find()->joinWith(['channel c'])
+             ->andFilterWhere(['campaign_channel_log.status' => 1])
+             ->andFilterWhere(['c.level' => 1,'c.create_type' => 1])
+             ->all();
+
+        /**
+         * 如果这些渠道昨日跑的单子 match cvr > 0.3%, 这个单子的总体cap（所有渠道加和）还未跑满（Match install < 80% daily cap)，
+         * 则系统自动创建一个一摸一样的单子（只有UUID不一样），且系统自动给这个渠道S2S
+         * */
+        $checks = [];
+        foreach ($delivers as $item){
+            $log = CampaignLogHourly::findDateReport($start, $end, $item->campaign_id,$item->channel_id);
+            if ($log['clicks'] == 0) {
+                continue;
+            }
+            $cvr = ($log['match_installs'] / $log['clicks']) * 100;
+            if ($cvr > 0.3) {
+                $this->echoMessage("cvr>0.3 : " . $item->campaign_id.'-'.$item->channel_id);
+                $camp_logs = CampaignLogHourly::findDateReportByCamp($start, $end, $item->campaign_id);
+                if ($camp_logs->daily_cap>0){
+                    $mc = ($camp_logs->match_installs/$camp_logs->daily_cap)*100;
+                    if ($mc <= 80){
+                        $this->echoMessage("install/daily_cap <= 80% : " . $item->campaign_id.'-'.$item->channel_id);
+                        $old_camp = Campaign::findOne($item->campaign_id);
+                        $new_camp = clone $old_camp;
+                        $new_camp->campaign_uuid = $item->campaign->advertiser.'_'.time();
+                        $new_camp->isNewRecord = true;
+                        $new_camp->id = null;
+                        $new_camp->save();
+
+                        $deliver = new Deliver();
+                        $deliver->campaign_id = $new_camp->id;
+                        $deliver->channel_id = $item->channel_id;
+                        $deliver->campaign_uuid = isset($deliver->campaign) ? $deliver->campaign->campaign_uuid : "";
+                        $deliver->channel0 = isset($deliver->channel) ? $deliver->channel->username : '';
+                        $deliver->adv_price = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                        if($deliver->channel->pay_out == 1){
+                            $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->adv_price : 0;
+                        }else{
+                            $deliver->pay_out = isset($deliver->campaign) ? $deliver->campaign->now_payout : 0;
+                        }
+                        if(empty($deliver->channel->daily_cap)){
+                            $deliver->daily_cap = isset($deliver->campaign) ? $deliver->campaign->daily_cap : 0;
+                        }else{
+                            $deliver->daily_cap =$deliver->channel->daily_cap;
+                        }
+                        $deliver->kpi = isset($deliver->campaign) ? $deliver->campaign->kpi : '';
+                        $deliver->note = isset($deliver->campaign) ? $deliver->campaign->note : '';
+                        $deliver->others = isset($deliver->campaign) ? $deliver->campaign->others : '';
+                        $deliver->discount = isset($deliver->channel) ? $deliver->channel->discount : 30;
+                        $deliver->save();
+                    }else {
+                        $this->echoMessage("install/daily_cap >= 80% : " . $item->campaign_id.'-'.$item->channel_id);
+                        $check = new LogAutoCheck();
+                        $check->campaign_id = $item->campaign_id;
+                        $check->channel_id = $item->channel_id;
+                        $check->campaign_name = $item->campaign->campaign_name;
+                        $check->channel_name = $item->channel->username;
+                        $check->match_cvr = $cvr;
+                        $check->match_install = $log->match_installs;
+                        $check->type = 1;
+                        $checks[] = $check;
+                    }
                 }
             }
+        }
+
+        if (!empty($checks)) {
+            MailUtil::sendOverReachEighty($checks);
         }
     }
 }

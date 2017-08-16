@@ -243,6 +243,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
+            'adv.username adv_name',
             'clh.campaign_id',
             'clh.channel_id',
             'clh.time timestamp',
@@ -261,6 +262,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
         $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
@@ -271,7 +273,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
 
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
-//            ->andFilterWhere(['like', 'adv.username', $this->advertiser])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name])
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
@@ -388,6 +390,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->select([
             'ch.username channel_name',
             'cam.campaign_name campaign_name',
+            'adv.username adv_name',
             'clh.campaign_id',
             'clh.channel_id',
             'u.username om',
@@ -405,6 +408,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->from('campaign_log_hourly clh');
         $query->leftJoin('channel ch', 'clh.channel_id = ch.id');
         $query->leftJoin('campaign cam', 'clh.campaign_id = cam.id');
+        $query->leftJoin('advertiser adv', 'cam.advertiser = adv.id');
         $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
@@ -420,6 +424,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         }
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
             ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
@@ -614,7 +619,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $end = $end->getTimestamp();
 
         $query->select([
-//            'adv.username advertiser',
+            'adv.username adv_name',
 //            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
@@ -655,6 +660,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         }
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
+            ->andFilterWhere(['like', 'ad.username', $this->adv_name])
 //            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
 //            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])

@@ -502,4 +502,61 @@ class MailUtil
             return false;
         }
     }
+
+    public static function sendOverReachEighty($checks)
+    {
+        $mail = Yii::$app->mailer->compose('over_reach', ['checks' => $checks]);
+//        $mail->setTo('operations@superads.cn');
+        $mail->setTo('2539131080@qq.com');
+        $mail->setSubject('Reach 80% Daily Cap - SuperADS');
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'autoCheck', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @param $campaigns
+     * @param $user
+     * @param $type
+     * @return bool
+     */
+    public static function sendSelectUpdateOffers($campaigns, $user,$type)
+    {
+//        $user_id = Yii::$app->user->id;
+        if ($type == 1){
+            $mail = Yii::$app->mailer->compose('select_pause_campaign', ['campaigns' => $campaigns]);
+            $mail->setSubject('Pausing Offers - SuperADS');
+        } else if ($type == 2){
+            $mail = Yii::$app->mailer->compose('select_price_campaign', ['campaigns' => $campaigns]);
+            $mail->setSubject('PriceUpdate Offers - SuperADS');
+        } else{
+            $mail = Yii::$app->mailer->compose('select_service_campaign', ['campaigns' => $campaigns]);
+            $mail->setSubject('Service Offers - SuperADS');
+        }
+
+        $mail->setTo($user->email);
+//        $mail->setTo('2539131080@qq.com');
+
+        $isSend = 0;
+        if ($mail->send()) {
+            $isSend = 1;
+        }
+        $param = array('type' => 'send select pausing offers', 'isSend' => $isSend);
+        SendMailLog::saveMailLog($mail, $param);
+        if ($isSend) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
 }

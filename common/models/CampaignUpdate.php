@@ -72,4 +72,9 @@ class CampaignUpdate extends \yii\db\ActiveRecord
         $model_update->value = $value;
         $model_update->save();
     }
+
+    public static function getSelectCampaignUpdateInfo($campaignId,$action){
+        return static::find()->where([ 'campaign_id'=> $campaignId])->andFilterWhere(['action' => $action])
+            ->orderBy(['effect_time' => SORT_ASC])->one();
+    }
 }
