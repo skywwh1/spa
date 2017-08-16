@@ -619,7 +619,6 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $end = $end->getTimestamp();
 
         $query->select([
-            'adv.username adv_name',
 //            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
