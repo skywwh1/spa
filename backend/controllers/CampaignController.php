@@ -71,6 +71,7 @@ class CampaignController extends Controller
                             'clickad-index',
                             'other-index',
                             'update-tag',
+                            'send-select-email',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
