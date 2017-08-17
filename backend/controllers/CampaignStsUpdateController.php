@@ -553,7 +553,7 @@ class CampaignStsUpdateController extends Controller
             $model2->is_send = 0;
             $model2->effect_time = $effect_time;
             $model2->save();
-            CampaignUpdate::updateLog($campaign_id,$model->name,$model->effect_time,$model->pay_out);
+            CampaignUpdate::updateLog($campaign_id,$model2->name,$model->effect_time,$model->pay_out);
 
             return $this->redirect(Yii::$app->request->referrer);
         } else {
