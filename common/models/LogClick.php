@@ -44,7 +44,7 @@ class LogClick extends \yii\db\ActiveRecord
 
     public static function getDb()
     {
-        return Yii::$app->get('db3');
+        return Yii::$app->get('db4');
     }
 
     /**
