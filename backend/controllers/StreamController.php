@@ -253,6 +253,7 @@ class StreamController extends Controller
 
         //2.ip 限制
         $target = $campaign->target_geo;
+        $geo = '';
         if (!empty($target) && $target !== 'Global') { //如果为空或者全球就限制
             $Info = \Yii::createObject([
                 'class' => '\rmrevin\yii\geoip\HostInfo',
@@ -356,7 +357,7 @@ class StreamController extends Controller
         $data['category'] = $campaign->category;
         $data['traffic_source'] = $campaign->traffic_source;
         $data['price_mode'] = $campaign->pricing_mode;
-        $data['geo'] = $campaign->target_geo;
+        $data['geo'] = $geo;
         $data['advertiser'] = $campaign->advertiser;
         $this->postKafka($data);
 
