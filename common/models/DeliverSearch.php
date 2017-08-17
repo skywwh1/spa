@@ -22,7 +22,7 @@ class DeliverSearch extends Deliver
     {
         return [
             [['daily_cap', 'status', 'creator', 'end_time', 'create_time', 'is_run', 'is_redirect', 'update_time', 'click', 'unique_click', 'install', 'match_install', 'def', 'is_send_create'], 'integer'],
-            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note', 'campaign_name', 'channel_name', 'bd', 'om', 'pm'], 'safe'],
+            [['campaign_id', 'channel_id', 'campaign_uuid', 'pricing_mode', 'track_url', 'note', 'campaign_name', 'channel_name', 'bd', 'om', 'pm','adv_name'], 'safe'],
             [['adv_price', 'pay_out', 'actual_discount', 'discount', 'cvr', 'cost', 'match_cvr', 'revenue', 'deduction_percent', 'profit', 'margin'], 'number'],
         ];
     }
@@ -105,6 +105,7 @@ class DeliverSearch extends Deliver
             ->andFilterWhere(['like', 'track_url', $this->track_url])
             ->andFilterWhere(['like', 'cp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ch.username', $this->channel_name])
+            ->andFilterWhere(['like', 'adv.username', $this->adv_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'u2.username', $this->pm])
             ->andFilterWhere(['like', 'u3.username', $this->om])
