@@ -23,7 +23,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     'dataProvider' => $dataProvider,
                     'filterModel' => $searchModel,
                     'columns' => [
-
+                        [
+                            'class' => 'yii\grid\ActionColumn',
+                            'template' => '{view}{update}'
+                        ],
                         'id',
                         'username',
 //                        'settlement_type',
@@ -79,11 +82,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         // 'cc_email:email',
                         // 'traffic_source',
                         'note',
-
-                        [
-                            'class' => 'yii\grid\ActionColumn',
-                            'template' => '{view}{update}'
-                        ],
                     ],
                 ]); ?>
                 <?php Pjax::end(); ?>

@@ -15,7 +15,9 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="box box-info">
             <div class="box-body">
                 <div class="advertiser-view">
-
+                    <p>
+                        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+                    </p>
 
                     <?= DetailView::widget([
                         'model' => $model,

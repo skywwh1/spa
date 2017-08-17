@@ -71,7 +71,7 @@ class Deliver extends \yii\db\ActiveRecord
     public $blacklist;
     public $whitelist;
     public $redirect_time;
-
+    public $adv_name;
     /**
      * @inheritdoc
      */
@@ -92,7 +92,7 @@ class Deliver extends \yii\db\ActiveRecord
             ['discount', 'number', 'max' => 99, 'min' => 0],
             [['campaign_uuid', 'pricing_mode'], 'string', 'max' => 100],
             [['track_url'], 'string', 'max' => 255],
-            [['channel0', 'daily_cap', 'note','bd','om','pm'], 'safe'],
+            [['channel0', 'daily_cap', 'note','bd','om','pm','adv_name'], 'safe'],
             [['kpi', 'note', 'others'], 'string'],
             [['campaign_id'], 'exist', 'skipOnError' => true, 'targetClass' => Campaign::className(), 'targetAttribute' => ['campaign_id' => 'id']],
             [['channel_id'], 'exist', 'skipOnError' => true, 'targetClass' => Channel::className(), 'targetAttribute' => ['channel_id' => 'id']],

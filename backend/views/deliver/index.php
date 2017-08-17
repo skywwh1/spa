@@ -37,7 +37,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'value' => 'channel.username',
                         'label' => 'Channel'
                     ],
-
                     'pricing_mode',
                     'pay_out',
                     'daily_cap',
@@ -146,7 +145,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => 'channel.username',
                             'label' => 'Channel'
                         ],
-
+                        [
+                            'attribute' => 'adv_name',
+                            'label' => 'Advertiser',
+                            'value' => function ($model) {
+                                return $model->campaign->advertiser0->username;
+                            },
+                            'filter' => true,
+                        ],
                         'pricing_mode',
                         'pay_out',
                         'daily_cap',
