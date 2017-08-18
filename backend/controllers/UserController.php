@@ -5,6 +5,7 @@ namespace backend\controllers;
 use backend\models\AuthAssignment;
 use backend\models\AuthItem;
 use backend\models\ResetpwdForm;
+use common\utility\TimeZoneUtil;
 use Yii;
 use common\models\User;
 use common\models\UserSearch;
@@ -12,6 +13,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use backend\models\UploadForm;
+use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -94,8 +97,14 @@ class UserController extends Controller
         $model = new User();
 
         if ($model->load(Yii::$app->request->post())) {
+            $image = $model->uploadImage();
             $model->password_hash = Yii::$app->security->generatePasswordHash($model->password_hash);
             $model->save();
+
+            if ($image !== false) {
+                $path = $model->getImageFile();
+                $image->saveAs($path);
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -113,8 +122,29 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $oldFile = $model->getImageFile();
+        $oldAvatar = $model->avatar;
+        $oldFileName = $model->filename;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+
+            // process uploaded image file instance
+            $image = $model->uploadImage();
+            // revert back if no valid file instance uploaded
+            if ($image === false) {
+                $model->avatar = $oldAvatar;
+                $model->filename = $oldFileName;
+            }
+
+            if ($model->save()){
+                // upload only if valid uploaded file instance found
+                if ($image !== false ) { // delete old and overwrite\
+                    if (!empty($oldFile))
+                        unlink($oldFile);
+                    $path = $model->getImageFile();
+                    $image->saveAs($path);
+                }
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('update', [
@@ -131,7 +161,15 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+
+        // validate deletion and on failure process any exception
+        // e.g. display an error message
+        if ($model->delete()) {
+            if (!$model->deleteImage()) {
+                Yii::$app->session->setFlash('error', 'Error deleting image');
+            }
+        }
 
         return $this->redirect(['index']);
     }

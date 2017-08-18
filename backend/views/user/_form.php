@@ -2,7 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
-
+use kartik\file\FileInput;
 /* @var $this yii\web\View */
 /* @var $model common\models\User */
 /* @var $form yii\widgets\ActiveForm */
@@ -13,9 +13,29 @@ use yii\widgets\ActiveForm;
             <div class="box-body">
                 <div class="user-form">
 
-                    <?php $form = ActiveForm::begin(); ?>
+                    <?php $form = ActiveForm::begin([
+                        'options'=>['enctype'=>'multipart/form-data'] // important
+                    ]); ?>
 
                     <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
+                    <?php echo $form->field($model, 'filename');
+
+                    // display the image uploaded or show a placeholder
+                    // you can also use this code below in your `view.php` file
+                    $title = isset($model->filename) && !empty($model->filename) ? $model->filename : 'Avatar';
+                    echo Html::img($model->getImageUrlAbs(), [
+                        'class'=>'img-thumbnail',
+                        'alt'=>$title,
+                        'title'=>$title
+                    ]);
+
+                    // your fileinput widget for single file upload
+                    echo $form->field($model, 'image')->widget(FileInput::classname(), [
+                        'options'=>['accept'=>'image/*'],
+                        'pluginOptions'=>['allowedFileExtensions'=>['jpg','gif','png'],
+                        ],
+                    ]);
+                    ?>
                     <?= $form->field($model, 'password_hash')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
                     <?= $form->field($model, 'lastname')->textInput(['maxlength' => true]) ?>

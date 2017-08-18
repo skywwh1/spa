@@ -5,7 +5,8 @@ namespace common\models;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\web\IdentityInterface;
-
+use yii\web\UploadedFile;
+use yii\db\ActiveRecord;
 /**
  * This is the model class for table "user".
  *
@@ -39,15 +40,17 @@ use yii\web\IdentityInterface;
  * @property integer $picture
  * @property integer $suspended
  * @property integer $deleted
+ * @property string $avatar generated filename on server
+ * @property string $filename source filename from client
  *
  * @property Advertiser[] $advertisers
  * @property Campaign[] $campaigns
  * @property Channel[] $channels
  */
-class User extends \yii\db\ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_ACTIVE = 10;
-
+    public $image;
     /**
      * @inheritdoc
      */
@@ -75,6 +78,8 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
             [['username'], 'unique'],
             [['email'], 'unique'],
             [['password_hash'], 'safe'],
+            [[ 'avatar', 'filename', 'image','imageFile'], 'safe'],
+            [['image'], 'file', 'extensions'=>'jpg, gif, png','maxSize'=>1024 * 1024 * 1,'tooBig'=>'头像最大不超过1MB，请重新上传!',],
 //            [['password_reset_token'], 'unique'],
         ];
     }
@@ -340,5 +345,94 @@ class User extends \yii\db\ActiveRecord implements IdentityInterface
     {
         //->andWhere(["type"=>9])
         return static::find()->select("email")->andFilterWhere(["in", "id", $ids])->column();
+    }
+
+    /**
+     * fetch stored image file name with complete path
+     * @return string
+     */
+    public  function getImageFile()
+    {
+        return empty($this->avatar) ? null : Yii::$app->params['uploadPath'] . $this->avatar ;
+    }
+
+    /**
+     * fetch stored image url
+     * @return string
+     */
+    public function getImageUrl()
+    {
+        // return a default image placeholder if your source avatar is not found
+        $avatar = isset($this->avatar) ? $this->avatar : 'default_user.jpg';
+        return Yii::$app->params['uploadUrl'] . $avatar;
+    }
+
+    /**
+     * Process upload of image
+     *
+     * @return mixed the uploaded image instance
+     */
+    public function uploadImage() {
+        // get the uploaded file instance. for multiple file uploads
+        // the following data will return an array (you may need to use
+        // getInstances method)
+        $image = UploadedFile::getInstance($this, 'image');
+
+        // if no image was uploaded abort the upload
+        if (empty($image)) {
+            return false;
+        }
+
+        // store the source file name
+        $this->filename = $image->name;
+        $image_info = explode(".", $image->name);
+        $ext = end($image_info);
+//        $ext = end((explode(".", $image->name)));
+
+        // generate a unique file name
+        $this->avatar = Yii::$app->security->generateRandomString().".{$ext}";
+
+        // the uploaded image instance
+        return $image;
+    }
+
+    /**
+     * Process deletion of image
+     *
+     * @return boolean the status of deletion
+     */
+    public function deleteImage() {
+        $file = $this->getImageFile();
+
+        // check if file exists on server
+        if (empty($file) || !file_exists($file)) {
+            return false;
+        }
+
+        // check if uploaded file can be deleted on server
+        if (!unlink($file)) {
+            return false;
+        }
+
+        // if deletion successful, reset your file attributes
+        $this->avatar = null;
+        $this->filename = null;
+
+        return true;
+    }
+
+    /**
+     * fetch stored image url
+     * @return string
+     */
+    public function getImageUrlAbs()
+    {
+        // return a default image placeholder if your source avatar is not found
+        $avatar = isset($this->avatar) ? $this->avatar : 'default_user.jpg';
+        return '/upload/channel/'. $avatar;
+    }
+
+    public static function  getBaseUrl(){
+        return 'http://admin.spa.com/upload/channel/';
     }
 }
