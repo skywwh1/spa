@@ -91,9 +91,10 @@ class CampaignSubChannelLog extends \yii\db\ActiveRecord
         return $this->hasOne(User::className(), ['id' => 'creator']);
     }
 
-    public  function beforeSave($insert){
-        if(parent::beforeSave($insert)){
-            if($insert){
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($insert) {
                 $this->create_time = time();
             }
             return true;
@@ -112,5 +113,10 @@ class CampaignSubChannelLog extends \yii\db\ActiveRecord
             ->andWhere(['not', ['effect_time' => null]])
             ->andWhere(['<', 'effect_time', time()])
             ->all();
+    }
+
+    public static function getSubChannelPaused($campaign_id, $channel_id, $sub_channel)
+    {
+        return self::findOne(['is_effected' => 1, 'campaign_id' => $campaign_id, 'channel_id' => $channel_id, 'sub_channel' => $sub_channel]);
     }
 }

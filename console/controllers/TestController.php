@@ -57,6 +57,8 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+//        Yii::$app->cache->set('test', Campaign::findById(88801));
+//        var_dump(Yii::$app->cache->get('test'));
         for($i = 0;$i<100;$i++) {
             echo "999 \n";
 //            $curl = new Curl();
