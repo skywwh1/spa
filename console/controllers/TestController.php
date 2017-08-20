@@ -57,12 +57,15 @@ class TestController extends Controller
 
     public function actionTmd()
     {
-        $a = 0 ;
-        if(!isset($a)){
-            echo 999;
-        }
-        if(!empty($a)){
+        $sub_redirect_key = 'sub-redirect' . 999;
+        $sub_redirect = Yii::$app->cache->get($sub_redirect_key);
+        var_dump($sub_redirect);
+        if ($sub_redirect === false) {
             echo 777;
+            Yii::$app->cache->set($sub_redirect_key, empty($sub_redirect) ? 0 : $sub_redirect, 3);
+        }
+        if(empty($sub_redirect)){
+            echo "888\n";
         }
 
 die();
