@@ -143,7 +143,6 @@ class StreamController extends Controller
         if ($code !== 200) {
             return Json::encode(['error' => $this->_getStatusCodeMessage($code)]);
         }
-        $click->save();
         return $this->redirect($click->redirect);
     }
 
@@ -289,28 +288,23 @@ class StreamController extends Controller
         $click->click_time = time();
 
         //是否导量
-        if ($deliver->is_redirect) {
-            $redirectKey = 'redirect-' . $campaign->id . '-' . $click->channel_id;
-            $redirect = Yii::$app->cache->get($redirectKey);
-            if (!isset($redirect)) {
-                $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
-                Yii::$app->cache->set($redirectKey, empty($redirect) ? 0 : $redirect, 300);
-            }
-            if (!empty($redirect)) {
-                $redirectCam = $redirect->campaignIdNew;
-                $redirectLink = $this->genAdvLink($redirectCam, $click);
-                $click->redirect = $redirectLink;
-                $click->redirect_campaign_id = $redirect->campaignIdNew->id;
-                return 200;
-            }
+        $redirectKey = 'redirect-' . $campaign->id . '-' . $click->channel_id;
+        $redirect = Yii::$app->cache->get($redirectKey);
+        if (!isset($redirect)) {
+            $redirect = RedirectLog::findIsActive($campaign->id, $click->channel_id);
+            Yii::$app->cache->set($redirectKey, empty($redirect) ? 0 : $redirect, 300);
         }
-
-        //子渠道是否导量
-        if (!empty($click->ch_subid)) {
+        if (!empty($redirect)) {
+            $redirectCam = $redirect->campaignIdNew;
+            $redirectLink = $this->genAdvLink($redirectCam, $click);
+            $click->redirect = $redirectLink;
+            $click->redirect_campaign_id = $redirect->campaignIdNew->id;
+            //子渠道是否导量
+        } else if (!empty($click->ch_subid)) {
             //对于停了的子渠道就返回405，is_effected=1表示子渠道是被手动暂停的
             $sub_channel_key = 'sub-channel' . $campaign->id . '-' . $click->channel_id . '-' . $click->ch_subid;
             $sub_channel = Yii::$app->cache->get($sub_channel_key);
-            if(!isset($sub_channel)){
+            if (!isset($sub_channel)) {
                 $sub_channel = CampaignSubChannelLog::getSubChannelPaused($campaign->id, $click->channel_id, $click->ch_subid);
                 Yii::$app->cache->set($sub_channel_key, empty($sub_channel) ? 0 : $sub_channel, 300);
             }
@@ -320,7 +314,7 @@ class StreamController extends Controller
             //子渠道导量
             $sub_redirect_key = 'sub-redirect' . $campaign->id . '-' . $click->channel_id . '-' . $click->ch_subid;
             $sub_redirect = Yii::$app->cache->get($sub_redirect_key);
-            if(!isset($sub_redirect)){
+            if (!isset($sub_redirect)) {
                 $sub_redirect = CampaignSubChannelLogRedirect::findIsActive($campaign->id, $click->channel_id, $click->ch_subid);
                 Yii::$app->cache->set($sub_redirect_key, empty($sub_redirect) ? 0 : $sub_redirect, 300);
             }
@@ -332,6 +326,9 @@ class StreamController extends Controller
             }
         }
 
+        if (!$click->save()) {
+            return 404;
+        }
 
 //        $clickDm = new LogClickDM();
 //        $clickDm->click_uuid = $click->click_uuid;

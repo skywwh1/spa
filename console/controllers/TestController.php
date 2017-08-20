@@ -57,6 +57,15 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $a = 0 ;
+        if(!isset($a)){
+            echo 999;
+        }
+        if(!empty($a)){
+            echo 777;
+        }
+
+die();
 //        Yii::$app->cache->set('test', Campaign::findById(88801));
 //        var_dump(Yii::$app->cache->get('test'));
         for($i = 0;$i<100;$i++) {
