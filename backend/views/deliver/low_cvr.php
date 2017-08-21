@@ -32,6 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                       <ul class="dropdown-menu">
                                       <li><a data-view="0" data-url="/campaign-sts-update/pause?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Paused</a></li>
                                       <li><a data-view="0" data-url="/campaign-sts-update/update-discount?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Update Discount</a></li>
+                                      <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
                                       </ul>
                                     </div>';
                                 },

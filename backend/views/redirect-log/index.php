@@ -1,8 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
-
+use kartik\grid\GridView;
+use yii\bootstrap\Modal;
 /* @var $this yii\web\View */
 /* @var $searchModel common\models\RedirectLogSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,6 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'columns' => [
+                            [
+                                'class' => 'kartik\grid\ActionColumn',
+                                'template' => '{all}',
+                                'header' => 'Action',
+                                'buttons' => [
+                                    'all' => function ($url, $model, $key) {
+                                        return '<div class="dropdown">
+                                      <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
+                                      <span class="caret"></span></button>
+                                      <ul class="dropdown-menu">
+                                      <li><a data-view="0" data-url="/redirect-log/create?type=2&channel_id=' . $model->channel_id . '&campaign_id=' . $model->campaign_id . '">Redirect</a></li>
+                                      </ul>
+                                    </div>';
+                                    },
+                                ],
+                            ],
                             [
                                 // 'label' => 'id',
                                 'attribute' => 'id',
@@ -150,3 +166,22 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
         </div>
     </div>
+<?php
+$this->registerJsFile(
+    '@web/js/deliver.js',
+    ['depends' => [\yii\web\JqueryAsset::className()]]
+);
+?>
+<?php Modal::begin([
+    'id' => 'deliver-modal',
+    'size' => 'modal-md',
+//    'header' =>'00',
+    'clientOptions' => [
+        'backdrop' => 'static',
+        'keyboard' => false,
+    ],
+]);
+
+echo '<div id="deliver-detail-content"></div>';
+
+Modal::end(); ?>
