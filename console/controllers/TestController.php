@@ -57,6 +57,20 @@ class TestController extends Controller
 
     public function actionTmd()
     {
+        $sub_redirect_key = 'sub-redirect' . 999;
+        $sub_redirect = Yii::$app->cache->get($sub_redirect_key);
+        var_dump($sub_redirect);
+        if ($sub_redirect === false) {
+            echo 777;
+            Yii::$app->cache->set($sub_redirect_key, empty($sub_redirect) ? 0 : $sub_redirect, 3);
+        }
+        if(empty($sub_redirect)){
+            echo "888\n";
+        }
+
+die();
+//        Yii::$app->cache->set('test', Campaign::findById(88801));
+//        var_dump(Yii::$app->cache->get('test'));
         for($i = 0;$i<100;$i++) {
             echo "999 \n";
 //            $curl = new Curl();

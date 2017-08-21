@@ -435,7 +435,7 @@ class CountController extends Controller
         $end = $start;
         $now = time();
         while ($end < $now) {
-            $end = $end + 300;
+            $end = $end + 10;
             if ($end > $now) {
                 $end = $now;
             }
