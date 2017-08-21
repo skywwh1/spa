@@ -140,7 +140,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'language' => 'en',
                             'options' => ['multiple' => true],
                             'pluginOptions' => ['previewFileType' => 'any',
-                                'uploadUrl' => Url::to(['/finance-channel-bill-term/upload?bill_id=' . $model->bill_id.'&multi=0']),
+                                'uploadUrl' => Url::to(['/finance-channel-bill-term/upload?bill_id=' . $model->bill_id.'&multi=1']),
                             ]
                         ]);
                         Modal::end();
