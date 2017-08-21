@@ -51,11 +51,6 @@ use yii\helpers\Url;
                 $preview_link = '<th> Preview Link</th>';
                 $creative_link = '<th> Creative Link</th>';
                 $kpi = '<th> KPI</th>';
-                $tag = '<th> Tag</th>';
-                $direct = '<th> Direct</th>';
-                $adv = '<th> Advertiser</th>';
-                $daily_cap = '<th> DailyCap</th>';
-                $note = '<th> Note</th>';
                 ?>
             </tr>
         </thead>
@@ -71,11 +66,6 @@ use yii\helpers\Url;
           echo $preview_link;
           echo $creative_link;
           echo $kpi;
-          echo $tag;
-          echo $direct;
-          echo $adv;
-          echo $daily_cap;
-          echo $note;
 
         foreach ($campaigns as $campaign) {
             $ids = '<td>' . Html::encode($campaign->id) . '</td>';
@@ -86,24 +76,48 @@ use yii\helpers\Url;
             $payouts = '<td>' . Html::encode($campaign->now_payout) . '</td>';
             $traffic_sources = '<td>' . $campaign->traffic_source . '</td>';
             $preview_links = '<td><a href="' . Html::encode($campaign->preview_link) . '">Preview Link</a></td>';
-//            $link .= '<td><a href="' . Url::to('@track' . $campaign->track_url) . '">Tracking Link</a></td>';
             $creativeSet = null;
             foreach ($campaign->campaignCreateLinks as $item){
                 $creativeSet .= !empty($item) ? '<a href="' . Url::to($item->creative_link) . '">Banner</a><br />' : '';
             }
-//            for($index=0;$index<count($campaign->campaignCreateLinks);$index++)
-//            {
-//                $creativeSet .= !empty($campaign->campaignCreateLinks[$index]) ? '<a href="' . Url::to($campaign->creative_link[$index]) . '">Banner</a><br />' : '';
-//            }
 
             $creative = '<td>' . $creativeSet . '</td>';
             $kpis = '<td>' . Html::encode($campaign->kpi) . '</td>';
+            $row = '<tr>' .$ids.$campaign_names.$campaign_uuids.$target_geos.$platforms.$payouts.$traffic_sources.$preview_links.$creative.$kpis.'</tr>';
+
+            echo $row;
+        }
+        ?>
+        </tbody>
+    </table>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <?php
+            $tag = '<th> Tag</th>';
+            $direct = '<th> Direct</th>';
+            $adv = '<th> Advertiser</th>';
+            $daily_cap = '<th> DailyCap</th>';
+            $note = '<th> Note</th>';
+            ?>
+        </tr>
+        </thead>
+        <tbody>
+        <?php
+        echo PHP_EOL;
+        echo $tag;
+        echo $direct;
+        echo $adv;
+        echo $daily_cap;
+        echo $note;
+        foreach ($campaigns as $campaign) {
             $tags = '<td>' . Html::encode(ModelsUtil::getCampaignTag($campaign->tag)) . '</td>';
             $directs = '<td>' . Html::encode(ModelsUtil::getCampaignDirect($campaign->direct)) . '</td>';
             $advs = '<td>' . Html::encode($campaign->advertiser0->username) . '</td>';
             $daily_caps = '<td>' . Html::encode($campaign->daily_cap) . '</td>';
             $notes = '<td>' . Html::encode($campaign->note) . '</td>';
-            $row = '<tr>' .$ids.$campaign_names.$campaign_uuids.$target_geos.$platforms.$payouts.$traffic_sources.$preview_links.$creative.$kpis.$tags.$directs.$advs.$daily_caps.$notes.'</tr>';
+            $row = '<tr>' .$tags.$directs.$advs.$daily_caps.$notes.'</tr>';
 
             echo $row;
         }
