@@ -64,7 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         },
                         'filter' => ModelsUtil::campaign_status,
                     ],
-                    'kpi',
+                    [
+                        'attribute' => 'kpi',
+                        'value' => function ($model) {
+                            return $model->kpi;
+                        },
+                        'format' =>'raw'
+                    ],
                     'note',
                     'others',
                     'pricing_mode',
