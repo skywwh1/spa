@@ -657,7 +657,7 @@ class CampaignController extends Controller
                     break;
                 default:break;
             }
-            $campaign->effective_time = empty($select_campaign)?'':$select_campaign->effect_time;
+            $campaign->effective_time = empty($select_campaign)?'':date("Y-m-d H:i",$select_campaign->effect_time);
             $campaign->impacted_channels = implode($channels,',');
             var_dump($campaign->creative_link);
             $campaigns[] = $campaign;
