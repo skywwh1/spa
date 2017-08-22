@@ -90,6 +90,7 @@ if (!empty($dataProvider)) {
                             <?php
                             echo GridView::widget([
                                 'dataProvider' => $summary,
+                                'layout' => '{items}',
                                 'columns' => [
                                     'revenue',
                                     'clicks',
