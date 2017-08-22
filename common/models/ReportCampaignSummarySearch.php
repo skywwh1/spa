@@ -455,6 +455,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => false,
             'sort' => [
                 'attributes' => [
                     'campaign_id' => [
@@ -612,6 +613,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         if (!$this->validate()) {
             return $dataProvider;
         }
+
         $start = new DateTime($this->start, new DateTimeZone($this->time_zone));
         $end = new DateTime($this->end, new DateTimeZone($this->time_zone));
         $end = $end->add(new DateInterval('P1D'));
@@ -619,12 +621,8 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $end = $end->getTimestamp();
 
         $query->select([
-//            'ch.username channel_name',
             'cam.campaign_name campaign_name',
             'clh.campaign_id',
-//            'clh.channel_id',
-//            'u.username om',
-//            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
@@ -644,7 +642,6 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         $query->leftJoin('user u2', 'ad.pm = u2.id');
-//        $query->leftJoin('user u', 'ch.om = u.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -660,14 +657,11 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         $query->andFilterWhere(['like', 'time_format', $this->time_format])
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'ad.username', $this->adv_name])
-//            ->andFilterWhere(['like', 'ch.username', $this->channel_name])
-//            ->andFilterWhere(['like', 'u.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
         $query->groupBy([
             'clh.campaign_id',
-//            'clh.channel_id',
         ]);
 
         if ($dataProvider->getSort()->getOrders() == null) {
