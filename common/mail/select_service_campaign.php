@@ -98,6 +98,7 @@ use yii\helpers\Url;
             $tag = '<th> Tag</th>';
             $direct = '<th> Direct</th>';
             $adv = '<th> Advertiser</th>';
+            $adv_price = '<th> Adv Price</th>';
             $daily_cap = '<th> DailyCap</th>';
             $note = '<th> Note</th>';
             ?>
@@ -109,15 +110,17 @@ use yii\helpers\Url;
         echo $tag;
         echo $direct;
         echo $adv;
+        echo $adv_price;
         echo $daily_cap;
         echo $note;
         foreach ($campaigns as $campaign) {
             $tags = '<td>' . Html::encode(ModelsUtil::getCampaignTag($campaign->tag)) . '</td>';
             $directs = '<td>' . Html::encode(ModelsUtil::getCampaignDirect($campaign->direct)) . '</td>';
             $advs = '<td>' . Html::encode($campaign->advertiser0->username) . '</td>';
+            $adv_prices = '<td>' . Html::encode($campaign->adv_price) . '</td>';
             $daily_caps = '<td>' . Html::encode($campaign->daily_cap) . '</td>';
-            $notes = '<td>' . Html::encode($campaign->note) . '</td>';
-            $row = '<tr>' .$tags.$directs.$advs.$daily_caps.$notes.'</tr>';
+            $notes = '<td></td>';
+            $row = '<tr>' .$tags.$directs.$advs.$adv_prices.$daily_caps.$notes.'</tr>';
 
             echo $row;
         }
