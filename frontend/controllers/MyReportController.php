@@ -115,13 +115,16 @@ class MyReportController extends Controller
 
         $searchModel = new MyCampaignLogSearch();
         $dataProvider = array();
+        $summary = array();
         if (!empty(Yii::$app->request->queryParams)) {
             $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+            $summary = $searchModel->summarySearch(Yii::$app->request->queryParams);
         }
 
         return $this->render('offers', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'summary' => $summary
         ]);
 
     }

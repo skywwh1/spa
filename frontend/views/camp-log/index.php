@@ -18,10 +18,17 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--        </div>-->
         <p>
             <?php
-              $model = Channel::findOne(Yii::$app->user->id);
+            $model = Channel::findOne(Yii::$app->user->id);
               echo $model->om0->username.' is your account manager';
             ?>
-        </p>
+        <p>
+        <?php
+        if (!empty($model->om0->avatar)){
+            $base = \common\models\User::getBaseUrl();
+            echo '<img src='.$base.$model->om0->avatar.' style="width:100px; height:100px;class="img-circle" alt="OM"" />';
+        }
+        ?>
+    </p>
         <p> <?php echo  empty($model->om0->email)?'':'Email : '.$model->om0->email;?></p>
         <p> <?php echo empty($model->om0->skype)?'':'Skype : '.$model->om0->skype;?></p>
         <p> <?php echo empty($model->om0->weixin)?'':'Wechat : '.$model->om0->weixin;?></p>

@@ -2,6 +2,7 @@
 
 namespace frontend\models;
 
+use common\models\Channel;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -178,6 +179,68 @@ class CampaignChannelLogSearch extends CampaignChannelLog
         $query->andFilterWhere(['ch.username' => \Yii::$app->user->identity->username])
             ->andFilterWhere(['is_read' => 0])
             ->orderBy('create_time desc');
+        return $dataProvider;
+    }
+
+    public function recommendSearch($params)
+    {
+        $channel = Channel::findOne(Yii::$app->user->identity->getId());
+        $query = CampaignChannelLog::find();
+        $query->alias('cl');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
+            return $dataProvider;
+        }
+        $query->joinWith('campaign c');
+
+        // grid filtering conditions
+
+        $query->andFilterWhere([
+            'cl.campaign_id' => $this->campaign_id,
+            'cl.channel_id' => Yii::$app->user->identity->getId(),
+            'cl.adv_price' => $this->adv_price,
+            'cl.pricing_mode' => $this->pricing_mode,
+            'pay_out' => $this->pay_out,
+            'cl.daily_cap' => $this->daily_cap,
+            'cl.status' => 1,
+            'c.status' => 1,
+        ]);
+
+        if(isset($channel->os)){
+            $os = explode(',',$channel->os);
+            $query->andWhere(['or like', 'platform', $os]);
+        }
+        if(isset($channel->strong_category)){
+            $category = explode(',',$channel->strong_category);
+            $query->andWhere(['or like', 'category', $category]);
+        }
+        if(isset($channel->strong_geo)){
+            $geo = explode(',',$channel->strong_geo);
+            $query->andWhere(['or like', 'target_geo', $geo]);
+        }
+
+        $query->orFilterWhere([
+            'cl.campaign_id' => $this->campaign_id,
+            'cl.channel_id' => Yii::$app->user->identity->getId(),
+            'cl.adv_price' => $this->adv_price,
+            'cl.pricing_mode' => $this->pricing_mode,
+            'pay_out' => $this->pay_out,
+            'cl.daily_cap' => $this->daily_cap,
+            'cl.status' => 1,
+            'c.status' => 1,
+            'c.tag' => 5]);
+//        var_dump($query->createCommand()->sql);
+//        var_dump($os,$category,$geo);
+//        die();
+        $query->orderBy('create_time Desc');
         return $dataProvider;
     }
 

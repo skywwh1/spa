@@ -89,4 +89,46 @@ class MyCampaignLogSearch extends MyCampaignLogHourly
         $query->orderBy(['time' => SORT_DESC, 'cam.campaign_name' => SORT_ASC,]);
         return $dataProvider;
     }
+
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function summarySearch($params)
+    {
+        $query = MyCampaignLogHourly::find();
+
+        $query->alias('clh');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        setlocale(LC_ALL,$this->timezone);
+        $start = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $end = mktime(0, 0, 0, date('m') , date('d')+1, date('Y'));
+
+        $query->select([
+            'sum(clh.clicks) clicks',
+            'sum(clh.unique_clicks) unique_clicks',
+            'sum(clh.installs) installs',
+            'avg(clh.pay_out) pay_out',
+            'SUM(clh.cost) revenue',
+        ]);
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'channel_id' => Yii::$app->user->getId(),
+            'pay_out' => $this->pay_out,
+        ]);
+
+        $query->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+
+        return $dataProvider;
+    }
 }

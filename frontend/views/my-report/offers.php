@@ -9,18 +9,13 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel frontend\models\MyCampaignLogSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $form yii\widgets\ActiveForm */
+/* @var $summary yii\data\ActiveDataProvider */
 
 $this->title = 'Offers report';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
     <div id="nav-menu" data-menu="offers"></div>
-    <div class="row">
-        <div class="col-lg-12">
-            <h3 class="page-header"><?= Html::encode($this->title) ?></h3>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-
+    <h3 class="page-header"><?= Html::encode($this->title) ?></h3>
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
@@ -89,8 +84,28 @@ if (!empty($dataProvider)) {
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-body">
+                    <h4>Today's total</h4>
                     <div class="row">
                         <div class="col-lg-12">
+                            <?php
+                            echo GridView::widget([
+                                'dataProvider' => $summary,
+                                'columns' => [
+                                    'revenue',
+                                    'clicks',
+                                    'installs',
+                                    [
+                                        'attribute' => 'cvr(100%)',
+                                        'value' => function ($model) {
+                                            if ($model->clicks > 0) {
+                                                return round($model->installs / $model->clicks, 4) * 100;
+                                            }
+                                            return 0;
+                                        },
+                                        'filter' => false,
+                                    ],
+                                ],
+                            ]); ?>
                             <?= GridView::widget([
                                 'dataProvider' => $dataProvider,
 //                            'filterModel' => $searchModel,

@@ -43,6 +43,7 @@ class CampLogController extends Controller
                             'apply',
                             'campaign-update',
                             'deliver-new',
+                            'recommend-offers'
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -239,6 +240,21 @@ class CampLogController extends Controller
         }
 
         return $this->render('deliver_new', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all CampaignChannelLog models.
+     * @return mixed
+     */
+    public function actionRecommendOffers()
+    {
+        $searchModel = new CampaignChannelLogSearch();
+        $dataProvider = $searchModel->recommendSearch(Yii::$app->request->queryParams);
+
+        return $this->render('recommend_offers', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
