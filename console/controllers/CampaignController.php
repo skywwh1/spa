@@ -433,10 +433,6 @@ class CampaignController extends Controller
              ->andFilterWhere(['c.level' => 1,'c.create_type' => 1])
              ->all();
 
-        /**
-         * 如果这些渠道昨日跑的单子 match cvr > 0.3%, 这个单子的总体cap（所有渠道加和）还未跑满（Match install < 80% daily cap)，
-         * 则系统自动创建一个一摸一样的单子（只有UUID不一样），且系统自动给这个渠道S2S
-         * */
         $checks = [];
         foreach ($delivers as $item){
             $log = CampaignLogHourly::findDateReport($start, $end, $item->campaign_id,$item->channel_id);
