@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
                     <div class="col-lg-2">
                         <?= $form->field($model, 'campaign_name')->textInput() ?>
                     </div>
-                    <div class="col-lg-3">
+                    <div class="col-lg-2">
                         <?= $form->field($model, 'adv_name')->widget(Typeahead::classname(), [
                             'pluginOptions' => ['highlight' => true],
                             //                        'options' => ['value' => isset($model->master_channel) ? $model->masterChannel->username : '',],
