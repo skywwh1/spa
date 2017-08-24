@@ -38,7 +38,26 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ]),
                             ],
                             ['class' => 'yii\grid\SerialColumn'],
-
+                            [
+                                'label' => 'tag',
+                                'value' => function ($model) {
+                                    return ModelsUtil::getCampaignTag($model->campaign->tag);
+                                },
+                                'contentOptions' => function ($model) {
+                                    if ($model->campaign->tag == 3) {
+                                        return ['class' => 'bg-danger'];
+                                    } else if ($model->campaign->tag == 2) {
+                                        return ['class' => 'bg-warning'];
+                                    } else if ($model->campaign->tag == 4) {
+                                        return ['class' => 'bg-info'];
+                                    } else if ($model->campaign->tag == 5) {
+                                        return ['class' => 'bg-gray'];
+                                    }
+                                    else {
+                                        return ['class' => 'bg-success'];
+                                    }
+                                },
+                            ],
                             // 'campaign.campaign_name',
                             //'channel.username',
                             'campaign_id',
