@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\CampaignLogHourly;
 use common\models\ChannelReportSearch;
 use common\models\Deliver;
 use common\models\ReportAdvSearch;
@@ -18,7 +19,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-
+use DateInterval;
 /**
  * ReportController implements the CRUD actions for Deliver model.
  */
@@ -47,6 +48,7 @@ class ReportController extends Controller
                             'report-summary',
                             'report-sub-channel',
                             'campaign-summary',
+                            'campaign-history',
                         ],
                         'allow' => true,
                         'roles' => ['@'],
@@ -294,6 +296,49 @@ class ReportController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'summary' => $summary,
+        ]);
+    }
+
+    /**
+     * search campaign history revenue
+     * @return string
+     */
+    public function actionCampaignHistory()
+    {
+        $searchModel = new ReportCampaignSummarySearch();
+
+        $searchModel->time_zone = 'Etc/GMT-8';
+        $date = new DateTime();
+        $date->setTimezone(new DateTimeZone($searchModel->time_zone));
+        $date->setTimestamp(time());
+        $date->format('Y-m-d');
+        $searchModel->start = $date->format('Y-m-d');
+        $searchModel->end = $date->format('Y-m-d');
+        $searchModel->load(Yii::$app->request->queryParams);
+        $searchModel->is_his = 1;
+        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+
+        $models = $dataProvider->getModels();
+        if (!empty($dataProvider)){
+            foreach($models as $key => &$item){
+                $end0 = intval($item['timestamp']);
+                $start0 = $end0;
+                $end = $end0;
+
+                $end0 = $end0 - 24*60*60;
+                $end = $end - 2*24*60*60;
+
+                $yesterday_rev = CampaignLogHourly::findDateReport($end0, $start0, $item['campaign_id'],$item['channel_id']);
+                $before_yesterday_rev = CampaignLogHourly::findDateReport($end, $start0, $item['campaign_id'],$item['channel_id']);
+
+                $item['yesterday_rev_def'] = (string)($item['revenue'] - $yesterday_rev['revenue']);
+                $item['before_yesterday_rev_def'] = (string)($item['revenue'] - $before_yesterday_rev['revenue']);
+            }
+            $dataProvider->setModels($models);
+        }
+        return $this->render('campaign_history', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
         ]);
     }
 }

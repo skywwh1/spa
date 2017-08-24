@@ -267,13 +267,14 @@ class CampaignLogHourly extends \yii\db\ActiveRecord
 //        $a = strtotime($this->start);
         $query->select([
             'clh.campaign_id',
-            'clh.time timestamp',
+            'UNIX_TIMESTAMP(FROM_UNIXTIME(clh.time, "%Y-%m-%d")) timestamp',
             'clh.time_format',
             'daily_cap',
             'SUM(clh.clicks) clicks',
             'SUM(clh.unique_clicks) unique_clicks',
             'SUM(clh.installs) installs',
             'SUM(clh.match_installs) match_installs',
+            'SUM(clh.revenue) revenue',
         ]);
 
         // grid filtering conditions
