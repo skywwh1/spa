@@ -23,6 +23,45 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
 //        'showHeader'=>false,
         'columns' => [
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{apply}',
+                'header' => 'Apply',
+                'buttons' => [
+                    'apply' => function ($url, $model) {
+                        if ($model->campaign->isApply($model->campaign->id, Yii::$app->user->id)) {
+                            $class = 'btn btn-primary btn-xs';
+                            $title = Yii::t('yii', 'Applying');
+                            switch ($model->campaign->apply_status) {
+                                case 1:
+                                    $class = 'btn btn-warning disabled btn-xs';
+                                    $title = Yii::t('yii', 'Applying');
+                                    break;
+                                case 2:
+                                    $class = 'btn btn-success disabled btn-xs';
+                                    $title = Yii::t('yii', 'Approved');
+                                    break;
+                                case 3:
+                                    $class = 'btn btn-danger disabled btn-xs';
+                                    $title = Yii::t('yii', 'Reject');
+                                    break;
+                            }
+                            return Html::a($title, '#', [
+                                'class' => $class,
+                                'title' => $title,
+                            ]);
+                        } else {
+                            return Html::a('apply', $url, [
+                                'class' => 'btn btn-primary btn-xs',
+                                'title' => Yii::t('yii', 'Apply'),
+                                'data-method' => 'post',
+                                'data-pjax' => 'w0',
+
+                            ]);
+                        }
+                    }
+                ],
+            ],
             'campaign_id',
 //            'campaign.campaign_name',
             [
@@ -121,6 +160,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class' => 'yii\grid\ActionColumn', 'template' => '{view}',
                 'header' => 'Detail',
             ],
+
         ],
     ]); ?>
     <?php Pjax::end(); ?></div>
