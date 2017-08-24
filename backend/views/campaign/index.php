@@ -143,10 +143,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                     if ($model->status != 1) {
                                         $restart = '<li><a data-pjax="0" data-view="1" data-url="/campaign/restart?id=' . $model->id . '">Restart</a></li>';
                                     }
-
                                     if (\Yii::$app->user->can('admin')
-                                        || strcmp($model->advertiser0->pm , Yii::$app->user->identity->username)
-                                        || strcmp($model->advertiser0->bd , Yii::$app->user->identity->username)) {
+                                        || strcmp($model->advertiser0->pm , Yii::$app->user->id)==0
+                                        || strcmp($model->advertiser0->bd , Yii::$app->user->id)==0) {
                                         return '<div class="dropdown">
                                           <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Actions
                                           <span class="caret"></span></button>
