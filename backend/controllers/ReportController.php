@@ -318,7 +318,7 @@ class ReportController extends Controller
         $searchModel->is_his = 1;
         $dataProvider = $searchModel->historySearch(Yii::$app->request->queryParams);
 
-        $models = $dataProvider->getModels();
+        $models = $dataProvider->getModels($forcePrepare = true);
         if (!empty($dataProvider)){
             foreach($models as $key => &$item){
                 $end0 = intval($item['timestamp']);
@@ -336,6 +336,7 @@ class ReportController extends Controller
             }
             $dataProvider->setModels($models);
         }
+
         return $this->render('campaign_history', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

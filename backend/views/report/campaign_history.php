@@ -243,10 +243,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'showPageSummary' => true,
-                        'layout' => '{toolbar}{summary} {items} {pager}',
-                        'toolbar' => [
-                            '{toggleData}',
-                        ],
+//                        'layout' => '{toolbar}{summary} {items} {pager}',
+//                        'toolbar' => [
+//                            '{toggleData}',
+//                        ],
 //                        'toggleDataOptions'=>['minCount'=>10],
                         'columns' => $columns,
                     ]); ?>

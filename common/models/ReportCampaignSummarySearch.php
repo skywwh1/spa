@@ -673,6 +673,7 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
         if ($dataProvider->getSort()->getOrders() == null) {
             $query->orderBy(['cam.campaign_name' => SORT_ASC, 'time' => SORT_DESC]);
         }
+        $query->all();
 
         return $dataProvider;
     }
@@ -684,6 +685,9 @@ class ReportCampaignSummarySearch extends ReportAdvHourly
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' =>[
+                'pageSize' => 20,
+            ],
             'sort' => [
                 'attributes' => [
                     'revenue' => [
