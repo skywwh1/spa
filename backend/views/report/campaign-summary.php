@@ -44,7 +44,7 @@ if (!empty($searchModel->type)) {
 }
 $columns = [
     [
-        'label' => 'Campaign ID',
+        'label' => 'ID',
         'attribute' => 'campaign_id',
         'value' => 'campaign_id',
         'filter' => false,
@@ -101,7 +101,7 @@ $columns = [
     ],
 
     [
-        'label' => 'Payout(avg)',
+        'label' => 'Payout (avg)',
         'attribute' => 'pay_out',
         'value' => function ($model) {
             $model = (object)$model;
@@ -137,7 +137,7 @@ $columns = [
         'filter' => false,
     ],
     [
-        'label' => 'ADV Price(avg)',
+        'label' => 'adv price (avg)',
         'attribute' => 'adv_price',
         'value' => function ($model) {
             $model = (object)$model;
@@ -368,32 +368,39 @@ if (!empty($dataProvider)) {
                             ],
                         ],
                     ]); ?>
-                    <?php echo ExportMenu::widget([
-                        'dataProvider' => $dataProvider,
-                        'columns' => $columns,
-                        'fontAwesome' => true,
-                        'showConfirmAlert' => false,
-                        'target' => GridView::TARGET_BLANK,
-                        'dropdownOptions' => [
-                            'label' => 'Export All',
-                            'class' => 'btn btn-default'
-                        ],
-                        'exportConfig' => [
-                            ExportMenu::FORMAT_TEXT => false,
-                            ExportMenu::FORMAT_PDF => false,
-                            ExportMenu::FORMAT_EXCEL_X => false,
-                            ExportMenu::FORMAT_HTML => false,
-                        ],
-                    ]);
+                    <?php
+//                    $fullExportMenu = ExportMenu::widget([
+//                        'dataProvider' => $dataProvider,
+//                        'columns' => $columns,
+//                        'target' => ExportMenu::TARGET_BLANK,
+//                        'fontAwesome' => true,
+//                        'showConfirmAlert' => false,
+//                        'batchSize' => 20,
+//                        'pjaxContainerId' => 'kv-pjax-container',
+//                        'dropdownOptions' => [
+//                            'label' => 'Export All',
+//                            'class' => 'btn btn-default'
+//                        ],
+//                        'exportConfig' => [
+//                            ExportMenu::FORMAT_TEXT => false,
+//                            ExportMenu::FORMAT_PDF => false,
+//                            ExportMenu::FORMAT_EXCEL_X => false,
+//                            ExportMenu::FORMAT_HTML => false,
+//                        ],
+//                    ]);
                     ?>
-                    <?php echo GridView::widget([
+
+                    <?= GridView::widget([
                         'dataProvider' => $dataProvider,
                         'filterModel' => $searchModel,
                         'showPageSummary' => true,
-                        'layout' => $layout,
+                        'layout' => '{toolbar}{summary} {items} {pager}',
                         'toolbar' => [
                             '{toggleData}',
+                            '{export}',
+//                            $fullExportMenu
                         ],
+                        'toggleDataOptions'=>['minCount'=>10],
                         'columns' => $columns,
                     ]); ?>
                 </div>

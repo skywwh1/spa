@@ -316,7 +316,7 @@ class ReportController extends Controller
         $searchModel->end = $date->format('Y-m-d');
         $searchModel->load(Yii::$app->request->queryParams);
         $searchModel->is_his = 1;
-        $dataProvider = $searchModel->dailySearch(Yii::$app->request->queryParams);
+        $dataProvider = $searchModel->historySearch(Yii::$app->request->queryParams);
 
         $models = $dataProvider->getModels();
         if (!empty($dataProvider)){

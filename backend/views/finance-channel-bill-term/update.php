@@ -200,9 +200,11 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                             'class' => 'btn btn-primary',
                         ]) ?>
                     </div>
-
                     <div class="col-lg-1">
-                        <?= Html::submitButton('Download', ['class' => 'btn btn-primary']) ?>
+                        <?= Html::a('Download', '/finance-channel-bill-term/download?bill_id=' . $model->bill_id, [
+                            'class' => 'btn btn-primary',
+                            'target' => 'blank',
+                        ]) ?>
                     </div>
                     <div class="col-lg-1">
                         <?= Html::a('Add Cost', null, [

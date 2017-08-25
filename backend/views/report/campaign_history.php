@@ -238,25 +238,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="col-lg-12">
             <div class="box box-info">
                 <div class="box-body">
-                    <?php $fullExportMenu = ExportMenu::widget([
-                        'dataProvider' => $dataProvider,
-                        'columns' => $columns,
-                        'fontAwesome' => true,
-                        'batchSize' => 20,
-                        'showConfirmAlert' => false,
-                        'target' => GridView::TARGET_BLANK,
-                        'dropdownOptions' => [
-                            'label' => 'Export All',
-                            'class' => 'btn btn-default'
-                        ],
-                        'exportConfig' => [
-                            ExportMenu::FORMAT_TEXT => false,
-                            ExportMenu::FORMAT_PDF => false,
-                            ExportMenu::FORMAT_EXCEL_X => false,
-                            ExportMenu::FORMAT_HTML => false,
-                        ],
-                    ]);
-                    ?>
 
                     <?= GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -265,7 +246,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         'layout' => '{toolbar}{summary} {items} {pager}',
                         'toolbar' => [
                             '{toggleData}',
-                            $fullExportMenu,
                         ],
 //                        'toggleDataOptions'=>['minCount'=>10],
                         'columns' => $columns,

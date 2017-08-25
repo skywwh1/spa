@@ -17,6 +17,7 @@ use backend\models\UploadForm;
 use common\models\Channel;
 use common\utility\MailUtil;
 use common\utility\TimeZoneUtil;
+use common\utility\Zip;
 use Yii;
 use backend\models\FinanceChannelBillTerm;
 use backend\models\FinanceChannelBillTermSearch;
@@ -48,7 +49,7 @@ class FinanceChannelBillTermController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'validate','edit','retreat','flow','upload','email'],
+                        'actions' => ['view', 'index', 'create', 'update', 'delete', 'validate', 'edit', 'retreat', 'flow', 'upload', 'email','download'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -168,10 +169,9 @@ class FinanceChannelBillTermController extends Controller
 //                // file is uploaded successfully
 //                return;
 //            }
-            switch ($model->status)
-            {
+            switch ($model->status) {
                 case 3:
-                    $compensation =  FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id,'channel_id' => $model->channel_id]);
+                    $compensation = FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id, 'channel_id' => $model->channel_id]);
                     $model->payable -= $model->compensation;
                     FinanceCompensation::deleteAll(['deduction_id' => $compensation->id]);
 
@@ -179,7 +179,7 @@ class FinanceChannelBillTermController extends Controller
                     $model->status = 1;//对于reject的单子，一律设为pending状态
                     break;
                 case 5:
-                    $compensation =  FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id,'channel_id' => $model->channel_id]);
+                    $compensation = FinanceDeduction::findOne(['channel_bill_id' => $model->bill_id, 'channel_id' => $model->channel_id]);
                     $model->payable -= $model->compensation;
                     FinanceCompensation::deleteAll(['deduction_id' => $compensation->id]);
 
@@ -258,7 +258,7 @@ class FinanceChannelBillTermController extends Controller
                 'prepaymentList' => $prepaymentList,
                 'costList' => $costList,
                 'subCostList' => $subCostList,
-                'upload'=>$upload,
+                'upload' => $upload,
                 'searchModel' => $campaignBillSearchModel,
                 'pics' => $pics
             ]);
@@ -281,7 +281,7 @@ class FinanceChannelBillTermController extends Controller
      * @param $multi
      * @return string
      */
-    public function actionUpload($bill_id,$multi)
+    public function actionUpload($bill_id, $multi)
     {
         $model = new UploadForm();
 
@@ -291,27 +291,27 @@ class FinanceChannelBillTermController extends Controller
 //            var_dump($model->imageFiles );
             $pic = new InvoicePicture();
             $flag = 0;
-            if ($multi == 1){
+            if ($multi == 1) {
                 $model->imageFiles = UploadedFile::getInstancesByName('imageFiles');
-                foreach ( $model->imageFiles as $file) {
+                foreach ($model->imageFiles as $file) {
                     $url = Yii::$app->params['uploadInvoicePath'] . $file->baseName . '.' . $file->extension;
-                    if($file->saveAs($url)){
-                        $pic->path = '/upload/financeUpload/'. $file->baseName . '.' . $file->extension;
+                    if ($file->saveAs($url)) {
+                        $pic->path = '/upload/financeUpload/' . $file->baseName . '.' . $file->extension;
                         $pic->channel_bill_id = $bill_id;
                         $pic->save();
                         $flag = 1;
                     }
                 }
-                if ($flag == 1){
+                if ($flag == 1) {
                     return '{}';
                 }
             } else {
                 $imageFile = UploadedFile::getInstanceByName('imageFile');
                 $model->imageFile = $imageFile;
                 $url = Yii::$app->params['uploadInvoicePath'] . $imageFile->baseName . '.' . $imageFile->extension;
-                if($imageFile->saveAs($url)){
+                if ($imageFile->saveAs($url)) {
                     $bill = FinanceChannelBillTerm::findOne($bill_id);
-                    $bill->invoice_path = '/upload/financeUpload/'. $imageFile->baseName . '.' . $imageFile->extension;
+                    $bill->invoice_path = '/upload/financeUpload/' . $imageFile->baseName . '.' . $imageFile->extension;
                     $bill->save();
                     return '{}';
                 }
@@ -343,15 +343,14 @@ class FinanceChannelBillTermController extends Controller
      * @return \yii\web\Response
      * @throws NotFoundHttpException
      */
-    public function actionFlow($bill_id,$status)
+    public function actionFlow($bill_id, $status)
     {
         $model = new FinanceChannelBillTerm();
         $model->bill_id = $bill_id;
 
         $model = $this->findModel($bill_id);
         //BD Leader Reject and Finance Reject will set status = pending
-        switch ($status)
-        {
+        switch ($status) {
             case 3:
                 $model->status = 1;
                 break;
@@ -361,7 +360,7 @@ class FinanceChannelBillTermController extends Controller
             default:
                 $model->status = $status;
         }
-        if ( $model->save()) {
+        if ($model->save()) {
             return $this->redirect(Yii::$app->request->referrer);
         } else {
             var_dump($model->getErrors());
@@ -383,5 +382,45 @@ class FinanceChannelBillTermController extends Controller
         } else {
             $this->asJson("send email fail!");
         }
+    }
+
+    public function actionDownload($bill_id){
+
+        $path = Yii::$app->params['uploadInvoicePath'];
+        $pcs = InvoicePicture::findAll(['channel_bill_id' => $bill_id]);
+
+        $filename = "channelPayable.zip"; //最终生成的文件名（含路径）
+        if(!file_exists($filename)){
+            //regenerate file
+            $zip = new \ZipArchive();//ubuntu should open zlib
+            if ($zip->open($filename, \ZipArchive::CREATE)!==TRUE) {
+                exit('无法打开文件，或者文件创建失败');
+            }
+            foreach ($pcs as $item){
+                $filename = explode("/",$item->path)[3];
+                $attachfile = $path.'/'.$filename; //获取原始文件路径
+                if(file_exists($attachfile)){
+                    $zip->addFile( $attachfile , basename($attachfile));//第二个参数是放在压缩包中的文件名称，如果文件可能会有重复
+                }
+            }
+            $invoice = FinanceChannelBillTerm::findOne(['bill_id' => $bill_id]);
+            $invoice_file = explode("/",$invoice->invoice_path)[3];
+            $attach_file = $path.'/'.$invoice_file; //orig source
+            if(file_exists($attach_file)){
+                $zip->addFile( $attach_file , basename($attach_file));//第二个参数是放在压缩包中的文件名称，如果文件可能会有重复，就需要注意一下
+            }
+            $zip->close();//关闭
+        }
+
+        header("Cache-Control: public");
+        header("Content-Description: File Transfer");
+        header('Content-disposition: attachment; filename='.basename($filename)); //文件名
+        header("Content-Type: application/zip"); //zip格式的
+        header("Content-Transfer-Encoding: binary"); //告诉浏览器，这是二进制文件
+        header('Content-Length: '. filesize($filename)); //告诉浏览器，文件大小
+        ob_clean();   //清空但不关闭输出缓存
+        flush();
+        @readfile($filename);
+        @unlink($filename);//删除打包的临时zip文件。文件会在用户下载完成后被删除
     }
 }
