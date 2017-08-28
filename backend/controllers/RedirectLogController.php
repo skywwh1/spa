@@ -93,6 +93,9 @@ class RedirectLogController extends Controller
             $model->channel_id = $channel_id;
         }
         if (Yii::$app->getRequest()->isPost && $model->load(Yii::$app->request->post())) {
+            if (!empty($model->recommend_camps)){
+                $model->campaign_id_new = $model->recommend_camps;
+            }
             $model->start_time = strtotime($model->start_time);
             if (!empty($model->end_time)){
                 $model->end_time = strtotime($model->end_time);

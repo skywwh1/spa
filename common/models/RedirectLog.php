@@ -30,6 +30,7 @@ use Yii;
  */
 class RedirectLog extends \yii\db\ActiveRecord
 {
+    public $recommend_camps;
     /**
      * @inheritdoc
      */
@@ -44,8 +45,9 @@ class RedirectLog extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['campaign_id', 'channel_id', 'campaign_id_new', 'discount'], 'required'],
-            [['campaign_id', 'channel_id', 'campaign_id_new', 'discount_numerator', 'discount_denominator', 'status', 'end_time', 'create_time', 'update_time', 'creator','start_time'], 'integer'],
+            [['recommend_camps'], 'safe'],
+            [['campaign_id', 'channel_id', 'discount'], 'required'],
+            [['campaign_id', 'channel_id','discount_numerator', 'discount_denominator', 'status', 'end_time', 'create_time', 'update_time', 'creator','start_time'], 'integer'],
             [['actual_discount', 'discount'], 'number'],
             ['discount', 'number', 'max' => 99, 'min' => 0],
             [['daily_cap'], 'string', 'max' => 100],

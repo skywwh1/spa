@@ -19,6 +19,10 @@ use kartik\datetime\DateTimePicker;
         <?= $form->field($model, 'campaign_id')->textInput(['readonly' => true]) ?>
         <?= $form->field($model, 'channel_id')->textInput(['readonly' => true]) ?>
         <?= $form->field($model, 'campaign_id_new')->textInput(['readonly' => isset($model->campaign_id_new) ? true : false]) ?>
+        <?= $form->field($model, 'recommend_camps')->dropDownList(
+            \backend\models\ReidrectRecommender::getRecommendCampaign($model->campaign_id,$model->channel_id),
+            ['prompt'=>'']    // options
+        ) ?>
         <?= $form->field($model, 'discount')->textInput(['maxlength' => true]) ?>
         <?= $form->field($model, 'status')->hiddenInput(['value' => isset($model->campaign_id_new) ? 2 : 0])->label(false) ?>
         <div class="form-group field-financededuction-start_date">
