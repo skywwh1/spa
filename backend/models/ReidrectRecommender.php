@@ -14,6 +14,7 @@ use yii\helpers\ArrayHelper;
  * @property integer $redirect_to
  * @property string $redirect_name
  * @property double $cvr
+ * @property double $epc
  * @property integer $status
  */
 class ReidrectRecommender extends \yii\db\ActiveRecord
@@ -33,7 +34,7 @@ class ReidrectRecommender extends \yii\db\ActiveRecord
     {
         return [
             [['channel_id', 'campaign_id', 'redirect_to', 'status'], 'integer'],
-            [['cvr'], 'number'],
+            [['cvr', 'epc'], 'number'],
             [['redirect_name'], 'string', 'max' => 100],
         ];
     }
@@ -50,6 +51,7 @@ class ReidrectRecommender extends \yii\db\ActiveRecord
             'redirect_to' => 'Redirect To',
             'redirect_name' => 'Redirect Name',
             'cvr' => 'Cvr',
+            'epc' => 'Epc',
             'status' => 'Status',
         ];
     }
@@ -57,7 +59,7 @@ class ReidrectRecommender extends \yii\db\ActiveRecord
     public static function getRecommendCampaign($campaignId,$channelId)
     {
         $data = ReidrectRecommender::find()
-            ->select(['redirect_to id', 'CONCAT(redirect_to,"-",redirect_name,"-",cvr) text'])
+            ->select(['redirect_to id', 'CONCAT(redirect_to,"-",redirect_name,"-",cvr,"-",epc) text'])
             ->andFilterWhere(['campaign_id'=> $campaignId,'channel_id'=> $channelId])
             ->andFilterWhere(['status'=> 1])
             ->limit(50)
@@ -66,4 +68,5 @@ class ReidrectRecommender extends \yii\db\ActiveRecord
         $data = ArrayHelper::map($data, 'id', 'text');
         return $data;
     }
+
 }
