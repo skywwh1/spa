@@ -11,6 +11,7 @@ class ReportAdvHourly extends CampaignLogHourly
     public $adv_name;
     public $bd;
     public $pm;
+    public $om;
 
     public $cvr;
     public $cost;

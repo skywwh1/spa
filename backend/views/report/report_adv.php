@@ -320,6 +320,11 @@ $columns = [
         'filter' => false,
     ],
     [
+        'label' => 'OM',
+        'attribute' => 'om',
+        'value' => 'om',
+    ],
+    [
         'label' => 'BD',
         'attribute' => 'bd',
         'value' => 'bd',

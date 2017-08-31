@@ -20,7 +20,7 @@ class ReportAdvSearch extends ReportAdvHourly
     {
         return [
             [['campaign_id', 'channel_id', 'time', 'clicks', 'unique_clicks', 'installs', 'match_installs', 'campaign_name', 'channel_name'], 'safe'],
-            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name', 'bd', 'pm'], 'safe'],
+            [['time_zone', 'time_format', 'daily_cap', 'type', 'start', 'end', 'adv_name','om', 'bd', 'pm'], 'safe'],
             [['pay_out', 'adv_price'], 'number'],
         ];
     }
@@ -156,14 +156,14 @@ class ReportAdvSearch extends ReportAdvHourly
             'ad.username adv_name',
             'u.username bd',
             'u2.username pm',
-
+            'u3.username om',
         ]);
         $query->joinWith('channel ch');
         $query->joinWith('campaign cam');
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         $query->leftJoin('user u2', 'ad.pm = u2.id');
-
+        $query->leftJoin('user u3', 'ch.om = u3.id');
         // grid filtering conditions
         $query->andFilterWhere([
             'campaign_id' => $this->campaign_id,
@@ -179,6 +179,7 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'u2.username', $this->pm])
+            ->andFilterWhere(['like', 'u3.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
 
@@ -317,6 +318,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.redirect_revenue) redirect_revenue',
             'u.username bd',
             'u2.username pm',
+            'u3.username om',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
             'ad.username adv_name',
@@ -327,6 +329,7 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         $query->leftJoin('user u2', 'ad.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -342,6 +345,7 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'u2.username', $this->pm])
+            ->andFilterWhere(['like', 'u3.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
         if (\Yii::$app->user->can('admin')) {
@@ -511,6 +515,7 @@ class ReportAdvSearch extends ReportAdvHourly
             'SUM(clh.redirect_revenue) redirect_revenue',
             'u.username bd',
             'u2.username pm',
+            'u3.username om',
             'cam.daily_cap cap',
             'clh.daily_cap daily_cap',
             'ad.username adv_name',
@@ -521,6 +526,7 @@ class ReportAdvSearch extends ReportAdvHourly
         $query->leftJoin('advertiser ad', 'cam.advertiser = ad.id');
         $query->leftJoin('user u', 'ad.bd = u.id');
         $query->leftJoin('user u2', 'ad.pm = u2.id');
+        $query->leftJoin('user u3', 'ch.om = u3.id');
 
         // grid filtering conditions
         $query->andFilterWhere([
@@ -536,6 +542,7 @@ class ReportAdvSearch extends ReportAdvHourly
             ->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name])
             ->andFilterWhere(['like', 'u.username', $this->bd])
             ->andFilterWhere(['like', 'u2.username', $this->pm])
+            ->andFilterWhere(['like', 'u3.username', $this->om])
             ->andFilterWhere(['>=', 'time', $start])
             ->andFilterWhere(['<', 'time', $end]);
         if (\Yii::$app->user->can('admin')) {
