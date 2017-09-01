@@ -228,6 +228,7 @@ class ApiUtil
                         $camp->campaign_id = $item['campaigns']['campaign_id'];
                         $camp->target_geo = $item['campaigns']['country'];
                         $camp->adv_price = $item['campaigns']['points'];
+                        $camp->status = 'active';
                     }
                 }
             }
