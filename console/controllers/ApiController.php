@@ -13,6 +13,7 @@ use console\models\Affle;
 use console\models\Clinkad;
 use console\models\Glispa;
 use console\models\HeadWay;
+use console\models\IGAWorks;
 use console\models\Mi;
 use console\models\MiDirect;
 use console\models\Mobair;
@@ -142,6 +143,12 @@ class ApiController extends Controller
     public function actionGetClink()
     {
         $yeah = new Clinkad();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetIgaWorks()
+    {
+        $yeah = new IGAWorks();
         $yeah->getApiCampaign();
     }
 }

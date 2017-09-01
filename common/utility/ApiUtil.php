@@ -197,4 +197,46 @@ class ApiUtil
             }
         }
     }
+
+    public static function genIGAWorksCampaigns($data)
+    {
+        $camps = array();
+        foreach ($data as $item) { //循环json里面的offers
+            $item = ArrayHelper::toArray($item);
+            $camp = new ApiCampaign();
+            foreach ($item as $api_k => $api_v) { //循环apis 的属性
+                if (!array_key_exists('app_details', $item)) {
+                    continue;
+                }
+                if (array_key_exists('app_details', $item)) { //如果 json每一个offer的属性存在apis里面。
+                    if (strcmp('app_details',$api_k)==0 && !empty($item['app_details'])){
+                        $camp->campaign_name = $item['app_details']['bundle_id'];
+                        $camp->platform = $item['app_details']['platform'];
+                        $camp->app_rate = $item['app_details']['store_rating'];
+                    }
+                }
+                if (array_key_exists('native_creatives', $item)) { //如果 json每一个offer的属性存在apis里面。
+                    if (strcmp('native_creatives',$api_k)==0 && is_array($item['native_creatives'])) {
+//                        var_dump($item['native_creatives']);
+//                        $camp->creative_link = $item['native_creatives'][0]['click_url'];
+//                        $camp->preview_link = $item['native_creatives'][0]['click_url'];
+                        $camp->adv_link = $item['native_creatives'][0]['click_url'];
+                    }
+                }
+                if (array_key_exists('campaigns', $item)) { //如果 json每一个offer的属性存在apis里面。
+                    if (strcmp('campaigns',$api_k)==0 && !empty($item['campaigns'])) {
+                        $camp->campaign_id = $item['campaigns']['campaign_id'];
+                        $camp->target_geo = $item['campaigns']['country'];
+                        $camp->adv_price = $item['campaigns']['points'];
+                    }
+                }
+            }
+            if (!empty($camp->campaign_id))
+                $camps[] = $camp;
+        }
+//        var_dump($camps);
+//        die();
+        return $camps;
+    }
+
 }
