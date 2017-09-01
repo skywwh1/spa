@@ -122,6 +122,7 @@ class IGAWorks
             Package Name 设为 buddle_id
          */
         $camp->carriers = 'all';
+        $camp->pricing_mode = 'cpi';
         $camp->conversion_flow = 'CPI';
         $camp->traffic_source = 'non-incent,no adult';
         $camp->kpi = 'Day +1 Retention > 30%';
