@@ -126,6 +126,7 @@ class IGAWorks
         $camp->conversion_flow = 'CPI';
         $camp->traffic_source = 'non-incent,no adult';
         $camp->kpi = 'Day +1 Retention > 30%';
+        $camp->package_name = $camp->package_name;
 //        if (isset($model->creative_link)) {
 //            $aa = explode(';', $model->creative_link);
 //            $camp->creative_link = str_replace('path:', '', $aa[0]);
