@@ -20,7 +20,7 @@ class IGAWorks
 {
     public function getApiCampaign()
     {
-        $apiModel = AdvertiserApi::findOne(['id' => 14]);
+        $apiModel = AdvertiserApi::findOne(['id' => 17]);
 
         $url = 'https://trd-dsp.ad-brix.com/ncpibulk';
         $data = array(
