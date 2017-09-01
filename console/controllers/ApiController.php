@@ -66,8 +66,8 @@ class ApiController extends Controller
         $yeah = new Clinkad();
         $yeah->getApiCampaign();
 
-        $yeah = new IGAWorks();
-        $yeah->getApiCampaign();
+//        $yeah = new IGAWorks();
+//        $yeah->getApiCampaign();
 
     }
 
