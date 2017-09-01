@@ -107,12 +107,24 @@ class IGAWorks
         $camp->target_geo = $model->target_geo;
         $camp->target_geo = str_replace('0:', '', $camp->target_geo);
         $camp->target_geo = str_replace(';', '', $camp->target_geo);
+        $camp->target_geo = str_replace('O', '', $camp->target_geo);
         $camp->adv_link = substr($model->adv_link, 0, stripos($model->adv_link, '?'));
         if (empty($camp->note)) {
             $camp->note = $model->note . PHP_EOL . $model->description;
         }
         $camp->preview_link = $model->preview_link;
         $camp->status = ($model->status == 'active') ? 1 : 2;
+        /**
+         *  Carrier 默认为： all
+            Conversion Flow 默认为：CPI
+            Target GEO: KOR 改成 KR
+            Traffic Source  默认为： Non-incent, no adult
+            Package Name 设为 buddle_id
+         */
+        $camp->carriers = 'all';
+        $camp->conversion_flow = 'CPI';
+        $camp->traffic_source = 'non-incent,no adult';
+        $camp->kpi = 'Day +1 Retention > 30%';
 //        if (isset($model->creative_link)) {
 //            $aa = explode(';', $model->creative_link);
 //            $camp->creative_link = str_replace('path:', '', $aa[0]);

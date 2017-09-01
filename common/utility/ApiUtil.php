@@ -211,6 +211,7 @@ class ApiUtil
                 if (array_key_exists('app_details', $item)) { //如果 json每一个offer的属性存在apis里面。
                     if (strcmp('app_details',$api_k)==0 && !empty($item['app_details'])){
                         $camp->campaign_name = $item['app_details']['bundle_id'];
+                        $camp->package_name = $item['app_details']['bundle_id'];
                         $camp->platform = $item['app_details']['platform'];
                         $camp->app_rate = $item['app_details']['store_rating'];
                     }
