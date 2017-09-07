@@ -149,7 +149,7 @@ $columns = [
         'attribute' => 'revenue',
         'value' => function ($model) {
             $model = (object)$model;
-            return $model->match_installs * $model->adv_price;
+            return bcmul($model->match_installs,$model->adv_price);
         },
         'filter' => false,
         'pageSummary' => true,
