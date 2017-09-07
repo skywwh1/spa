@@ -163,8 +163,13 @@ class DeliverController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $delivers = [];
             $blackChannels = [];
+            $return_msg = array();
             foreach ($model->campaign_uuid as $campaign_id) {
                 $camp = Campaign::findOne($campaign_id);
+                if ($camp->tag == 4) {
+                    $str = 'Cannot S2S!!!Note:' .$campaign_id.' is a keep camp!' ;
+                    $return_msg[] = $str;
+                }
                 if (!empty($camp->target_geo)) {
                     $targetGeos = explode(",", $camp->target_geo);
                 }
@@ -215,7 +220,7 @@ class DeliverController extends Controller
                 }
             }
 
-            $return_msg = array();
+
             if (!empty($blackChannels)) {
                 foreach ($blackChannels as $black_channel) {
                     // $black_channel[0]不为空
@@ -228,11 +233,11 @@ class DeliverController extends Controller
                     }
                     $return_msg[] = $str;
                 }
-                $return_msg = implode(";", $return_msg);
             }
+
             return $this->render('second', [
                 'delivers' => $delivers,
-                'returnMsg' => empty($return_msg) ? null : $return_msg
+                'returnMsg' => empty($return_msg) ? null : implode(";", $return_msg)
             ]);
         }
         return $this->render('create', [
