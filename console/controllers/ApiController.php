@@ -9,6 +9,7 @@
 namespace console\controllers;
 
 
+use console\models\ADMobGeek;
 use console\models\Affle;
 use console\models\Clinkad;
 use console\models\Glispa;
@@ -69,6 +70,8 @@ class ApiController extends Controller
         $yeah = new IGAWorks();
         $yeah->getApiCampaign();
 
+        $yeah = new ADMobGeek();
+        $yeah->getApiCampaign();
     }
 
     public function actionGetHeadway()
@@ -152,6 +155,12 @@ class ApiController extends Controller
     public function actionGetIgaWorks()
     {
         $yeah = new IGAWorks();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetGeek()
+    {
+        $yeah = new ADMobGeek();
         $yeah->getApiCampaign();
     }
 }
