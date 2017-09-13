@@ -94,8 +94,8 @@ class ADMobGeek
                 foreach ($cr as $item) {
                     if (empty($item))
                         continue;
-                    if (strpos($item, 'url:') !== false) {
-                        $camp->creative_link = str_replace('url:', '', $item);
+                    if (strpos($item, 'q_80/') !== false) {
+                        $camp->creative_link = explode("q_80/",$item);
                         break;
                     }
                 }
