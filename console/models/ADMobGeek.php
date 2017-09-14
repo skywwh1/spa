@@ -75,7 +75,7 @@ class ADMobGeek
             $camp->preview_link = $model->preview_link;
             if ($model->platform == 1){
                 $camp->platform = 'ios';
-            }else if ($model->pricing_mode == 2){
+            }else if ($model->platform == 2){
                 $camp->platform = 'android';
             }else {
                 $camp->platform = 'web';
