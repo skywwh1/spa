@@ -156,7 +156,7 @@ class ADMobGeek
             foreach ($apiOffers as $item){
                 $newOffers[]=$item;
                 $creatives = '';
-                var_dump($item);
+//                var_dump($item);
                 if(isset($item->creatives)){
                     foreach ($item->creatives as $creative){
                         var_dump($creative);
