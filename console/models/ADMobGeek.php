@@ -84,6 +84,8 @@ class ADMobGeek
             $camp->status = 1;
             $camp->open_type = 0;
             $camp->tag = 2;
+            $camp->carriers = $model->carriers;
+            $camp->conversion_flow = $model->conversion_flow;
             if ($model->traffic_source == 0) {
                 $camp->traffic_source = 'non-incent';
             }else {
