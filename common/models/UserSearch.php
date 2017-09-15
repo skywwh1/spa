@@ -89,7 +89,7 @@ class UserSearch extends User
             ->andFilterWhere(['like', 'country', $this->country])
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'lang', $this->lang])
+            ->andFilterWhere(['<>', 'id', 8])
             ->andFilterWhere(['like', 'timezone', $this->timezone]);
 
         return $dataProvider;
