@@ -47,6 +47,9 @@ class ADMobGeek
             $camp->campaign_uuid = $uuid;
             if (empty($camp->campaign_name)) {
                 $camp->campaign_name = $model->campaign_name;
+                if ($model->icon == true ){
+                    $camp->campaign_name = $model->campaign_name.'(device)';
+                }
             }
 
             if ($model->pricing_mode == 1){
@@ -59,6 +62,7 @@ class ADMobGeek
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $camp->adv_price > 1 ? $camp->adv_price * 0.9 : $camp->adv_price;
             $daily_cap = $model->daily_cap;
+
 
             if (empty($camp->promote_start)) {
                 $camp->promote_start = time();
