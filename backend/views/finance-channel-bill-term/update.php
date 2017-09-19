@@ -473,6 +473,139 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     </p>
 
                     <?php
+                    $campaignBillColumns_excel = [
+                        [
+                            // 'label' => 'start_time',
+                            'attribute' => 'bill.period',
+                            'pageSummary' => 'Summary',
+                        ],
+                        [
+                            'label' => 'Channel',
+                            'attribute' => 'channel_id',
+//                                'value' => 'channel_id',
+                            'value' => 'channel.username',
+                            'filter' => false,
+                        ],
+                        [
+                            // 'label' => 'campaign_id',
+                            'attribute' => 'campaign_id',
+                            'value' => 'campaign_id',
+                        ],
+                        [
+                            // 'label' => 'time_zone',
+                            'attribute' => 'campaign_name',
+                            'value' => 'campaign.campaign_name',
+                        ],
+                        [
+//                                'label' => 'clicks',
+                            'attribute' => 'clicks',
+                            'value' => 'clicks',
+                            'pageSummary' => true,
+                        ],
+                        [
+//                                'label' => 'installs',
+                            'attribute' => 'installs',
+                            'value' => 'installs',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'attribute' => 'cvr',
+                            'value' => function ($model) {
+                                $model = (object)$model;
+                                if ($model->clicks > 0) {
+                                    return round(($model->installs / $model->clicks) * 100, 2) . '%';
+                                }
+                                return "0%";
+                            },
+                            'filter' => false,
+                            'contentOptions' => function ($model) {
+                                $model = (object)$model;
+                                $cvr = 0;
+                                if ($model->clicks > 0) {
+                                    $cvr = round(($model->installs / $model->clicks) * 100, 2);
+                                }
+                                if ($cvr > 2) {
+                                    return ['class' => 'bg-danger'];
+                                }
+                            }
+                        ],
+                        [
+//                             'label' => 'pay_out',
+                            'attribute' => 'pay_out',
+                            'value' => 'pay_out',
+                        ],
+                        [
+                            'label' => 'cost',
+                            'attribute' => 'cost',
+                            'value' => 'cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+//                                'label' => 'revenue',
+                            'attribute' => 'revenue',
+                            'value' => 'revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Margin',
+                            'attribute' => 'redirect_revenue',
+                            'value' => function ($model) {
+                                return $model->revenue == 0 ? 0 : round((($model->revenue - $model->cost) / $model->revenue), 2);
+                            }
+                        ],
+                        [
+                            'label' => 'Pending Cost',
+                            'attribute' => 'pending_cost',
+//                            'value' => 'pending_cost',
+                            'value' => function ($model) {
+//                                var_dump($model->deduction_cost > 0);
+//                                die();
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_cost;
+                            },
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Pending Revenue',
+                            'attribute' => 'pending_revenue',
+//                            'value' => 'pending_revenue',
+                            'value' => function ($model) {
+
+                                return $model->deduction_cost > 0 ? 0.00 : $model->pending_revenue;
+                            },
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Deduction Cost',
+                            'attribute' => 'deduction_cost',
+                            'value' => 'deduction_cost',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'Deduction Revenue',
+                            'attribute' => 'deduction_revenue',
+                            'value' => 'deduction_revenue',
+                            'pageSummary' => true,
+                        ],
+                        [
+                            'label' => 'ADV',
+                            'value' => function ($model) {
+                                return $model->campaign->advertiser0->username;
+                            }
+                        ],
+                        [
+                            'label' => 'BD',
+                            'value' => function ($model) {
+                                return $model->campaign->advertiser0->bd0->username;
+                            }
+                        ],
+                        [
+                            'label' => 'PM',
+                            'value' => function ($model) {
+                                return null;
+                            }
+                        ],
+
+                    ];
                     $campaignBillColumns = [
                         [
                             // 'label' => 'start_time',
@@ -645,7 +778,7 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
                     ];
                     echo ExportMenu::widget([
                         'dataProvider' => $campaignBill,
-                        'columns' => $campaignBillColumns,
+                        'columns' => $campaignBillColumns_excel,
                         'fontAwesome' => true,
                         'showConfirmAlert' => false,
                         'target' => GridView::TARGET_BLANK,
@@ -1034,20 +1167,24 @@ $this->params['breadcrumbs'][] = ['label' => $model->bill_id, 'url' => ['view', 
 //                             'label' => 'cost',
                             'attribute' => 'cost',
                             'value' => 'cost',
+                            'pageSummary' => true,
                         ],
                         [
 //                                'label' => 'deduction_cost',
                             'attribute' => 'deduction_cost',
                             'value' => 'deduction_cost',
+                            'pageSummary' => true,
                         ],
                         [
 //                                'label' => 'deduction_revenue',
                             'attribute' => 'deduction_revenue',
                             'value' => 'deduction_revenue',
+                            'pageSummary' => true,
                         ],
                         [
                             'attribute' => 'revenue',
                             'value' => 'revenue',
+                            'pageSummary' => true,
                         ],
                         //[
                         // 'label' => 'margin',

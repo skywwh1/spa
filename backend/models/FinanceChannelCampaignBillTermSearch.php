@@ -122,8 +122,8 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
             'fp.id pending_id',
             'fp.revenue pending_revenue',
             'fp.cost pending_cost',
-            'fd.deduction_cost',
-            'fd.deduction_revenue',
+            'SUM(`fd`.`deduction_cost`) as deduction_cost ',
+            'SUM(`fd`.`deduction_revenue`) as deduction_revenue'
         ]);
 
         // grid filtering conditions
@@ -161,6 +161,7 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
         $query->andFilterWhere(['like', 'fcb.time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
             ->andFilterWhere(['<>', 'fcb.cost', 0]);
+        $query->addGroupBy(['fcb.bill_id','fcb.campaign_id']);
 
 //        var_dump($query->createCommand()->sql);
 //        die();
