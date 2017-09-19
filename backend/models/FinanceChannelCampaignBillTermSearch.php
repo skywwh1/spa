@@ -122,8 +122,8 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
             'fp.id pending_id',
             'fp.revenue pending_revenue',
             'fp.cost pending_cost',
-            'fd.deduction_cost',
-            'fd.deduction_revenue',
+            'sum(fd.deduction_cost)',
+            'sum(fd.deduction_revenue)',
         ]);
 
         // grid filtering conditions
