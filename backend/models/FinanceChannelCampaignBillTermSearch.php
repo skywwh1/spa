@@ -160,7 +160,6 @@ class FinanceChannelCampaignBillTermSearch extends FinanceChannelCampaignBillTer
 
         $query->andFilterWhere(['like', 'fcb.time_zone', $this->time_zone])
             ->andFilterWhere(['like', 'camp.campaign_name', $this->campaign_name])
-            ->andFilterWhere(['<>', 'fd.status', 0])
             ->andFilterWhere(['<>', 'fcb.cost', 0]);
 
 //        var_dump($query->createCommand()->sql);
