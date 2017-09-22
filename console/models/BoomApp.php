@@ -63,7 +63,9 @@ class BoomApp
             $camp->target_geo = $model->target_geo;
 
             $camp->adv_link = $model->adv_link;
-            $camp->package_name = explode("id=",$model->preview_link)[1];
+//            var_dump(explode("id=",$model->preview_link)[1]);
+//            die();
+//            $camp->package_name = explode("id",$model->preview_link)[1];
             $camp->platform = $model->platform;
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
