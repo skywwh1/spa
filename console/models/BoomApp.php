@@ -66,12 +66,24 @@ class BoomApp
 //            var_dump(explode("id=",$model->preview_link)[1]);
 //            die();
 //            $camp->package_name = explode("id",$model->preview_link)[1];
+            if (strpos($camp->preview_link, 'itunes')) {
+                $camp->package_name = explode("id",$model->preview_link)[1];
+//                $camp->platform = 'ios';
+            }
+            if (strpos($camp->preview_link, 'google')) {
+                $camp->package_name = explode("id=",$model->preview_link)[1];
+//                $camp->platform = 'android';
+            }
             $camp->platform = $model->platform;
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->preview_link = $model->preview_link;
             $camp->note = $model->category;
-            $camp->kpi = $model->note;
+            if (!empty($model->description)){
+                $camp->kpi = $model->description;
+            }else{
+                $camp->kpi = 'Day+1 Retention Rate > 30%';
+            }
             $camp->conversion_flow = $model->conversion_flow;
             if ($model->status == 'active'){
                 $camp->status = 1;
