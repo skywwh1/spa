@@ -71,7 +71,11 @@ class BoomApp
             $camp->category = $model->category;
             $camp->kpi = $model->note;
             $camp->conversion_flow = $model->conversion_flow;
-            $camp->status = intval($model->status);
+            if ($model->status == 'active'){
+                $camp->status = 1;
+            }else{
+                $camp->status = 0;
+            }
             $camp->open_type = 1;
 
             $camp->advertiser = $apiModel->adv_id;
