@@ -63,12 +63,12 @@ class BoomApp
             $camp->target_geo = $model->target_geo;
 
             $camp->adv_link = $model->adv_link;
-//            $camp->package_name = $model->package_name;
+            $camp->package_name = explode("id=",$model->preview_link)[1];
             $camp->platform = $model->platform;
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->preview_link = $model->preview_link;
-            $camp->category = $model->category;
+            $camp->note = $model->category;
             $camp->kpi = $model->note;
             $camp->conversion_flow = $model->conversion_flow;
             if ($model->status == 'active'){
