@@ -24,6 +24,7 @@ use console\models\Nposting;
 use console\models\Taptica;
 use console\models\Yeahmobi;
 use console\models\Yeahmobi2;
+use console\models\BoomApp;
 use yii\console\Controller;
 
 class ApiController extends Controller
@@ -71,6 +72,9 @@ class ApiController extends Controller
         $yeah->getApiCampaign();
 
         $yeah = new ADMobGeek();
+        $yeah->getApiCampaign();
+
+        $yeah = new BoomApp();
         $yeah->getApiCampaign();
     }
 
@@ -161,6 +165,12 @@ class ApiController extends Controller
     public function actionGetGeek()
     {
         $yeah = new ADMobGeek();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetBoomApp()
+    {
+        $yeah = new BoomApp();
         $yeah->getApiCampaign();
     }
 }
