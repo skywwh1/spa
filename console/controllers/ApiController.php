@@ -11,6 +11,7 @@ namespace console\controllers;
 
 use console\models\ADMobGeek;
 use console\models\Affle;
+use console\models\Boom;
 use console\models\Clinkad;
 use console\models\Glispa;
 use console\models\HeadWay;
@@ -75,6 +76,9 @@ class ApiController extends Controller
         $yeah->getApiCampaign();
 
         $yeah = new BoomApp();
+        $yeah->getApiCampaign();
+
+        $yeah = new Boom();
         $yeah->getApiCampaign();
     }
 
@@ -171,6 +175,11 @@ class ApiController extends Controller
     public function actionGetBoomApp()
     {
         $yeah = new BoomApp();
+        $yeah->getApiCampaign();
+    }
+
+    public function actionGetBoom(){
+        $yeah = new Boom();
         $yeah->getApiCampaign();
     }
 }
