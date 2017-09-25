@@ -222,7 +222,8 @@ class Boom
                 $response = file_get_contents( $url, false, $context );
                 $response = json_decode($response);
                 if (!empty($response->data)) {
-                    $apiCampaigns[] = $response->data->rowset;
+//                    $apiCampaigns[] = $response->data->rowset;
+                    $apiCampaigns = array_merge($apiCampaigns, $response->data->rowset);
                 }else{
                     break;
                 }
