@@ -51,7 +51,7 @@ class BoomApp
                 $camp->campaign_name = $model->campaign_name;
             }
 
-            $camp->pricing_mode = $model->pricing_mode;
+            $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $daily_cap = $model->daily_cap;
@@ -85,6 +85,7 @@ class BoomApp
                 $camp->kpi = 'Day+1 Retention Rate > 30%';
             }
             $camp->conversion_flow = $model->conversion_flow;
+            var_dump($model->status);
             if ($model->status == 'active'){
                 $camp->status = 1;
             }else{
@@ -103,9 +104,9 @@ class BoomApp
             }
             $liveCamps[] = $camp->campaign_uuid;
         }
-//        if (!empty($liveCamps)) {
-//            $this->updateCampaignStatus($liveCamps, $all);
-//        }
+        if (!empty($liveCamps)) {
+            $this->updateCampaignStatus($liveCamps, $all);
+        }
 
     }
 
@@ -229,6 +230,8 @@ class BoomApp
                 }
         }
     }
+//    file_put_contents('/var/www/html/spa/console/log.txt',json_encode($apiCampaigns));
+//    die();
     return $apiCampaigns;
 }
 }
