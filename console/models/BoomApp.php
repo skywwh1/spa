@@ -103,9 +103,9 @@ class BoomApp
             }
             $liveCamps[] = $camp->campaign_uuid;
         }
-        if (!empty($liveCamps)) {
-            $this->updateCampaignStatus($liveCamps, $all);
-        }
+//        if (!empty($liveCamps)) {
+//            $this->updateCampaignStatus($liveCamps, $all);
+//        }
 
     }
 
