@@ -63,9 +63,6 @@ class BoomApp
             $camp->target_geo = $model->target_geo;
 
             $camp->adv_link = $model->adv_link;
-//            var_dump(explode("id=",$model->preview_link)[1]);
-//            die();
-//            $camp->package_name = explode("id",$model->preview_link)[1];
             if (strpos($camp->preview_link, 'itunes')) {
                 $camp->package_name = explode("id",$model->preview_link)[1];
 //                $camp->platform = 'ios';
@@ -85,7 +82,6 @@ class BoomApp
                 $camp->kpi = 'Day+1 Retention Rate > 30%';
             }
             $camp->conversion_flow = $model->conversion_flow;
-            var_dump($model->status);
             if ($model->status == 'active'){
                 $camp->status = 1;
             }else{
@@ -230,8 +226,6 @@ class BoomApp
                 }
         }
     }
-//    file_put_contents('/var/www/html/spa/console/log.txt',json_encode($apiCampaigns));
-//    die();
     return $apiCampaigns;
 }
 }
