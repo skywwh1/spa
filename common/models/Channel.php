@@ -117,7 +117,7 @@ class Channel extends ActiveRecord implements IdentityInterface
             [['phone1', 'phone2'], 'string', 'max' => 20],
             [['lang'], 'string', 'max' => 30],
             [['username'], 'unique'],
-            [['email'], 'unique'],
+//            [['email'], 'unique'],
             [['email'], 'email'],
             [['discount'], 'number'],
             [['cc_email', 'traffic_source', 'strong_category', 'note', 'strong_geo', 'os'], 'safe'],
@@ -304,6 +304,8 @@ class Channel extends ActiveRecord implements IdentityInterface
                 $k = '{' . $param[0] . '}';
                 $v = $param[1];
                 $postback = str_replace($k, $v, $postback);
+                var_dump($k);
+                var_dump($v);
             }
         }
         return $postback;
