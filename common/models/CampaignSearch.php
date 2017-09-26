@@ -130,6 +130,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
             ->andFilterWhere(['like', 'a.username', $this->advertiser])
+            ->andFilterWhere(['<>', 'advertiser', 26])
             ->andFilterWhere(['<>', 'advertiser', 35])
             ->andFilterWhere(['<>', 'advertiser', 36])
             ->andFilterWhere(['<>', 'advertiser', 80])
@@ -825,7 +826,7 @@ class CampaignSearch extends Campaign
             ->andFilterWhere(['like', 'track_link_domain', $this->track_link_domain])
             ->andFilterWhere(['like', 'adv_link', $this->adv_link])
             ->andFilterWhere(['like', 'a.username', $this->advertiser])
-            ->andFilterWhere(['in', 'advertiser', [35, 36,53,59,80,87,88]])
+            ->andFilterWhere(['in', 'advertiser', [26,35, 36,53,59,80,87,88]])
             ->andFilterWhere(['like', 'ip_blacklist', $this->ip_blacklist])
             ->andFilterWhere(['in', 'c.id', $this->ids]);
 
