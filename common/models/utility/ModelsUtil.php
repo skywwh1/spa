@@ -301,6 +301,18 @@ class ModelsUtil
         '0' => 'include 0',
     );
 
+    const category = array(
+        '101' =>  'Adult',
+        '102' =>  'Apps',
+        '103' =>  'Dating',
+        '104' =>  'Entertainment',
+        '105' =>  'Games',
+        '106' =>  'Health',
+        '107' =>  'Mobile Subscription',
+        '108' =>  'Others',
+        '109' =>  'Lead Generation',
+    );
+
 
     public static function getChannelLevel($k)
     {
@@ -466,5 +478,17 @@ class ModelsUtil
 
     public static function getExcludeZero($k){
         return static::getValue(static::exclude_zero,$k);
+    }
+
+    public static function getCategory($k)
+    {
+        if(!empty($k)){
+            $arr = explode(',',$k);
+            $keys = [];
+            foreach ( $arr as  $item){
+                $keys [] = static::getValue(static::category, $item);
+            }
+            return implode(",",$keys);
+        }
     }
 }

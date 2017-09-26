@@ -66,7 +66,7 @@ class Avazu
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->preview_link = $model->preview_link;
-            $camp->category = $model->category;
+            $camp->category = \ModelsUtil::getCategory($model->category);
             $camp->kpi = $model->note;
             if ($model->conversion_flow == 'None') {
                 $camp->kpi = 'Day 2 RR > 30%';
