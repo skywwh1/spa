@@ -62,7 +62,6 @@ class Avazu
                 $camp->promote_start = time();
             }
             $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
-            $camp->package_name = $model->package_name;
             $camp->platform = $model->platform == '1' ? 'android' : 'ios';
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
@@ -82,11 +81,15 @@ class Avazu
                 $links = unserialize($model->note);
 //                file_put_contents('/var/www/html/spa/console/log.txt',json_encode($links));
                 foreach ($links as $item){
-                    $camp->target_geo = empty($item['country'])?'not set':$item['country'];
+                    if (empty($camp->target_geo)){
+                        $camp->target_geo = 'not set';
+                        $camp->status = 2;
+                    }
                     $camp->adv_price = $item['payout'];
                     $camp->now_payout = $item['payout'] > 1 ? $item['payout'] * 0.9 : $item['payout'];
                     $camp->preview_link = $item['previewlink'];
                     $camp->adv_link = $item['trackinglink'];
+                    $camp->package_name = $item['pkgname'];
                     if ($camp->save()) {
                         Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
                     } else {
