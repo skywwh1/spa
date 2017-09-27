@@ -67,7 +67,7 @@ class Svg
                 $camp->package_name = explode("id=",$camp->preview_link)[1];
                 $camp->platform = 'android';
             }
-            if ($model->daily_cap == '0.00'){
+            if ($model->daily_cap == 0.00){
                 $camp->daily_cap = 'open';
             }
             $camp->pricing_mode = 'cpi';
@@ -84,10 +84,10 @@ class Svg
             $camp->kpi = 'Day 2 RR > 30%';
 
             if (strstr($model->category,'101') || strstr($model->category,'105')){
-                $camp->category = 'Incent';
+                $camp->traffic_source = 'Incent';
             }
             if (strstr($model->category,'103') || strstr($model->category,'107')){
-                $camp->category = 'Non-Incent';
+                $camp->traffic_source = 'Non-Incent';
             }
             $camp->carriers = 'all';
             $camp->status = 1;
