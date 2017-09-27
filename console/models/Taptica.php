@@ -112,6 +112,9 @@ class Taptica
 //        var_dump($campaigns);
 //        var_dump($all);
         foreach ($all as $item) {
+            if ($item->is_manual == 1) {
+                continue;
+            }
             if (!in_array($item->campaign_uuid, $campaigns)) {
                 $item->status = 2;
                 if ($item->save()) {
