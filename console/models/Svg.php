@@ -67,18 +67,16 @@ class Svg
                 $camp->package_name = explode("id=",$camp->preview_link)[1];
                 $camp->platform = 'android';
             }
-            if ($model->daily_cap == 0.00){
+            if ($model->daily_cap == '0.00'){
                 $camp->daily_cap = 'open';
             }
             $camp->pricing_mode = 'cpi';
             $camp->adv_price = $model->adv_price;
             $camp->now_payout = $model->adv_price > 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $camp->adv_link = $model->adv_link;
-            $daily_cap = $model->daily_cap;
             if (empty($camp->promote_start)) {
                 $camp->promote_start = time();
             }
-            $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
             $camp->kpi = 'Day 2 RR > 30%';
