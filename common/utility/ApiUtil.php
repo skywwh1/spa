@@ -263,8 +263,39 @@ class ApiUtil
             }
             $camps[] = $camp;
         }
-//        var_dump($camps);
-//        die();
+        return $camps;
+    }
+
+    /**
+     * @param $apis
+     * @param $data
+     * @return array
+     */
+    public static function genApiCampaignNew($apis, $data)
+    {
+        $camps = array();
+        foreach ($data as $arr){
+            $item = $arr->Offer;
+            $item = ArrayHelper::toArray($item);
+            $camp = new ApiCampaign();
+            $camp->setAttribute('target_geo',  implode(",",array_keys(ArrayHelper::toArray($arr->Country))));//数组转为string.方便后续将string转为数组
+            $camp->setAttribute('category',  implode(",",array_keys(ArrayHelper::toArray($arr->OfferCategory))));//数组转为string.方便后续将string转为数组
+            $camp->setAttribute('adv_link',  $arr->TrackingLink->click_url);
+            $camp_attrs = $camp->getAttributes();
+            $apis_attrs = $apis->getAttributes();
+            foreach ($apis_attrs as $api_k => $api_v) { //循环apis 的属性
+                if (array_key_exists($api_v, $item)) { //如果 json每一个offer的属性存在apis里面。
+                    if (array_key_exists($api_k, $camp_attrs)) { // 并且campaign api里面的属性也存在。
+                        if (is_array($item[$api_v])) {
+                            $camp->setAttribute($api_k,  serialize($item[$api_v]));//数组转为string.方便后续将string转为数组
+                        } else {
+                            $camp->setAttribute($api_k, $item[$api_v]);
+                        }
+                    }
+                }
+            }
+            $camps[] = $camp;
+        }
         return $camps;
     }
 

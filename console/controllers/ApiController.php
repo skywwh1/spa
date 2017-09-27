@@ -23,6 +23,7 @@ use console\models\Mobair;
 use console\models\Movista;
 use console\models\Mundo;
 use console\models\Nposting;
+use console\models\Svg;
 use console\models\Taptica;
 use console\models\Yeahmobi;
 use console\models\Yeahmobi2;
@@ -190,5 +191,10 @@ class ApiController extends Controller
     public function actionGetAvazu(){
         $avazu = new Avazu();
         $avazu->getApiCampaign();
+    }
+
+    public function actionGetSvg(){
+        $svg = new Svg();
+        $svg->getApiCampaign();
     }
 }
