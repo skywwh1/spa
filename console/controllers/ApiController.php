@@ -23,6 +23,7 @@ use console\models\Mobair;
 use console\models\Movista;
 use console\models\Mundo;
 use console\models\Nposting;
+use console\models\Promo;
 use console\models\Svg;
 use console\models\Taptica;
 use console\models\Yeahmobi;
@@ -85,6 +86,12 @@ class ApiController extends Controller
 
         $avazu = new Avazu();
         $avazu->getApiCampaign();
+
+        $avazu = new Svg();
+        $avazu->getApiCampaign();
+
+//        $avazu = new Promo();
+//        $avazu->getApiCampaign();
     }
 
     public function actionGetHeadway()
@@ -196,5 +203,10 @@ class ApiController extends Controller
     public function actionGetSvg(){
         $svg = new Svg();
         $svg->getApiCampaign();
+    }
+
+    public function actionGetPromo(){
+        $avazu = new Promo();
+        $avazu->getApiCampaign();
     }
 }
