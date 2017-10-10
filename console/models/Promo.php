@@ -12,6 +12,7 @@ use common\models\ApiCampaign;
 use common\models\Campaign;
 use common\models\Deliver;
 use common\utility\ApiUtil;
+use common\utility\CampaignUtil;
 use yii\helpers\ArrayHelper;
 
 class Promo
@@ -37,6 +38,10 @@ class Promo
         $liveCamps = array();
         foreach ($apiCampaigns as $model) {
             $model->adv_id = $apiModel->adv_id;
+            $model->target_geo = CampaignUtil::getParamFromArray($model->target_geo,'code');
+            $model->platform = CampaignUtil::getParamFromArray($model->platform,'system');
+            $model->creative_link = CampaignUtil::getParamFromArray($model->creative_link,'filelink');
+            $model->adv_price = CampaignUtil::getParamFromArray($model->adv_price,'payout');
             if (!$model->save()) {
                 var_dump($model->getErrors());
             }
@@ -58,10 +63,14 @@ class Promo
                 $camp->promote_start = time();
             }
             $camp->daily_cap = empty($daily_cap) ? 'open' : $daily_cap;
-            $camp->platform = $model->platform == '1' ? 'android' : 'ios';
+            $camp->platform = $model->platform;
+            $camp->target_geo = $model->target_geo;
+            $camp->creative_link = $model->creative_link;
             $camp->icon =  $model->icon;
             $camp->description = $model->description;
-            $camp->preview_link = $model->preview_link;
+            $camp->adv_link = $model->adv_link;
+            $camp->adv_price = $model->adv_price;
+            $camp->now_payout = $model->adv_price> 1 ? $model->adv_price * 0.9 : $model->adv_price;
             $camp->category = \ModelsUtil::getCategory($model->category);
             $camp->kpi = $model->note;
             if ($model->conversion_flow == 'None') {
@@ -73,37 +82,6 @@ class Promo
             $camp->advertiser = $apiModel->adv_id;
             $ad = Advertiser::findOne($apiModel->adv_id);
             $camp->creator = $ad->bd;
-            if (!empty($model->note)){
-                $links = unserialize($model->adv_price);
-                foreach ($links as $item){
-                    $camp->adv_price = $item['payout'];
-                    $camp->now_payout = $item['payout'] > 1 ? $item['payout'] * 0.9 : $item['payout'];
-                }
-            }
-            if (!empty($model->target_geo)){
-                $links = unserialize($model->target_geo);
-                $geos = [];
-                foreach ($links as $item){
-                    $geos[] = $item['code'];
-                }
-                $camp->target_geo = implode(",",$geos);
-            }
-            if (!empty($model->platform)){
-                $links = unserialize($model->platform);
-                $codes = [];
-                foreach ($links as $item){
-                    $codes[] = $item['system'];
-                }
-                $camp->target_geo = implode(",",$codes);
-            }
-            if (!empty($model->creative_link)){
-                $links = unserialize($model->creative_link);
-                $codes = [];
-                foreach ($links as $item){
-                    $codes[] = $item['filelink'];
-                }
-                $camp->creative_link = implode(",",$codes);
-            }
             if ($camp->save()) {
                 Deliver::updateStsStatusByCampaignUid($camp->campaign_uuid, $camp->status);
             } else {
@@ -137,6 +115,7 @@ class Promo
     private function getAllCampaigns($apiModel)
     {
         $url = $apiModel->url;
+//        $url ='https://www.promoadx.com/api/affoffer/index?type=personal';
         $options = array(
             'http' => array(
                 'method'  => 'GET',
@@ -147,7 +126,7 @@ class Promo
         );
         $context  = stream_context_create( $options );
         $result = file_get_contents( $url, false, $context );
-
+        var_dump($url);
         $response = json_decode( $result );
         if ($response === false) {
             echo "cannot get the cookies";

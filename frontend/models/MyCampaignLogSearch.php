@@ -132,4 +132,52 @@ class MyCampaignLogSearch extends MyCampaignLogHourly
 
         return $dataProvider;
     }
+
+    public function topCampaignSearch($params)
+    {
+        setlocale(LC_ALL,'Etc/GMT-8');
+        $start = mktime(0, 0, 0, date('m'), date('d'), date('Y'));
+        $end = mktime(0, 0, 0, date('m') , date('d')+1, date('Y'));
+
+        $query = MyCampaignLogHourly::find();
+
+        $query->alias('clh');
+        // add conditions that should always apply here
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $query,
+            'pagination' => false,
+        ]);
+
+        $this->load($params);
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+        $query->select([
+            'cam.campaign_name campaign_name',
+            'clh.campaign_id',
+            'sum(clh.clicks) clicks',
+            'sum(clh.unique_clicks) unique_clicks',
+            'sum(clh.installs) installs',
+            'avg(clh.pay_out) pay_out',
+            'SUM(clh.cost) revenue',
+
+        ]);
+        $query->joinWith('campaign cam');
+        // grid filtering conditions
+
+        $query->andFilterWhere([
+            'campaign_id' => $this->campaign_id,
+            'channel_id' => Yii::$app->user->getId(),
+            'pay_out' => $this->pay_out,
+        ]);
+
+        $query->andFilterWhere(['like', 'cam.campaign_name', $this->campaign_name]);
+        $query->andFilterWhere(['>=', 'time', $start])
+            ->andFilterWhere(['<', 'time', $end]);
+        $query->limit(5);
+        $query->groupBy(['clh.campaign_id']);
+        $query->orderBy(['revenue' => SORT_DESC, 'cam.campaign_name' => SORT_ASC,]);
+        return $dataProvider;
+    }
 }

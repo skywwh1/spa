@@ -73,4 +73,22 @@ class CampaignUtil{
                 </div>';
         return str_replace("  ","",$tmpl);
     }
+
+    /**
+     * @param $arr
+     * @param $param
+     * @return string
+     */
+    public static function getParamFromArray($arr,$param){
+        if (!empty($arr)){
+            $data = unserialize($arr);
+            $tmp = [];
+            foreach ($data as $item){
+                $tmp[] = $item[$param];
+            }
+            $result = implode(",",$tmp);
+            return $result;
+        }
+        return 'not set';
+    }
 }

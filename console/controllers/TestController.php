@@ -346,4 +346,19 @@ die();
         $date->setTimezone(new DateTimeZone('Etc/GMT+7'));
         echo $date->format('Y-m-d H:i:sP') . "\n";
     }
+
+    public static function actionCtt(){
+//        $file_name="/var/www/html/spa/console/controllers/log.txt";
+//        $fp=fopen($file_name,'r');
+//        while(!feof($fp))
+//        {
+//            $buffer=fgets($fp,4096);
+//            echo $buffer."<br>";
+//        }
+//        fclose($fp);
+        $a=10;
+
+        $result=$a +  ++$a +  ++$a;
+        echo $result;
+    }
 }

@@ -10,6 +10,7 @@ use common\models\DeliverSearch;
 use frontend\models\AllCampaignSearch;
 use frontend\models\CampaignChannelLog;
 use frontend\models\CampaignChannelLogSearch;
+use frontend\models\MyCampaignLogSearch;
 use frontend\models\MyCampaignSearch;
 use common\models\CampaignCreativeLink;
 use Yii;
@@ -65,8 +66,10 @@ class CampLogController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CampaignChannelLogSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//        $searchModel = new CampaignChannelLogSearch();
+//        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new MyCampaignLogSearch();
+        $dataProvider = $searchModel->topCampaignSearch(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
